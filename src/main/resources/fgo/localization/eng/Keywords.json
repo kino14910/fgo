@@ -308,7 +308,9 @@
     ]
   },
   {
-    "PROPER_NAME": "Shielder Paladin",
+    "NAMES": [
+      "Shielder Paladin"
+    ],
     "DESCRIPTIONS": [
       "The next #yNoble Phantasm is fixed as #yRayProofKyrielight. NL Change #yObscurantWallofChalk to #yTimewornBulletKindling."
     ]

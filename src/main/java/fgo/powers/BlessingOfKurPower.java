@@ -25,6 +25,7 @@ public class BlessingOfKurPower extends BasePower {
         super(POWER_ID, PowerType.BUFF, false, owner);
         this.maxHP = maxHP;
         this.strength = strength;
+        updateDescription();
     }
 
     @Override
