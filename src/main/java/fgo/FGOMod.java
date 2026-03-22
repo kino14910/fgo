@@ -195,7 +195,8 @@ public class FGOMod implements
         //If you want to set up a config panel, that will be done here.
         //The Mod Badges page has a basic example of this, but setting up config is overall a bit complex.
 
-        config = new FGOConfig();
+        // this has been loaded from receiveEditCards
+        // config = new FGOConfig();
 
         BaseMod.registerModBadge(badgeTexture, info.Name, GeneralUtils.arrToString(info.Authors), info.Description, config);
 
@@ -439,6 +440,9 @@ public class FGOMod implements
 
     @Override
     public void receiveEditCards() { //somewhere in the class
+        if (config == null) {
+            config = new FGOConfig();
+        }
         AutoAdd autoAdd = new AutoAdd(modID);
         //Loads files from this mod
         autoAdd.packageFilter(FGOCard.class) //In the same package as this class
@@ -448,6 +452,7 @@ public class FGOMod implements
         if (!FGOConfig.enableColorlessCards) {
             autoAdd = autoAdd.notPackageFilter("fgo.cards.colorless");
         }
+
         autoAdd.setDefaultSeen(true) //And marks them as seen in the compendium
                 .cards(); //Adds the cards
         BaseMod.addDynamicVariable(new NoblePhantasmVariable());

@@ -10,6 +10,7 @@ public class FGOConfig extends EasyConfigPanel {
     public static boolean enableEmiya = true;
     public static boolean enablePadoru = true;
     public static boolean enableFtue = true;
+    public static boolean enableNoCostNoblePhantasm = true;
     
 
     public FGOConfig() {

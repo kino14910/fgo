@@ -107,7 +107,8 @@
       "enableColorlessCards": "Enable Colorless Cards (Requires game restart)",
       "enableEmiya": "Enable BOSS: Emiya (Requires game restart)",
       "enablePadoru": "Enable Christmas Easter Egg",
-      "enableFtue": "Enable Ftue"
+      "enableFtue": "Enable Ftue",
+      "enableNoCostNoblePhantasm": "Enable No Cost Noble Phantasm (Requires game restart)"
     }
   },
   "${modID}:NobleDeckViewScreen": {

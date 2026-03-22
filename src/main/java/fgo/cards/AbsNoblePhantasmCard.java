@@ -15,13 +15,14 @@ import fgo.characters.CustomEnums.FGOCardColor;
 import fgo.hexui_lib.util.RenderImageLayer;
 import fgo.hexui_lib.util.TextureLoader;
 import fgo.powers.NPOverChargePower;
+import fgo.ui.panels.FGOConfig;
 
 public abstract class AbsNoblePhantasmCard extends FateMagineerCard {
     public AbsNoblePhantasmCard(String id, AbstractCard.CardType type, AbstractCard.CardTarget target) {
         this(id, type, target, -2);
     }
     public AbsNoblePhantasmCard(String id, AbstractCard.CardType type, AbstractCard.CardTarget target, int cost) {
-        super(id, cost, type, target, AbstractCard.CardRarity.SPECIAL, FGOCardColor.NOBLE_PHANTASM);
+        super(id, FGOConfig.enableNoCostNoblePhantasm ? -2 : cost, type, target, AbstractCard.CardRarity.SPECIAL, FGOCardColor.NOBLE_PHANTASM);
         setSelfRetain();
         PurgeField.purge.set(this, true);
         CommonKeywordIconsField.useIcons.set(this, false);
