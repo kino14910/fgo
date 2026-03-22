@@ -31,6 +31,7 @@ import fgo.hexui_lib.util.FloatPair;
 import javassist.CannotCompileException;
 import javassist.CtBehavior;
 
+@SuppressWarnings({"rawtypes", "unused"})
 public class RenderCardPatch {
     @SpirePatch(clz = AbstractCard.class, method = "getCardBg")
     public static class GetCardBgPatch {

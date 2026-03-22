@@ -106,6 +106,7 @@ public class TextureLoader {
         return textureString;
     }
 
+    @SuppressWarnings("unused")
     private static void loadTexture(final String textureString) throws GdxRuntimeException {
         loadTexture(textureString, false);
     }
