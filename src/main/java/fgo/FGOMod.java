@@ -440,9 +440,7 @@ public class FGOMod implements
 
     @Override
     public void receiveEditCards() { //somewhere in the class
-        if (config == null) {
-            config = new FGOConfig();
-        }
+        config = new FGOConfig();
         AutoAdd autoAdd = new AutoAdd(modID);
         //Loads files from this mod
         autoAdd.packageFilter(FGOCard.class) //In the same package as this class
