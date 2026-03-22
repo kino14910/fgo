@@ -29,6 +29,8 @@ import com.megacrit.cardcrawl.helpers.ScreenShake;
 import com.megacrit.cardcrawl.helpers.TipHelper;
 import com.megacrit.cardcrawl.screens.CharSelectInfo;
 
+import basemod.BaseMod;
+import basemod.ReflectionHacks;
 import basemod.abstracts.CustomPlayer;
 import fgo.FGOMod;
 import fgo.cards.fgo.CharismaOfHope;
@@ -234,6 +236,12 @@ public class Master extends CustomPlayer{
         super.renderHealth(sb);
         float x = hb.x;
         float y = hb.y + hb.height;
+        
+        // Check if mintySpire TotalIncomingDamage is enabled
+        if (isMintySpireTIDEnabled()) {
+            y += 40.0f * Settings.scale; // Adjust position upward
+        }
+        
         FgoNPhb = new Hitbox(x, y, hb_w, FgoNp_BAR_HEIGHT);
         FgoNPhb.render(sb);
         TruthValueBgRender(sb, x, y);
@@ -255,6 +263,21 @@ public class Master extends CustomPlayer{
                 FgoNpHideTimer = 1.0f;
             }
         }
+    }
+    
+    private boolean isMintySpireTIDEnabled() {
+        try {
+            if (BaseMod.hasModID("mintyspire:") ) {
+                Class<?> mintySpireClass = Class.forName("mintySpire.MintySpire");
+                java.lang.reflect.Method showTIDMethod = ReflectionHacks.getCachedMethod(mintySpireClass, "showTID");
+                if (showTIDMethod != null) {
+                    return (boolean) showTIDMethod.invoke(null);
+                }
+            }
+        } catch (Exception e) {
+            // mintySpire not found or error accessing config
+        }
+        return false;
     }
 
     private void renderTruthValueBar(SpriteBatch sb, float x) {
