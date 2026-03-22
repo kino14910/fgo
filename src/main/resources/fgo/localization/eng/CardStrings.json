@@ -635,5 +635,9 @@
   "${modID}:CodeOriginalSin": {
     "NAME": "Code Original Sin",
     "DESCRIPTION": "All enemies lose !D! HP. NL Gain !NP! % fgo:NP ."
+  },
+  "${modID}:ExcaliburExcelsus": {
+    "NAME": "Excalibur Excelsus",
+    "DESCRIPTION": "fgo:Ignores_Invincibility. NL For each enemy, gain !B! Block, gain !M! Strength, fgo:OverCharge and !NP!% fgo:NP. NL Deal !D! damage to ALL enemies."
   }
 }

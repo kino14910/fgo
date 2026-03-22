@@ -632,6 +632,6 @@
   },
   "${modID}:ExcaliburExcelsus": {
     "NAME": "由此，展现誓约胜利之剑",
-    "DESCRIPTION": "fgo:无敌贯通 。对所有敌人造成 !D! 点伤害。 NL 每有一名敌人，就获得!M! 层 力量 ， fgo:过充 ， 和 !NP! % fgo:宝具值 。"
+    "DESCRIPTION": "fgo:无敌贯通 。 NL 每有一名敌人，就获得 !B! 层格挡，!M! 层 力量 ， fgo:宝具充能阶段上升 和 !NP! % fgo:宝具值 。NL 对所有敌人造成 !D! 点伤害。"
   }
 }
