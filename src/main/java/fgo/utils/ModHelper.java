@@ -23,6 +23,9 @@ import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.random.Random;
 import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
 
+import basemod.BaseMod;
+import basemod.ReflectionHacks;
+
 public class ModHelper {
     public static void addToBot(AbstractGameAction action) {
         AbstractDungeon.actionManager.addToBottom(action);
@@ -272,5 +275,20 @@ public class ModHelper {
 
     public static boolean hasBuff(AbstractCreature creature, AbstractPower.PowerType type) {
         return creature.powers.stream().anyMatch(power -> power.type == type);
+    }
+    
+    public static boolean isMintySpireTIDEnabled() {
+        try {
+            if (BaseMod.hasModID("mintyspire:")) {
+                Class<?> mintySpireClass = Class.forName("mintySpire.MintySpire");
+                java.lang.reflect.Method showTIDMethod = ReflectionHacks.getCachedMethod(mintySpireClass, "showTID");
+                if (showTIDMethod != null) {
+                    return (boolean) showTIDMethod.invoke(null);
+                }
+            }
+        } catch (Exception e) {
+            // mintySpire not found or error accessing config
+        }
+        return false;
     }
 }

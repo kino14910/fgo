@@ -26,5 +26,11 @@
     "DESCRIPTIONS": [
       "Apply #b%d stacks of #yCurse."
     ]
+  },
+  "${modID}:StarPotion": {
+    "NAME": "Stars Potion",
+    "DESCRIPTIONS": [
+      "Gain #b10 #yStar."
+    ]
   }
 }

@@ -71,19 +71,16 @@ public abstract class BasePower extends AbstractPower {
         this.amount = amount;
         this.type = powerType;
 
-        if (loadImage)
-        {
+        if (loadImage) {
             String unPrefixed = Objects.nonNull(img) ? img : GeneralUtils.removePrefix(id);
             Texture normalTexture = TextureLoader.getPowerTexture(unPrefixed);
             Texture hiDefImage = TextureLoader.getHiDefPowerTexture(unPrefixed);
-            if (hiDefImage != null)
-            {
+
+            if (hiDefImage != null) {
                 region128 = new TextureAtlas.AtlasRegion(hiDefImage, 0, 0, hiDefImage.getWidth(), hiDefImage.getHeight());
                 if (normalTexture != null)
                     region48 = new TextureAtlas.AtlasRegion(normalTexture, 0, 0, normalTexture.getWidth(), normalTexture.getHeight());
-            }
-            else
-            {
+            } else {
                 this.img = normalTexture;
                 region48 = new TextureAtlas.AtlasRegion(normalTexture, 0, 0, normalTexture.getWidth(), normalTexture.getHeight());
             }
@@ -104,7 +101,6 @@ public abstract class BasePower extends AbstractPower {
                 c.a = alpha;
                 FontHelper.renderFontRightTopAligned(sb, FontHelper.powerAmountFont, Integer.toString(this.amount2), x, y + 15.0f * Settings.scale, this.fontScale, c);
             }
-
         }
     }
 

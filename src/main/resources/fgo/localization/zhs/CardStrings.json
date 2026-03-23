@@ -426,6 +426,11 @@
     "DESCRIPTION": "{@@}抽1张牌。 NL 将手牌中的任意张牌放到抽牌堆的顶部。{!Upgrades!|0= NL  消耗 。}",
     "FLAVOR": "测试画风可以更改。"
   },
+  "${modID}:Shvibzik": {
+    "NAME": "小恶魔",
+    "DESCRIPTION": "造成 !D! 点伤害。 NL 在本场战斗中你获得 *冻结之眼 。 NL 消耗 。",
+    "FLAVOR": "测试画风可以更改。"
+  },
   "${modID}:FifthForm": {
     "NAME": "第五势",
     "DESCRIPTION": "在本回合，对一个敌人的攻击牌会打出两次，但伤害降低 !M! %。 NL 消耗 。",

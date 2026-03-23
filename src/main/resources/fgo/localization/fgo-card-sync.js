@@ -1,6 +1,6 @@
 const fs = require('fs-extra')
 const path = require('path')
-const XLSX = require('xlsx')
+const ExcelJS = require('exceljs')
 const readline = require('readline')
 
 const JSON_FILE = './zhs/CardStrings.json'
@@ -146,24 +146,30 @@ function scanJavaFiles(dir) {
   return javaFiles
 }
 
-function importExcelToJSON() {
+async function importExcelToJSON() {
   const allData = {}
 
   if (fs.existsSync(OUTPUT_EXCEL_NORMAL)) {
-    const wb = XLSX.readFile(OUTPUT_EXCEL_NORMAL)
-    const sheet = wb.Sheets[wb.SheetNames[0]]
-    const rows = XLSX.utils.sheet_to_json(sheet)
+    const workbook = new ExcelJS.Workbook()
+    await workbook.xlsx.readFile(OUTPUT_EXCEL_NORMAL)
+    const worksheet = workbook.getWorksheet(1)
 
-    rows.forEach(row => {
-      const idNonPrefix = row.ID
+    let isHeader = true
+    worksheet.eachRow((row, rowNumber) => {
+      if (isHeader) {
+        isHeader = false
+        return
+      }
+
+      const idNonPrefix = row.getCell('A').value
       if (!idNonPrefix) return
-      
+
       const id = MOD_ID_PREFIX + idNonPrefix
 
-      const name = LF2NL(row['牌名'] || '')
-      const desc = LF2NL(row['描述'] || '')
-      const upgradeDesc = LF2NL(row['描述+'] || '')
-      const flavor = LF2NL(row['风味文字'] || '')
+      const name = LF2NL(row.getCell('B').value || '')
+      const desc = LF2NL(row.getCell('G').value || '')
+      const upgradeDesc = LF2NL(row.getCell('P').value || '')
+      const flavor = LF2NL(row.getCell('O').value || '')
 
       const entry = {
         NAME: name,
@@ -172,7 +178,7 @@ function importExcelToJSON() {
 
       if (upgradeDesc) entry.UPGRADE_DESCRIPTION = upgradeDesc
 
-      const extDescRaw = (row['扩展描述'] || '')
+      const extDescRaw = row.getCell('N').value || ''
       if (extDescRaw) {
         const descWithNewline = LF2NL(extDescRaw)
         entry.EXTENDED_DESCRIPTION = descWithNewline
@@ -183,25 +189,30 @@ function importExcelToJSON() {
       if (flavor) entry.FLAVOR = flavor
       allData[id] = entry
     })
-    console.log(`✅ 导入卡片: ${rows.length} 条`)
+    console.log(`✅ 导入卡片: ${Object.keys(allData).length} 条`)
   }
-  if (fs.existsSync(OUTPUT_EXCEL_NOBLE)) {
-    const wb = XLSX.readFile(OUTPUT_EXCEL_NOBLE)
-    const sheet = wb.Sheets[wb.SheetNames[0]]
-    const rows = XLSX.utils.sheet_to_json(sheet)
 
-    rows.forEach(row => {
-      const idNonPrefix = row.ID
+  if (fs.existsSync(OUTPUT_EXCEL_NOBLE)) {
+    const workbook = new ExcelJS.Workbook()
+    await workbook.xlsx.readFile(OUTPUT_EXCEL_NOBLE)
+    const worksheet = workbook.getWorksheet(1)
+
+    let isHeader = true
+    worksheet.eachRow((row, rowNumber) => {
+      if (isHeader) {
+        isHeader = false
+        return
+      }
+
+      const idNonPrefix = row.getCell('A').value
       if (!idNonPrefix) return
-      
+
       const id = MOD_ID_PREFIX + idNonPrefix
 
-      // 中文字段处理（宝具卡Excel字段名与普通卡一致）
-      const name = LF2NL(row['牌名'] || '')
-      const desc = LF2NL(row['描述'] || '')
-      const upgradeDesc = LF2NL(row['描述+'] || '')
-      const extDescRaw = (row['扩展描述'] || '')
-      const flavor = LF2NL(row['风味文字'] || '')
+      const name = LF2NL(row.getCell('B').value || '')
+      const desc = LF2NL(row.getCell('G').value || '')
+      const upgradeDesc = LF2NL(row.getCell('P').value || '')
+      const flavor = LF2NL(row.getCell('O').value || '')
 
       const entry = {
         NAME: name,
@@ -209,18 +220,19 @@ function importExcelToJSON() {
       }
 
       if (upgradeDesc) entry.UPGRADE_DESCRIPTION = upgradeDesc
+
+      const extDescRaw = row.getCell('N').value || ''
       if (extDescRaw) {
         const descWithNewline = LF2NL(extDescRaw)
         entry.EXTENDED_DESCRIPTION = descWithNewline
           .split('\n')
           .filter(part => part !== '')
       }
+
       if (flavor) entry.FLAVOR = flavor
-
-
       allData[id] = entry
     })
-    console.log(`✅ 导入卡片: ${rows.length} 条 (宝具卡)`)
+    console.log(`✅ 导入卡片: ${Object.keys(allData).length} 条 (宝具卡)`)
   }
 
   if (Object.keys(allData).length === 0) {
@@ -230,72 +242,42 @@ function importExcelToJSON() {
 
   fs.writeFileSync(JSON_FILE, JSON.stringify(allData, null, 2))
   console.log(
-    `✅ JSON文件已生成: ${JSON_FILE} (${Object.keys(allData).length} 个条目)`
+    `✅ JSON文件已生成: ${JSON_FILE} (${Object.keys(allData).length} 个条目)`,
   )
 }
 
-function importExcelToENJSON() {
+async function importExcelToENJSON() {
   const enData = {}
-  
-  if (!fs.existsSync(OUTPUT_EXCEL_NORMAL) && !fs.existsSync(OUTPUT_EXCEL_NOBLE)) {
+
+  if (
+    !fs.existsSync(OUTPUT_EXCEL_NORMAL) &&
+    !fs.existsSync(OUTPUT_EXCEL_NOBLE)
+  ) {
     console.log('❌ 未找到Excel文件，请先导出Excel')
     return
   }
 
-  const excelFile = fs.existsSync(OUTPUT_EXCEL_NORMAL) ? 
-                   OUTPUT_EXCEL_NORMAL : 
-                   OUTPUT_EXCEL_NOBLE
+  if (fs.existsSync(OUTPUT_EXCEL_NORMAL)) {
+    const workbook = new ExcelJS.Workbook()
+    await workbook.xlsx.readFile(OUTPUT_EXCEL_NORMAL)
+    const worksheet = workbook.getWorksheet(1)
 
-  const wb = XLSX.readFile(excelFile)
-  const sheet = wb.Sheets[wb.SheetNames[0]]
-  const rows = XLSX.utils.sheet_to_json(sheet)
+    let isHeader = true
+    worksheet.eachRow((row, rowNumber) => {
+      if (isHeader) {
+        isHeader = false
+        return
+      }
 
-  rows.forEach(row => {
-    const idNonPrefix = row.ID
-    if (!idNonPrefix) return
-    
-    const id = MOD_ID_PREFIX + idNonPrefix
-
-    const name = LF2NL(row['Name'] || '')
-    const desc = LF2NL(row['Description'] || '')
-    const upgradeDesc = LF2NL(row['Description+'] || '')
-    const flavor = LF2NL(row['Flavor'] || '')
-    const extDescRaw = (row['Extended Description'] || '')
-
-    const entry = {
-      NAME: name,
-      DESCRIPTION: desc,
-    }
-
-    if (upgradeDesc) entry.UPGRADE_DESCRIPTION = upgradeDesc
-    if (flavor) entry.FLAVOR = flavor
-
-    if (extDescRaw) {
-      const descWithNewline = LF2NL(extDescRaw)
-      entry.EXTENDED_DESCRIPTION = descWithNewline
-        .split('\n')
-        .filter(part => part !== '')
-    }
-
-    enData[id] = entry
-  })
-
-    if (fs.existsSync(OUTPUT_EXCEL_NOBLE)) {
-    const wb = XLSX.readFile(OUTPUT_EXCEL_NOBLE)
-    const sheet = wb.Sheets[wb.SheetNames[0]]
-    const rows = XLSX.utils.sheet_to_json(sheet)
-
-    rows.forEach(row => {
-      const idNonPrefix = row.ID
+      const idNonPrefix = row.getCell('A').value
       if (!idNonPrefix) return
-      
+
       const id = MOD_ID_PREFIX + idNonPrefix
-      // 英文字段
-      const name = LF2NL(row['Name'] || '')
-      const desc = LF2NL(row['Description'] || '')
-      const upgradeDesc = LF2NL(row['Description+'] || '')
-      const extDescRaw = (row['Extended Description'] || '')
-      const flavor = LF2NL(row['Flavor'] || '')
+
+      const name = LF2NL(row.getCell('Q').value || '')
+      const desc = LF2NL(row.getCell('R').value || '')
+      const upgradeDesc = LF2NL(row.getCell('S').value || '')
+      const flavor = LF2NL(row.getCell('U').value || '')
 
       const entry = {
         NAME: name,
@@ -303,6 +285,8 @@ function importExcelToENJSON() {
       }
 
       if (upgradeDesc) entry.UPGRADE_DESCRIPTION = upgradeDesc
+
+      const extDescRaw = row.getCell('T').value || ''
       if (extDescRaw) {
         const descWithNewline = LF2NL(extDescRaw)
         entry.EXTENDED_DESCRIPTION = descWithNewline
@@ -311,10 +295,52 @@ function importExcelToENJSON() {
       }
 
       if (flavor) entry.FLAVOR = flavor
-
       enData[id] = entry
     })
-    console.log(`✅ 导入英文卡片: ${rows.length} 条 (宝具卡)`)
+    console.log(`✅ 导入英文卡片: ${Object.keys(enData).length} 条`)
+  }
+
+  if (fs.existsSync(OUTPUT_EXCEL_NOBLE)) {
+    const workbook = new ExcelJS.Workbook()
+    await workbook.xlsx.readFile(OUTPUT_EXCEL_NOBLE)
+    const worksheet = workbook.getWorksheet(1)
+
+    let isHeader = true
+    worksheet.eachRow((row, rowNumber) => {
+      if (isHeader) {
+        isHeader = false
+        return
+      }
+
+      const idNonPrefix = row.getCell('A').value
+      if (!idNonPrefix) return
+
+      const id = MOD_ID_PREFIX + idNonPrefix
+
+      const name = LF2NL(row.getCell('Q').value || '')
+      const desc = LF2NL(row.getCell('R').value || '')
+      const upgradeDesc = LF2NL(row.getCell('S').value || '')
+      const flavor = LF2NL(row.getCell('U').value || '')
+
+      const entry = {
+        NAME: name,
+        DESCRIPTION: desc,
+      }
+
+      if (upgradeDesc) entry.UPGRADE_DESCRIPTION = upgradeDesc
+
+      const extDescRaw = row.getCell('T').value || ''
+      if (extDescRaw) {
+        const descWithNewline = LF2NL(extDescRaw)
+        entry.EXTENDED_DESCRIPTION = descWithNewline
+          .split('\n')
+          .filter(part => part !== '')
+      }
+
+      if (flavor) entry.FLAVOR = flavor
+      enData[id] = entry
+    })
+    console.log(`✅ 导入英文卡片: ${Object.keys(enData).length} 条 (宝具卡)`)
   }
 
   if (Object.keys(enData).length === 0) {
@@ -323,10 +349,12 @@ function importExcelToENJSON() {
   }
 
   fs.writeFileSync(EN_JSON_FILE, JSON.stringify(enData, null, 2))
-  console.log(`✅ 英文JSON文件已生成: ${EN_JSON_FILE} (${Object.keys(enData).length} 个条目)`)
+  console.log(
+    `✅ 英文JSON文件已生成: ${EN_JSON_FILE} (${Object.keys(enData).length} 个条目)`,
+  )
 }
 
-function exportJSONToExcel() {
+async function exportJSONToExcel() {
   const zhJsonData = JSON.parse(fs.readFileSync(JSON_FILE, 'utf-8'))
   let enJsonData = {}
   try {
@@ -336,7 +364,6 @@ function exportJSONToExcel() {
   }
   const normalRows = []
   const nobleRows = []
-
 
   const enHeader = [
     'Name',
@@ -368,9 +395,9 @@ function exportJSONToExcel() {
     '特殊值+',
     '宝具值+',
     '暴击星+',
-    '泛用性', 
+    '泛用性',
     '功能',
-    ...enHeader
+    ...enHeader,
   ]
 
   const nobleHeader = [
@@ -394,9 +421,9 @@ function exportJSONToExcel() {
     '特殊值+',
     '宝具值+',
     '暴击星+',
-    '泛用性', 
+    '泛用性',
     '功能',
-    ...enHeader
+    ...enHeader,
   ]
 
   const javaCardInfo = {}
@@ -420,38 +447,52 @@ function exportJSONToExcel() {
     }
 
     const javaInfo = javaCardInfo[cardId] || {
-      cost: null, type: '', target: '', rarity: '',
-      damage: null, block: null, magicNumber: null, np: null, star: null,
-      damageUpgrade: null, blockUpgrade: null, magicUpgrade: null,
-      npUpgrade: null, starUpgrade: null, costUpgrade: null, isNoble: false,
+      cost: null,
+      type: '',
+      target: '',
+      rarity: '',
+      damage: null,
+      block: null,
+      magicNumber: null,
+      np: null,
+      star: null,
+      damageUpgrade: null,
+      blockUpgrade: null,
+      magicUpgrade: null,
+      npUpgrade: null,
+      starUpgrade: null,
+      costUpgrade: null,
+      isNoble: false,
     }
 
     const enInfo = enJsonData[fullKey] || enJsonData[cardId] || {}
 
     const enFields = {
-      'Name': NL2LF(enInfo.NAME || ''),
-      'Description': NL2LF(enInfo.DESCRIPTION || ''),
+      Name: NL2LF(enInfo.NAME || ''),
+      Description: NL2LF(enInfo.DESCRIPTION || ''),
       'Description+': NL2LF(enInfo.UPGRADE_DESCRIPTION || ''),
-      'Extended Description': enInfo.EXTENDED_DESCRIPTION ?
-        enInfo.EXTENDED_DESCRIPTION.map(part => NL2LF(part)).join('\n') : '',
-      'Flavor': NL2LF(enInfo.FLAVOR || ''),
+      'Extended Description': enInfo.EXTENDED_DESCRIPTION
+        ? enInfo.EXTENDED_DESCRIPTION.map(part => NL2LF(part)).join('\n')
+        : '',
+      Flavor: NL2LF(enInfo.FLAVOR || ''),
     }
 
     const commonFields = {
-      'ID': cardId,
-      '牌名': zhInfo.NAME || '',
-      '类型': javaInfo.type,
-      '目标': javaInfo.target,
-      '费用': javaInfo.cost,
-      '描述': NL2LF(zhInfo.DESCRIPTION || ''),
-      '伤害值': javaInfo.damage,
-      '格挡值': javaInfo.block,
-      '特殊值': javaInfo.magicNumber,
-      '宝具值': javaInfo.np,
-      '暴击星': javaInfo.star,
-      '扩展描述': zhInfo.EXTENDED_DESCRIPTION ?
-        zhInfo.EXTENDED_DESCRIPTION.map(part => NL2LF(part)).join('\n') : '',
-      '风味文字': NL2LF(zhInfo.FLAVOR || ''),
+      ID: cardId,
+      牌名: zhInfo.NAME || '',
+      类型: javaInfo.type,
+      目标: javaInfo.target,
+      费用: javaInfo.cost,
+      描述: NL2LF(zhInfo.DESCRIPTION || ''),
+      伤害值: javaInfo.damage,
+      格挡值: javaInfo.block,
+      特殊值: javaInfo.magicNumber,
+      宝具值: javaInfo.np,
+      暴击星: javaInfo.star,
+      扩展描述: zhInfo.EXTENDED_DESCRIPTION
+        ? zhInfo.EXTENDED_DESCRIPTION.map(part => NL2LF(part)).join('\n')
+        : '',
+      风味文字: NL2LF(zhInfo.FLAVOR || ''),
       '费用+': javaInfo.costUpgrade,
       '描述+': NL2LF(zhInfo.UPGRADE_DESCRIPTION || ''),
       '伤害值+': javaInfo.damageUpgrade,
@@ -459,8 +500,8 @@ function exportJSONToExcel() {
       '特殊值+': javaInfo.magicUpgrade,
       '宝具值+': javaInfo.npUpgrade,
       '暴击星+': javaInfo.starUpgrade,
-      '泛用性': '',
-      '功能': '',
+      泛用性: '',
+      功能: '',
       ...enFields,
     }
 
@@ -469,28 +510,52 @@ function exportJSONToExcel() {
     } else {
       normalRows.push({
         ...commonFields,
-        '稀有度': javaInfo.rarity,
+        稀有度: javaInfo.rarity,
       })
     }
   }
 
   if (normalRows.length > 0) {
-    const wsNormal = XLSX.utils.json_to_sheet(normalRows, { header: normalHeader })
-    const wbNormal = XLSX.utils.book_new()
-    XLSX.utils.book_append_sheet(wbNormal, wsNormal, 'Cards')
-    XLSX.writeFile(wbNormal, OUTPUT_EXCEL_NORMAL)
+    const workbook = new ExcelJS.Workbook()
+    const worksheet = workbook.addWorksheet('Cards')
+
+    // 设置表头
+    worksheet.columns = normalHeader.map((header, index) => ({
+      header: header,
+      key: header,
+      width: 20,
+    }))
+
+    // 添加数据行
+    normalRows.forEach(row => {
+      worksheet.addRow(row)
+    })
+
+    await workbook.xlsx.writeFile(OUTPUT_EXCEL_NORMAL)
     console.log(
-      `✅ 普通卡 Excel 已生成: ${OUTPUT_EXCEL_NORMAL} (${normalRows.length} 张卡)`
+      `✅ 普通卡 Excel 已生成: ${OUTPUT_EXCEL_NORMAL} (${normalRows.length} 张卡)`,
     )
   }
 
   if (nobleRows.length > 0) {
-    const wsNoble = XLSX.utils.json_to_sheet(nobleRows, { header: nobleHeader })
-    const wbNoble = XLSX.utils.book_new()
-    XLSX.utils.book_append_sheet(wbNoble, wsNoble, 'Noble Cards')
-    XLSX.writeFile(wbNoble, OUTPUT_EXCEL_NOBLE)
+    const workbook = new ExcelJS.Workbook()
+    const worksheet = workbook.addWorksheet('Noble Cards')
+
+    // 设置表头
+    worksheet.columns = nobleHeader.map((header, index) => ({
+      header: header,
+      key: header,
+      width: 20,
+    }))
+
+    // 添加数据行
+    nobleRows.forEach(row => {
+      worksheet.addRow(row)
+    })
+
+    await workbook.xlsx.writeFile(OUTPUT_EXCEL_NOBLE)
     console.log(
-      `✅ 宝具卡 Excel 已生成: ${OUTPUT_EXCEL_NOBLE} (${nobleRows.length} 张卡)`
+      `✅ 宝具卡 Excel 已生成: ${OUTPUT_EXCEL_NOBLE} (${nobleRows.length} 张卡)`,
     )
   }
 }
@@ -517,12 +582,13 @@ async function main() {
 
   if (process.argv.includes('--export')) {
     console.log('\n▶ 正在导出Excel...')
-    exportJSONToExcel()
+    await exportJSONToExcel()
     return
   }
   if (process.argv.includes('--import')) {
     console.log('\n▶ 正在导入JSON...')
-    importExcelToJSON()
+    await importExcelToJSON()
+    await importExcelToENJSON()
     return
   }
 
@@ -531,12 +597,12 @@ async function main() {
   switch (choice.trim()) {
     case '1':
       console.log('\n▶ 正在导出Excel...')
-      exportJSONToExcel()
+      await exportJSONToExcel()
       break
     case '2':
       console.log('\n▶ 正在导入JSON...')
-      importExcelToJSON()
-      importExcelToENJSON()
+      await importExcelToJSON()
+      await importExcelToENJSON()
       break
     default:
       console.log('❌ 无效选择！请使用 1 或 2')

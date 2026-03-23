@@ -11,7 +11,7 @@ public class HeroicKingPower extends BasePower {
     public static final PowerStrings powerStrings = CardCrawlGame.languagePack.getPowerStrings(POWER_ID);
 
     public HeroicKingPower(AbstractCreature owner, int amount) {
-        super(POWER_ID, PowerType.BUFF, false, owner, amount, "PutOnFakeFacePower");
+        super(POWER_ID, PowerType.BUFF, false, owner, amount);
     }
 
     @Override

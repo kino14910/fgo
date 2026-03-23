@@ -26,5 +26,11 @@
     "DESCRIPTIONS": [
       "给予 #b%d 层 #y诅呪 。"
     ]
+  },
+  "${modID}:StarPotion": {
+    "NAME": "星之药水",
+    "DESCRIPTIONS": [
+      "获得 #b10 颗 #y暴击星 。"
+    ]
   }
 }
