@@ -358,11 +358,6 @@
     "NAME": "Dazzling Moon",
     "DESCRIPTION": "{@@}{!Upgrades!|1=Innate. NL }At the start of each turn for 3 turns, lose 1 Strength and all enemies lose 2 Strength. NL At the end, convert your negative Strength into equal Dexterity."
   },
-  "${modID}:Shvibzik": {
-    "NAME": "Shvibzik",
-    "DESCRIPTION": "Deal !D! damage. NL Obtain *Frozen *Eye this combat. NL Exhaust.",
-    "FLAVOR": "Test art can be changed."
-  },
   "${modID}:LakeTexcoco": {
     "NAME": "Lake Texcoco",
     "DESCRIPTION": "Gain !NP!% fgo:NP. NL At the next 3 turns, gain !M!% fgo:NP. NL Gain fgo:Waterside."
@@ -438,6 +433,10 @@
     "NAME": "Proof and Rebuttal",
     "DESCRIPTION": "{@@}Draw 1 card. NL Put any number of cards from your hand on top of draw pile.{!Upgrades!|0= NL Exhaust.}",
     "FLAVOR": "Test art can be changed."
+  },
+  "${modID}:Shvibzik": {
+    "NAME": "Shvibzik",
+    "DESCRIPTION": "Deal !D! damage. NL Obtain *Frozen *Eye this combat. NL Exhaust."
   },
   "${modID}:FifthForm": {
     "NAME": "Fifth Form",

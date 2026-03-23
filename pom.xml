@@ -97,6 +97,11 @@
                                     <includes>
                                         <include>src/main/resources/**/*.json</include>
                                     </includes>
+                                    <excludes>
+                                        <exclude>src/main/resources/**/node_modules/**</exclude>
+                                        <exclude>src/main/resources/**/package.json</exclude>
+                                        <exclude>src/main/resources/**/package-lock.json</exclude>
+                                    </excludes>
                                 </validationSet>
                             </validationSets>
                             <allowEmptyFiles>true</allowEmptyFiles>

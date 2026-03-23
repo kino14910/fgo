@@ -1,6 +1,5 @@
 package fgo.patches;
 
-import static fgo.FGOMod.BASE_NP_PERCARD;
 import static fgo.FGOMod.NP_RATE_POWER_MULTIPLIER;
 
 import com.badlogic.gdx.graphics.Color;
@@ -20,6 +19,7 @@ import fgo.characters.CustomEnums.FGOCardColor;
 import fgo.characters.Master;
 import fgo.powers.NPRatePower;
 import fgo.powers.SealNPPower;
+import fgo.ui.panels.FGOConfig;
 
 @SpirePatch(
     clz = AbstractCard.class,
@@ -47,7 +47,7 @@ public class PatchCostAmtKey {
 
     private static int getCostModifier() {
         boolean hasGoldLaw = AbstractDungeon.player.hasPower(NPRatePower.POWER_ID);
-        return BASE_NP_PERCARD * (hasGoldLaw ? NP_RATE_POWER_MULTIPLIER : 1);
+        return FGOConfig.baseNPPerCost * (hasGoldLaw ? NP_RATE_POWER_MULTIPLIER : 1);
     }
 
     private static int calculateCostAmount(int costForTurn, int costModifier) {

@@ -1,5 +1,5 @@
 {
-  "fgo:Emiya": {
+  "${modID}:Emiya": {
     "MOVES": [
       "Caladbolg Ⅱ",
       "Kanshou Bakuya",
@@ -17,6 +17,70 @@
       "Trace On!",
       "Sorry. Bad habit.",
       "This is the opportune time. I'm taking them down now."
+    ]
+  },
+  "${modID}:FaerieKnightGawain": {
+    "MOVES": [
+      ""
+    ],
+    "NAME": "Faerie Knight Gawain",
+    "DIALOG": [
+      ""
+    ]
+  },
+  "${modID}:FaerieKnightLancelot": {
+    "MOVES": [
+      "Innocence Aroundight"
+    ],
+    "NAME": "Faerie Knight Lancelot",
+    "DIALOG": [
+      ""
+    ]
+  },
+  "${modID}:QueenMorgan": {
+    "MOVES": [
+      "O bell of Orkney!",
+      "Now this is a storm."
+    ],
+    "NAME": "Queen Morgan",
+    "DIALOG": [
+      ""
+    ]
+  },
+  "${modID}:CalamityofNorwich": {
+    "MOVES": [
+      "",
+      "",
+      "",
+      ""
+    ],
+    "NAME": "Calamity of Norwich",
+    "DIALOG": [
+      ""
+    ]
+  },
+  "${modID}:Cernunnos": {
+    "MOVES": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "NAME": "Cernunnos",
+    "DIALOG": [
+      ""
+    ]
+  },
+  "${modID}:Moss": {
+    "MOVES": [
+      "",
+      ""
+    ],
+    "NAME": "Moss",
+    "DIALOG": [
+      ""
     ]
   }
 }

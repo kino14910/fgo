@@ -29,10 +29,7 @@ import com.megacrit.cardcrawl.helpers.ScreenShake;
 import com.megacrit.cardcrawl.helpers.TipHelper;
 import com.megacrit.cardcrawl.screens.CharSelectInfo;
 
-import basemod.BaseMod;
-import basemod.ReflectionHacks;
 import basemod.abstracts.CustomPlayer;
-import fgo.FGOMod;
 import fgo.cards.fgo.CharismaOfHope;
 import fgo.cards.fgo.Defend;
 import fgo.cards.fgo.DreamUponTheStars;
@@ -42,6 +39,7 @@ import fgo.patches.MainMenuUIFgoPatch;
 import fgo.patches.PictureSelectFgoPatch;
 import fgo.relics.SuitcaseFgo;
 import fgo.ui.panels.FGOConfig;
+import fgo.utils.ModHelper;
 import fgo.utils.Sounds;
 
 public class Master extends CustomPlayer{
@@ -238,7 +236,7 @@ public class Master extends CustomPlayer{
         float y = hb.y + hb.height;
         
         // Check if mintySpire TotalIncomingDamage is enabled
-        if (isMintySpireTIDEnabled()) {
+        if (ModHelper.isMintySpireTIDEnabled()) {
             y += 40.0f * Settings.scale; // Adjust position upward
         }
         
@@ -251,7 +249,7 @@ public class Master extends CustomPlayer{
         FgoNPhb.update();
         if (FgoNPhb.hovered) {
             if (!AbstractDungeon.isScreenUp) {
-                TipHelper.renderGenericTip(hb.cX + hb.width / 2.0f + TIP_OFFSET_R_X, y + hb.height / 2.0f, NPTEXT[0], String.format(NPTEXT[1], FGOMod.BASE_NP_PERCARD));
+                TipHelper.renderGenericTip(hb.cX + hb.width / 2.0f + TIP_OFFSET_R_X, y + hb.height / 2.0f, NPTEXT[0], String.format(NPTEXT[1], FGOConfig.baseNPPerCost));
             }
             FgoNpHideTimer -= Gdx.graphics.getDeltaTime() * 4.0f;
             if (FgoNpHideTimer < 0.2f) {
@@ -265,20 +263,7 @@ public class Master extends CustomPlayer{
         }
     }
     
-    private boolean isMintySpireTIDEnabled() {
-        try {
-            if (BaseMod.hasModID("mintyspire:") ) {
-                Class<?> mintySpireClass = Class.forName("mintySpire.MintySpire");
-                java.lang.reflect.Method showTIDMethod = ReflectionHacks.getCachedMethod(mintySpireClass, "showTID");
-                if (showTIDMethod != null) {
-                    return (boolean) showTIDMethod.invoke(null);
-                }
-            }
-        } catch (Exception e) {
-            // mintySpire not found or error accessing config
-        }
-        return false;
-    }
+
 
     private void renderTruthValueBar(SpriteBatch sb, float x) {
         Color color = fgoNp > 200 ? FgoNpBarColor3 : (fgoNp > 100 ? FgoNpBarColor2 : FgoNpBarColor1);

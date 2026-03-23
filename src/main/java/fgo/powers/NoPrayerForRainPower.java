@@ -12,7 +12,7 @@ public class NoPrayerForRainPower extends BasePower {
     public static final PowerStrings powerStrings = CardCrawlGame.languagePack.getPowerStrings(POWER_ID);
 
     public NoPrayerForRainPower(AbstractCreature owner) {
-        super(POWER_ID, PowerType.BUFF, false, owner, "PutOnFakeFacePower");
+        super(POWER_ID, PowerType.BUFF, false, owner);
     }
 
     @Override

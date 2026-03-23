@@ -21,6 +21,7 @@ import com.megacrit.cardcrawl.ui.panels.AbstractPanel;
 import fgo.action.NoblePhantasmSelectAction;
 import fgo.characters.Master;
 import fgo.powers.SealNPPower;
+import fgo.utils.ModHelper;
 
 public class NoblePhantasmButton extends AbstractPanel {
     private static final TutorialStrings tutorialStrings = CardCrawlGame.languagePack.getTutorialString("fgo:NoblePhantasm");
@@ -31,18 +32,18 @@ public class NoblePhantasmButton extends AbstractPanel {
 
     public NoblePhantasmButton() {
         super(
-            AbstractDungeon.player.hb.x - 48.0f * Settings.scale,
-            AbstractDungeon.player.hb.y + AbstractDungeon.player.hb.height - 16.0f * Settings.scale,
+            0.0f,
+            0.0f,
             -Settings.WIDTH,
-            AbstractDungeon.player.hb.y + AbstractDungeon.player.hb.height - 16.0f * Settings.scale,
+            0.0f,
             8.0f * Settings.xScale,
             0.0f,
             null,
             true
         );
         hb = new Hitbox(
-            AbstractDungeon.player.hb.x - 64.0f * Settings.scale,
-            AbstractDungeon.player.hb.y + AbstractDungeon.player.hb.height - 12.0f * Settings.scale,
+            0.0f,
+            0.0f,
             64.0f * Settings.scale,
             64.0f * Settings.scale
         );
@@ -50,6 +51,22 @@ public class NoblePhantasmButton extends AbstractPanel {
 
     @Override
     public void updatePositions() {
+        if (AbstractDungeon.player instanceof Master) {
+            Master master = (Master) AbstractDungeon.player;
+            float x = master.hb.x - 48.0f * Settings.scale;
+            float y = master.hb.y + master.hb.height - 16.0f * Settings.scale + (ModHelper.isMintySpireTIDEnabled() ? 40.0f * Settings.scale : 0.0f);
+            
+            this.current_x = x;
+            this.current_y = y;
+            this.target_x = x;
+            this.target_y = y;
+            
+            hb.move(
+                master.hb.x - 64.0f * Settings.scale,
+                master.hb.y + master.hb.height - 12.0f * Settings.scale + (ModHelper.isMintySpireTIDEnabled() ? 40.0f * Settings.scale : 0.0f)
+            );
+        }
+        
         super.updatePositions();
         hb.update();
         scale = MathHelper.scaleLerpSnap(scale, Settings.scale);
@@ -84,10 +101,16 @@ public class NoblePhantasmButton extends AbstractPanel {
 
         hb.render(sb);
 
-        if (shouldRenderTip()) {
+        if (shouldRenderTip() && AbstractDungeon.player instanceof Master) {
+            Master master = (Master) AbstractDungeon.player;
+            float tipYOffset = 0.0f;
+            if (ModHelper.isMintySpireTIDEnabled()) {
+                tipYOffset = 40.0f * Settings.scale; // Adjust tip position upward for MintySpireTID
+            }
+            
             TipHelper.renderGenericTip(
-                AbstractDungeon.player.hb.x - 128.0f * Settings.scale,
-                AbstractDungeon.player.hb.y + AbstractDungeon.player.hb.height - 32.0f * Settings.scale,
+                master.hb.x - 128.0f * Settings.scale,
+                master.hb.y + master.hb.height - 32.0f * Settings.scale + tipYOffset,
                 tutorialStrings.LABEL[0],
                 tutorialStrings.TEXT[0] + tutorialStrings.TEXT[1]
             );

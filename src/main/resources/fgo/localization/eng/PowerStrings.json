@@ -512,6 +512,12 @@
       "At the end of your turn, lose #b%d #yStrength."
     ]
   },
+  "${modID}:ViyViyViyPower": {
+    "NAME": "Viy",
+    "DESCRIPTIONS": [
+      "You lose #r%s at the end of combat."
+    ]
+  },
   "${modID}:StarHunterPower": {
     "NAME": "Star Hunter",
     "DESCRIPTIONS": [
@@ -535,6 +541,102 @@
     "DESCRIPTIONS": [
       "Receive #b25% more damage from #yAttacks for this turn.",
       "Receive #b25%% more damage from #yAttacks for #b%d turns."
+    ]
+  },
+  "${modID}:BusterCardPower": {
+    "NAME": "Buster",
+    "DESCRIPTIONS": [
+      "#yAttack card: Increases attack damage by #b%d, increases #yBlock gained by #b%d."
+    ]
+  },
+  "${modID}:ArtsCardPower": {
+    "NAME": "Arts",
+    "DESCRIPTIONS": [
+      "Whenever you play a #ySkill card, gain #b%d%% additional #yNP."
+    ]
+  },
+  "${modID}:QuickCardPower": {
+    "NAME": "Quick",
+    "DESCRIPTIONS": [
+      "Whenever you play a #yPower card, gain #b%d #yStar."
+    ]
+  },
+  "${modID}:FoulWeatherPower": {
+    "NAME": "Foul Weather",
+    "DESCRIPTIONS": [
+      "Reduce #b%d%% damage taken."
+    ]
+  },
+  "${modID}:TaintedCursePower": {
+    "NAME": "Tainted Curse",
+    "DESCRIPTIONS": [
+      "Reduce #b50% damage taken. Whenever it is #yattacked, apply #b1 #yEvil #yCurse to you."
+    ]
+  },
+  "${modID}:PowerofGrudgePower": {
+    "NAME": "Power of Grudge",
+    "DESCRIPTIONS": [
+      "This enemy's attack damage and the damage it takes both increase by #b1 for each #yEvil #yCurse."
+    ]
+  },
+  "${modID}:CurseCondensingPower": {
+    "NAME": "Curse Condensing",
+    "DESCRIPTIONS": [
+      "After the enemy's next action conclude, you will absorb all #yEvil #yCurses.",
+      "After the enemy's next #b%d actions concludes, you will absorb all #yEvil #yCurses."
+    ]
+  },
+  "${modID}:FaerieKnightPower": {
+    "NAME": "Faerie Knight",
+    "DESCRIPTIONS": [
+      "Your next #yCamelot gain additional buffs: gain #b5 #yArtifact."
+    ]
+  },
+  "${modID}:CooldownFgoPower": {
+    "NAME": "Cooldown",
+    "DESCRIPTIONS": [
+      "%s has no effect but to reduce 1 turn, exist #b%d turns."
+    ]
+  },
+  "${modID}:FaeQueenPower": {
+    "NAME": "Fae Queen",
+    "DESCRIPTIONS": [
+      "1.At the end of her turn, remove #b1 debuff. NL 2.Activate #yCharisma #yof #yDesire once every #b3 turns, she gain #b2 #yStrength and you gain #b1 #yVulnerable.",
+      "It is currently the #b%dth turn.",
+      "At the end of this turn, #rActivate #rCharisma #rof #rDesire."
+    ]
+  },
+  "${modID}:OrkneyPower": {
+    "NAME": "O bell of Orkney!",
+    "DESCRIPTIONS": [
+      "At the end of her for #b%d turns, you gain #b1 #yWeak, add #b2 *Dazed into your discard pile."
+    ]
+  },
+  "${modID}:NowStormPower": {
+    "NAME": "Now this is a storm.",
+    "DESCRIPTIONS": [
+      "1.At the end of her turn, she gain #b1 #yStrength and #yThorns. NL 2.Each of her attack intentions will remove one of your buffs."
+    ]
+  },
+  "${modID}:ProphesizedChildPower": {
+    "NAME": "Prophesized Child",
+    "DESCRIPTIONS": [
+      "Activate #yCharisma #yof #yHope once every #b3 turns, you gain #b2 #yStrength and #b30% #yNP.",
+      "It is currently the #b%dth turn.",
+      "At the end of this turn, #yActivate #yCharisma #yrof #yHope."
+    ]
+  },
+  "${modID}:CurseDecayedFleshPower": {
+    "NAME": "Curse Decayed Flesh",
+    "DESCRIPTIONS": [
+      "#yCernunnos reduces attack damage it takes by #b10% and increases its attack damage by #b10% for each stack of #yEvil #yCurses it has.",
+      " NL Whenever #yCernunnos is attacked, if it has #yEvil #yCurses, it removes #b1 #yEvil #yCurses, heals #b10 HP, and you gain #b1 #yVulnerable and #yEvil #yCurses."
+    ]
+  },
+  "${modID}:GainsCurseLayerPower": {
+    "NAME": "Gains Curse Layer",
+    "DESCRIPTIONS": [
+      "At the end of each turn, #yCernunnos gain #b3 #yEvil #yCurses. NL Whenever #yCernunnos attack, gain #b1 #yEvil #yCurses."
     ]
   }
 }

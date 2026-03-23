@@ -104,11 +104,18 @@
   },
   "${modID}:FGOConfig": {
     "TEXT_DICT": {
+      "baseNPPerCost": "NP Gain per Cost",
       "enableColorlessCards": "Enable Colorless Cards (Requires game restart)",
-      "enableEmiya": "Enable BOSS: Emiya (Requires game restart)",
       "enablePadoru": "Enable Christmas Easter Egg",
       "enableFtue": "Enable Ftue",
-      "enableNoCostNoblePhantasm": "Enable No Cost Noble Phantasm (Requires game restart)"
+      "enableNoCostNoblePhantasm": "Enable No Cost Noble Phantasm (Requires game restart)",
+      "enableEmiya": "Enable BOSS: Emiya (Requires game restart)",
+      "enableCalamityofNorwich": "Enable Calamity of Norwich (Requires game restart)",
+      "enableCernunnos": "Enable Cernunnos (Requires game restart)",
+      "enableFaerieKnightGawain": "Enable Faerie Knight Gawain (Requires game restart)",
+      "enableFaerieKnightLancelot": "Enable Faerie Knight Lancelot (Requires game restart)",
+      "enableMoss": "Enable Moss (Requires game restart)",
+      "enableQueenMorgan": "Enable Queen Morgan (Requires game restart)"
     }
   },
   "${modID}:NobleDeckViewScreen": {

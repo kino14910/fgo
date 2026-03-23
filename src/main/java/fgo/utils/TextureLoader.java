@@ -124,15 +124,23 @@ public class TextureLoader {
         logger.info("Loaded texture " + textureString);
         textures.put(textureString, texture);
     }
+public static Texture getPowerTexture(final String powerName) {
+    String textureString = powerPath(powerName);
+    Texture t = getTextureNull(textureString);
+    
+    if (t == null) {
+        return getTexture(powerPath("PutOnFakeFacePower"));
+    }
+    return t;
+}
 
-    public static Texture getPowerTexture(final String powerName)
-    {
-        String textureString = powerPath(powerName);
-        return getTexture(textureString);
+public static Texture getHiDefPowerTexture(final String powerName) {
+    String textureString = powerPath("large/" + powerName);
+    Texture t = getTextureNull(textureString);
+    
+    if (t == null) {
+        return getTextureNull(powerPath("large/" + "PutOnFakeFacePower"));
     }
-    public static Texture getHiDefPowerTexture(final String powerName)
-    {
-        String textureString = powerPath("large/" + powerName);
-        return getTextureNull(textureString);
-    }
+    return t;
+}
 }

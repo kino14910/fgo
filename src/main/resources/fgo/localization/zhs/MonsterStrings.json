@@ -1,5 +1,5 @@
 {
-  "fgo:Emiya": {
+  "${modID}:Emiya": {
     "MOVES": [
       "伪螺旋剑",
       "干将莫邪",
@@ -17,6 +17,70 @@
       "投影，开始！",
       "习惯不太好呢。",
       "趁这个机会，彻底解决掉吧。"
+    ]
+  },
+  "${modID}:FaerieKnightGawain": {
+    "MOVES": [
+      ""
+    ],
+    "NAME": "妖精骑士高文",
+    "DIALOG": [
+      ""
+    ]
+  },
+  "${modID}:FaerieKnightLancelot": {
+    "MOVES": [
+      "无垢湖光"
+    ],
+    "NAME": "妖精骑士兰斯洛特",
+    "DIALOG": [
+      ""
+    ]
+  },
+  "${modID}:QueenMorgan": {
+    "MOVES": [
+      "奥克尼之钟啊……！",
+      "风暴应该是这样的！"
+    ],
+    "NAME": "女王摩根",
+    "DIALOG": [
+      ""
+    ]
+  },
+  "${modID}:CalamityofNorwich": {
+    "MOVES": [
+      "",
+      "",
+      "",
+      ""
+    ],
+    "NAME": "诺维奇的灾厄",
+    "DIALOG": [
+      ""
+    ]
+  },
+  "${modID}:Cernunnos": {
+    "MOVES": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "NAME": "科尔努诺斯",
+    "DIALOG": [
+      ""
+    ]
+  },
+  "${modID}:Moss": {
+    "MOVES": [
+      "",
+      ""
+    ],
+    "NAME": "苔藓",
+    "DIALOG": [
+      ""
     ]
   }
 }

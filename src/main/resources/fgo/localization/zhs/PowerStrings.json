@@ -501,6 +501,12 @@
       "在你的回合结束时，失去 #b%d 点 #y力量 。"
     ]
   },
+  "${modID}:ViyViyViyPower": {
+    "NAME": "维",
+    "DESCRIPTIONS": [
+      "在战斗结束时你失去 #r%s 。"
+    ]
+  },
   "${modID}:StarHunterPower": {
     "NAME": "星之猎人",
     "DESCRIPTIONS": [
@@ -524,6 +530,102 @@
     "DESCRIPTIONS": [
       "在本回合从 #y攻击 受到的伤害增加 #b25% 。",
       "从 #y攻击 受到的伤害增加 #b25%% 。持续时间 #b%d 回合。"
+    ]
+  },
+  "${modID}:BusterCardPower": {
+    "NAME": "攻击牌性能提升",
+    "DESCRIPTIONS": [
+      "#y攻击牌 额外造成 #b%d 点伤害，从 #y攻击牌 中额外获得 #b%d 点 #y格挡 。"
+    ]
+  },
+  "${modID}:ArtsCardPower": {
+    "NAME": "技能牌性能提升",
+    "DESCRIPTIONS": [
+      "每当你打出一张 #y技能牌 ，额外获得 #b%d%% #y宝具值 。"
+    ]
+  },
+  "${modID}:QuickCardPower": {
+    "NAME": "能力牌性能提升",
+    "DESCRIPTIONS": [
+      "每当你打出一张 #g能力牌 ，额外获得 #b%d 颗 #y暴击星 。"
+    ]
+  },
+  "${modID}:FoulWeatherPower": {
+    "NAME": "福尔·韦瑟",
+    "DESCRIPTIONS": [
+      "受到的所有攻击伤害减少 #b%d%% 。"
+    ]
+  },
+  "${modID}:TaintedCursePower": {
+    "NAME": "咒咒污浊",
+    "DESCRIPTIONS": [
+      "受到的所有攻击伤害减少 #b50% 。每当其被攻击时，给予你 #b1 层 #y诅呪 。"
+    ]
+  },
+  "${modID}:PowerofGrudgePower": {
+    "NAME": "怨咒之力",
+    "DESCRIPTIONS": [
+      "这名敌人每有 #b1 层 #y诅呪 ，它的攻击伤害和受到的攻击伤害都提高 #b1 点。"
+    ]
+  },
+  "${modID}:CurseCondensingPower": {
+    "NAME": "诅咒汇集",
+    "DESCRIPTIONS": [
+      "在敌人的下一个行动结束后，你被吸收所有 #y诅呪 状态。",
+      "在敌人的下 #b%d 个行动结束后，你被吸收所有 #y诅呪 状态。"
+    ]
+  },
+  "${modID}:FaerieKnightPower": {
+    "NAME": "谢菲尔德的骑士",
+    "DESCRIPTIONS": [
+      "你下一次打出 #y理想之城 时，获得 #b5 层 #y人工制品 。"
+    ]
+  },
+  "${modID}:CooldownFgoPower": {
+    "NAME": "冷却中",
+    "DESCRIPTIONS": [
+      "你打出 %s 时将没有效果，但可以减少一回合。持续时间 #b%d 回合。"
+    ]
+  },
+  "${modID}:FaeQueenPower": {
+    "NAME": "妖精女王",
+    "DESCRIPTIONS": [
+      "1.在她回合结束时，移除 #b1 个负面状态。 NL 2.每间隔 #b3 个回合，释放渴望的魅力，她获得 #b2 点 #y力量 并且给予你 #b1 层 #y易伤 。",
+      "当前间隔 #b%d 回合。",
+      "在她的本回合结束时 #r释放渴望的魅力 。"
+    ]
+  },
+  "${modID}:OrkneyPower": {
+    "NAME": "奥克尼之钟啊……！",
+    "DESCRIPTIONS": [
+      "在她的回合结束时，给予你 #b1 层 #y虚弱 ，将 #b2 张 #y晕眩 放入你的弃牌堆。持续回合 #b%d 回合。"
+    ]
+  },
+  "${modID}:NowStormPower": {
+    "NAME": "风暴应该是这样的！",
+    "DESCRIPTIONS": [
+      "1.在她的回合结束时，她获得 #b1 点 #y力量 和 #y荆棘 。 NL 2.她的每次攻击意图都会移除你的 #b1 个正面状态。"
+    ]
+  },
+  "${modID}:ProphesizedChildPower": {
+    "NAME": "预言之子",
+    "DESCRIPTIONS": [
+      "每间隔 #b3 个回合，释放希望的魅力，你获得 #b2 点 #y力量 和 #b30% #y宝具值 。",
+      "当前间隔 #b%d 回合。",
+      "在本回合结束时 #y释放希望的魅力 。"
+    ]
+  },
+  "${modID}:CurseDecayedFleshPower": {
+    "NAME": "咒腐肉层",
+    "DESCRIPTIONS": [
+      "#y科尔努诺斯 每有一层 #y诅呪 ，就减少 #b10% 受到的攻击伤害，增加 #b10% 攻击伤害。",
+      " NL 每当 #y科尔努诺斯 被攻击时，如果它有 #y诅呪 状态，则它移除 #b1 层 #y诅呪 ，回复 #b10 点生命，给予你 #b1 层 #y易伤 和 #y诅呪 。"
+    ]
+  },
+  "${modID}:GainsCurseLayerPower": {
+    "NAME": "咒层生成",
+    "DESCRIPTIONS": [
+      "在每回合结束时， #y科尔努诺斯 获得 #b3 层 #y诅呪 。 NL 每当 #y科尔努诺斯 攻击时，获得 #b1 层 #y诅呪 。"
     ]
   }
 }

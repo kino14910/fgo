@@ -128,7 +128,6 @@ public class FGOMod implements
     public static final Logger logger = LogManager.getLogger(modID); //Used to output to the console.
     private static final String resourcesFolder = checkResourcesPath();
     
-    public static final int BASE_NP_PERCARD = 3;
     public static final int NP_RATE_POWER_MULTIPLIER = 2;
     
     static Texture[] ftues;
@@ -203,6 +202,24 @@ public class FGOMod implements
         if(FGOConfig.enableEmiya){
             BaseMod.addMonster(Emiya.ID, Emiya.NAME, () -> new MonsterGroup(new AbstractMonster[]{new Emiya()}));
             BaseMod.addBoss(TheBeyond.ID, Emiya.ID, monsterPath("map_emiya"), monsterPath("map_emiya_outline"));
+        }
+        if(FGOConfig.enableCalamityofNorwich){
+            BaseMod.addMonster(fgo.monsters.CalamityofNorwich.ID, fgo.monsters.CalamityofNorwich.NAME, () -> new MonsterGroup(new AbstractMonster[]{new fgo.monsters.CalamityofNorwich()}));
+        }
+        if(FGOConfig.enableCernunnos){
+            BaseMod.addMonster(fgo.monsters.Cernunnos.ID, fgo.monsters.Cernunnos.NAME, () -> new MonsterGroup(new AbstractMonster[]{new fgo.monsters.Cernunnos()}));
+        }
+        if(FGOConfig.enableFaerieKnightGawain){
+            BaseMod.addMonster(fgo.monsters.FaerieKnightGawain.ID, fgo.monsters.FaerieKnightGawain.NAME, () -> new MonsterGroup(new AbstractMonster[]{new fgo.monsters.FaerieKnightGawain()}));
+        }
+        if(FGOConfig.enableFaerieKnightLancelot){
+            BaseMod.addMonster(fgo.monsters.FaerieKnightLancelot.ID, fgo.monsters.FaerieKnightLancelot.NAME, () -> new MonsterGroup(new AbstractMonster[]{new fgo.monsters.FaerieKnightLancelot()}));
+        }
+        if(FGOConfig.enableMoss){
+            BaseMod.addMonster(fgo.monsters.Moss.ID, fgo.monsters.Moss.NAME, () -> new MonsterGroup(new AbstractMonster[]{new fgo.monsters.Moss()}));
+        }
+        if(FGOConfig.enableQueenMorgan){
+            BaseMod.addMonster(fgo.monsters.QueenMorgan.ID, fgo.monsters.QueenMorgan.NAME, () -> new MonsterGroup(new AbstractMonster[]{new fgo.monsters.QueenMorgan()}));
         }
         shouldRenderNobleDeck = true;
     }
@@ -536,7 +553,7 @@ public class FGOMod implements
                     ImageMaster.loadImage(uiPath("tutorial/4")),
                 };
                 tutTexts = CardCrawlGame.languagePack.getUIString(makeID("ftue")).TEXT;
-                tutTexts[0] = String.format(tutTexts[0], BASE_NP_PERCARD);    
+                tutTexts[0] = String.format(tutTexts[0], FGOConfig.baseNPPerCost);    
             boolean hasTexture  = false;
             for (Texture tex : ftues) {
                 if (tex == null) {
@@ -602,7 +619,7 @@ public class FGOMod implements
 
     
     private int calculateNpRateMultiplier() {
-        int multiplier = BASE_NP_PERCARD;
+        int multiplier = FGOConfig.baseNPPerCost;
         
         AbstractPlayer p = AbstractDungeon.player;
         if (p.hasPower(NPRatePower.POWER_ID)) {
