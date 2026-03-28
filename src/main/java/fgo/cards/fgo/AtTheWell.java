@@ -13,7 +13,7 @@ public class AtTheWell extends FGOCard {
 
     public AtTheWell() {
         super(ID, 0, CardType.SKILL, CardTarget.SELF, CardRarity.RARE);
-        setMagic(10, 10);
+        setMagic(6, 12);
         setExhaust();
         tags.add(CardTags.HEALING);
     }

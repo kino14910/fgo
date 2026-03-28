@@ -24,7 +24,7 @@ public class AtTheWellPower extends BasePower {
     @Override
     public void atStartOfTurn() {
         flash();
-        addToBot(new ApplyPowerAction(owner, owner, new GutsPower(owner, 3)));
+        addToBot(new ApplyPowerAction(owner, owner, new GutsPower(owner, amount)));
         addToBot(new VFXAction(new LightningEffect(owner.hb.cX, owner.hb.cY)));
         addToBot(new LoseHPAction(owner, owner, 99999));
         addToBot(new FgoNpAction(80));
