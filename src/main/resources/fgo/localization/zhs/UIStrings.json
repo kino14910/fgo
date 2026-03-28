@@ -109,13 +109,14 @@
       "enablePadoru": "启用圣诞节彩蛋",
       "enableFtue": "启用新手教程",
       "enableNoCostNoblePhantasm": "启用宝具卡无消耗（需要重启游戏）",
-      "enableEmiya": "启用BOSS: 卫宫（需要重启游戏）",
-      "enableCalamityofNorwich": "启用诺里奇的灾难（需要重启游戏）",
-      "enableCernunnos": "启用科尔努诺斯（需要重启游戏）",
-      "enableFaerieKnightGawain": "启用妖精骑士高文（需要重启游戏）",
-      "enableFaerieKnightLancelot": "启用妖精骑士兰斯洛特（需要重启游戏）",
-      "enableMoss": "启用莫斯（需要重启游戏）",
-      "enableQueenMorgan": "启用摩根女王（需要重启游戏）"
+      "enableEnemies": "启用敌对（需要重启游戏）",
+      "enableEmiya": "卫宫",
+      "enableCalamityofNorwich": "诺里奇的灾难",
+      "enableCernunnos": "科尔努诺斯",
+      "enableFaerieKnightGawain": "妖精骑士高文",
+      "enableFaerieKnightLancelot": "妖精骑士兰斯洛特",
+      "enableMoss": "莫斯",
+      "enableQueenMorgan": "摩根女王"
     }
   },
   "${modID}:ftue": {

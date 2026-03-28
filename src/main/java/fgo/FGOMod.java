@@ -100,7 +100,6 @@ import fgo.ui.panels.FGOConfig;
 import fgo.ui.panels.MasterSkin;
 import fgo.ui.panels.NobleDeckCards;
 import fgo.ui.screens.NobleDeckViewScreen;
-import fgo.utils.GeneralUtils;
 import fgo.utils.KeywordInfo;
 import fgo.utils.Sounds;
 import fgo.utils.TextureLoader;
@@ -123,7 +122,6 @@ public class FGOMod implements
         {
     public static ModInfo info;
     public static String modID; //Edit your pom.xml to change this
-    public static FGOConfig config;
     static { loadModInfo(); }
     public static final Logger logger = LogManager.getLogger(modID); //Used to output to the console.
     private static final String resourcesFolder = checkResourcesPath();
@@ -187,17 +185,12 @@ public class FGOMod implements
         registerPotions();
         registerEvents();
         //This loads the image used as an icon in the in-game mods menu.
-        Texture badgeTexture = TextureLoader.getTexture(uiPath("badge"));
+        // Texture badgeTexture = TextureLoader.getTexture(uiPath("badge"));
         //Set up the mod information displayed in the in-game mods menu.
         //The information used is taken from your pom.xml file.
 
-        //If you want to set up a config panel, that will be done here.
-        //The Mod Badges page has a basic example of this, but setting up config is overall a bit complex.
-
-        // this has been loaded from receiveEditCards
-        // config = new FGOConfig();
-
-        BaseMod.registerModBadge(badgeTexture, info.Name, GeneralUtils.arrToString(info.Authors), info.Description, config);
+        // Set up the mod config menu
+        FGOConfig.initModConfigMenu();
 
         if(FGOConfig.enableEmiya){
             BaseMod.addMonster(Emiya.ID, Emiya.NAME, () -> new MonsterGroup(new AbstractMonster[]{new Emiya()}));
@@ -457,7 +450,8 @@ public class FGOMod implements
 
     @Override
     public void receiveEditCards() { //somewhere in the class
-        config = new FGOConfig();
+        // Initialize FGOConfig settings
+        FGOConfig.initModSettings();
         AutoAdd autoAdd = new AutoAdd(modID);
         //Loads files from this mod
         autoAdd.packageFilter(FGOCard.class) //In the same package as this class
@@ -565,7 +559,11 @@ public class FGOMod implements
             System.out.println("hasTexture: " + hasTexture);
             AbstractDungeon.ftue = new CustomMultiPageFtue(ftues, tutTexts);
             FGOConfig.enableFtue = false;
-            FGOMod.config.save();
+            try {
+                FGOConfig.config.save();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
