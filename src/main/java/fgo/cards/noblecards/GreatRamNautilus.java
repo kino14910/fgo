@@ -15,7 +15,7 @@ public class GreatRamNautilus extends AbsNoblePhantasmCard {
     public static final String ID = makeID(GreatRamNautilus.class.getSimpleName());
 
     public GreatRamNautilus() {
-        super(ID,CardType.ATTACK, CardTarget.ENEMY, 2);
+        super(ID, CardType.ATTACK, CardTarget.ENEMY, 2);
         setDamage(40, 12);
     }
 

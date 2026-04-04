@@ -31,5 +31,4 @@ public class ElementaryPower extends BasePower {
             }
         }
     }
-
 }

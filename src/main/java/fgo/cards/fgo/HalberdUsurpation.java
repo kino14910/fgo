@@ -12,8 +12,10 @@ import com.megacrit.cardcrawl.powers.GainStrengthPower;
 import com.megacrit.cardcrawl.powers.StrengthPower;
 
 import fgo.cards.FGOCard;
+
 public class HalberdUsurpation extends FGOCard {
     public static final String ID = makeID(HalberdUsurpation.class.getSimpleName());
+
     public HalberdUsurpation() {
         super(ID, 2, CardType.ATTACK, CardTarget.ENEMY, CardRarity.UNCOMMON);
         setDamage(15, 5);
@@ -38,7 +40,7 @@ public class HalberdUsurpation extends FGOCard {
             return;
         }
         int HuAmt = getPowerCount(m, StrengthPower.POWER_ID) * 2;
-        if(HuAmt <= 0) {
+        if (HuAmt <= 0) {
             return;
         }
         addToBot(new ApplyPowerAction(m, p, new StrengthPower(m, -HuAmt)));

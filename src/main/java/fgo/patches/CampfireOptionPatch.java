@@ -14,7 +14,6 @@ import javassist.CannotCompileException;
 import javassist.expr.ExprEditor;
 import javassist.expr.FieldAccess;
 
-
 @SpirePatch(clz = CampfireUI.class, method = "initializeButtons")
 public class CampfireOptionPatch {
     @SpireInstrumentPatch

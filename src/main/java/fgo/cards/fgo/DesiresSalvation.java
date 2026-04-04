@@ -6,8 +6,10 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 
 import fgo.cards.FGOCard;
 import fgo.powers.EnergyRegenPower;
+
 public class DesiresSalvation extends FGOCard {
     public static final String ID = makeID(DesiresSalvation.class.getSimpleName());
+
     public DesiresSalvation() {
         super(ID, 1, CardType.POWER, CardTarget.SELF, CardRarity.UNCOMMON);
         setNP(10);

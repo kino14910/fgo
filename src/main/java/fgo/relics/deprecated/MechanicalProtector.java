@@ -11,9 +11,10 @@ import fgo.characters.CustomEnums.FGOCardColor;
 import fgo.powers.CursePower;
 import fgo.relics.BaseRelic;
 
-public class MechanicalProtector extends BaseRelic implements OnReceivePowerRelic{
+public class MechanicalProtector extends BaseRelic implements OnReceivePowerRelic {
     private static final String NAME = "MechanicalProtector";
 	public static final String ID = makeID(NAME);
+    
     public MechanicalProtector() {
         super(ID, NAME, FGOCardColor.FGO, RelicTier.RARE, LandingSound.FLAT);
     }

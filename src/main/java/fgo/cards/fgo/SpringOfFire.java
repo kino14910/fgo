@@ -7,8 +7,10 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import fgo.cards.FGOCard;
 import fgo.powers.NonStackableGutsPower;
 import fgo.powers.SpringOfFirePower;
+
 public class SpringOfFire extends FGOCard {
     public static final String ID = makeID(SpringOfFire.class.getSimpleName());
+
     public SpringOfFire() {
         super(ID, 3, CardType.POWER, CardTarget.SELF, CardRarity.RARE);
         setMagic(3, 3);

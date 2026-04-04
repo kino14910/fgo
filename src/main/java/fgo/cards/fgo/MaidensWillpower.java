@@ -10,6 +10,7 @@ import fgo.powers.GutsPower;
 
 public class MaidensWillpower extends FGOCard {
     public static final String ID = makeID(MaidensWillpower.class.getSimpleName());
+
     public MaidensWillpower() {
         super(ID, 1, CardType.SKILL, CardTarget.SELF, CardRarity.COMMON);
         setCostUpgrade(0);

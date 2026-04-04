@@ -25,13 +25,16 @@ public class PowerofGrudgePower extends BasePower {
 
     @Override
     public float atDamageGive(float damage, DamageInfo.DamageType type) {
-        return type == DamageInfo.DamageType.NORMAL && this.owner.hasPower(CursePower.POWER_ID) ? damage + (float)this.owner.getPower(CursePower.POWER_ID).amount : damage;
+        if (type == DamageInfo.DamageType.NORMAL && this.owner.hasPower(CursePower.POWER_ID)) {
+            return damage + this.owner.getPower(CursePower.POWER_ID).amount;
+        }
+        return damage;
     }
 
     @Override
     public float atDamageReceive(float damage, DamageInfo.DamageType type) {
-        if (type == DamageInfo.DamageType.NORMAL) {
-            return this.owner != null && !this.owner.isPlayer && this.owner.hasPower(CursePower.POWER_ID) ? damage + (float)this.owner.getPower(CursePower.POWER_ID).amount : damage;
+        if (type == DamageInfo.DamageType.NORMAL && this.owner != null && !this.owner.isPlayer && this.owner.hasPower(CursePower.POWER_ID)) {
+            return damage + this.owner.getPower(CursePower.POWER_ID).amount;
         }
         return damage;
     }

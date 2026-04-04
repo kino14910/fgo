@@ -16,8 +16,9 @@ import fgo.cards.AbsNoblePhantasmCard;
 
 public class LostLonginus extends AbsNoblePhantasmCard {
     public static final String ID = makeID(LostLonginus.class.getSimpleName());
+    
     public LostLonginus() {
-        super(ID,CardType.ATTACK, CardTarget.ALL_ENEMY, 1);
+        super(ID, CardType.ATTACK, CardTarget.ALL_ENEMY, 1);
         setDamage(24, 6);
         setMagic(100, 100);
     }

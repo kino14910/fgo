@@ -1,6 +1,4 @@
 package fgo.patches;
-
-
 import java.util.ArrayList;
 
 import com.evacipated.cardcrawl.modthespire.lib.LineFinder;
@@ -19,7 +17,6 @@ import javassist.CtBehavior;
 
 
 public class HotkeyPatches {
-
     @SpirePatch(
             clz = InputSettingsScreen.class,
             method = "refreshData"

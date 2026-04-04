@@ -36,6 +36,4 @@ public class EvasionPower extends BasePower {
 
         return damageAmount;
     }
-
-    
 }

@@ -24,7 +24,6 @@ public class ExtraterrestrialOctopus extends FGOCard {
         tags.add(FGO_Foreigner);
     }
 
-    
     @Override
     public void applyPowers() {
         setDamage(getPowerCount(AbstractDungeon.player, StarPower.POWER_ID));

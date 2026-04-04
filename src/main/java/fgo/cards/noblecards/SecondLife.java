@@ -13,7 +13,7 @@ public class SecondLife extends AbsNoblePhantasmCard {
     public static final String ID = makeID(SecondLife.class.getSimpleName());
 
     public SecondLife() {
-        super(ID,CardType.SKILL, CardTarget.SELF, 1);
+        super(ID, CardType.SKILL, CardTarget.SELF, 1);
         setNP(25, 25);
     }
 

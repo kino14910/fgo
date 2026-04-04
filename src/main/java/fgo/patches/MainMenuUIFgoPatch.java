@@ -29,7 +29,7 @@ import com.megacrit.cardcrawl.screens.options.DropdownMenu;
 import basemod.ReflectionHacks;
 import basemod.interfaces.ISubscriber;
 
-public class MainMenuUIFgoPatch implements ISubscriber{
+public class MainMenuUIFgoPatch implements ISubscriber {
     public static final ArrayList<DropdownMenu> dropdowns = new ArrayList<>();
     public static final ArrayList<String> packSetups = new ArrayList<>();
     private static final Hitbox packDraftToggle = new Hitbox(40.0f * Settings.scale, 40.0f * Settings.scale);
@@ -101,7 +101,7 @@ public class MainMenuUIFgoPatch implements ISubscriber{
 
     public static String refreshSkinFgo() {
         String skinPath = characterPath("Master" + modifierIndexes + "");
-        if(modifierIndexes == 19) {
+        if (modifierIndexes == 19) {
             skinPath = characterPath("Cat_Arcueid_Brunestud");
         }
         return skinPath;
@@ -156,7 +156,7 @@ public class MainMenuUIFgoPatch implements ISubscriber{
                     }
                 }
 
-                if(stopInput)
+                if (stopInput)
                     return;
 
                 packDraftToggle.update();

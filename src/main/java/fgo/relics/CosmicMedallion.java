@@ -28,11 +28,13 @@ public class CosmicMedallion extends BaseRelic {
         this.pulse = true;
         beginPulse();
     }
+    
     @Override
     public void onPlayerEndTurn() {
         isChecking = true;
         this.pulse = false;
     }
+    
     @Override
     public void onLoseHp(int damageAmount) {
         if (!isActive) {
@@ -50,10 +52,12 @@ public class CosmicMedallion extends BaseRelic {
         addToTop(new RelicAboveCreatureAction(p, this));
         
     }
+    
     @Override
     public void onVictory() {
         this.pulse = false;
     }
+    
     @Override
     public String getUpdatedDescription() {
         return DESCRIPTIONS[0];

@@ -40,7 +40,7 @@ public class TimewornBulletKindling extends FGOCard {
         
         FGOCard obscurantWallofChalk = new ObscurantWallofChalk();
         for (AbstractCard c : AbstractDungeon.player.masterDeck.group) {
-            if (c.cardID == ObscurantWallofChalk.ID && c.upgraded){
+            if (c.cardID == ObscurantWallofChalk.ID && c.upgraded) {
                 obscurantWallofChalk.upgrade();
                 break;
             }

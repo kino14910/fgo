@@ -27,6 +27,4 @@ public class CurseHarmonyPower extends BasePower {
             addToBot(new BouncingFlaskAction(randomMonster, ChAmount, 1));
         }
     }
-
-    
 }

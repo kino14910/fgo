@@ -18,7 +18,7 @@ public class MahaPralaya extends AbsNoblePhantasmCard {
     public static final String ID = makeID(MahaPralaya.class.getSimpleName());
 
     public MahaPralaya() {
-        super(ID,CardType.ATTACK, CardTarget.ALL_ENEMY, 1);
+        super(ID, CardType.ATTACK, CardTarget.ALL_ENEMY, 1);
         setDamage(8, 3);
     }
 

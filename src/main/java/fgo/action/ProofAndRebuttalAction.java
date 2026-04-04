@@ -12,6 +12,7 @@ public class ProofAndRebuttalAction extends AbstractGameAction {
     private final AbstractPlayer p;
     private static final UIStrings uiStrings = CardCrawlGame.languagePack.getUIString("fgo:ProofAndRebuttalAction");
     public static final String[] TEXT = uiStrings.TEXT;
+    
     public ProofAndRebuttalAction() {
         p = AbstractDungeon.player;
         duration = Settings.ACTION_DUR_FAST;

@@ -24,7 +24,7 @@ public class TsumukariMuramasa extends AbsNoblePhantasmCard {
     public static final String ID = makeID(TsumukariMuramasa.class.getSimpleName());
     
     public TsumukariMuramasa() {
-        super(ID,CardType.ATTACK, CardTarget.ALL_ENEMY, 1);
+        super(ID, CardType.ATTACK, CardTarget.ALL_ENEMY, 1);
         setDamage(4, 1);
     }
 

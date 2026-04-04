@@ -23,7 +23,8 @@ public class ExtremelySpicyMapoTofu extends BasePotion {
     public static final String ID = makeID(ExtremelySpicyMapoTofu.class.getSimpleName());
     private static final PotionStrings potionStrings = CardCrawlGame.languagePack.getPotionString(ID);
     public static final Color NOBLE = CardHelper.getColor(255, 215, 0);
-    public ExtremelySpicyMapoTofu(){
+    
+    public ExtremelySpicyMapoTofu() {
         super(ID, 0, PotionRarity.RARE, PotionSize.BOTTLE, Color.ORANGE, Color.RED, null);
         labOutlineColor = NOBLE;
         isThrown = false;

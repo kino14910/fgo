@@ -10,7 +10,7 @@ public class Failnaught extends AbsNoblePhantasmCard {
     public static final String ID = makeID(Failnaught.class.getSimpleName());
 
     public Failnaught() {
-        super(ID,CardType.ATTACK, CardTarget.ENEMY, 2);
+        super(ID, CardType.ATTACK, CardTarget.ENEMY, 2);
         setDamage(48, 12);
     }
 

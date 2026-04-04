@@ -11,8 +11,10 @@ import com.megacrit.cardcrawl.powers.AbstractPower;
 
 import fgo.action.FgoNpAction;
 import fgo.cards.FGOCard;
+
 public class WisdomOfThePeople extends FGOCard {
     public static final String ID = makeID(WisdomOfThePeople.class.getSimpleName());
+
     public WisdomOfThePeople() {
         super(ID, 3, CardType.SKILL, CardTarget.SELF, CardRarity.RARE);
         setMagic(20);

@@ -23,6 +23,7 @@ import fgo.powers.ReducePercentDamagePower;
 
 public class LordChaldeas extends AbsNoblePhantasmCard {
     public static final String ID = makeID(LordChaldeas.class.getSimpleName());
+
     public LordChaldeas() {
         super(ID, CardType.POWER, CardTarget.SELF, 1);
         setMagic(30, 20);
@@ -47,7 +48,7 @@ public class LordChaldeas extends AbsNoblePhantasmCard {
     }
 
     private void exchangeCard(CardGroup deck) {
-        if(Objects.isNull(deck.findCardById(VeneratedShieldOfSnowflakes.ID))){
+        if (Objects.isNull(deck.findCardById(VeneratedShieldOfSnowflakes.ID))) {
             return;
         }
         

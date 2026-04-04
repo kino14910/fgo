@@ -46,8 +46,8 @@ public class FaerieKnightLancelot extends BaseMonster {
         } else {
             setHp(124, 128);
         }
-        int AroundightDmg = AbstractDungeon.ascensionLevel >= 3 ? 15 : 14;
-        damage.add(new DamageInfo(this, AroundightDmg));
+        final int aroundightDmg = getDamage(14, 15);
+        damage.add(new DamageInfo(this, aroundightDmg));
     }
 
     @Override
@@ -84,7 +84,7 @@ public class FaerieKnightLancelot extends BaseMonster {
 
     @Override
     protected void getMove(int num) {
-        setMove(MOVES[0], (byte)1, Intent.ATTACK, damage.get(0).base);
+        setMove(MOVES[0], (byte) 1, Intent.ATTACK, damage.get(0).base);
     }
 
     @Override

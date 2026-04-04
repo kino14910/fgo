@@ -8,8 +8,10 @@ import fgo.cards.FGOCard;
 import fgo.cards.noblecards.KurKigalIrkalla;
 import fgo.powers.BlessingOfKurPower;
 import fgo.powers.NPRatePower;
+
 public class BlessingOfKur extends FGOCard {
     public static final String ID = makeID(BlessingOfKur.class.getSimpleName());
+
     public BlessingOfKur() {
         super(ID, 1, CardType.POWER, CardTarget.SELF, CardRarity.UNCOMMON);
         setMagic(6, 9);

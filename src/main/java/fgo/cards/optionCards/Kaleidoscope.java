@@ -14,7 +14,6 @@ public class Kaleidoscope extends FGOCard {
         setNP(40, 20);
     }
 
-
     @Override
     public void use(AbstractPlayer p, AbstractMonster m) {
     }

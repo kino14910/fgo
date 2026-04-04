@@ -23,6 +23,7 @@ import fgo.relics.MidsummerNightDream;
 )
 public class MidsummerNightPatch {
     private static final String[] TEXT = CardCrawlGame.languagePack.getUIString("fgo:MidsummerNightDream").TEXT;
+    
     @SpireInsertPatch
             (rloc = 35)
     public static SpireReturn<Void> Insert(ApplyPowerAction __instance) {

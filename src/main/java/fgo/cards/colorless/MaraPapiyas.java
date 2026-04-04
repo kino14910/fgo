@@ -6,8 +6,10 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 
 import fgo.cards.FGOCard;
+
 public class MaraPapiyas extends FGOCard {
     public static final String ID = makeID(MaraPapiyas.class.getSimpleName());
+
     public MaraPapiyas() {
         super(ID, 0, CardType.SKILL, CardTarget.SELF, CardRarity.UNCOMMON, CardColor.COLORLESS);
         setMagic(12, 4);

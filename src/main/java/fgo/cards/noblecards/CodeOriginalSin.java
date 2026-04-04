@@ -12,7 +12,7 @@ public class CodeOriginalSin extends AbsNoblePhantasmCard {
     public static final String ID = makeID(CodeOriginalSin.class.getSimpleName());
 
     public CodeOriginalSin() {
-        super(ID,CardType.ATTACK, CardTarget.ENEMY, 1);
+        super(ID, CardType.ATTACK, CardTarget.ENEMY, 1);
         setDamage(32, 8);
         setNP(20);
     }

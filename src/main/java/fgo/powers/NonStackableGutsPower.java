@@ -11,7 +11,7 @@ import com.megacrit.cardcrawl.localization.PowerStrings;
 
 import fgo.patches.RevivePatch;
 
-public class NonStackableGutsPower extends BasePower implements NonStackablePower{
+public class NonStackableGutsPower extends BasePower implements NonStackablePower {
     public static final String POWER_ID = makeID(NonStackableGutsPower.class.getSimpleName());
     public static final PowerStrings powerStrings = CardCrawlGame.languagePack.getPowerStrings(POWER_ID);
     private int time;

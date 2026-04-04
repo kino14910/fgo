@@ -30,5 +30,4 @@ public class InsanityPower extends BasePower {
             addToBot(new ReducePowerAction(owner, owner, CursePower.POWER_ID, 1));
         }
     }
-
 }

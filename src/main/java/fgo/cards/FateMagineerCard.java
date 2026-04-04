@@ -29,6 +29,7 @@ public abstract class FateMagineerCard extends FGOCard implements CustomCardPort
     private final ArrayList<RenderLayer> portraitLayers1024 = new ArrayList<>();
     public ArrayList<RenderLayer> cardArtLayers512 = new ArrayList<>();
     public ArrayList<RenderLayer> cardArtLayers1024 = new ArrayList<>();
+    
     public FateMagineerCard(String ID, int cost, CardType cardType, CardTarget target, CardRarity rarity, CardColor color) {
         super(ID, cost, cardType, target, rarity, color, getCardTextureString(removePrefix(ID), cardType));
         initializeDecoRenderLayers();

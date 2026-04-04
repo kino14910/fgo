@@ -5,7 +5,7 @@ import static fgo.FGOMod.makeID;
 import fgo.characters.CustomEnums.FGOCardColor;
 import fgo.characters.Master;
 
-public class SuitcaseFgo extends BaseRelic{
+public class SuitcaseFgo extends BaseRelic {
     private static final String NAME = SuitcaseFgo.class.getSimpleName();
     public static final String ID = makeID(NAME);
     

@@ -12,8 +12,10 @@ import com.megacrit.cardcrawl.vfx.combat.CleaveEffect;
 
 import fgo.cards.FGOCard;
 import fgo.powers.StarPower;
+
 public class WarriorsBlade extends FGOCard {
     public static final String ID = makeID(WarriorsBlade.class.getSimpleName());
+    
     public WarriorsBlade() {
         super(ID, 1, CardType.ATTACK, CardTarget.ENEMY, CardRarity.COMMON);
         setDamage(2);

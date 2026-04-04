@@ -7,8 +7,10 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 
 import fgo.cards.FGOCard;
+
 public class Strike extends FGOCard {
     public static final String ID = makeID(Strike.class.getSimpleName());
+
     public Strike() {
         super(ID, 1, CardType.ATTACK, CardTarget.ENEMY, CardRarity.BASIC);
 

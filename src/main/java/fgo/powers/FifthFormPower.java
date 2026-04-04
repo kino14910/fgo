@@ -37,7 +37,7 @@ public class FifthFormPower extends BasePower {
             return;
         }
         flash();
-        AbstractMonster m = (AbstractMonster)action.target;
+        AbstractMonster m = (AbstractMonster) action.target;
         GameActionManager.queueExtraCard(card, m);
     }
 

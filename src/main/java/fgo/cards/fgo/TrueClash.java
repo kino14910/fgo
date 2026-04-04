@@ -10,13 +10,16 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 
 import fgo.cards.FGOCard;
+
 public class TrueClash extends FGOCard {
     public static final String ID = makeID(TrueClash.class.getSimpleName());
+
     public TrueClash() {
         super(ID, 1, CardType.ATTACK, CardTarget.ENEMY, CardRarity.COMMON);
         setDamage(10, 3);
         setBlock(10, 3);
     }
+
     @Override
     public void use(AbstractPlayer p, AbstractMonster m) {
         addToBot(new DamageAction(m, new DamageInfo(p, damage, damageTypeForTurn), AbstractGameAction.AttackEffect.SLASH_HEAVY));

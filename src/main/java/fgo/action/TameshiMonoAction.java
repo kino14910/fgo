@@ -41,7 +41,7 @@ public class TameshiMonoAction extends AbstractGameAction {
     }
 
     if (!screen.selectedCards.isEmpty()) {
-      int selectedAmt = (int)ReflectionHacks.getPrivate(screen, GridCardSelectScreen.class, "cardSelectAmount");
+      int selectedAmt = (int) ReflectionHacks.getPrivate(screen, GridCardSelectScreen.class, "cardSelectAmount");
       addToBot(new ApplyPowerAction(p, p, new StarPower(p, selectedAmt * 4)));
       screen.selectedCards.clear();
     }

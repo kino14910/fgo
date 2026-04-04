@@ -15,7 +15,7 @@ public class Overload extends AbsNoblePhantasmCard {
     public static final String ID = makeID(Overload.class.getSimpleName());
 
     public Overload() {
-        super(ID,CardType.ATTACK, CardTarget.ENEMY, 1);
+        super(ID, CardType.ATTACK, CardTarget.ENEMY, 1);
         setDamage(30, 8);
         setMagic(2);
     }

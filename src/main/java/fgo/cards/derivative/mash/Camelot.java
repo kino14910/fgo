@@ -15,7 +15,7 @@ public class Camelot extends AbsNoblePhantasmCard {
     public static final CardStrings cardStrings = CardCrawlGame.languagePack.getCardStrings(ID);
     
     public Camelot() {
-        super(ID,CardType.POWER, CardTarget.SELF, 1);
+        super(ID, CardType.POWER, CardTarget.SELF, 1);
         setCustomVar("metal", 1, 2);
         setBlock(2, 5);
         setMagic(10, 10);

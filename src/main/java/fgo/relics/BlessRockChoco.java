@@ -11,6 +11,7 @@ import fgo.characters.CustomEnums.FGOCardColor;
 public class BlessRockChoco extends BaseRelic {
     private static final String NAME = BlessRockChoco.class.getSimpleName();
 	public static final String ID = makeID(NAME);
+    
     public BlessRockChoco() {
         super(ID, NAME, FGOCardColor.FGO, RelicTier.UNCOMMON, LandingSound.FLAT);
     }

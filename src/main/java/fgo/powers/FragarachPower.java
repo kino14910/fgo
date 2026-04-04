@@ -37,6 +37,4 @@ public class FragarachPower extends BasePower {
             addToBot(new RemoveSpecificPowerAction(owner, owner, ID));
         }
     }
-
-    
 }

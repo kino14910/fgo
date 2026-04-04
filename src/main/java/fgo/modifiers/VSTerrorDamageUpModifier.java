@@ -10,12 +10,14 @@ import com.megacrit.cardcrawl.powers.AbstractPower;
 
 import fgo.powers.TerrorPower;
 
-public class VSTerrorDamageUpModifier extends AbstractDamageModifier{
+public class VSTerrorDamageUpModifier extends AbstractDamageModifier {
     public static final String ID = makeID(VSTerrorDamageUpModifier.class.getSimpleName());
     private final int amount;
+    
     public VSTerrorDamageUpModifier(int amount) {
         this.amount = amount;
     }
+    
     @Override
     public float atDamageGive(float damage, DamageInfo.DamageType type, AbstractCreature target, AbstractCard card) {
         if (target == null) {

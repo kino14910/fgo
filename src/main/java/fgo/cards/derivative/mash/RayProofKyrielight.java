@@ -25,7 +25,7 @@ public class RayProofKyrielight extends AbsNoblePhantasmCard {
 
     @Override
     public void use(AbstractPlayer p, AbstractMonster m) {
-        for(AbstractMonster mo : AbstractDungeon.getCurrRoom().monsters.monsters) {
+        for (AbstractMonster mo : AbstractDungeon.getCurrRoom().monsters.monsters) {
             addToBot(new IgnoresInvincibilityAction(mo));
         }
 
@@ -34,7 +34,7 @@ public class RayProofKyrielight extends AbsNoblePhantasmCard {
         );
 
         addToBot(new DamageAllEnemiesAction(p, multiDamage, DamageInfo.DamageType.NORMAL, AbstractGameAction.AttackEffect.SLASH_HEAVY));
-        for(AbstractMonster mo : AbstractDungeon.getCurrRoom().monsters.monsters) {
+        for (AbstractMonster mo : AbstractDungeon.getCurrRoom().monsters.monsters) {
             if (mo.type != AbstractMonster.EnemyType.BOSS) {
                 for (AbstractPower pow : mo.powers) {
                     if (pow.type == AbstractPower.PowerType.BUFF) {

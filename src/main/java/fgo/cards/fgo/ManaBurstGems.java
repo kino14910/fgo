@@ -10,8 +10,10 @@ import com.megacrit.cardcrawl.vfx.combat.VerticalAuraEffect;
 
 import fgo.cards.FGOCard;
 import fgo.powers.ManaBurstGemsPower;
+
 public class ManaBurstGems extends FGOCard {
     public static final String ID = makeID(ManaBurstGems.class.getSimpleName());
+
     public ManaBurstGems() {
         super(ID, 1, CardType.SKILL, CardTarget.SELF, CardRarity.UNCOMMON);
         setMagic(3, 1);

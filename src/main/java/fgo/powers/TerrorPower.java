@@ -14,7 +14,7 @@ import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.localization.PowerStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 
-public class TerrorPower extends BasePower implements NonStackablePower{
+public class TerrorPower extends BasePower implements NonStackablePower {
     public static final String POWER_ID = makeID(TerrorPower.class.getSimpleName());
     public static final PowerStrings powerStrings = CardCrawlGame.languagePack.getPowerStrings(POWER_ID);
     private final Random random = new Random();

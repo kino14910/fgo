@@ -11,8 +11,10 @@ import fgo.action.FgoNpAction;
 import fgo.action.SparksRouteAction;
 import fgo.cards.FGOCard;
 import fgo.characters.Master;
+
 public class SparksRoute extends FGOCard {
     public static final String ID = makeID(SparksRoute.class.getSimpleName());
+
     public SparksRoute() {
         super(ID, 0, CardType.SKILL, CardTarget.SELF, CardRarity.COMMON);
         setExhaust(true, false);

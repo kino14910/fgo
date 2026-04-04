@@ -6,8 +6,10 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 
 import fgo.cards.FGOCard;
 import fgo.powers.NPOverChargePower;
+
 public class Chasmatis extends FGOCard {
     public static final String ID = makeID(Chasmatis.class.getSimpleName());
+
     public Chasmatis() {
         super(ID, 1, CardType.POWER, CardTarget.SELF, CardRarity.UNCOMMON);
         setMagic(1);

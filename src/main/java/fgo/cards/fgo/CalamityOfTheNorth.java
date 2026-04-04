@@ -8,8 +8,10 @@ import com.megacrit.cardcrawl.powers.PoisonPower;
 
 import fgo.cards.FGOCard;
 import fgo.powers.CursePower;
+
 public class CalamityOfTheNorth extends FGOCard {
     public static final String ID = makeID(CalamityOfTheNorth.class.getSimpleName());
+
     public CalamityOfTheNorth() {
         super(ID, 1, CardType.SKILL, CardTarget.ALL_ENEMY, CardRarity.UNCOMMON);
         setMagic(3, 2);

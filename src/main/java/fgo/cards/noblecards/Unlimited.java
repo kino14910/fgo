@@ -16,11 +16,11 @@ import fgo.powers.UnlimitedPower;
 
 public class Unlimited extends AbsNoblePhantasmCard {
     public static final String ID = makeID(Unlimited.class.getSimpleName());
+
     public Unlimited() {
-        super(ID,CardType.POWER, CardTarget.SELF, 1);
+        super(ID, CardType.POWER, CardTarget.SELF, 1);
         setMagic(1, 1);
     }
-
 
     @Override
     public void use(AbstractPlayer p, AbstractMonster m) {

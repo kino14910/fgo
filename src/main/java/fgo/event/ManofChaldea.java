@@ -42,7 +42,6 @@ public class ManofChaldea extends PhasedEvent {
                 transitionKey("Heal");
             }));
         
-
         registerPhase("Gold", new TextPhase(DESCRIPTIONS[3])
             .addOption(OPTIONS[3], i -> {
                 AbstractDungeon.player.heal(15, true);

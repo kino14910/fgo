@@ -11,10 +11,9 @@ public class ElementaryMyDear extends AbsNoblePhantasmCard {
     public static final String ID = makeID(ElementaryMyDear.class.getSimpleName());
 
     public ElementaryMyDear() {
-        super(ID,CardType.POWER, CardTarget.SELF, 1);
+        super(ID, CardType.POWER, CardTarget.SELF, 1);
         setMagic(1, 1);
     }
-
 
     @Override
     public void use(AbstractPlayer p, AbstractMonster m) {

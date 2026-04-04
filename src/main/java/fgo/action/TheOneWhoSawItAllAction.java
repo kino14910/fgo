@@ -11,6 +11,7 @@ public class TheOneWhoSawItAllAction extends AbstractGameAction {
     private final AbstractPlayer p;
     private final AbstractCard.CardType typeToCheck;
     private final int damage;
+    
     public TheOneWhoSawItAllAction(int amount, AbstractCard.CardType type, int damage) {
         p = AbstractDungeon.player;
         setValues(p, p, amount);
@@ -42,7 +43,7 @@ public class TheOneWhoSawItAllAction extends AbstractGameAction {
                 return;
             }
 
-            for(int i = 0; i < amount; ++i) {
+            for (int i = 0; i < amount; ++i) {
                 if (!tmp.isEmpty()) {
                     tmp.shuffle();
                     card = tmp.getBottomCard();

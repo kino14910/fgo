@@ -1,4 +1,5 @@
 package fgo.potions;
+
 import static fgo.FGOMod.makeID;
 
 import com.badlogic.gdx.graphics.Color;

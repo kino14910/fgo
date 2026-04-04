@@ -15,6 +15,7 @@ public class SupportCraft extends FateMagineerCard {
     public static final String ID = makeID(SupportCraft.class.getSimpleName());
     public static final String IMG_PATH = cardPath("noble/SupportCraft");
     public static final String IMG_PATH_P = cardPath("noble/SupportCraft_p");
+    
     public SupportCraft() {
         super(ID, -2, AbstractCard.CardType.SKILL, AbstractCard.CardTarget.SELF, AbstractCard.CardRarity.SPECIAL, AbstractCard.CardColor.COLORLESS);
         setNP(50);

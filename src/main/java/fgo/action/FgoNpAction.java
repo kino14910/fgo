@@ -13,6 +13,7 @@ import fgo.powers.NPOverChargePower;
 public class FgoNpAction extends AbstractGameAction {
     private final int amount;
     public boolean canText;
+    
     public FgoNpAction(int amount) {
         this(amount, true);
     }
@@ -28,7 +29,7 @@ public class FgoNpAction extends AbstractGameAction {
         // 0 <= fgoNP <=300
         Master.fgoNp = Math.min(Math.max(Master.fgoNp + amount, 0), 300);
         // 保留了一部分fgo特性，让你知道自己在玩fgo
-        if(Master.fgoNp == 99 && oldNp < 99){
+        if (Master.fgoNp == 99 && oldNp < 99) {
             Master.fgoNp = 100;
         }
 
@@ -58,7 +59,7 @@ public class FgoNpAction extends AbstractGameAction {
 }
 
         if (p instanceof Master) {
-            ((Master)p).TruthValueUpdatedEvent();
+            ((Master) p).TruthValueUpdatedEvent();
         }
 
         isDone = true;

@@ -15,11 +15,10 @@ public class HollowHeartAlbion extends AbsNoblePhantasmCard {
     public static final String ID = makeID(HollowHeartAlbion.class.getSimpleName());
 
     public HollowHeartAlbion() {
-        super(ID,AbstractCard.CardType.ATTACK, AbstractCard.CardTarget.ALL_ENEMY, 1);
+        super(ID, CardType.ATTACK, CardTarget.ALL_ENEMY, 1);
         setDamage(27, 8);
         setStar(10);
     }
-
 
     @Override
     public void use(AbstractPlayer p, AbstractMonster m) {
@@ -27,10 +26,8 @@ public class HollowHeartAlbion extends AbsNoblePhantasmCard {
         addToBot(new ApplyPowerAction(p, p, new StarPower(p, star)));
     }
 
-
     @Override
     public AbstractCard makeCopy() {
         return new HollowHeartAlbion();
     }
-
 }

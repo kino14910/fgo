@@ -16,11 +16,10 @@ public class BlackdogGalatine extends AbsNoblePhantasmCard {
     public static final String ID = makeID(BlackdogGalatine.class.getSimpleName());
 
     public BlackdogGalatine() {
-        super(ID,CardType.ATTACK, CardTarget.ALL_ENEMY, 1);
+        super(ID, CardType.ATTACK, CardTarget.ALL_ENEMY, 1);
         setDamage(16, 4);
         setMagic(9);
     }
-
 
     @Override
     public void use(AbstractPlayer p, AbstractMonster m) {

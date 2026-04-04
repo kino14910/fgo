@@ -11,6 +11,7 @@ import fgo.powers.FacelessMoonPower;
 
 public class FacelessMoon extends FGOCard {
     public static final String ID = makeID(FacelessMoon.class.getSimpleName());
+
     public FacelessMoon() {
         super(ID, 1, CardType.SKILL, CardTarget.SELF, CardRarity.COMMON);
         setMagic(1);

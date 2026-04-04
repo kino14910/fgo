@@ -10,8 +10,10 @@ import fgo.action.FgoNpAction;
 import fgo.cards.FGOCard;
 import fgo.powers.CursePower;
 import fgo.powers.GutsPower;
+
 public class VoidSpaceFineArts extends FGOCard {
     public static final String ID = makeID(VoidSpaceFineArts.class.getSimpleName());
+
     public VoidSpaceFineArts() {
         super(ID, 1, CardType.SKILL, CardTarget.SELF, CardRarity.UNCOMMON);
         setMagic(5, 5);
@@ -29,13 +31,13 @@ public class VoidSpaceFineArts extends FGOCard {
     @Override
     public void use(AbstractPlayer p, AbstractMonster m) {
         addToBot(new ApplyPowerAction(p, p, new GutsPower(p, 10)));
-        for(int i = 0; i < 3; ++i) {
+        for (int i = 0; i < 3; ++i) {
             addToBot(new ApplyPowerAction(p, p, new CursePower(p, p, 1)));
         }
         
         if (p.hasPower(CursePower.POWER_ID)) {
-            int CurseAmt = p.getPower(CursePower.POWER_ID).amount;
-            addToBot(new FgoNpAction(magicNumber * CurseAmt));
+            int curseAmt = p.getPower(CursePower.POWER_ID).amount;
+            addToBot(new FgoNpAction(magicNumber * curseAmt));
         }
     }
 }

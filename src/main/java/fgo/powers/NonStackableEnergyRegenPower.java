@@ -10,7 +10,7 @@ import com.megacrit.cardcrawl.localization.PowerStrings;
 
 import fgo.action.FgoNpAction;
 
-public class NonStackableEnergyRegenPower extends BasePower implements NonStackablePower{
+public class NonStackableEnergyRegenPower extends BasePower implements NonStackablePower {
     public static final String POWER_ID = makeID(NonStackableEnergyRegenPower.class.getSimpleName());
     public static final PowerStrings powerStrings = CardCrawlGame.languagePack.getPowerStrings(POWER_ID);
     private int time;
@@ -21,7 +21,6 @@ public class NonStackableEnergyRegenPower extends BasePower implements NonStacka
         amount2 = time == 1 ? 0 : time;
         updateDescription();
     }
-
 
     @Override
     public void atStartOfTurn() {

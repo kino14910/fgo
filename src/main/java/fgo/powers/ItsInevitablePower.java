@@ -13,6 +13,7 @@ public class ItsInevitablePower extends BasePower {
     public static final String POWER_ID = makeID(ItsInevitablePower.class.getSimpleName());
     public static final PowerStrings powerStrings = CardCrawlGame.languagePack.getPowerStrings(POWER_ID);
     public int boost = 0;
+    
     public ItsInevitablePower(AbstractCreature owner, int amount, int boost) {
         super(POWER_ID, PowerType.BUFF, false, owner, amount, "BurningPower");
         amount2 += boost;
@@ -39,5 +40,4 @@ public class ItsInevitablePower extends BasePower {
                 DamageInfo.DamageType.NORMAL, AbstractGameAction.AttackEffect.FIRE));
         updateDescription();
     }
-
 }

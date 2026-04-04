@@ -12,6 +12,7 @@ import com.megacrit.cardcrawl.helpers.CardHelper;
 public class ElixirofRejuvenation extends BasePotion {
     public static final String ID = makeID(ElixirofRejuvenation.class.getSimpleName());
     public static final Color NOBLE = CardHelper.getColor(255, 215, 0);
+    
     public ElixirofRejuvenation() {
         super(ID, 10, PotionRarity.RARE, PotionSize.SPHERE, Color.CYAN, Color.CYAN, null);
         labOutlineColor = NOBLE;

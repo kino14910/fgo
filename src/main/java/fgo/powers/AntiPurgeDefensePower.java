@@ -32,6 +32,4 @@ public class AntiPurgeDefensePower extends BasePower {
 
         return 0;
     }
-
-    
 }

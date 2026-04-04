@@ -27,16 +27,16 @@ public class ProofAndRebuttalEvent extends PhasedEvent {
     private int goldLoss = eventAscension() 
             ? AbstractDungeon.miscRng.random(50, 75) 
             : AbstractDungeon.miscRng.random(40, 60);
+    
     public ProofAndRebuttalEvent() {
         super(ID, NAME, eventPath("ProofAndRebuttalEvent"));
-
         AbstractPlayer p = AbstractDungeon.player;
         goldLoss = Math.min(goldLoss, p.gold);
 
         registerPhase(0, new TextPhase(DESCRIPTIONS[0])
             .addOption(new TextPhase.OptionInfo(OPTIONS[0], new ProofAndRebuttal())
-                .setOptionResult( i -> {
-                    AbstractDungeon.effectList.add(new ShowCardAndObtainEffect(new ProofAndRebuttal(), (float)Settings.WIDTH / 2.0f, Settings.HEIGHT / 2.0f));
+                .setOptionResult(i -> {
+                    AbstractDungeon.effectList.add(new ShowCardAndObtainEffect(new ProofAndRebuttal(), Settings.WIDTH / 2.0f, Settings.HEIGHT / 2.0f));
                     transitionKey("Witness");
                 }))
             .addOption(

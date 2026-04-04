@@ -16,6 +16,7 @@ public abstract class BaseRelic extends CustomRelic {
     public AbstractCard.CardColor pool = null;
     public RelicType relicType = RelicType.SHARED;
     protected String imageName;
+    
     //for character specific relics
     public BaseRelic(String id, String imageName, AbstractCard.CardColor pool, RelicTier tier, LandingSound sfx) {
         this(id, imageName, tier, sfx);

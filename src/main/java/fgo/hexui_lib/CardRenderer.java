@@ -49,7 +49,7 @@ public class CardRenderer {
                 Gdx.gl.glColorMask(true, true, true, true);
                 sb.begin();
                 sb.setColor(Color.WHITE);
-                sb.setBlendFunction(-1, -1);//disable spritebatch blending override
+                sb.setBlendFunction(-1, -1); //disable spritebatch blending override
                 Gdx.gl.glBlendFuncSeparate(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA, GL20.GL_ONE, GL20.GL_ONE_MINUS_SRC_ALPHA);
                 break;
             case FBO_END:
@@ -69,7 +69,7 @@ public class CardRenderer {
                 sb.begin();
                 TextureRegion drawTex2 = new TextureRegion(fbo.getColorBufferTexture());
                 drawTex2.flip(false, true);
-                sb.setBlendFunction(-1, -1);//disable spritebatch blending override
+                sb.setBlendFunction(-1, -1); //disable spritebatch blending override
                 Gdx.gl.glBlendFuncSeparate(GL20.GL_SRC_ALPHA, GL20.GL_ONE, GL20.GL_ONE, GL20.GL_ONE);
                 sb.draw(drawTex2, 0.0f, 0.0f);
                 setBlending(sb, RenderLayer.BLENDMODE.NORMAL);
@@ -82,7 +82,7 @@ public class CardRenderer {
                 sb.begin();
                 TextureRegion drawTex3 = new TextureRegion(fbo.getColorBufferTexture());
                 drawTex3.flip(false, true);
-                sb.setBlendFunction(-1, -1);//disable spritebatch blending override
+                sb.setBlendFunction(-1, -1); //disable spritebatch blending override
                 Gdx.gl.glBlendFuncSeparate(GL20.GL_SRC_ALPHA, GL20.GL_ONE, GL20.GL_ONE, GL20.GL_ONE);
                 sb.draw(drawTex3, 0.0f, 0.0f);
                 sb.draw(drawTex3, 0.0f, 0.0f);
@@ -91,7 +91,7 @@ public class CardRenderer {
                 Gdx.gl.glClear(GL20.GL_DEPTH_BUFFER_BIT);
                 break;
             case ATTEMPT_RESET:
-                sb.setBlendFunction(-1, -1);//disable spritebatch blending override
+                sb.setBlendFunction(-1, -1); //disable spritebatch blending override
                 Gdx.gl.glBlendFunc(-1, -1);
                 setBlending(sb, RenderLayer.BLENDMODE.NORMAL);
                 Gdx.gl.glColorMask(true, true, true, true);

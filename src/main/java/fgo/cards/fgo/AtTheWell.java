@@ -18,7 +18,6 @@ public class AtTheWell extends FGOCard {
         tags.add(CardTags.HEALING);
     }
 
-    
     @Override
     public void use(AbstractPlayer p, AbstractMonster m) {
         addToBot(new RemoveAllPowersAction(p, true));

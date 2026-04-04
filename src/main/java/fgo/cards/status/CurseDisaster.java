@@ -27,14 +27,13 @@ public class CurseDisaster extends FGOCard {
     }
 
     @Override
-    public void use(AbstractPlayer p, AbstractMonster m) {}
-
+    public void use(AbstractPlayer p, AbstractMonster m) { onChoseThisOption(); }
 
     @Override
     public void triggerWhenDrawn() {
         AbstractPlayer p = AbstractDungeon.player;
         addToBot(new SFXAction("ATTACK_PIERCING_WAIL"));
-        addToBot(new VFXAction(p, new ShockWaveEffect(p.hb.cX, p.hb.cY, Settings.GREEN_TEXT_COLOR, ShockWaveEffect.ShockWaveType.CHAOTIC), Settings.FAST_MODE ? 0.3f :1.5f));
+        addToBot(new VFXAction(p, new ShockWaveEffect(p.hb.cX, p.hb.cY, Settings.GREEN_TEXT_COLOR, ShockWaveEffect.ShockWaveType.CHAOTIC), Settings.FAST_MODE ? 0.3f : 1.5f));
         addToBot(new ApplyPowerAction(p, p, new CursePower(p, p, magicNumber)));
         addToBot(new AllEnemyApplyPowerAction(p, magicNumber,
                 monster -> new CursePower(monster, p, magicNumber))

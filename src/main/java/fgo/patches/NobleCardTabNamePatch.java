@@ -12,6 +12,7 @@ import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.screens.mainMenu.ColorTabBar;
 
 import javassist.CtBehavior;
+
 public class NobleCardTabNamePatch {
     private static final String[] DESCRIPTIONS = (CardCrawlGame.languagePack.getUIString("fgo:TabNamePatch")).TEXT;
     @SpirePatch(
@@ -26,6 +27,7 @@ public class NobleCardTabNamePatch {
                 tabName[0] = DESCRIPTIONS[1];
             }
         }
+        
         private static class TabNameLocator extends SpireInsertLocator {
             @Override
             public int[] Locate(CtBehavior ctMethodToPatch) throws Exception {

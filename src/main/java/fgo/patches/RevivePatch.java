@@ -22,6 +22,7 @@ import fgo.powers.SpringOfFirePower;
 import fgo.relics.SaveStone;
 import fgo.ui.panels.CommandSpellPanel;
 import javassist.CtBehavior;
+
 public class RevivePatch {
     @SpirePatch(clz = AbstractPlayer.class, method = "damage")
     public static class GutsPowerPatch {

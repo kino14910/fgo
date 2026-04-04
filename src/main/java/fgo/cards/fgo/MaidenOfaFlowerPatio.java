@@ -10,16 +10,16 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 
 import fgo.cards.FGOCard;
 import fgo.powers.CursePower;
+
 public class MaidenOfaFlowerPatio extends FGOCard {
     public static final String ID = makeID(MaidenOfaFlowerPatio.class.getSimpleName());
+
     public MaidenOfaFlowerPatio() {
         super(ID, 1, CardType.SKILL, CardTarget.SELF, CardRarity.UNCOMMON);
         setBlock(15, 5);
         setMagic(1);
         portraitImg = ImageMaster.loadImage(cardPath("skill/MaidenOfaFlowerPatio"));
     }
-
-
 
     @Override
     public void use(AbstractPlayer p, AbstractMonster m) {

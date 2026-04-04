@@ -7,13 +7,14 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 
 import fgo.action.FgoNpAction;
 import fgo.cards.FGOCard;
+
 public class SwordOfSelection extends FGOCard {
     public static final String ID = makeID(SwordOfSelection.class.getSimpleName());
+
     public SwordOfSelection() {
         super(ID, 1, CardType.SKILL, CardTarget.SELF, CardRarity.COMMON);
         setMagic(3, 1);
     }
-
 
     @Override
     public void use(AbstractPlayer p, AbstractMonster m) {

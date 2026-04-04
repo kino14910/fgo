@@ -36,6 +36,4 @@ public class NPDamagePower extends BasePower {
     public float atDamageGive(float damage, DamageInfo.DamageType type) {
         return type == DamageInfo.DamageType.NORMAL ? damage * (100 + amount) / 100 : damage;
     }
-
-    
 }

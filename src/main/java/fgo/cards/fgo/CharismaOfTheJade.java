@@ -40,7 +40,7 @@ public class CharismaOfTheJade extends FGOCard {
 
     @Override
     public void triggerOnGlowCheck() {
-        if(!AbstractDungeon.player.hasPower(StarPower.POWER_ID))
+        if (!AbstractDungeon.player.hasPower(StarPower.POWER_ID))
             return;
         glowColor = AbstractDungeon.player.getPower(StarPower.POWER_ID).amount < 20 
                     ? AbstractCard.BLUE_BORDER_GLOW_COLOR.cpy()

@@ -11,8 +11,10 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import fgo.cards.FGOCard;
 import fgo.powers.CursePower;
 import fgo.powers.InsanityPower;
+
 public class Insanity extends FGOCard {
     public static final String ID = makeID(Insanity.class.getSimpleName());
+
     public Insanity() {
         super(ID, 1, CardType.POWER, CardTarget.ALL_ENEMY, CardRarity.RARE);
         setMagic(10, 10);

@@ -9,9 +9,11 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 
 import fgo.cards.FGOCard;
 import fgo.powers.WatersidePower;
+
 public class SwanLake extends FGOCard {
     public static final String ID = makeID(SwanLake.class.getSimpleName());
-    public SwanLake() {this(0);}
+
+    public SwanLake() { this(0); }
     
     public SwanLake(int upgrades) {
         super(ID, 1, CardType.ATTACK, CardTarget.ENEMY, CardRarity.COMMON);

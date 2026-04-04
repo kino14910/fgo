@@ -7,8 +7,10 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import fgo.cards.FGOCard;
 import fgo.powers.StarHunterPower;
 import fgo.powers.StarPower;
+
 public class StarHunter extends FGOCard {
     public static final String ID = makeID(StarHunter.class.getSimpleName());
+
     public StarHunter() {
         super(ID, 1, CardType.SKILL, CardTarget.SELF, CardRarity.UNCOMMON);
         setMagic(50, 50);

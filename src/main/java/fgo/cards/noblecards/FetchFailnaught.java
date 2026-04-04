@@ -21,17 +21,15 @@ public class FetchFailnaught extends AbsNoblePhantasmCard {
     public static final String ID = makeID(FetchFailnaught.class.getSimpleName());
 
     public FetchFailnaught() {
-        super(ID,CardType.ATTACK, CardTarget.ENEMY, 1);
+        super(ID, CardType.ATTACK, CardTarget.ENEMY, 1);
         setDamage(30, 8);
         setMagic(1, 1);
     }
 
-
-
     @Override
     public void use(AbstractPlayer p, AbstractMonster m) {
         addToBot(new VFXAction(new ViolentAttackEffect(m.hb.cX, m.hb.cY, Color.RED), Settings.FAST_MODE ? 0 : 0.4f));
-        for(int i = 0; i < 5; i++) {
+        for (int i = 0; i < 5; i++) {
             addToBot(new VFXAction(new StarBounceEffect(m.hb.cX, m.hb.cY)));
         }
 

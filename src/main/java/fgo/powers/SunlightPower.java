@@ -18,6 +18,7 @@ public class SunlightPower extends BasePower {
     public SunlightPower(AbstractCreature owner, int amount) {
         super(POWER_ID, PowerType.BUFF, false, owner, amount);
     }
+    
     @Override
     public void onUseCard(AbstractCard card, UseCardAction action) {
         if (card.type == AbstractCard.CardType.ATTACK) {
@@ -38,8 +39,8 @@ public class SunlightPower extends BasePower {
     
     private void gainVigor() {
         if (owner.hasPower(VigorPower.POWER_ID)) {
-            int VigorAmt = owner.getPower(VigorPower.POWER_ID).amount;
-            addToBot(new ApplyPowerAction(owner, owner, new VigorPower(owner, VigorAmt)));
+            int vigorAmt = owner.getPower(VigorPower.POWER_ID).amount;
+            addToBot(new ApplyPowerAction(owner, owner, new VigorPower(owner, vigorAmt)));
         }
     }
 

@@ -7,8 +7,10 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import fgo.cards.FGOCard;
 import fgo.powers.DeathOfDeathPower;
 import fgo.powers.GutsPower;
+
 public class AbyssOfDeath extends FGOCard {
     public static final String ID = makeID(AbyssOfDeath.class.getSimpleName());
+
     public AbyssOfDeath() {
         super(ID, 2, CardType.POWER, CardTarget.SELF, CardRarity.RARE);
         setMagic(15, 10);

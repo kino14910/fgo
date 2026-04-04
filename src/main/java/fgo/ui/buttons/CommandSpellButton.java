@@ -71,7 +71,6 @@ public class CommandSpellButton extends AbstractPanel {
         }
     }
 
-    
     /**
      * {@link RevivePatch}
      */
@@ -119,11 +118,11 @@ public class CommandSpellButton extends AbstractPanel {
     }
 
     private boolean shouldRenderTip() {
-        return !isHidden &&
-               hb != null &&
-               hb.hovered &&
-               !AbstractDungeon.isScreenUp &&
-               AbstractDungeon.getMonsters() != null &&
-               !AbstractDungeon.getMonsters().areMonstersDead();
+        return !isHidden
+                && hb != null
+                && hb.hovered
+                && !AbstractDungeon.isScreenUp
+                && AbstractDungeon.getMonsters() != null
+                && !AbstractDungeon.getMonsters().areMonstersDead();
     }
 }

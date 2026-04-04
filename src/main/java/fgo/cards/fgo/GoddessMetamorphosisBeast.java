@@ -6,8 +6,10 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 
 import fgo.cards.FGOCard;
 import fgo.powers.GoddessMetamorphosisBeastPower;
+
 public class GoddessMetamorphosisBeast extends FGOCard {
     public static final String ID = makeID(GoddessMetamorphosisBeast.class.getSimpleName());
+
     public GoddessMetamorphosisBeast() {
         super(ID, 2, CardType.POWER, CardTarget.SELF, CardRarity.UNCOMMON);
         setMagic(1);

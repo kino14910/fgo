@@ -38,9 +38,9 @@ public class Salem extends BaseRelic {
     }
 
     private void updateDescriptionAndTips() {
-        description = DESCRIPTIONS[0] + (counter == 0 ? 
-            String.format(DESCRIPTIONS[1]) : 
-            String.format(DESCRIPTIONS[2], counter));
+        description = DESCRIPTIONS[0] + (counter == 0 
+            ? String.format(DESCRIPTIONS[1])
+            : String.format(DESCRIPTIONS[2], counter));
 
         tips.clear();
         tips.add(new PowerTip(name, description));

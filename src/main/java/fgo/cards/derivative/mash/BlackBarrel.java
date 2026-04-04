@@ -8,6 +8,7 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 
 import fgo.cards.FGOCard;
 import fgo.characters.CustomEnums.FGOCardColor;
+
 public class BlackBarrel extends FGOCard {
     public static final String ID = makeID(BlackBarrel.class.getSimpleName());
     private final String upgradeName;

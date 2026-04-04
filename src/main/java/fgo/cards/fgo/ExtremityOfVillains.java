@@ -16,6 +16,7 @@ import fgo.powers.StarPower;
 
 public class ExtremityOfVillains extends FGOCard {
     public static final String ID = makeID(ExtremityOfVillains.class.getSimpleName());
+
     public ExtremityOfVillains() {
         super(ID, 1, CardType.ATTACK, CardTarget.ENEMY, CardRarity.UNCOMMON);
         setDamage(8, 4);
@@ -29,7 +30,7 @@ public class ExtremityOfVillains extends FGOCard {
             addToTop(new DrawCardAction(p, magicNumber));
             addToTop(new GainEnergyAction(1));
         }
-        addToBot(new DamageAction(m, new DamageInfo(p, damage, damageTypeForTurn),AbstractGameAction.AttackEffect.SLASH_DIAGONAL));
+        addToBot(new DamageAction(m, new DamageInfo(p, damage, damageTypeForTurn), AbstractGameAction.AttackEffect.SLASH_DIAGONAL));
     }
 }
 

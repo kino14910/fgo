@@ -4,10 +4,12 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.Settings;
+
 public class ChangeSceneEffect extends AbstractChangeSceneEffect {
     private final Texture img;
     public float x;
     public Color color;
+    
     public ChangeSceneEffect(Texture img) {
         color = Color.WHITE.cpy();
         renderBehind = true;
@@ -40,7 +42,6 @@ public class ChangeSceneEffect extends AbstractChangeSceneEffect {
 
         sb.draw(img, 0.0f, 0.0f, drawWidth, drawHeight);
     }
-
 
     @Override
     public void dispose() {}

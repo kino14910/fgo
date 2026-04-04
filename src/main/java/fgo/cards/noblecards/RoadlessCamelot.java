@@ -15,7 +15,7 @@ public class RoadlessCamelot extends AbsNoblePhantasmCard {
     public static final String ID = makeID(RoadlessCamelot.class.getSimpleName());
 
     public RoadlessCamelot() {
-        super(ID,CardType.ATTACK, CardTarget.ALL_ENEMY, 1);
+        super(ID, CardType.ATTACK, CardTarget.ALL_ENEMY, 1);
         setDamage(24);
         setMagic(1, 1);
     }

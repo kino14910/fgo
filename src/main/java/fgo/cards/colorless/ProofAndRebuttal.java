@@ -10,15 +10,15 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 
 import fgo.action.ProofAndRebuttalAction;
 import fgo.cards.FGOCard;
+
 public class ProofAndRebuttal extends FGOCard {
     public static final String ID = makeID(ProofAndRebuttal.class.getSimpleName());
+
     public ProofAndRebuttal() {
         super(ID, 0, CardType.SKILL, CardTarget.SELF, CardRarity.SPECIAL, CardColor.COLORLESS);
         setExhaust();
         portraitImg = ImageMaster.loadImage(cardPath("skill/ProofAndRebuttal"));
     }
-
-
 
     @Override
     public void use(AbstractPlayer p, AbstractMonster m) {

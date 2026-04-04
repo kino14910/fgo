@@ -41,8 +41,8 @@ public class RelicEventHelper {
         List<String> upgradedCards = new ArrayList<>();
         List<AbstractCard> deck = AbstractDungeon.player.masterDeck.group;
         Collections.shuffle(deck, new Random(AbstractDungeon.miscRng.randomLong()));
-        float x = (float)Settings.WIDTH / 2.0f;
-        float y = (float)Settings.HEIGHT / 2.0f;
+        float x = Settings.WIDTH / 2.0f;
+        float y = Settings.HEIGHT / 2.0f;
         for (AbstractCard c : deck) {
             if (c.canUpgrade() && !upgradedCards.contains(c.cardID)) {
                 upgradedCards.add(c.cardID);
@@ -57,20 +57,20 @@ public class RelicEventHelper {
                         case 2:
                             switch (count) {
                                 case 1:
-                                    x = (float)Settings.WIDTH / 2.0f - 190.0f * Settings.scale;
-                                    y = (float)Settings.HEIGHT / 2.0f;
+                                    x = Settings.WIDTH / 2.0f - 190.0f * Settings.scale;
+                                    y = Settings.HEIGHT / 2.0f;
                                     break;
                                 case 2:
-                                    x = (float)Settings.WIDTH / 2.0f + 190.0f * Settings.scale;
-                                    y = (float)Settings.HEIGHT / 2.0f;
+                                    x = Settings.WIDTH / 2.0f + 190.0f * Settings.scale;
+                                    y = Settings.HEIGHT / 2.0f; 
                                     break;
                                 default:
                                     break;
                             }
                             break;
                         default:
-                            x = MathUtils.random(0.1F, 0.9F) * (float) Settings.WIDTH;
-                            y = MathUtils.random(0.2F, 0.8F) * (float) Settings.HEIGHT;
+                            x = MathUtils.random(0.1f, 0.9f) * Settings.WIDTH;
+                            y = MathUtils.random(0.2f, 0.8f) * Settings.HEIGHT;
                             break;
                     }
                     AbstractDungeon.effectList.add(new ShowCardBrieflyEffect(c.makeStatEquivalentCopy(), x, y));
@@ -89,20 +89,21 @@ public class RelicEventHelper {
             if (c.canUpgrade()) {
                 c.upgrade();
                 AbstractDungeon.player.bottledCardUpgradeCheck(c);
-                float x = MathUtils.random(0.1F, 0.9F) * (float) Settings.WIDTH;
-                float y = MathUtils.random(0.2F, 0.8F) * (float) Settings.HEIGHT;
+                float x = MathUtils.random(0.1f, 0.9f) * Settings.WIDTH;
+                float y = MathUtils.random(0.2f, 0.8f) * Settings.HEIGHT;
                 AbstractDungeon.topLevelEffectsQueue.add(new ShowCardBrieflyEffect(c.makeStatEquivalentCopy(), x, y));
                 AbstractDungeon.topLevelEffectsQueue.add(new UpgradeShineEffect(x, y));
             }
         }
     }
+    
     public static void upgradeCards(CardGroup cards) {
         for (AbstractCard c : cards.group) {
             if (c.canUpgrade()) {
                 c.upgrade();
                 AbstractDungeon.player.bottledCardUpgradeCheck(c);
-                float x = MathUtils.random(0.1F, 0.9F) * (float) Settings.WIDTH;
-                float y = MathUtils.random(0.2F, 0.8F) * (float) Settings.HEIGHT;
+                float x = MathUtils.random(0.1f, 0.9f) * Settings.WIDTH;
+                float y = MathUtils.random(0.2f, 0.8f) * Settings.HEIGHT;
                 AbstractDungeon.topLevelEffectsQueue.add(new ShowCardBrieflyEffect(c.makeStatEquivalentCopy(), x, y));
                 AbstractDungeon.topLevelEffectsQueue.add(new UpgradeShineEffect(x, y));
             }
@@ -120,12 +121,12 @@ public class RelicEventHelper {
             logger.error("RELIC_EVENT_HELPER: No cards to gain.");
             return;
         } else if (cards.length == 1)
-            AbstractDungeon.effectList.add(new ShowCardAndObtainEffect(cards[0], (float) Settings.WIDTH / 2.0F, (float) Settings.HEIGHT / 2.0F));
+            AbstractDungeon.effectList.add(new ShowCardAndObtainEffect(cards[0], Settings.WIDTH / 2.0f, Settings.HEIGHT / 2.0f));
         else if (cards.length <= 5) {
             float x = 0;
             for (AbstractCard card : cards) {
-                AbstractDungeon.effectList.add(new ShowCardAndObtainEffect(card, (float) Settings.WIDTH / 6.0F + x, (float) Settings.HEIGHT / 2.0F));
-                x += (float) Settings.WIDTH / 6.0F;
+                AbstractDungeon.effectList.add(new ShowCardAndObtainEffect(card, Settings.WIDTH / 6.0f + x, Settings.HEIGHT / 2.0f));
+                x += Settings.WIDTH / 6.0f;
             }
         } else {
             for (AbstractCard card : cards) {
@@ -139,12 +140,12 @@ public class RelicEventHelper {
             logger.error("RELIC_EVENT_HELPER: No cards to purge.");
             return;
         } else if (cards.length == 1) {
-            AbstractDungeon.topLevelEffectsQueue.add(new PurgeCardEffect(cards[0], (float) Settings.WIDTH / 2.0F, (float) Settings.HEIGHT / 2.0F));
+            AbstractDungeon.topLevelEffectsQueue.add(new PurgeCardEffect(cards[0], Settings.WIDTH / 2.0f, Settings.HEIGHT / 2.0f));
         } else if (cards.length <= 5) {
             float x = 0;
             for (AbstractCard card : cards) {
-                AbstractDungeon.topLevelEffectsQueue.add(new PurgeCardEffect(card, (float) Settings.WIDTH / 6.0F + x, (float) Settings.HEIGHT / 2.0F));
-                x += (float) Settings.WIDTH / 6.0F;
+                AbstractDungeon.topLevelEffectsQueue.add(new PurgeCardEffect(card, Settings.WIDTH / 6.0f + x, Settings.HEIGHT / 2.0f));
+                x += Settings.WIDTH / 6.0f;
             }
         } else {
             for (AbstractCard card : cards) {
@@ -157,7 +158,7 @@ public class RelicEventHelper {
     public static void gainRelics(int amount, Predicate<AbstractRelic> predicate) {
         List<AbstractRelic> relics = getRelics(amount, predicate);
         for (AbstractRelic relic : relics) {
-            AbstractDungeon.getCurrRoom().spawnRelicAndObtain((float) (Settings.WIDTH / 2), (float) (Settings.HEIGHT / 2), relic);
+            AbstractDungeon.getCurrRoom().spawnRelicAndObtain((Settings.WIDTH / 2.0f), (Settings.HEIGHT / 2.0f), relic);
         }
     }
 
@@ -181,14 +182,14 @@ public class RelicEventHelper {
                 logger.error("RELIC_EVENT_HELPER: Null relic to gain.");
                 continue;
             }
-            AbstractDungeon.getCurrRoom().spawnRelicAndObtain((float) (Settings.WIDTH / 2), (float) (Settings.HEIGHT / 2), relic);
+            AbstractDungeon.getCurrRoom().spawnRelicAndObtain((Settings.WIDTH / 2.0f), (Settings.HEIGHT / 2.0f), relic);
         }
     }
 
     public static void gainRelics(String... relicIDs) {
         for (String relicId : relicIDs) {
             RelicEventHelper.removeRelicFromPool(relicId);
-            AbstractDungeon.getCurrRoom().spawnRelicAndObtain((float) (Settings.WIDTH / 2), (float) (Settings.HEIGHT / 2), RelicLibrary.getRelic(relicId).makeCopy());
+            AbstractDungeon.getCurrRoom().spawnRelicAndObtain((Settings.WIDTH / 2.0f), (Settings.HEIGHT / 2.0f), RelicLibrary.getRelic(relicId).makeCopy());
         }
     }
 

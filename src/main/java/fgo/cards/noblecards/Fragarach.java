@@ -11,7 +11,7 @@ public class Fragarach extends AbsNoblePhantasmCard {
     public static final String ID = makeID(Fragarach.class.getSimpleName());
 
     public Fragarach() {
-        super(ID,CardType.POWER, CardTarget.SELF, 1);
+        super(ID, CardType.POWER, CardTarget.SELF, 1);
         setDamage(15, 5);
     }
 

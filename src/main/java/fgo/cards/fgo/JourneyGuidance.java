@@ -13,8 +13,10 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import fgo.cards.FGOCard;
 import fgo.cards.tempCards.SoulOfWaterChannels;
 import fgo.powers.WatersidePower;
+
 public class JourneyGuidance extends FGOCard {
     public static final String ID = makeID(JourneyGuidance.class.getSimpleName());
+
     public JourneyGuidance() {
         super(ID, 2, CardType.ATTACK, CardTarget.ENEMY, CardRarity.COMMON);
         setDamage(14, 4);

@@ -287,7 +287,7 @@ public class ModHelper {
                 }
             }
         } catch (Exception e) {
-            // mintySpire not found or error accessing config
+            fgo.FGOMod.logger.warn("Failed to check mintySpire TID status, defaulting to false", e);
         }
         return false;
     }

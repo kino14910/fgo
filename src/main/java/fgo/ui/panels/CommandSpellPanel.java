@@ -11,7 +11,6 @@ public class CommandSpellPanel implements CustomSavable<Integer> {
     public static int commandSpellCount = 3;
     public static Texture CommandSpell;
 
-
     @Override
     public Integer onSave() {
         return commandSpellCount;
@@ -25,7 +24,7 @@ public class CommandSpellPanel implements CustomSavable<Integer> {
         commandSpellCount = count;
     }
 
-    public static void reset(){
+    public static void reset() {
         commandSpellCount = 3;
         CommandSpell = ImageMaster.loadImage(uiPath("CommandSpell/CommandSpell3"));
     }

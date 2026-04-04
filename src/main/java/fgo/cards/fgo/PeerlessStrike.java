@@ -16,8 +16,10 @@ import com.megacrit.cardcrawl.vfx.combat.WeightyImpactEffect;
 
 import fgo.cards.FGOCard;
 import fgo.powers.CriticalDamageUpPower;
+
 public class PeerlessStrike extends FGOCard {
     public static final String ID = makeID(PeerlessStrike.class.getSimpleName());
+
     public PeerlessStrike() {
         super(ID, 0, CardType.ATTACK, CardTarget.ENEMY, CardRarity.RARE);
         setDamage(30);
@@ -32,7 +34,7 @@ public class PeerlessStrike extends FGOCard {
         this.addToBot(new WaitAction(0.8f));
         this.addToBot(new DamageAction(m, new DamageInfo(p, damage, damageTypeForTurn), AbstractGameAction.AttackEffect.NONE));
         addToBot(new ApplyPowerAction(p, p, new CriticalDamageUpPower(p, 100)));
-        if(!upgraded) {
+        if (!upgraded) {
             addToBot(new LoseHPAction(p, p, 99999));
         } else {
             addToBot(new ApplyPowerAction(p, p, new EndTurnDeathPower(p)));
@@ -46,7 +48,7 @@ public class PeerlessStrike extends FGOCard {
             return false;
         } 
 
-        if ((float)p.currentHealth > (float)p.maxHealth / 2.0f) {
+        if ((float) p.currentHealth > (float) p.maxHealth / 2.0f) {
             canUse = false;
             cantUseMessage = cardStrings.EXTENDED_DESCRIPTION[0];
         }
@@ -57,7 +59,7 @@ public class PeerlessStrike extends FGOCard {
     @Override
     public void triggerOnGlowCheck() {
         AbstractPlayer p = AbstractDungeon.player;
-        if ((float)p.currentHealth <= (float)p.maxHealth / 2.0f && p.currentHealth > 0) {
+        if ((float) p.currentHealth <= (float) p.maxHealth / 2.0f && p.currentHealth > 0) {
             glowColor = AbstractCard.GOLD_BORDER_GLOW_COLOR.cpy();
         }
     }

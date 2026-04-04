@@ -10,6 +10,7 @@ import fgo.utils.Sounds;
 
 public class OriginBullet extends FGOCard {
     public static final String ID = makeID(OriginBullet.class.getSimpleName());
+
     public OriginBullet() {
         super(ID, 1, CardType.SKILL, CardTarget.ENEMY, CardRarity.UNCOMMON);
         setExhaust(false, true);

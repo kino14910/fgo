@@ -22,7 +22,6 @@ public class IraLupus extends AbsNoblePhantasmCard {
         setMagic(2, 1);
     }
 
-
     @Override
     public void use(AbstractPlayer p, AbstractMonster m) {
         addToBot(new SFXAction("ATTACK_HEAVY"));

@@ -11,6 +11,7 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 
 public class DragonCoreAction extends AbstractGameAction {
     private boolean upgraded;
+    
     public DragonCoreAction(boolean upgraded) {
         setValues(AbstractDungeon.player, AbstractDungeon.player);
         actionType = ActionType.EXHAUST;

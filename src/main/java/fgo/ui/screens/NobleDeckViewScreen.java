@@ -26,16 +26,18 @@ public class NobleDeckViewScreen extends CustomScreen implements ScrollBarListen
     private static final TutorialStrings tutorialStrings = CardCrawlGame.languagePack.getTutorialString(makeID(NobleDeckViewScreen.class.getSimpleName()));
     public static final String[] TEXT = NobleDeckViewScreen.tutorialStrings.TEXT;
     private static final String HEADER_INFO;
+    
     public static class Enum {
         @SpireEnum
         public static AbstractDungeon.CurrentScreen Noble_Phantasm;
     }
 
     static {
-        drawStartY = (float)Settings.HEIGHT * 0.66f;
+        drawStartY = (float) Settings.HEIGHT * 0.66f;
         SCROLL_BAR_THRESHOLD = 500.0f * Settings.scale;
         HEADER_INFO = TEXT[0];
     }
+
     @Override
     public AbstractDungeon.CurrentScreen curScreen() {
         return Enum.Noble_Phantasm;
@@ -68,7 +70,7 @@ public class NobleDeckViewScreen extends CustomScreen implements ScrollBarListen
         drawStartX /= 2.0f;
         drawStartX += AbstractCard.IMG_WIDTH * 0.75f / 2.0f;
         
-        drawStartY = (float)Settings.HEIGHT * 0.66f;
+        drawStartY = (float) Settings.HEIGHT * 0.66f;
         
         padX = AbstractCard.IMG_WIDTH * 0.75f + Settings.CARD_VIEW_PAD_X;
         padY = AbstractCard.IMG_HEIGHT * 0.75f + Settings.CARD_VIEW_PAD_Y;
@@ -83,7 +85,7 @@ public class NobleDeckViewScreen extends CustomScreen implements ScrollBarListen
         // 保存传入的卡组
         if (args.length > 0 && args[0] instanceof NobleCardGroup) {
             @SuppressWarnings("unchecked")
-            NobleCardGroup<AbsNoblePhantasmCard> nobleCards =  (NobleCardGroup<AbsNoblePhantasmCard>) args[0];
+            NobleCardGroup<AbsNoblePhantasmCard> nobleCards = (NobleCardGroup<AbsNoblePhantasmCard>) args[0];
             this.nobleCards = nobleCards;
             }
 
@@ -141,7 +143,6 @@ public class NobleDeckViewScreen extends CustomScreen implements ScrollBarListen
     public void openingSettings() {
         switchScreen();
     }
-
 
     @Override
     public void scrolledUsingBar(float newPercent) {
@@ -212,7 +213,7 @@ public class NobleDeckViewScreen extends CustomScreen implements ScrollBarListen
         if (nobleCards.size() % CARDS_PER_LINE != 0) {
             ++scrollTmp;
         }
-        scrollUpperBound = Settings.DEFAULT_SCROLL_LIMIT + (float)scrollTmp * padY;
+        scrollUpperBound = Settings.DEFAULT_SCROLL_LIMIT + (float) scrollTmp * padY;    
 
     }
 
@@ -226,8 +227,8 @@ public class NobleDeckViewScreen extends CustomScreen implements ScrollBarListen
                 ++lineNum;
             }
             AbstractCard card = nobleCards.group.get(i);
-            card.current_x = drawStartX + (float)mod * padX;
-            card.current_y = drawStartY + currentDiffY - (float)lineNum * padY - MathUtils.random(100.0f * Settings.scale, 200.0f * Settings.scale);
+            card.current_x = drawStartX + (float) mod * padX;
+            card.current_y = drawStartY + currentDiffY - (float) lineNum * padY - MathUtils.random(100.0f * Settings.scale, 200.0f * Settings.scale);
             card.targetDrawScale = 0.75f;
             card.drawScale = 0.75f;
             card.setAngle(0.0f, true);
@@ -244,10 +245,10 @@ public class NobleDeckViewScreen extends CustomScreen implements ScrollBarListen
             }
             if (InputHelper.justClickedLeft) {
                 grabbedScreen = true;
-                grabStartY = (float)y - currentDiffY;
+                grabStartY = (float) y - currentDiffY;
             }
         } else if (InputHelper.isMouseDown) {
-            currentDiffY = (float)y - grabStartY;
+            currentDiffY = (float) y - grabStartY;
         } else {
             grabbedScreen = false;
         }
@@ -268,8 +269,8 @@ public class NobleDeckViewScreen extends CustomScreen implements ScrollBarListen
             }
             
             AbstractCard card = nobleCards.group.get(i);
-            card.target_x = drawStartX + (float)mod * padX;
-            card.target_y = drawStartY + currentDiffY - (float)lineNum * padY;
+            card.target_x = drawStartX + (float) mod * padX;
+            card.target_y = drawStartY + currentDiffY - (float) lineNum * padY;
             card.update();
             card.updateHoverLogic();
             

@@ -29,7 +29,7 @@ public class WitchOfSalem extends FGOCard {
     @Override
     public void use(AbstractPlayer p, AbstractMonster m) {
         for (AbstractMonster mo : AbstractDungeon.getMonsters().monsters) {
-            if(mo.isDead || mo.isDying) continue;
+            if (mo.isDead || mo.isDying) continue;
             addToBot(new ApplyPowerAction(mo, p, new VulnerablePower(mo, 3, false)));
             addToBot(new ApplyPowerAction(mo, p, new WeakPower(mo, 3, false)));
             addToBot(new ApplyPowerAction(mo, p, new TerrorPower(mo, 3, magicNumber)));

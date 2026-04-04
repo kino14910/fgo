@@ -15,8 +15,10 @@ import basemod.patches.com.megacrit.cardcrawl.cards.AbstractCard.MultiCardPrevie
 import fgo.cards.FGOCard;
 import fgo.cards.colorless.InfiniteSuffering;
 import fgo.cards.colorless.TheAbsoluteSword;
+
 public class SwifterThanSound extends FGOCard {
     public static final String ID = makeID(SwifterThanSound.class.getSimpleName());
+
     public SwifterThanSound() {
         super(ID, 1, CardType.ATTACK, CardTarget.ALL_ENEMY, CardRarity.RARE);
         setDamage(6, 3);

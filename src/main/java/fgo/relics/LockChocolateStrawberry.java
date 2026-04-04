@@ -63,7 +63,9 @@ public class LockChocolateStrawberry extends BaseRelic {
 
     @Override
     public void onMonsterDeath(AbstractMonster m) {
-        if (AbstractDungeon.actNum > 1 && m.type == AbstractMonster.EnemyType.BOSS && AbstractDungeon.getCurrRoom().monsters.areMonstersBasicallyDead()) {
+        if (AbstractDungeon.actNum > 1 
+                && m.type == AbstractMonster.EnemyType.BOSS 
+                && AbstractDungeon.getCurrRoom().monsters.areMonstersBasicallyDead()) {
             changeNobleCard(LockChocolateStrawberry.lordCamelot, LockChocolateStrawberry.lordChaldeas);
             changeNobleCard(LockChocolateStrawberry.camelot, LockChocolateStrawberry.lordCamelot);
             changeCard(LockChocolateStrawberry.veneratedWall, LockChocolateStrawberry.veneratedShield);
@@ -82,6 +84,7 @@ public class LockChocolateStrawberry extends BaseRelic {
             AbstractDungeon.player.masterDeck.addToBottom(newCard);
         }
     }
+    
     private void changeNobleCard(AbsNoblePhantasmCard oldCard, AbsNoblePhantasmCard newCard) {
         boolean hasCard = NobleDeckCards.nobleCards.group.stream()
             .anyMatch(card -> card.cardID.equals(oldCard.cardID));

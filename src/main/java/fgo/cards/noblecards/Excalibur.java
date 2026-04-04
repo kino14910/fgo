@@ -15,7 +15,7 @@ public class Excalibur extends AbsNoblePhantasmCard {
     public static final String ID = makeID(Excalibur.class.getSimpleName());
 
     public Excalibur() {
-        super(ID,CardType.ATTACK, CardTarget.ALL_ENEMY, 1);
+        super(ID, CardType.ATTACK, CardTarget.ALL_ENEMY, 1);
         setDamage(25, 7);
         setNP(20, 30);
     }

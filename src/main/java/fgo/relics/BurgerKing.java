@@ -12,6 +12,7 @@ import fgo.characters.CustomEnums.FGOCardColor;
 public class BurgerKing extends BaseRelic {
     private static final String NAME = BurgerKing.class.getSimpleName();
 	public static final String ID = makeID(NAME);
+    
     public BurgerKing() {
         super(ID, NAME, FGOCardColor.FGO, RelicTier.BOSS, LandingSound.FLAT);
     }

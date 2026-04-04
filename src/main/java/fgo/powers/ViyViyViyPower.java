@@ -23,7 +23,7 @@ public class ViyViyViyPower extends BasePower {
         this.r = r;
         this.p = AbstractDungeon.player;
         this.rName = r.name;
-        AbstractDungeon.getCurrRoom().spawnRelicAndObtain((float)Settings.WIDTH / 2.0f, (float)Settings.HEIGHT / 2.0f, r);
+        AbstractDungeon.getCurrRoom().spawnRelicAndObtain(Settings.WIDTH / 2.0f, Settings.HEIGHT / 2.0f, r);
         r.atBattleStart();
         updateDescription();
     }

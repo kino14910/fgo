@@ -8,8 +8,10 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import basemod.ReflectionHacks;
 import fgo.cards.FGOCard;
 import fgo.powers.ReducePercentDamagePower;
+
 public class HolyShroud extends FGOCard {
     public static final String ID = makeID(HolyShroud.class.getSimpleName());
+
     public HolyShroud() {
         super(ID, 0, CardType.SKILL, CardTarget.SELF, CardRarity.UNCOMMON);
         setMagic(25, 5);
@@ -20,9 +22,9 @@ public class HolyShroud extends FGOCard {
         int sum = 0;
         
         for (AbstractMonster monster : AbstractDungeon.getMonsters().monsters) {
-            int dmg = (int)ReflectionHacks.getPrivate(monster, AbstractMonster.class, "intentDmg");
-            int actualDmg = (boolean)ReflectionHacks.getPrivate(monster, AbstractMonster.class, "isMultiDmg")
-                    ? dmg * (int)ReflectionHacks.getPrivate(monster, AbstractMonster.class, "intentMultiAmt")
+            int dmg = (int) ReflectionHacks.getPrivate(monster, AbstractMonster.class, "intentDmg");
+            int actualDmg = (boolean) ReflectionHacks.getPrivate(monster, AbstractMonster.class, "isMultiDmg")
+                    ? dmg * (int) ReflectionHacks.getPrivate(monster, AbstractMonster.class, "intentMultiAmt")
                     : dmg;
             sum += actualDmg;
         }

@@ -19,6 +19,4 @@ public class StarRatePower extends BasePower {
     public void atEndOfTurn(boolean isPlayer) {
         addToBot(new RemoveSpecificPowerAction(owner, owner, ID));
     }
-
-
 }

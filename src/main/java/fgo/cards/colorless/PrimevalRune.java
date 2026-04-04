@@ -11,8 +11,10 @@ import com.megacrit.cardcrawl.powers.WeakPower;
 import com.megacrit.cardcrawl.vfx.combat.BlizzardEffect;
 
 import fgo.cards.FGOCard;
+
 public class PrimevalRune extends FGOCard {
     public static final String ID = makeID(PrimevalRune.class.getSimpleName());
+
     public PrimevalRune() {
         super(ID, 1, CardType.SKILL, CardTarget.ALL_ENEMY, CardRarity.RARE, CardColor.COLORLESS);
         setMagic(2, 1);

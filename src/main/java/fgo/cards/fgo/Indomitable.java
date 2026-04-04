@@ -10,6 +10,7 @@ import fgo.powers.NonStackableGutsPower;
 
 public class Indomitable extends FGOCard {
     public static final String ID = makeID(Indomitable.class.getSimpleName());
+
     public Indomitable() {
         super(ID, 1, CardType.POWER, CardTarget.SELF, CardRarity.RARE);
         setMagic(5, 5);

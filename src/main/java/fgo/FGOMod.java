@@ -87,7 +87,13 @@ import fgo.event.DevilSlot;
 import fgo.event.FGOLibrary;
 import fgo.event.ManofChaldea;
 import fgo.event.ProofAndRebuttalEvent;
+import fgo.monsters.CalamityofNorwich;
+import fgo.monsters.Cernunnos;
 import fgo.monsters.Emiya;
+import fgo.monsters.FaerieKnightGawain;
+import fgo.monsters.FaerieKnightLancelot;
+import fgo.monsters.Moss;
+import fgo.monsters.QueenMorgan;
 import fgo.potions.BasePotion;
 import fgo.powers.ArtsPerformancePower;
 import fgo.powers.NPRatePower;
@@ -102,7 +108,6 @@ import fgo.ui.panels.NobleDeckCards;
 import fgo.ui.screens.NobleDeckViewScreen;
 import fgo.utils.KeywordInfo;
 import fgo.utils.Sounds;
-import fgo.utils.TextureLoader;
 
 @SpireInitializer
 public class FGOMod implements
@@ -122,7 +127,9 @@ public class FGOMod implements
         {
     public static ModInfo info;
     public static String modID; //Edit your pom.xml to change this
+    
     static { loadModInfo(); }
+    
     public static final Logger logger = LogManager.getLogger(modID); //Used to output to the console.
     private static final String resourcesFolder = checkResourcesPath();
     
@@ -130,6 +137,7 @@ public class FGOMod implements
     
     static Texture[] ftues;
     static String[] tutTexts;
+    
     //This is used to prefix the IDs of various objects like cards and relics,
     //to avoid conflicts between different mods using the same name for things.
     public static String makeID(String id) {
@@ -167,7 +175,6 @@ public class FGOMod implements
     //默认背景图片。
     private static final String MASTER_PORTRAIT = imagePath("charSelect/MasterPortrait1");
     
-
     public FGOMod() {
         BaseMod.subscribe(this); //This will make BaseMod trigger all the subscribers at their appropriate times.
         BaseMod.addColor(FGOCardColor.FGO, SILVER, DEFAULT_CC, DEFAULT_CC, DEFAULT_CC, ENERGY_ORB_CC, DEFAULT_CC_PORTRAIT, DEFAULT_CC_PORTRAIT, DEFAULT_CC_PORTRAIT, ENERGY_ORB_CC_PORTRAIT, CARD_ENERGY_ORB);
@@ -180,6 +187,7 @@ public class FGOMod implements
     }
 
     private boolean shouldRenderNobleDeck = false;
+    
     @Override
     public void receivePostInitialize() {
         registerPotions();
@@ -192,27 +200,27 @@ public class FGOMod implements
         // Set up the mod config menu
         FGOConfig.initModConfigMenu();
 
-        if(FGOConfig.enableEmiya){
+        if (FGOConfig.enableEmiya) {
             BaseMod.addMonster(Emiya.ID, Emiya.NAME, () -> new MonsterGroup(new AbstractMonster[]{new Emiya()}));
             BaseMod.addBoss(TheBeyond.ID, Emiya.ID, monsterPath("map_emiya"), monsterPath("map_emiya_outline"));
         }
-        if(FGOConfig.enableCalamityofNorwich){
-            BaseMod.addMonster(fgo.monsters.CalamityofNorwich.ID, fgo.monsters.CalamityofNorwich.NAME, () -> new MonsterGroup(new AbstractMonster[]{new fgo.monsters.CalamityofNorwich()}));
+        if (FGOConfig.enableCalamityofNorwich) {
+            BaseMod.addMonster(CalamityofNorwich.ID, CalamityofNorwich.NAME, () -> new MonsterGroup(new AbstractMonster[]{new CalamityofNorwich()}));
         }
-        if(FGOConfig.enableCernunnos){
-            BaseMod.addMonster(fgo.monsters.Cernunnos.ID, fgo.monsters.Cernunnos.NAME, () -> new MonsterGroup(new AbstractMonster[]{new fgo.monsters.Cernunnos()}));
+        if (FGOConfig.enableCernunnos) {
+            BaseMod.addMonster(Cernunnos.ID, Cernunnos.NAME, () -> new MonsterGroup(new AbstractMonster[]{new Cernunnos()}));
         }
-        if(FGOConfig.enableFaerieKnightGawain){
-            BaseMod.addMonster(fgo.monsters.FaerieKnightGawain.ID, fgo.monsters.FaerieKnightGawain.NAME, () -> new MonsterGroup(new AbstractMonster[]{new fgo.monsters.FaerieKnightGawain()}));
+        if (FGOConfig.enableFaerieKnightGawain) {
+            BaseMod.addMonster(FaerieKnightGawain.ID, FaerieKnightGawain.NAME, () -> new MonsterGroup(new AbstractMonster[]{new FaerieKnightGawain()}));
         }
-        if(FGOConfig.enableFaerieKnightLancelot){
-            BaseMod.addMonster(fgo.monsters.FaerieKnightLancelot.ID, fgo.monsters.FaerieKnightLancelot.NAME, () -> new MonsterGroup(new AbstractMonster[]{new fgo.monsters.FaerieKnightLancelot()}));
+        if (FGOConfig.enableFaerieKnightLancelot) {
+            BaseMod.addMonster(FaerieKnightLancelot.ID, FaerieKnightLancelot.NAME, () -> new MonsterGroup(new AbstractMonster[]{new FaerieKnightLancelot()}));
         }
-        if(FGOConfig.enableMoss){
-            BaseMod.addMonster(fgo.monsters.Moss.ID, fgo.monsters.Moss.NAME, () -> new MonsterGroup(new AbstractMonster[]{new fgo.monsters.Moss()}));
+        if (FGOConfig.enableMoss) {
+            BaseMod.addMonster(Moss.ID, Moss.NAME, () -> new MonsterGroup(new AbstractMonster[]{new Moss()}));
         }
-        if(FGOConfig.enableQueenMorgan){
-            BaseMod.addMonster(fgo.monsters.QueenMorgan.ID, fgo.monsters.QueenMorgan.NAME, () -> new MonsterGroup(new AbstractMonster[]{new fgo.monsters.QueenMorgan()}));
+        if (FGOConfig.enableQueenMorgan) {
+            BaseMod.addMonster(QueenMorgan.ID, QueenMorgan.NAME, () -> new MonsterGroup(new AbstractMonster[]{new QueenMorgan()}));
         }
         shouldRenderNobleDeck = true;
     }
@@ -220,10 +228,10 @@ public class FGOMod implements
             /*----------Localization----------*/
 
     //This is used to load the appropriate localization files based on language.
-    private static String getLangString()
-    {
+    private static String getLangString() {
         return Settings.language.name().toLowerCase();
     }
+    
     private static final String defaultLanguage = "eng";
 
     public static final Map<String, KeywordInfo> keywords = new HashMap<>();
@@ -240,8 +248,7 @@ public class FGOMod implements
         if (!defaultLanguage.equals(getLangString())) {
             try {
                 loadLocalization(getLangString());
-            }
-            catch (GdxRuntimeException e) {
+            } catch (GdxRuntimeException e) {
                 e.printStackTrace();
             }
         }
@@ -252,7 +259,7 @@ public class FGOMod implements
         loadAudio(Sounds.class);
     }
 
-    private static final String[] AUDIO_EXTENSIONS = { ".ogg", ".wav", ".mp3" }; //There are more valid types, but not really worth checking them all here
+    private static final String[] AUDIO_EXTENSIONS = {".ogg", ".wav", ".mp3"}; //There are more valid types, but not really worth checking them all here
     private void loadAudio(Class<?> cls) {
         try {
             Field[] fields = cls.getDeclaredFields();
@@ -336,9 +343,7 @@ public class FGOMod implements
                     keyword.prep();
                     registerKeyword(keyword);
                 }
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 logger.warn(modID + " does not support " + getLangString() + " keywords.");
             }
         }
@@ -356,7 +361,6 @@ public class FGOMod implements
     public static String localizationPath(String lang, String file) {
         return resourcesFolder + "/localization/" + lang + "/" + file;
     }
-
     public static String audioPath(String file) {
         return resourcesFolder + "/audio/" + file;
     }
@@ -535,11 +539,11 @@ public class FGOMod implements
         if (AbstractDungeon.player.hasRelic(SuitcaseFgo.ID)) {
             fgoNp = 20;
         }
-        if(AbstractDungeon.floorNum == 16) {
+        if (AbstractDungeon.floorNum == 16) {
             AbstractDungeon.getCurrRoom().spawnRelicAndObtain(Settings.WIDTH / 2.0f, Settings.HEIGHT / 2.0f, RelicLibrary.getRelic(LockChocolateStrawberry.ID).makeCopy());
         }
         
-        if (FGOConfig.enableFtue && AbstractDungeon.getCurrRoom().monsters != null){
+        if (FGOConfig.enableFtue && AbstractDungeon.getCurrRoom().monsters != null) {
             ftues = new Texture[] {
                     ImageMaster.loadImage(uiPath("tutorial/1")),
                     ImageMaster.loadImage(uiPath("tutorial/2")),
@@ -562,7 +566,7 @@ public class FGOMod implements
             try {
                 FGOConfig.config.save();
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error("Failed to save FGO config", e);
             }
         }
     }
@@ -642,5 +646,4 @@ public class FGOMod implements
     private boolean isMaster() {
         return AbstractDungeon.player instanceof Master;
     }
-
 }

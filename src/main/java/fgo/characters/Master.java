@@ -12,7 +12,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.megacrit.cardcrawl.actions.AbstractGameAction;
+import com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
@@ -42,7 +42,7 @@ import fgo.ui.panels.FGOConfig;
 import fgo.utils.ModHelper;
 import fgo.utils.Sounds;
 
-public class Master extends CustomPlayer{
+public class Master extends CustomPlayer {
     private static final String[] ORB_TEXTURES = new String[] {
             uiPath("EPanel/layer5"),
             uiPath("EPanel/layer4"),
@@ -125,7 +125,7 @@ public class Master extends CustomPlayer{
     }
 
     @Override
-    public String getTitle(PlayerClass playerClass) {return TEXT[3];}
+    public String getTitle(PlayerClass playerClass) { return TEXT[3]; }
 
     @Override
     public AbstractCard.CardColor getCardColor() {
@@ -177,7 +177,7 @@ public class Master extends CustomPlayer{
     }
 
     @Override
-    public String getLocalizedCharacterName() {return TEXT[4];}
+    public String getLocalizedCharacterName() { return TEXT[4]; }
 
     @Override
     public AbstractPlayer newInstance() {
@@ -190,12 +190,12 @@ public class Master extends CustomPlayer{
     }
 
     @Override
-    public AbstractGameAction.AttackEffect[] getSpireHeartSlashEffect() {
-        return new AbstractGameAction.AttackEffect[] { AbstractGameAction.AttackEffect.SLASH_HEAVY, AbstractGameAction.AttackEffect.FIRE, AbstractGameAction.AttackEffect.SLASH_DIAGONAL, AbstractGameAction.AttackEffect.SLASH_HEAVY, AbstractGameAction.AttackEffect.FIRE, AbstractGameAction.AttackEffect.SLASH_DIAGONAL };
+    public AttackEffect[] getSpireHeartSlashEffect() {
+        return new AttackEffect[] { AttackEffect.SLASH_HEAVY, AttackEffect.FIRE, AttackEffect.SLASH_DIAGONAL, AttackEffect.SLASH_HEAVY, AttackEffect.FIRE, AttackEffect.SLASH_DIAGONAL };
     }
 
     @Override
-    public String getVampireText() {return Vampires.DESCRIPTIONS[1];}
+    public String getVampireText() { return Vampires.DESCRIPTIONS[1]; }
 
     @Override
     public String getSpireHeartText() {
@@ -262,8 +262,6 @@ public class Master extends CustomPlayer{
             }
         }
     }
-    
-
 
     private void renderTruthValueBar(SpriteBatch sb, float x) {
         Color color = fgoNp > 200 ? FgoNpBarColor3 : (fgoNp > 100 ? FgoNpBarColor2 : FgoNpBarColor1);

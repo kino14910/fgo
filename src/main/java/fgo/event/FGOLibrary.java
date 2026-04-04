@@ -35,6 +35,7 @@ public class FGOLibrary extends PhasedEvent {
     private final int maxHPAmt;
     private static final float healMultiplier = eventAscension() ? 0.2F : 0.33F;
     private static final float maxHPMultiplier = eventAscension() ? 0.15F : 0.1F;
+    
     public FGOLibrary() {
         super(ID, NAME, eventPath("FGOLibrary"));
 
@@ -42,7 +43,7 @@ public class FGOLibrary extends PhasedEvent {
         healAmt = (int) (p.maxHealth * healMultiplier);
         maxHPAmt = (int) (p.maxHealth * maxHPMultiplier);
 
-        registerPhase(0, new TextPhase(DESCRIPTIONS[0]){
+        registerPhase(0, new TextPhase(DESCRIPTIONS[0]) {
                 @Override
                 public void update() {
                     super.update();

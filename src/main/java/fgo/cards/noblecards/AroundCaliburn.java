@@ -13,10 +13,9 @@ public class AroundCaliburn extends AbsNoblePhantasmCard {
     public static final String ID = makeID(AroundCaliburn.class.getSimpleName());
 
     public AroundCaliburn() {
-        super(ID,CardType.POWER, CardTarget.SELF, 1);
+        super(ID, CardType.POWER, CardTarget.SELF, 1);
         setMagic(1, 1);
     }
-
 
     @Override
     public void use(AbstractPlayer p, AbstractMonster m) {

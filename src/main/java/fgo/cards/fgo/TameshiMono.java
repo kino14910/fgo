@@ -5,8 +5,10 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 
 import fgo.action.TameshiMonoAction;
 import fgo.cards.FGOCard;
+
 public class TameshiMono extends FGOCard {
     public static final String ID = makeID(TameshiMono.class.getSimpleName());
+
     public TameshiMono() {
         super(ID, 1, CardType.SKILL, CardTarget.SELF, CardRarity.UNCOMMON);
         setMagic(2, 1);

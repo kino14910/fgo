@@ -12,6 +12,7 @@ import com.megacrit.cardcrawl.potions.AbstractPotion;
 
 public abstract class BasePotion extends AbstractPotion {
     private static final Field containerImg, outlineImg, liquidImg, hybridImg, spotsImg;
+    
     static {
         try {
             containerImg = AbstractPotion.class.getDeclaredField("containerImg");
@@ -79,6 +80,7 @@ public abstract class BasePotion extends AbstractPotion {
     }
 
     public abstract String getDescription();
+    
     public void addAdditionalTips() {
 
     }
@@ -90,6 +92,7 @@ public abstract class BasePotion extends AbstractPotion {
             throw new RuntimeException(e);
         }
     }
+
     public final Texture getContainerImg() {
         try {
             return (Texture) containerImg.get(this);
@@ -97,6 +100,7 @@ public abstract class BasePotion extends AbstractPotion {
             throw new RuntimeException(e);
         }
     }
+
     public final  Texture getLiquidImg() {
         try {
             return (Texture) liquidImg.get(this);
@@ -104,6 +108,7 @@ public abstract class BasePotion extends AbstractPotion {
             throw new RuntimeException(e);
         }
     }
+
     public final Texture getHybridImg() {
         try {
             return (Texture) hybridImg.get(this);
@@ -111,6 +116,7 @@ public abstract class BasePotion extends AbstractPotion {
             throw new RuntimeException(e);
         }
     }
+
     public final Texture getSpotsImg() {
         try {
             return (Texture) spotsImg.get(this);
@@ -126,6 +132,7 @@ public abstract class BasePotion extends AbstractPotion {
             throw new RuntimeException(e);
         }
     }
+
     public final void setContainerImg(Texture t) {
         try {
             containerImg.set(this, t);
@@ -133,6 +140,7 @@ public abstract class BasePotion extends AbstractPotion {
             throw new RuntimeException(e);
         }
     }
+    
     public final void setLiquidImg(Texture t) {
         try {
             liquidImg.set(this, t);
@@ -140,6 +148,7 @@ public abstract class BasePotion extends AbstractPotion {
             throw new RuntimeException(e);
         }
     }
+    
     public final void setHybridImg(Texture t) {
         try {
             hybridImg.set(this, t);

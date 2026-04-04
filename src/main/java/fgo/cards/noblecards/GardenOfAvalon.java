@@ -13,12 +13,11 @@ public class GardenOfAvalon extends AbsNoblePhantasmCard {
     public static final String ID = makeID(GardenOfAvalon.class.getSimpleName());
 
     public GardenOfAvalon() {
-        super(ID,CardType.POWER, CardTarget.SELF, 1);
+        super(ID, CardType.POWER, CardTarget.SELF, 1);
         setBlock(3, 1);
         setNP(5);
         setStar(5, 5);
     }
-
 
     @Override
     public void use(AbstractPlayer p, AbstractMonster m) {

@@ -12,8 +12,10 @@ import com.megacrit.cardcrawl.powers.DrawPower;
 import com.megacrit.cardcrawl.vfx.combat.CleaveEffect;
 
 import fgo.cards.FGOCard;
+
 public class TheAbsoluteSword extends FGOCard {
     public static final String ID = makeID(TheAbsoluteSword.class.getSimpleName());
+
     public TheAbsoluteSword() {
         super(ID, 3, CardType.ATTACK, CardTarget.ALL_ENEMY, CardRarity.SPECIAL, CardColor.COLORLESS);
         setDamage(10, 3);
@@ -22,7 +24,7 @@ public class TheAbsoluteSword extends FGOCard {
 
     @Override
     public void use(AbstractPlayer p, AbstractMonster m) {
-        for(int i = 0; i < 2; ++i) {
+        for (int i = 0; i < 2; ++i) {
             addToBot(new SFXAction("ATTACK_HEAVY"));
             addToBot(new VFXAction(p, new CleaveEffect(), 0.1F));
             addToBot(new DamageAllEnemiesAction(p, multiDamage, damageTypeForTurn, AbstractGameAction.AttackEffect.NONE));

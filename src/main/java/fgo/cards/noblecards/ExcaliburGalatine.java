@@ -15,7 +15,7 @@ public class ExcaliburGalatine extends AbsNoblePhantasmCard {
     public static final String ID = makeID(ExcaliburGalatine.class.getSimpleName());
 
     public ExcaliburGalatine() {
-        super(ID,CardType.ATTACK, CardTarget.ALL_ENEMY, 1);
+        super(ID, CardType.ATTACK, CardTarget.ALL_ENEMY, 1);
         setDamage(24, 6);
         setMagic(2, 1);
     }

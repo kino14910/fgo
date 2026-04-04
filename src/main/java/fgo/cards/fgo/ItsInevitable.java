@@ -16,6 +16,7 @@ import fgo.utils.Sounds;
 
 public class ItsInevitable extends FGOCard {
     public static final String ID = makeID(ItsInevitable.class.getSimpleName());
+
     public ItsInevitable() {
         super(ID, 1, CardType.ATTACK, CardTarget.ALL_ENEMY, CardRarity.COMMON);
         setDamage(4, 1);

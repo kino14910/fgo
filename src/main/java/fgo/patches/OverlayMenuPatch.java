@@ -35,7 +35,7 @@ public class OverlayMenuPatch {
     public static class UpdatePatch {
         @SpirePostfixPatch
         public static void Postfix(OverlayMenu __instance) {
-            if(AbstractDungeon.player instanceof Master){
+            if (AbstractDungeon.player instanceof Master){
                 CommandSpellButtonField.commandSpellButton.get(__instance).updatePositions();
                 NoblePhantasmButtonField.noblePhantasmButton.get(__instance).updatePositions();
             }
@@ -49,7 +49,7 @@ public class OverlayMenuPatch {
     public static class RenderPatch {
         @SpirePostfixPatch
         public static void Postfix(OverlayMenu __instance, SpriteBatch sb) {
-            if(AbstractDungeon.player instanceof Master){
+            if (AbstractDungeon.player instanceof Master){
                 CommandSpellButtonField.commandSpellButton.get(__instance).render(sb);
                 NoblePhantasmButtonField.noblePhantasmButton.get(__instance).render(sb);
             }
@@ -63,7 +63,7 @@ public class OverlayMenuPatch {
     public static class ShowCombatPanelsPatch {
         @SpirePostfixPatch
         public static void Postfix(OverlayMenu __instance) {
-            if(AbstractDungeon.player instanceof Master) {
+            if (AbstractDungeon.player instanceof Master) {
                 CommandSpellButtonField.commandSpellButton.get(__instance).show();
                 NoblePhantasmButtonField.noblePhantasmButton.get(__instance).show();
             }
@@ -77,7 +77,7 @@ public class OverlayMenuPatch {
     public static class HideCombatPanelsPatch {
         @SpirePostfixPatch
         public static void Postfix(OverlayMenu __instance) {
-            if(AbstractDungeon.player instanceof Master) {
+            if (AbstractDungeon.player instanceof Master) {
                 CommandSpellButtonField.commandSpellButton.get(__instance).hide();
                 NoblePhantasmButtonField.noblePhantasmButton.get(__instance).hide();
             }

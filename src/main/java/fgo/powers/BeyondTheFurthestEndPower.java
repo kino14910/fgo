@@ -27,8 +27,7 @@ public class BeyondTheFurthestEndPower extends BasePower {
         }
         addToBot(new ReducePowerAction(owner, owner, this, 1));
     }
-
-    
+ 
    @Override
     public void updateDescription() {
         description = DESCRIPTIONS[0];

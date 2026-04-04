@@ -6,8 +6,10 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 
 import fgo.cards.FGOCard;
 import fgo.powers.MonteCristoTreasurePower;
+
 public class MonteCristoTreasure extends FGOCard {
     public static final String ID = makeID(MonteCristoTreasure.class.getSimpleName());
+
     public MonteCristoTreasure() {
         super(ID, 3, CardType.POWER, CardTarget.SELF, CardRarity.RARE);
         setMagic(1);

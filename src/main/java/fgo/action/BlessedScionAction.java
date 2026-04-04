@@ -13,6 +13,7 @@ import com.megacrit.cardcrawl.localization.UIStrings;
 public class BlessedScionAction extends AbstractGameAction {
     private static final UIStrings uiStrings = CardCrawlGame.languagePack.getUIString(makeID(BlessedScionAction.class.getSimpleName()));
     public static final String[] TEXT = uiStrings.TEXT;
+    
     public BlessedScionAction(AbstractCreature target, AbstractCreature source, int amount) {
         setValues(target, source, amount);
         actionType = ActionType.CARD_MANIPULATION;

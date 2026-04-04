@@ -40,6 +40,4 @@ public class DazzlingMoonPower extends BasePower {
             addToBot(new ApplyPowerAction(owner, owner, new DexterityPower(owner, StrAmt)));
         }
     }
-
-    
 }

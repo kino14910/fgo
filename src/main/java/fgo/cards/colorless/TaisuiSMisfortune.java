@@ -10,8 +10,10 @@ import com.megacrit.cardcrawl.vfx.combat.OfferingEffect;
 
 import fgo.cards.FGOCard;
 import fgo.powers.TaisuiSPower;
+
 public class TaisuiSMisfortune extends FGOCard {
     public static final String ID = makeID(TaisuiSMisfortune.class.getSimpleName());
+
     public TaisuiSMisfortune() {
         super(ID, 0, CardType.SKILL, CardTarget.ALL_ENEMY, CardRarity.UNCOMMON, CardColor.COLORLESS);
         setMagic(2, 1);

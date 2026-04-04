@@ -26,7 +26,7 @@ import fgo.ui.panels.FGOConfig;
     method = "renderCardTip"
 )
 public class PatchCostAmtKey {
-    private static final String[] NPTEXT = CardCrawlGame.languagePack.getUIString((String)"fgo:NPText").TEXT;
+    private static final String[] NPTEXT = CardCrawlGame.languagePack.getUIString("fgo:NPText").TEXT;
 
     @SpirePrefixPatch
     public static void Prefix(AbstractCard __instance, SpriteBatch sb) {

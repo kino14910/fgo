@@ -41,6 +41,4 @@ public class StarGainMonsterPower extends BasePower {
        flash();
        addToTop(new ReducePowerAction(owner, owner, ID, 10));
     }
-
-    
 }

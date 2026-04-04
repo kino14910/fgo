@@ -21,7 +21,6 @@ public class BeautifulJourney extends AbsNoblePhantasmCard {
         setNP(20);
     }
 
-
     @Override
     public void use(AbstractPlayer p, AbstractMonster m) {
         addToBot(new ApplyPowerAction(p, p, new ArtsPerformancePower(p, 1)));

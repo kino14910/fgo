@@ -13,8 +13,10 @@ import com.megacrit.cardcrawl.powers.WeakPower;
 
 import fgo.cards.FGOCard;
 import fgo.powers.BeyondTheFurthestEndPower;
+
 public class BeyondTheFurthestEnd extends FGOCard {
     public static final String ID = makeID(BeyondTheFurthestEnd.class.getSimpleName());
+
     public BeyondTheFurthestEnd() {
         super(ID, 2, CardType.POWER, CardTarget.ALL_ENEMY, CardRarity.UNCOMMON);
         setMagic(3, 1);

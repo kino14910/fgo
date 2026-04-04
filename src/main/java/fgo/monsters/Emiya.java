@@ -108,7 +108,7 @@ public class Emiya extends BaseMonster {
             CardCrawlGame.music.unsilenceBGM();
             AbstractDungeon.scene.fadeOutAmbiance();
             AbstractDungeon.getCurrRoom().playBgmInstantly("UBW_Extended.mp3");
-            addToBotAbstract(()->{img = ImageMaster.loadImage(IMG2);});
+            addToBotAbstract(() -> { img = ImageMaster.loadImage(IMG2); });
             
         });
         addMoveA(Intent.ATTACK_BUFF, projectionDmg, PROJECTION_ATK_AMT, mi -> {
@@ -170,7 +170,7 @@ public class Emiya extends BaseMonster {
                 firstTurn = false;
                 return;
             }
-            if (secondTurn){
+            if (secondTurn) {
                 setMove(HAWK_EYE);
                 secondTurn = false;
                 return;
@@ -227,7 +227,7 @@ public class Emiya extends BaseMonster {
             CardCrawlGame.screenShake.rumble(4.0f);
             if (!CardHelper.hasCardWithID(Unlimited.ID) && AbstractDungeon.player instanceof Master) {
                 // AbstractDungeon.effectList.add(new ShowCardAndObtainEffect(new Unlimited(), 
-                //     (float)Settings.WIDTH / 2.0f + 190.0f * Settings.scale, Settings.HEIGHT / 2.0f));
+                //     Settings.WIDTH / 2.0f + 190.0f * Settings.scale, Settings.HEIGHT / 2.0f));
                 AbstractDungeon.effectList.add(new ShowCardBrieflyEffect(new Unlimited()));
                 NobleDeckCards.addCard(Unlimited.ID);
             }

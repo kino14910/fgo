@@ -6,8 +6,10 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 
 import fgo.cards.FGOCard;
 import fgo.powers.SquireOfProphecyPower;
+
 public class SquireOfProphecy extends FGOCard {
     public static final String ID = makeID(SquireOfProphecy.class.getSimpleName());
+
     public SquireOfProphecy() {
         super(ID, 1, CardType.SKILL, CardTarget.SELF, CardRarity.UNCOMMON, CardColor.COLORLESS);
         setMagic(2, 1);

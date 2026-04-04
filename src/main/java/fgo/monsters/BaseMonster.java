@@ -246,7 +246,7 @@ public abstract class BaseMonster extends CustomMonster {
         shout(index, 1.0f);
     }
 
-    public void shout (int index, String sound) {
+    public void shout(int index, String sound) {
         shout(index, sound, 1.0f);
     }
 

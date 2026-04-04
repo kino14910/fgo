@@ -14,8 +14,10 @@ import com.megacrit.cardcrawl.powers.ThornsPower;
 import com.megacrit.cardcrawl.powers.watcher.VigorPower;
 
 import fgo.cards.FGOCard;
+
 public class EightKindness extends FGOCard {
     public static final String ID = makeID(EightKindness.class.getSimpleName());
+
     public EightKindness() {
         super(ID, 3, CardType.SKILL, CardTarget.SELF, CardRarity.RARE, CardColor.COLORLESS);
         setMagic(2);
@@ -30,7 +32,7 @@ public class EightKindness extends FGOCard {
         }
     }
 
-    public void gainPower(AbstractPlayer p, AbstractPower powerToApply){
+    public void gainPower(AbstractPlayer p, AbstractPower powerToApply) {
         addToBot(new ApplyPowerAction(p, p,  powerToApply));
 
     }
@@ -46,7 +48,6 @@ public class EightKindness extends FGOCard {
         gainPower(p, new IntangiblePlayerPower(p, magicNumber));
         gainPower(p, new ArtifactPower(p, magicNumber));
     }
-
 }
 
 

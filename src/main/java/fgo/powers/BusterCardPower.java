@@ -24,7 +24,7 @@ public class BusterCardPower extends BasePower {
     @Override
     public float atDamageFinalGive(float damage, DamageInfo.DamageType type, AbstractCard card) {
         if (card.type == AbstractCard.CardType.ATTACK) {
-            return type == DamageInfo.DamageType.NORMAL ? damage + (float)this.amount : damage;
+            return type == DamageInfo.DamageType.NORMAL ? damage + (float) this.amount : damage;
         }
         return damage;
     }
@@ -39,7 +39,7 @@ public class BusterCardPower extends BasePower {
 
     @Override
     public float modifyBlock(float blockAmount) {
-        return blockAmount + (float)this.amount;
+        return blockAmount + (float) this.amount;
     }
 }
 

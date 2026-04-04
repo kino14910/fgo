@@ -8,8 +8,10 @@ import fgo.action.FgoNpAction;
 import fgo.cards.FGOCard;
 import fgo.powers.NPDamagePower;
 import fgo.powers.NPOverChargePower;
+
 public class DreamUponTheStars extends FGOCard {
     public static final String ID = makeID(DreamUponTheStars.class.getSimpleName());
+
     public DreamUponTheStars() {
         super(ID, 1, CardType.SKILL, CardTarget.SELF, CardRarity.BASIC);
         setMagic(20, 10);

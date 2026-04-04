@@ -13,7 +13,7 @@ public class EnferChateaudIf extends AbsNoblePhantasmCard {
     public static final String ID = makeID(EnferChateaudIf.class.getSimpleName());
 
     public EnferChateaudIf() {
-        super(ID,CardType.POWER, CardTarget.SELF, 1);
+        super(ID, CardType.POWER, CardTarget.SELF, 1);
     }
     
     @Override
@@ -33,7 +33,6 @@ public class EnferChateaudIf extends AbsNoblePhantasmCard {
             spawnRelicWingBoots();
         }
     }
-
 
     private void spawnRelicWingBoots() {
         AbstractDungeon.getCurrRoom().spawnRelicAndObtain(Settings.WIDTH / 2.0f, Settings.HEIGHT / 2.0f, new WingBoots());

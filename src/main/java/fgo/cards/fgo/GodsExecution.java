@@ -13,8 +13,10 @@ import com.megacrit.cardcrawl.powers.AbstractPower;
 
 import fgo.cards.FGOCard;
 import fgo.utils.ModHelper;
+
 public class GodsExecution extends FGOCard {
     public static final String ID = makeID(GodsExecution.class.getSimpleName());
+
     public GodsExecution() {
         super(ID, 1, CardType.ATTACK, CardTarget.ENEMY, CardRarity.UNCOMMON);
         setDamage(5, 3);

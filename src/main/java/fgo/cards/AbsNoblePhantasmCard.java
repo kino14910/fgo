@@ -21,6 +21,7 @@ public abstract class AbsNoblePhantasmCard extends FateMagineerCard {
     public AbsNoblePhantasmCard(String id, AbstractCard.CardType type, AbstractCard.CardTarget target) {
         this(id, type, target, -2);
     }
+    
     public AbsNoblePhantasmCard(String id, AbstractCard.CardType type, AbstractCard.CardTarget target, int cost) {
         super(id, FGOConfig.enableNoCostNoblePhantasm ? -2 : cost, type, target, AbstractCard.CardRarity.SPECIAL, FGOCardColor.NOBLE_PHANTASM);
         setSelfRetain();
@@ -32,7 +33,6 @@ public abstract class AbsNoblePhantasmCard extends FateMagineerCard {
         cardArtLayers512.add(new RenderImageLayer(TextureLoader.getTexture(noblePath(this.getClass().getSimpleName()))));
         cardArtLayers1024.add(new RenderImageLayer(TextureLoader.getTexture(noblePath(this.getClass().getSimpleName() + "_p"))));
     }
-
 
     public static String noblePath(String file) {
         return cardPath("noble/" + file);

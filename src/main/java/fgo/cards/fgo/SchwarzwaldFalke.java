@@ -7,8 +7,10 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import fgo.cards.FGOCard;
 import fgo.powers.NPRatePower;
 import fgo.powers.SchwarzwaldFalkePower;
+
 public class SchwarzwaldFalke extends FGOCard {
     public static final String ID = makeID(SchwarzwaldFalke.class.getSimpleName());
+
     public SchwarzwaldFalke() {
         super(ID, 3, CardType.POWER, CardTarget.SELF, CardRarity.RARE);
         setMagic(3);

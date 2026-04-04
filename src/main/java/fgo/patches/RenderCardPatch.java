@@ -112,6 +112,7 @@ public class RenderCardPatch {
             }
         }
     }
+    
 	@SpirePatch(clz = SingleCardViewPopup.class, method = "renderCardBanner", paramtypez = {SpriteBatch.class})
 	public static class RenderCardBannerPatch {
 		@SpirePrefixPatch

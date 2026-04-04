@@ -14,6 +14,7 @@ public class DreamChip extends BaseRelic {
     private static final String NAME = DreamChip.class.getSimpleName();
 	public static final String ID = makeID(NAME);
     private static boolean usedThisCombat = false;
+    
     public DreamChip() {
         super(ID, NAME, FGOCardColor.FGO, RelicTier.SHOP, LandingSound.FLAT);
     }

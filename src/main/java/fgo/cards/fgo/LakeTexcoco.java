@@ -8,8 +8,10 @@ import fgo.action.FgoNpAction;
 import fgo.cards.FGOCard;
 import fgo.powers.NonStackableEnergyRegenPower;
 import fgo.powers.WatersidePower;
+
 public class LakeTexcoco extends FGOCard {
     public static final String ID = makeID(LakeTexcoco.class.getSimpleName());
+
     public LakeTexcoco() {
         super(ID, 1, CardType.SKILL, CardTarget.SELF, CardRarity.UNCOMMON);
         setNP(20, 10);

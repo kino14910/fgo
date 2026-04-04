@@ -57,12 +57,12 @@ public class AlterOptionEffect extends AbstractGameEffect {
 
         if (!AbstractDungeon.isScreenUp && !AbstractDungeon.gridSelectScreen.selectedCards.isEmpty()) {
             AbstractCard c = AbstractDungeon.gridSelectScreen.selectedCards.get(0);
-            // AbstractDungeon.topLevelEffects.add(new ShowCardAndObtainEffect(c, (float)Settings.WIDTH / 2.0f + 190.0f * Settings.scale, Settings.HEIGHT / 2.0f));
+            // AbstractDungeon.topLevelEffects.add(new ShowCardAndObtainEffect(c, Settings.WIDTH / 2.0f + 190.0f * Settings.scale, Settings.HEIGHT / 2.0f));
             // NobleDeckPanelItem.addCard(c.makeCopy());
             NobleDeckCards.addCard(c.cardID);
             AlterOption.usedIdentify = true;
             AbstractDungeon.gridSelectScreen.selectedCards.clear();
-            ((RestRoom)AbstractDungeon.getCurrRoom()).fadeIn();
+            ((RestRoom) AbstractDungeon.getCurrRoom()).fadeIn();
         }
 
         if (duration < 1.0f && !openedScreen) {
@@ -105,7 +105,7 @@ public class AlterOptionEffect extends AbstractGameEffect {
             if (CampfireUI.hidden) {
                 AbstractRoom.waitTimer = 0.0f;
                 AbstractDungeon.getCurrRoom().phase = AbstractRoom.RoomPhase.INCOMPLETE;
-                ((RestRoom)AbstractDungeon.getCurrRoom()).campfireUI.reopen();
+                ((RestRoom) AbstractDungeon.getCurrRoom()).campfireUI.reopen();
                 ((RestRoom) AbstractDungeon.getCurrRoom()).cutFireSound();
             }
         }

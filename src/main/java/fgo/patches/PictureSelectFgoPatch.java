@@ -27,6 +27,7 @@ public class PictureSelectFgoPatch {
     public static Hitbox TalentRight;
     public static Hitbox TalentLeft;
     private static final float Talent_RIGHT_W = FontHelper.getSmartWidth(FontHelper.cardTitleFont, TEXT[1], 9999.0f, 0.0f);
+    
     @SpirePatch(clz = CharacterSelectScreen.class, method = "initialize")
     public static class CharacterSelectScreenPatch_Initialize {
         @SpirePostfixPatch
@@ -34,8 +35,8 @@ public class PictureSelectFgoPatch {
             // Called when you first open the screen, create hitbox for each button
             TalentRight = new Hitbox(70.0f * Settings.scale, 70.0f * Settings.scale);
             TalentLeft = new Hitbox(70.0f * Settings.scale, 70.0f * Settings.scale);
-            TalentRight.move((float)Settings.WIDTH / 2.0f + 500.0f * Settings.scale + Talent_RIGHT_W * 1.5f, 70.0f * Settings.scale);
-            TalentLeft.move((float)Settings.WIDTH / 2.0f + 500.0f * Settings.scale - Talent_RIGHT_W * 0.5f, 70.0f * Settings.scale);
+            TalentRight.move(Settings.WIDTH / 2.0f + 500.0f * Settings.scale + Talent_RIGHT_W * 1.5f, 70.0f * Settings.scale);
+            TalentLeft.move(Settings.WIDTH / 2.0f + 500.0f * Settings.scale - Talent_RIGHT_W * 0.5f, 70.0f * Settings.scale);
         }
     }
 
@@ -69,8 +70,8 @@ public class PictureSelectFgoPatch {
 
                     sb.draw(ImageMaster.CF_LEFT_ARROW, TalentLeft.cX - 24.0f, TalentLeft.cY - 24.0f, 24.0f, 24.0f, 48.0f, 48.0f, Settings.scale, Settings.scale, 0.0f, 0, 0, 48, 48, false, false);
 
-                    FontHelper.renderFontCentered(sb, FontHelper.smallDialogOptionFont, TEXT[TalentCount + 2], (float)Settings.WIDTH / 2.0f + Talent_RIGHT_W / 2.0f + 500.0f * Settings.scale, 35.0f * Settings.scale, Settings.CREAM_COLOR.cpy());
-                    FontHelper.renderFontCentered(sb, FontHelper.cardTitleFont, TEXT[TalentCount], (float)Settings.WIDTH / 2.0f + Talent_RIGHT_W / 2.0f + 500.0f * Settings.scale, TalentRight.cY, Settings.GOLD_COLOR.cpy());
+                    FontHelper.renderFontCentered(sb, FontHelper.smallDialogOptionFont, TEXT[TalentCount + 2], Settings.WIDTH / 2.0f + Talent_RIGHT_W / 2.0f + 500.0f * Settings.scale, 35.0f * Settings.scale, Settings.CREAM_COLOR.cpy());
+                    FontHelper.renderFontCentered(sb, FontHelper.cardTitleFont, TEXT[TalentCount], Settings.WIDTH / 2.0f + Talent_RIGHT_W / 2.0f + 500.0f * Settings.scale, TalentRight.cY, Settings.GOLD_COLOR.cpy());
                 }
             }
 
@@ -120,12 +121,11 @@ public class PictureSelectFgoPatch {
                 TalentLeft.update();
                 TalentRight.update();
             }
-
         }
     }
 
-    public static Texture updateBgImg(){
-        switch (TalentCount){
+    public static Texture updateBgImg() {
+        switch (TalentCount) {
             case 0:
                 return new Texture(imagePath("charSelect/MasterPortrait"));
             case 1:

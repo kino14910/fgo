@@ -23,6 +23,7 @@ public class Beyondthe extends PhasedEvent {
     private static final String[] OPTIONS = eventStrings.OPTIONS;
     private static final String NAME = eventStrings.NAME;
     private static final int maxHPAmt = eventAscension() ? MathUtils.round(4) : MathUtils.round(6);
+    
     public Beyondthe() {
         super(ID, NAME, eventPath("Beyondthe"));
 

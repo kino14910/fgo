@@ -11,8 +11,10 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 
 import fgo.cards.FGOCard;
 import fgo.powers.HeroicKingPower;
+
 public class HeroicKing extends FGOCard {
     public static final String ID = makeID(HeroicKing.class.getSimpleName());
+
     public HeroicKing() {
         super(ID, 1, CardType.ATTACK, CardTarget.ALL_ENEMY, CardRarity.UNCOMMON);
         setDamage(5, 3);
@@ -21,7 +23,7 @@ public class HeroicKing extends FGOCard {
 
     @Override
     public void use(AbstractPlayer p, AbstractMonster m) {
-        for(int i = 0; i < magicNumber; i++) {
+        for (int i = 0; i < magicNumber; i++) {
             addToBot(new AttackDamageRandomEnemyAction(this));
         }
     }

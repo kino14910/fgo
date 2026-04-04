@@ -21,7 +21,7 @@ public class ObscurantWallofChalk extends FGOCard {
 
     @Override
     public void use(AbstractPlayer p, AbstractMonster m) {
-        if(!upgraded) {
+        if (!upgraded) {
             addToBot(new ApplyPowerAction(p, p, new BufferPower(p, 1)));
         } else {
             addToBot(new ApplyPowerAction(p, p, new IntangiblePlayerPower(p, 1)));

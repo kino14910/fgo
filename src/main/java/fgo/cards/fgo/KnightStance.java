@@ -8,15 +8,15 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import fgo.cards.FGOCard;
 import fgo.powers.NPRatePower;
 import fgo.powers.ReducePercentDamagePower;
+
 public class KnightStance extends FGOCard {
     public static final String ID = makeID(KnightStance.class.getSimpleName());
+
     public KnightStance() {
         super(ID, 2, CardType.SKILL, CardTarget.SELF, CardRarity.COMMON);
         setBlock(11);
         setMagic(20, 20);
     }
-
-
 
     @Override
     public void use(AbstractPlayer p, AbstractMonster m) {

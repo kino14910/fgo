@@ -25,11 +25,10 @@ public class Sevendrive extends AbsNoblePhantasmCard {
     public static final String ID = makeID(Sevendrive.class.getSimpleName());
 
     public Sevendrive() {
-        super(ID,CardType.ATTACK, CardTarget.ALL_ENEMY, 1);
+        super(ID, CardType.ATTACK, CardTarget.ALL_ENEMY, 1);
         setDamage(24, 8);
         setNP(10, 20);
     }
-
 
     @Override
     public void use(AbstractPlayer p, AbstractMonster m) {
@@ -42,7 +41,7 @@ public class Sevendrive extends AbsNoblePhantasmCard {
         for (AbstractMonster mo : AbstractDungeon.getMonsters().monsters) {
             if (mo == null || mo.isDeadOrEscaped()) 
                 return;
-            int intentMultiAmt = (int)ReflectionHacks.getPrivate(mo, AbstractMonster.class, "intentMultiAmt");
+            int intentMultiAmt = (int) ReflectionHacks.getPrivate(mo, AbstractMonster.class, "intentMultiAmt");
             if (intentMultiAmt > 1) {
                 addToBotAbstract(() -> {
                     ReflectionHacks.setPrivate(mo, AbstractMonster.class, "intentMultiAmt", intentMultiAmt - 1);

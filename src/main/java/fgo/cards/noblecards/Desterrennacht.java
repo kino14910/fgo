@@ -13,11 +13,12 @@ import fgo.powers.CriticalDamageUpPower;
 import fgo.powers.ForeignerPower;
 import fgo.powers.StarRegenPower;
 import fgo.powers.TerrorPower;
+
 public class Desterrennacht extends AbsNoblePhantasmCard {
     public static final String ID = makeID(Desterrennacht.class.getSimpleName());
 
     public Desterrennacht() {
-        super(ID,CardType.POWER, CardTarget.ALL_ENEMY, 2);
+        super(ID, CardType.POWER, CardTarget.ALL_ENEMY, 2);
         setMagic(2, 1);
         setCustomVar("CriticalDamage", 60, 10);
         tags.add(FGO_Foreigner);

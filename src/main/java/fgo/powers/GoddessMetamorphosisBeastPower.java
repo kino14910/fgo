@@ -26,5 +26,4 @@ public class GoddessMetamorphosisBeastPower extends BasePower {
             addToBot(new ApplyPowerAction(target, owner, new CursePower(target, owner, 1), 1, true));
         }
     }
-
 }

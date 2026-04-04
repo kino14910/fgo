@@ -13,10 +13,9 @@ public class YewBow extends AbsNoblePhantasmCard {
     public static final String ID = makeID(YewBow.class.getSimpleName());
 
     public YewBow() {
-        super(ID,CardType.ATTACK, CardTarget.ENEMY, 1);
+        super(ID, CardType.ATTACK, CardTarget.ENEMY, 1);
         setDamage(25, 5);
     }
-
 
     @Override
     public void use(AbstractPlayer p, AbstractMonster m) {

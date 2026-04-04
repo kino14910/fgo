@@ -6,8 +6,10 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 
 import fgo.action.FgoNpAction;
 import fgo.cards.FGOCard;
+
 public class YinYangFish extends FGOCard {
     public static final String ID = makeID(YinYangFish.class.getSimpleName());
+
     public YinYangFish() {
         super(ID, 1, CardType.SKILL, CardTarget.SELF, CardRarity.UNCOMMON);
         setNP(10);
@@ -18,7 +20,7 @@ public class YinYangFish extends FGOCard {
 
     @Override
     public void use(AbstractPlayer p, AbstractMonster m) {
-        if(upgraded){
+        if (upgraded) {
             addToBot(new FgoNpAction(30));
         }
         addToBot(new FgoNpAction(-np));

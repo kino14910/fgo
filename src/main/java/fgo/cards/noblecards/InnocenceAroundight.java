@@ -16,7 +16,7 @@ public class InnocenceAroundight extends AbsNoblePhantasmCard {
     public static final String ID = makeID(InnocenceAroundight.class.getSimpleName());
 
     public InnocenceAroundight() {
-        super(ID,CardType.ATTACK, CardTarget.ENEMY, 1);
+        super(ID, CardType.ATTACK, CardTarget.ENEMY, 1);
         setDamage(32, 8);
         setMagic(3);
         cardsToPreview = new RayHorizon();

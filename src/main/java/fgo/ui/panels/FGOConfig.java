@@ -5,6 +5,9 @@ import static fgo.FGOMod.makeID;
 
 import java.util.Properties;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.evacipated.cardcrawl.modthespire.lib.SpireConfig;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
@@ -20,6 +23,7 @@ import basemod.ModPanel;
 import fgo.utils.TextureLoader;
 
 public class FGOConfig {
+    private static final Logger logger = LogManager.getLogger(FGOConfig.class.getName());
     public static final String BADGE_IMAGE = imagePath("badge");
     
     public static final String BASE_NP_PER_COST = "baseNPPerCost";
@@ -82,7 +86,7 @@ public class FGOConfig {
             enableMoss = config.getBool(ENABLE_MOSS);
             enableQueenMorgan = config.getBool(ENABLE_QUEEN_MORGAN);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Failed to load mod settings", e);
         }
     }
     
@@ -99,7 +103,7 @@ public class FGOConfig {
         int maxColumns = 4;
         UIStrings uiStrings = CardCrawlGame.languagePack.getUIString(makeID("FGOConfig"));
         
-        // Base NPperCost setting (integer)
+        // Base NP perCost setting (integer)
         // Use separate label and slider like buildSlider pattern
         String baseNPPerCostLabel = uiStrings.TEXT_DICT.get("baseNPPerCost");
         ModLabel baseNPPerCostLabelElement = new ModLabel(baseNPPerCostLabel,
@@ -107,7 +111,6 @@ public class FGOConfig {
                 settingsPanel,
                 (label) -> {});
         settingsPanel.addUIElement(baseNPPerCostLabelElement);
-
         
         float textHeight = FontHelper.getHeight(FontHelper.cardDescFont_N, baseNPPerCostLabel, 1f / Settings.scale);
         float textWidth = FontHelper.getWidth(FontHelper.cardDescFont_N, baseNPPerCostLabel, 1f / Settings.scale);
@@ -116,12 +119,12 @@ public class FGOConfig {
         ModMinMaxSlider baseNPPerCostSlider = new ModMinMaxSlider("",
                 sliderXPos, settingYPos + textHeight / 2.0f, 1.0f, 5.0f, (float) baseNPPerCost, "%.0f", settingsPanel,
                 (slider) -> {
-                    baseNPPerCost = (int) slider.getValue();
+                    baseNPPerCost = (int)slider.getValue();
                     try {
                         config.setInt(BASE_NP_PER_COST, baseNPPerCost);
                         config.save();
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        logger.error("Failed to save baseNPPerCost setting", e);
                     }
                 });
         settingsPanel.addUIElement(baseNPPerCostSlider);
@@ -140,7 +143,7 @@ public class FGOConfig {
                         config.setBool(ENABLE_COLORLESS_CARDS, enableColorlessCards);
                         config.save();
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        logger.error("Failed to save enableColorlessCards setting", e);
                     }
                 });
         settingsPanel.addUIElement(enableColorlessCardsButton);
@@ -159,7 +162,7 @@ public class FGOConfig {
                         config.setBool(ENABLE_PADORU, enablePadoru);
                         config.save();
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        logger.error("Failed to save enablePadoru setting", e);
                     }
                 });
         settingsPanel.addUIElement(enablePadoruButton);
@@ -178,7 +181,7 @@ public class FGOConfig {
                         config.setBool(ENABLE_FTUE, enableFtue);
                         config.save();
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        logger.error("Failed to save enableFtue setting", e);
                     }
                 });
         settingsPanel.addUIElement(enableFtueButton);
@@ -197,7 +200,7 @@ public class FGOConfig {
                         config.setBool(ENABLE_NO_COST_NOBLE_PHANTASM, enableNoCostNoblePhantasm);
                         config.save();
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        logger.error("Failed to save enableNoCostNoblePhantasm setting", e);
                     }
                 });
         settingsPanel.addUIElement(enableNoCostNoblePhantasmButton);
@@ -229,7 +232,7 @@ public class FGOConfig {
                         config.setBool(ENABLE_QUEEN_MORGAN, enabled);
                         config.save();
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        logger.error("Failed to save enableEnemies settings", e);
                     }
                 });
         settingsPanel.addUIElement(enableEnemiesButton);
@@ -253,7 +256,7 @@ public class FGOConfig {
                         config.setBool(ENABLE_EMIYA, enableEmiya);
                         config.save();
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        logger.error("Failed to save enableEmiya setting", e);
                     }
                 });
         settingsPanel.addUIElement(enableEmiyaButton);
@@ -279,7 +282,7 @@ public class FGOConfig {
                         config.setBool(ENABLE_CALAMITY_OF_NORWICH, enableCalamityofNorwich);
                         config.save();
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        logger.error("Failed to save enableCalamityofNorwich setting", e);
                     }
                 });
         settingsPanel.addUIElement(enableCalamityofNorwichButton);
@@ -305,7 +308,7 @@ public class FGOConfig {
                         config.setBool(ENABLE_CERNUNNOS, enableCernunnos);
                         config.save();
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        logger.error("Failed to save enableCernunnos setting", e);
                     }
                 });
         settingsPanel.addUIElement(enableCernunnosButton);
@@ -331,7 +334,7 @@ public class FGOConfig {
                         config.setBool(ENABLE_FAERIE_KNIGHT_LANCELOT, enableFaerieKnightLancelot);
                         config.save();
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        logger.error("Failed to save enableFaerieKnightLancelot setting", e);
                     }
                 });
         settingsPanel.addUIElement(enableFaerieKnightLancelotButton);
@@ -357,7 +360,7 @@ public class FGOConfig {
                         config.setBool(ENABLE_FAERIE_KNIGHT_GAWAIN, enableFaerieKnightGawain);
                         config.save();
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        logger.error("Failed to save enableFaerieKnightGawain setting", e);
                     }
                 });
         settingsPanel.addUIElement(enableFaerieKnightGawainButton);
@@ -383,7 +386,7 @@ public class FGOConfig {
                         config.setBool(ENABLE_MOSS, enableMoss);
                         config.save();
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        logger.error("Failed to save enableMoss setting", e);
                     }
                 });
         settingsPanel.addUIElement(enableMossButton);
@@ -409,7 +412,7 @@ public class FGOConfig {
                         config.setBool(ENABLE_QUEEN_MORGAN, enableQueenMorgan);
                         config.save();
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        logger.error("Failed to save enableQueenMorgan setting", e);
                     }
                 });
         settingsPanel.addUIElement(enableQueenMorganButton);

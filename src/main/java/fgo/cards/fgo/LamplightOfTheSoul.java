@@ -10,6 +10,7 @@ import fgo.powers.GutsPower;
 
 public class LamplightOfTheSoul extends FGOCard {
     public static final String ID = makeID(LamplightOfTheSoul.class.getSimpleName());
+
     public LamplightOfTheSoul() {
         super(ID, 2, CardType.SKILL, CardTarget.SELF, CardRarity.UNCOMMON);
         setMagic(5, 2);

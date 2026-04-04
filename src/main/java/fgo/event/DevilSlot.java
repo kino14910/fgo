@@ -51,7 +51,6 @@ public class DevilSlot extends PhasedEvent {
         transitionKey(0);
     }
 
-    
     @Override
     public void update() {
         super.update();

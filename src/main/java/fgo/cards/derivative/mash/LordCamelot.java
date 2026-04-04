@@ -14,8 +14,9 @@ import fgo.powers.ReducePercentDamagePower;
 public class LordCamelot extends AbsNoblePhantasmCard {
     public static final String ID = makeID(LordCamelot.class.getSimpleName());
     public static final CardStrings cardStrings = CardCrawlGame.languagePack.getCardStrings(ID);
+    
     public LordCamelot() {
-        super(ID,CardType.POWER, CardTarget.SELF, 1);
+        super(ID, CardType.POWER, CardTarget.SELF, 1);
         setCustomVar("metal", 1, 2);
         setMagic(10, 10);
     }

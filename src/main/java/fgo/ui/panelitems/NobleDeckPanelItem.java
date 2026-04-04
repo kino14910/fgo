@@ -30,6 +30,7 @@ public class NobleDeckPanelItem extends TopPanelItem {
     public static final String LABEL = TEXT[0];
     public static final String MSG = TEXT[1];
     private float rotateTimer = 0.0f;
+    
     public NobleDeckPanelItem() {
         super(IMG, ID);
     }
@@ -135,14 +136,13 @@ public class NobleDeckPanelItem extends TopPanelItem {
 
         BaseMod.openCustomScreen(NobleDeckViewScreen.Enum.Noble_Phantasm, NobleDeckCards.getNobleCards());
 
-
         // 标记卡牌为已见
         // NobleDeckCards.getNobleCards().group.forEach(c -> UnlockTracker.markCardAsSeen(c.cardID));
     }
 
     @Override
     protected void onHover() {
-        TipHelper.renderGenericTip(1550.0f * Settings.scale, (float)Settings.HEIGHT - 120.0f * Settings.scale, LABEL + "(" + FGOInputActionSet.nobleDeckAction.getKeyString() + ")", MSG);
+        TipHelper.renderGenericTip(1550.0f * Settings.scale, Settings.HEIGHT - 120.0f * Settings.scale, LABEL + "(" + FGOInputActionSet.nobleDeckAction.getKeyString() + ")", MSG);
         super.onHover();
     }
 

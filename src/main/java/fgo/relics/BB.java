@@ -19,6 +19,7 @@ import fgo.characters.CustomEnums.FGOCardColor;
 public class BB extends BaseRelic {
     private static final String NAME = BB.class.getSimpleName();
 	public static final String ID = makeID(NAME);
+    
     public BB() {
         super(ID, NAME, FGOCardColor.FGO, RelicTier.SPECIAL, LandingSound.FLAT);
     }

@@ -48,7 +48,7 @@ public class IgnoresInvincibilityAction extends AbstractGameAction {
                 }
             }
 
-            if(usePower && timesAmount != 0) {
+            if (usePower && timesAmount != 0) {
                 addToBot(new ApplyPowerAction(p, p, new IgnoresInvincibilityPower(p, timesAmount)));
             }
 
@@ -59,6 +59,4 @@ public class IgnoresInvincibilityAction extends AbstractGameAction {
 
         tickDuration();
     }
-
-
 }

@@ -18,7 +18,6 @@ public class AnimalDialogue extends FGOCard {
         setCostUpgrade(0);
     }
 
-
     @Override
     public void use(AbstractPlayer p, AbstractMonster m) {
         if (Master.fgoNp >= magicNumber) {

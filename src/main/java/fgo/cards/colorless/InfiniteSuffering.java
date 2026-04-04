@@ -14,8 +14,10 @@ import com.megacrit.cardcrawl.stances.WrathStance;
 import com.megacrit.cardcrawl.vfx.combat.CleaveEffect;
 
 import fgo.cards.FGOCard;
+
 public class InfiniteSuffering extends FGOCard {
     public static final String ID = makeID(InfiniteSuffering.class.getSimpleName());
+
     public InfiniteSuffering() {
         super(ID, 2, CardType.ATTACK, CardTarget.ALL_ENEMY, CardRarity.SPECIAL, CardColor.COLORLESS);
         setDamage(8, 2);
@@ -30,7 +32,6 @@ public class InfiniteSuffering extends FGOCard {
             upgradeName();
         }
     }
-
 
     @Override
     public void use(AbstractPlayer p, AbstractMonster m) {

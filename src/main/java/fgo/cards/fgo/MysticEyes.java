@@ -12,8 +12,10 @@ import com.megacrit.cardcrawl.vfx.combat.ViceCrushEffect;
 
 import fgo.cards.FGOCard;
 import fgo.powers.CursePower;
+
 public class MysticEyes extends FGOCard {
     public static final String ID = makeID(MysticEyes.class.getSimpleName());
+
     public MysticEyes() {
         super(ID, 2, CardType.ATTACK, CardTarget.ENEMY, CardRarity.RARE);
         setDamage(10);

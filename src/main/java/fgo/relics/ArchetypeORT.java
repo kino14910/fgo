@@ -16,9 +16,10 @@ import fgo.powers.AntiPurgeDefensePower;
 import fgo.powers.EnergyRegenPower;
 import fgo.powers.StarRegenPower;
 
-public class ArchetypeORT extends BaseRelic implements SuperRareRelic, OnReceivePowerRelic{
+public class ArchetypeORT extends BaseRelic implements SuperRareRelic, OnReceivePowerRelic {
     private static final String NAME = ArchetypeORT.class.getSimpleName();
 	public static final String ID = makeID(NAME);
+    
     public ArchetypeORT() {
         super(ID, NAME, FGOCardColor.FGO, RelicTier.RARE, LandingSound.FLAT);
     }

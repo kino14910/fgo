@@ -47,8 +47,7 @@ public class StarPower extends BasePower {
 
         return damage;
     }
-
-
+    
     public float finalDamage(float damage, DamageInfo.DamageType type, float multiplier) {
         int starHunterAmt = 0;
         if (owner.hasPower(StarHunterPower.POWER_ID)) {
@@ -56,9 +55,9 @@ public class StarPower extends BasePower {
             starHunterAmt = starHunterPower.amount2;
         }
 
-        int CrAmt = getPowerCount(owner, CriticalDamageUpPower.POWER_ID) + starHunterAmt;
+        int crAmt = getPowerCount(owner, CriticalDamageUpPower.POWER_ID) + starHunterAmt;
         return type == DamageInfo.DamageType.NORMAL
-                ? damage * (multiplier + CrAmt / 100.0f)
+                ? damage * (multiplier + crAmt / 100.0f)
                 : damage;
     }
 

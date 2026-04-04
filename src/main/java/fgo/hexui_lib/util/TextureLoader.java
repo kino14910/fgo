@@ -15,8 +15,6 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 
 // Welcome to the utilities package. This package is for small utilities that make our life easier.
 // You honestly don't need to bother with this unless you want to know how we're loading the textures.
-
-
 public class TextureLoader {
     private static HashMap<String, Texture> textures = new HashMap<String, Texture>();
     public static final Logger logger = LogManager.getLogger(TextureLoader.class.getName());

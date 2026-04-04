@@ -34,5 +34,4 @@ public class InvincibilityTurnPower extends BasePower {
     public void atStartOfTurn() {
         addToBot(new ReducePowerAction(owner, owner, ID, 1));
     }
-
 }

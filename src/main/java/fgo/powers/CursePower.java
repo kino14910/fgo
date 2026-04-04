@@ -20,6 +20,4 @@ public class CursePower extends BasePower {
         flash();
         addToBot(new LoseHPAction(owner, owner, amount));
     }
-
-    
 }

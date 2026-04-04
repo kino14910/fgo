@@ -86,7 +86,7 @@ public class NoblePhantasmButton extends AbstractPanel {
 
         if (Master.fgoNp >= 100) {
             Master.fgoNp = 0;
-            ((Master)p).TruthValueUpdatedEvent();
+            ((Master) p).TruthValueUpdatedEvent();
             addToBot(new NoblePhantasmSelectAction());
         }
     }
@@ -118,11 +118,11 @@ public class NoblePhantasmButton extends AbstractPanel {
     }
 
     private boolean shouldRenderTip() {
-        return !isHidden &&
-               hb != null &&
-               hb.hovered &&
-               !AbstractDungeon.isScreenUp &&
-               AbstractDungeon.getMonsters() != null &&
-               !AbstractDungeon.getMonsters().areMonstersDead();
+        return !isHidden
+               && hb != null
+               && hb.hovered
+               && !AbstractDungeon.isScreenUp
+               && AbstractDungeon.getMonsters() != null
+               && !AbstractDungeon.getMonsters().areMonstersDead();
     }
 }

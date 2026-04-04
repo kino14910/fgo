@@ -12,6 +12,7 @@ import fgo.powers.StarPower;
 
 public class Swingby extends FGOCard {
     public static final String ID = makeID(Swingby.class.getSimpleName());
+
     public Swingby() {
         super(ID, 2, CardType.SKILL, CardTarget.SELF, CardRarity.COMMON);
         setBlock(12, 6);

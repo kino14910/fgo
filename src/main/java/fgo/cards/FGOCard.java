@@ -569,7 +569,6 @@ public abstract class FGOCard extends CustomCard {
                 target.calculation = current.calculation;
             }
         }
-
         
         if (candidate instanceof FGOCard) {
             FGOCard fgoCard = (FGOCard) candidate;
@@ -647,7 +646,6 @@ public abstract class FGOCard extends CustomCard {
         this.initializeDescription();
     }
 
-    
     protected void upgradeCustomVar(String key) {
         LocalVarInfo var = cardVariables.get(key);
         if (var == null) {

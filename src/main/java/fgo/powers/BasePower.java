@@ -21,6 +21,7 @@ public abstract class BasePower extends AbstractPower {
     {
         return CardCrawlGame.languagePack.getPowerStrings(ID);
     }
+    
     protected AbstractCreature source;
     protected String[] DESCRIPTIONS;
 

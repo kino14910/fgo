@@ -20,8 +20,6 @@ public class PoisonousDagger extends FGOCard {
         setExhaust();
     }
 
-
-
     @Override
     public void use(AbstractPlayer p, AbstractMonster m) {
         addToBot(new DamageAction(m, new DamageInfo(p, damage, damageTypeForTurn), AbstractGameAction.AttackEffect.SLASH_HORIZONTAL));
