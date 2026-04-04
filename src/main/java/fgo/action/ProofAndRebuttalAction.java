@@ -1,7 +1,5 @@
 package fgo.action;
 
-import java.util.Iterator;
-
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
@@ -36,13 +34,9 @@ public class ProofAndRebuttalAction extends AbstractGameAction {
             }
         } else {
             if (!AbstractDungeon.handCardSelectScreen.wereCardsRetrieved) {
-                AbstractCard c;
-                for(Iterator<AbstractCard> var1 = AbstractDungeon.handCardSelectScreen.selectedCards.group.iterator();
-                    var1.hasNext();
-                    p.hand.moveToDeck(c, false)) {
-                    c = var1.next();
-                }
-
+                AbstractDungeon.handCardSelectScreen.selectedCards.group.forEach(
+                    c -> p.hand.moveToDeck(c, false)
+                );
                 AbstractDungeon.player.hand.refreshHandLayout();
                 AbstractDungeon.handCardSelectScreen.wereCardsRetrieved = true;
             }
@@ -50,5 +44,4 @@ public class ProofAndRebuttalAction extends AbstractGameAction {
             tickDuration();
         }
     }
-
 }

@@ -10,9 +10,11 @@ import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 
 public class DragonCoreAction extends AbstractGameAction {
-    public DragonCoreAction() {
+    private boolean upgraded;
+    public DragonCoreAction(boolean upgraded) {
         setValues(AbstractDungeon.player, AbstractDungeon.player);
         actionType = ActionType.EXHAUST;
+        this.upgraded = upgraded;
     }
 
     @Override
@@ -29,6 +31,9 @@ public class DragonCoreAction extends AbstractGameAction {
             addToTop(new ExhaustSpecificCardAction(card, hand));
             AbstractCard randCard = AbstractDungeon.returnTrulyRandomCardInCombat(AbstractCard.CardType.ATTACK).makeCopy();
             randCard.setCostForTurn(0);
+            if (upgraded) {
+                randCard.upgrade();
+            }
             addToBot(new MakeTempCardInHandAction(randCard, true));
         }
 

@@ -23,13 +23,13 @@ public class BlessingOfKurPower extends BasePower {
 
     public BlessingOfKurPower(AbstractCreature owner, int maxHP, int strength) {
         super(POWER_ID, PowerType.BUFF, false, owner);
-        this.maxHP = maxHP;
+        this.amount = this.maxHP = maxHP;
         this.strength = strength;
         updateDescription();
     }
 
     @Override
-    public void updateDescription() {description = String.format(DESCRIPTIONS[0], maxHP, strength);}
+    public void updateDescription() { description = String.format(DESCRIPTIONS[0], maxHP, strength); }
 
     @Override
     public void onUseCard(AbstractCard card, UseCardAction action) {
@@ -39,6 +39,4 @@ public class BlessingOfKurPower extends BasePower {
             addToBot(new RemoveSpecificPowerAction(owner, owner, ID));
         }
     }
-
-    
 }

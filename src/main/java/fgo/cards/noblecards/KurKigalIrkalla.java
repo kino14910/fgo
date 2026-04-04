@@ -16,7 +16,7 @@ public class KurKigalIrkalla extends AbsNoblePhantasmCard {
     public static final String ID = makeID(KurKigalIrkalla.class.getSimpleName());
 
     public KurKigalIrkalla() {
-        super(ID,CardType.ATTACK, CardTarget.ALL_ENEMY, 1);
+        super(ID, CardType.ATTACK, CardTarget.ALL_ENEMY, 1);
         setDamage(26, 8);
     }
 
@@ -32,8 +32,10 @@ public class KurKigalIrkalla extends AbsNoblePhantasmCard {
 
     @Override
     public void applyPowers() {
-        if (AbstractDungeon.player.hasPower(BlessingOfKurPower.POWER_ID)) {
-            rawDescription = cardStrings.DESCRIPTION + cardStrings.EXTENDED_DESCRIPTION[0];
+        AbstractPlayer p = AbstractDungeon.player;
+        if (p.hasPower(BlessingOfKurPower.POWER_ID)) {
+            rawDescription = cardStrings.DESCRIPTION
+            + String.format(cardStrings.EXTENDED_DESCRIPTION[0], p.getPower(BlessingOfKurPower.POWER_ID).amount);
         }
         super.applyPowers();
         initializeDescription();

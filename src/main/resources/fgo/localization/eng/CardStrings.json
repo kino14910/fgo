@@ -50,7 +50,7 @@
   },
   "${modID}:HolyShroud": {
     "NAME": "Holy Shroud",
-    "DESCRIPTION": "If enemies cause over 20 damage in total, Reduce !M!% damage taken this turn."
+    "DESCRIPTION": "If player takes over 20 damage in total, Reduce !M!% damage taken this turn."
   },
   "${modID}:QueensCovenant": {
     "NAME": "Queen's Covenant",
@@ -137,7 +137,7 @@
   },
   "${modID}:DragonCore": {
     "NAME": "Dragon Core",
-    "DESCRIPTION": "Exhaust all non-Attack cards in your hand. NL Add an equal number of random Attack cards to your hand. NL They cost 0 this turn. NL Exhaust."
+    "DESCRIPTION": "Exhaust all non-Attack cards in your hand. NL Add an equal number of random {!Upgrades!|1=upgraded }Attack cards to your hand. NL They cost 0 this turn. NL Exhaust."
   },
   "${modID}:AtTheWell": {
     "NAME": "At The Well",

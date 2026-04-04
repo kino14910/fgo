@@ -50,7 +50,7 @@
   },
   "${modID}:HolyShroud": {
     "NAME": "圣骸布",
-    "DESCRIPTION": "如果敌人造成总共20以上的伤害，在这个回合受到的攻击伤害降低 !M! %。"
+    "DESCRIPTION": "如果这个回合即将受到总共20以上的伤害，受到的攻击伤害降低 !M! %。"
   },
   "${modID}:QueensCovenant": {
     "NAME": "女王的契约",
@@ -137,7 +137,7 @@
   },
   "${modID}:DragonCore": {
     "NAME": "龙之炉心",
-    "DESCRIPTION": "消耗 手牌中所有非攻击牌，将等量随机攻击牌加入手牌。它们在本回合耗能变为0。 NL 消耗 。"
+    "DESCRIPTION": "{@@}消耗 手牌中所有非攻击牌，将等量随机{!Upgrades!|1=已 升级 的}攻击牌加入手牌。它们在本回合耗能变为0。 NL 消耗 。"
   },
   "${modID}:AtTheWell": {
     "NAME": "于泉之处",
@@ -603,7 +603,7 @@
     "NAME": "灵峰踏抱冥府之鞴",
     "DESCRIPTION": "对所有敌人造成 !D! 点伤害，没有 *飞行 状态的敌人额外失去10%最大生命。",
     "EXTENDED_DESCRIPTION": [
-      " NL 获得3点 力量 。 NL 获得3层 人工制品 。"
+      " NL 获得2点 力量 。 NL 获得 %d 层 临时生命 。"
     ]
   },
   "${modID}:SecondLife": {
