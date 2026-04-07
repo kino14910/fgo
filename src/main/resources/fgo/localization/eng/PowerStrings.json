@@ -158,7 +158,8 @@
   "${modID}:EndOfADreamPower": {
     "NAME": "End of A Dream",
     "DESCRIPTIONS": [
-      "At the end of your turn, gain #yEternal #ySleep."
+      "At the end of your turn,exhaust a random hand.",
+      "At the end of your turn,exhaust a hand."
     ]
   },
   "${modID}:PowerUpBoostPower": {

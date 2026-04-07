@@ -20,7 +20,7 @@ public class SneferuIteruNile extends AbsNoblePhantasmCard {
     public SneferuIteruNile() {
         super(ID, AbstractCard.CardType.ATTACK, AbstractCard.CardTarget.ALL_ENEMY, 2);
         setDamage(35, 10);
-        setMagic(10, 5);
+        setMagic(6, 1);
     }
 
     @Override

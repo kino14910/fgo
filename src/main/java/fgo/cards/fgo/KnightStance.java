@@ -14,7 +14,7 @@ public class KnightStance extends FGOCard {
 
     public KnightStance() {
         super(ID, 2, CardType.SKILL, CardTarget.SELF, CardRarity.COMMON);
-        setBlock(11);
+        setBlock(11, 3);
         setMagic(20, 20);
     }
 

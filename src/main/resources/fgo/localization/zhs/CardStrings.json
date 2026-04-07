@@ -154,7 +154,7 @@
   },
   "${modID}:EndOfADream": {
     "NAME": "梦之终结",
-    "DESCRIPTION": "在你的回合结束时， 消耗 一张随机手牌。 NL fgo:宝具牌 攻击伤害翻倍。"
+    "DESCRIPTION": "在你的回合结束时， 消耗 一张{!Upgrades!|0=随机}手牌。 NL fgo:宝具牌 攻击伤害翻倍。"
   },
   "${modID}:SchwarzwaldFalke": {
     "NAME": "黑森之鹰",
@@ -210,7 +210,7 @@
   },
   "${modID}:WildRule": {
     "NAME": "野性法则/强食",
-    "DESCRIPTION": "造成 !D! 点伤害。 NL 回复3点生命。 NL 使敌人失去1点 力量 ， NL 如果成功，给予 !M! 层 易伤 。"
+    "DESCRIPTION": "造成 !D! 点伤害。 NL 回复3点生命。 NL 使敌人失去1点 力量 ， NL 如果成功，给予 1 层 易伤 。"
   },
   "${modID}:TeslaCoil": {
     "NAME": "特斯拉线圈",
@@ -343,7 +343,7 @@
   },
   "${modID}:PursuerofLove": {
     "NAME": "恋之追踪者",
-    "DESCRIPTION": "给予 1 点 力量 。 NL 给予 3 层 fgo:追踪 。"
+    "DESCRIPTION": "给予 1 点 力量 。 NL 给予 !M! 层 fgo:追踪 。"
   },
   "${modID}:DazzlingMoon": {
     "NAME": "光辉之月",
@@ -390,7 +390,7 @@
   },
   "${modID}:CalamityOfTheNorth": {
     "NAME": "北之灾厄",
-    "DESCRIPTION": "给予所有敌人 !M! 层 中毒 和 fgo:诅呪 。 NL 消耗 。"
+    "DESCRIPTION": "保留 。 NL 给予所有敌人 !M! 层 中毒 和 fgo:诅呪 。"
   },
   "${modID}:ExtremityOfVillains": {
     "NAME": "武恶之极限",
@@ -499,7 +499,7 @@
   },
   "${modID}:AroundCaliburn": {
     "NAME": "环抱着你的希望之星",
-    "DESCRIPTION": "获得3点 力量 。 NL 获得 !M! 次 fgo:肃正防御 。 "
+    "DESCRIPTION": "获得4点 力量 。 NL 获得 !M! 次 fgo:肃正防御 。 "
   },
   "${modID}:BeautifulJourney": {
     "NAME": "超越边界的存在",
@@ -633,10 +633,10 @@
   },
   "${modID}:CodeOriginalSin": {
     "NAME": "第七圣典·断罪死",
-    "DESCRIPTION": "使敌人失去 !D! 点生命。 NL 获得 !NP! % fgo:宝具值 。"
+    "DESCRIPTION": "使敌人失去 !D! 点生命。 NL 给予 !M! 层 fgo:即死 。 NL 获得 !NP! % fgo:宝具值 。"
   },
   "${modID}:ExcaliburExcelsus": {
     "NAME": "由此，展现誓约胜利之剑",
-    "DESCRIPTION": "fgo:无敌贯通 。 NL 每有一名敌人，就获得 !B! 层格挡，!M! 层 力量 ， fgo:宝具充能阶段上升 和 !NP! % fgo:宝具值 。NL 对所有敌人造成 !D! 点伤害。"
+    "DESCRIPTION": "fgo:无敌贯通 。 NL 每有一名敌人，就获得 !B! 层格挡，!M! 层 力量 ， fgo:宝具充能阶段上升 和 !NP! % fgo:宝具值 。 NL 对所有敌人造成 !D! 点伤害。"
   }
 }

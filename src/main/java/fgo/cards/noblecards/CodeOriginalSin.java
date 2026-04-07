@@ -14,6 +14,7 @@ public class CodeOriginalSin extends AbsNoblePhantasmCard {
     public CodeOriginalSin() {
         super(ID, CardType.ATTACK, CardTarget.ENEMY, 1);
         setDamage(32, 8);
+        setMagic(10);
         setNP(20);
     }
 

@@ -19,10 +19,10 @@ public class ExcaliburExcelsus extends AbsNoblePhantasmCard {
 
     public ExcaliburExcelsus() {
         super(ID, CardType.ATTACK, CardTarget.ALL_ENEMY, 2);
-        setDamage(24, 0);
+        setDamage(16, 6);
         setBlock(6);
-        setMagic(2, 0);
-        setNP(20, 0);
+        setMagic(2);
+        setNP(20);
     }
 
     @Override

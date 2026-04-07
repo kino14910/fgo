@@ -154,7 +154,7 @@
   },
   "${modID}:EndOfADream": {
     "NAME": "End of a Dream",
-    "DESCRIPTION": "At the end of your turn,exhaust a random hand. NL  fgo:Noble Phantasm cause double damage."
+    "DESCRIPTION": "{@@}At the end of your turn,exhaust a {!Upgrades!|0=random }hand. NL  fgo:Noble Phantasm cause double damage."
   },
   "${modID}:SchwarzwaldFalke": {
     "NAME": "Schwarzwald Falke",
@@ -352,7 +352,7 @@
   },
   "${modID}:PursuerofLove": {
     "NAME": "Pursuer of Love",
-    "DESCRIPTION": "Apply 1 Strength. NL Apply 3 fgo:Pursue."
+    "DESCRIPTION": "Apply 1 Strength. NL Apply !M! fgo:Pursue."
   },
   "${modID}:DazzlingMoon": {
     "NAME": "Dazzling Moon",
@@ -399,7 +399,7 @@
   },
   "${modID}:CalamityOfTheNorth": {
     "NAME": "Calamity of the North",
-    "DESCRIPTION": "Apply !M! Poison and fgo:Evil_Curse to ALL enemies"
+    "DESCRIPTION": "Retain. NL Apply !M! Poison and fgo:Evil_Curse to ALL enemies."
   },
   "${modID}:ExtremityOfVillains": {
     "NAME": "Extremity of Villains",

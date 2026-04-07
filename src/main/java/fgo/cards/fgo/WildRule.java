@@ -24,9 +24,9 @@ public class WildRule extends FGOCard {
     boolean hasVulnerable = false;
     
     public WildRule() {
-        super(ID, 2, CardType.ATTACK, CardTarget.ENEMY, CardRarity.UNCOMMON);
-        setDamage(12, 4);
-        setMagic(2, 1);
+        super(ID, 1, CardType.ATTACK, CardTarget.ENEMY, CardRarity.UNCOMMON);
+        setDamage(10, 4);
+        setMagic(1);
     }
 
     @Override

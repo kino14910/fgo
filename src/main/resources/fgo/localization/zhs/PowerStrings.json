@@ -147,21 +147,10 @@
     ]
   },
   "${modID}:EndOfADreamPower": {
-    "NAME": "延迟发动",
-    "DESCRIPTIONS": [
-      "在这个回合结束时，获得 #y永久睡眠 。"
-    ]
-  },
-  "${modID}:EternalSleepPower": {
     "NAME": "永久睡眠",
     "DESCRIPTIONS": [
-      "在每回合结束时， #r失去 最开始的一个状态。"
-    ]
-  },
-  "${modID}:CurseHarmonyPower": {
-    "NAME": "兔人的诅咒",
-    "DESCRIPTIONS": [
-      "在你的回合结束时，随机给予敌人你 #y诅呪 层数 #b%d 倍的 #y中毒 。"
+      "在每回合结束时， 消耗 一张随机手牌。",
+      "在每回合结束时， 消耗 一张手牌。"
     ]
   },
   "${modID}:EnergyRegenPower": {
@@ -225,8 +214,8 @@
   "${modID}:AntiPurgeDefensePower": {
     "NAME": "肃正防御",
     "DESCRIPTIONS": [
-      "阻止下一次你受到的生命值损伤。每次阻止成功获得 #b5 点临时生命。",
-      "阻止下 #b%d 次你受到的生命值损伤。每次阻止成功获得 #b5 点临时生命。"
+      "阻止下一次你受到的生命值损伤。每次阻止成功回复 #b5 点生命。",
+      "阻止下 #b%d 次你受到的生命值损伤。每次阻止成功回复 #b5 点生命。"
     ]
   },
   "${modID}:NPOverChargePower": {
@@ -522,7 +511,7 @@
   "${modID}:DeathChancePower": {
     "NAME": "即死",
     "DESCRIPTIONS": [
-      "生命值 #b%d 以下时 #r死亡。"
+      "生命值 #b%d 以下时 #r死亡 。"
     ]
   },
   "${modID}:PursuerOfLovePower": {
