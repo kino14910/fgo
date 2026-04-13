@@ -394,7 +394,7 @@
   },
   "${modID}:MagicBulletCharging": {
     "NAME": "魔弹装填",
-    "DESCRIPTION": "获得 5 点 力量 。 NL 依次打出 X 张手牌中的攻击牌。 NL 如果能量超过手牌中攻击牌数量，最后一张攻击牌伤害增加 5 × 多余能量。",
+    "DESCRIPTION": "依次打出 X 张手牌中的攻击牌。 NL 如果能量超过手牌中攻击牌数量，最后一张攻击牌伤害增加 5 × 多余能量。",
     "EXTENDED_DESCRIPTION": [
       " NL 增加 %d 。"
     ]

@@ -16,32 +16,47 @@ public class MagicBulletCharging extends FGOCard {
         super(ID, -1, CardType.SKILL, CardTarget.ENEMY, CardRarity.RARE);
     }
 
+    public static int calculateEffect(AbstractPlayer p, int energyOnUse) {
+        int effect = EnergyPanel.totalCount;
+        if (energyOnUse != -1) {
+            effect = energyOnUse;
+        }
+        if (p != null && p.hasRelic("Chemical X")) {
+            effect += 2;
+        }
+        return Math.max(0, effect);
+    }
+
+    public static int countAttacks(AbstractPlayer p) {
+        if (p == null) return 0;
+        int count = 0;
+        for (AbstractCard card : p.hand.group) {
+            if (card.type == AbstractCard.CardType.ATTACK) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public static int calculateDelta(int effect, int attackCount) {
+        return effect - attackCount;
+    }
+
     @Override
     public void use(AbstractPlayer p, AbstractMonster m) {
-        addToBot(new MagicBulletChargingAction(p, m, this.freeToPlayOnce, this.energyOnUse));
+        int effect = calculateEffect(p, this.energyOnUse);
+        int attackCount = countAttacks(p);
+        int delta = calculateDelta(effect, attackCount);
+        
+        addToBot(new MagicBulletChargingAction(p, m, this.freeToPlayOnce, this.energyOnUse, effect, delta));
     }
 
     @Override
     public void applyPowers() {
-        int effect = EnergyPanel.totalCount;
-        if (this.energyOnUse != -1) {
-            effect = this.energyOnUse;
-        }
-        if (AbstractDungeon.player != null && AbstractDungeon.player.hasRelic("Chemical X")) {
-            effect += 2;
-        }
-        effect = Math.max(0, effect);
+        int effect = calculateEffect(AbstractDungeon.player, this.energyOnUse);
+        int attackCount = countAttacks(AbstractDungeon.player);
+        int delta = calculateDelta(effect, attackCount);
 
-        int attackCount = 0;
-        if (AbstractDungeon.player != null) {
-            for (AbstractCard card : AbstractDungeon.player.hand.group) {
-                if (card.type == AbstractCard.CardType.ATTACK) {
-                    attackCount++;
-                }
-            }
-        }
-
-        int delta = effect - attackCount;
         if (delta >= 1) {
             rawDescription = cardStrings.DESCRIPTION + String.format(cardStrings.EXTENDED_DESCRIPTION[0], delta * 5);
         } else {

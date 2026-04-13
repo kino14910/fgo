@@ -396,7 +396,7 @@
   },
   "${modID}:MagicBulletCharging": {
     "NAME": "Magic Bullet Charging",
-    "DESCRIPTION": "Gain 5 Strength. NL Sequentially play X Attack cards through your hand. NL If Energy exceeds Attack cards in hand, the last Attack card's damage increases by 5 × excess Energy.",
+    "DESCRIPTION": "Sequentially play X Attack cards through your hand. NL If Energy exceeds Attack cards in hand, the last Attack card's damage increases by 5 × excess Energy.",
     "EXTENDED_DESCRIPTION": [
       " NL Increases by %d."
     ]
