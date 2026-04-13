@@ -10,7 +10,7 @@ public class DragonCore extends FGOCard {
     public static final String ID = makeID(DragonCore.class.getSimpleName());
 
     public DragonCore() {
-        super(ID, 1, CardType.SKILL, CardTarget.SELF, CardRarity.UNCOMMON);
+        super(ID, 2, CardType.SKILL, CardTarget.SELF, CardRarity.UNCOMMON);
         setExhaust();
     }
 

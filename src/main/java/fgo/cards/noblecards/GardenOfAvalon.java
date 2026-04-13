@@ -6,7 +6,7 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.MetallicizePower;
 
 import fgo.cards.AbsNoblePhantasmCard;
-import fgo.powers.EnergyRegenPower;
+import fgo.powers.NPRegenPower;
 import fgo.powers.StarRegenPower;
 
 public class GardenOfAvalon extends AbsNoblePhantasmCard {
@@ -22,7 +22,7 @@ public class GardenOfAvalon extends AbsNoblePhantasmCard {
     @Override
     public void use(AbstractPlayer p, AbstractMonster m) {
         addToBot(new ApplyPowerAction(p, p, new MetallicizePower(p, block)));
-        addToBot(new ApplyPowerAction(p, p, new EnergyRegenPower(p, np)));
+        addToBot(new ApplyPowerAction(p, p, new NPRegenPower(p, np)));
         addToBot(new ApplyPowerAction(p, p, new StarRegenPower(p, star)));
     }
 }

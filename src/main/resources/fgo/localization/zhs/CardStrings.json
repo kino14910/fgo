@@ -9,7 +9,7 @@
   },
   "${modID}:DreamUponTheStars": {
     "NAME": "予星以梦",
-    "DESCRIPTION": "获得 !NP! % fgo:宝具值 。 NL 获得 !M! % fgo:宝具威力 。 NL fgo:宝具充能阶段上升 。"
+    "DESCRIPTION": "获得 !B! 点 格挡 。 NL 获得 !M! % fgo:宝具威力 。 NL fgo:宝具充能阶段上升 。"
   },
   "${modID}:CharismaOfHope": {
     "NAME": "2019年的格洛斯特",
@@ -102,10 +102,6 @@
     "DESCRIPTION": "{@@}将{!M!|1=一|@= !M! }张手牌复制一张，它们在被打出之前耗能变为0。",
     "FLAVOR": "测试画风可以更改。"
   },
-  "${modID}:BeastMagic": {
-    "NAME": "对兽魔术",
-    "DESCRIPTION": "每当你获得负面 状态 时，就获得 !M! 点 格挡 。"
-  },
   "${modID}:YinYangFish": {
     "NAME": "阴阳鱼",
     "DESCRIPTION": "失去 !NP! % fgo:宝具值 。 NL 回复 !M! 点生命。 NL 消耗 。",
@@ -129,7 +125,7 @@
   },
   "${modID}:GodsExecution": {
     "NAME": "封神执行",
-    "DESCRIPTION": "造成 !D! 点伤害。 NL 如果你有负面状态 ， NL 获得 [E] 并且 NL 抽1张牌。"
+    "DESCRIPTION": "对所有敌人造成 !D! 点伤害。 NL 所有敌人失去 2 点 力量 。 NL 如果你本回合打出过 fgo:宝具牌 ，这张牌耗能变为0。"
   },
   "${modID}:CrownedWithLife": {
     "NAME": "疯狂的晚宴",
@@ -259,10 +255,6 @@
     "NAME": "动物会话",
     "DESCRIPTION": "你每有 !M! % fgo:宝具值 ，就获得1 [E] 。 NL 失去所有 fgo:宝具值 。"
   },
-  "${modID}:Chasmatis": {
-    "NAME": "天之裂谷",
-    "DESCRIPTION": " fgo:宝具充能阶段上升 。"
-  },
   "${modID}:DesiresSalvation": {
     "NAME": "祈祷救济之人",
     "DESCRIPTION": "{@@}{!Upgrades!|1=固有 。 NL }在你的回合开始时，获得 !NP! % fgo:宝具值 。"
@@ -329,10 +321,6 @@
     "NAME": "少女的志气",
     "DESCRIPTION": "获得 5 层 fgo:毅力 。 NL 获得 1 层 人工制品 。 NL  消耗 。"
   },
-  "${modID}:LamplightOfTheSoul": {
-    "NAME": "魂之灯火",
-    "DESCRIPTION": "获得 !M! 层 fgo:毅力 。 NL 在你的回合结束时，获得 !M! 点 格挡 。"
-  },
   "${modID}:Indomitable": {
     "NAME": "不屈不挠",
     "DESCRIPTION": "获得 !M! 层 fgo:毅力 （可与其他 fgo:毅力 重复）。 NL 每次 fgo:毅力 发动时，获得 2 点 力量 。"
@@ -355,17 +343,12 @@
   },
   "${modID}:WitchOfSalem": {
     "NAME": "塞勒姆的魔女",
-    "DESCRIPTION": "{@@}给予所有敌人 3 层 易伤 ， 虚弱 和 fgo:恐怖 ( !M! %概率)。 NL 获得 {!Upgrades!|@=fgo:对恐怖特攻|1=fgo:对恐怖特攻+} 。 NL 获得 !NP! % fgo:宝具值 。",
+    "DESCRIPTION": "{@@}给予所有敌人 3 层 易伤 ， 虚弱 和 fgo:恐怖 ( !M! %概率)。 NL 获得 !${modID}:terror! % fgo:对恐怖特攻 。 NL 获得 !NP! % fgo:宝具值 。",
     "FLAVOR": "领域外生命。"
   },
   "${modID}:ExtraterrestrialOctopus": {
     "NAME": "雅号·异星蛸",
     "DESCRIPTION": "造成 !D! 点伤害( !M! × 你的 fgo:暴击星 数量)。",
-    "FLAVOR": "领域外生命。"
-  },
-  "${modID}:Swingby": {
-    "NAME": "重力助推",
-    "DESCRIPTION": "获得 !B! 点 格挡 。 NL 获得 !Star! 颗 fgo:暴击星 。",
     "FLAVOR": "领域外生命。"
   },
   "${modID}:FacelessMoon": {
@@ -396,6 +379,25 @@
     "NAME": "武恶之极限",
     "DESCRIPTION": "造成 !D! 点伤害。 NL 如果这张卡暴击，获得  [E]  并抽 !M! 张卡。",
     "FLAVOR": "领域外生命。"
+  },
+  "${modID}:EarthHeartRhythm": {
+    "NAME": "地球心律",
+    "DESCRIPTION": "获得 !NP! % fgo:宝具值 。 NL 获得 !M! % fgo:宝具威力 。 NL fgo:宝具充能阶段上升 。"
+  },
+  "${modID}:WorldsEndFlowerGarden": {
+    "NAME": "万花盛放的辉彩花园",
+    "DESCRIPTION": "每当你造成 fgo:暴击 时，获得 10 % fgo:宝具值 。"
+  },
+  "${modID}:ImitationImmortality": {
+    "NAME": "仿造不灭",
+    "DESCRIPTION": "获得 !M! 层 fgo:毅力 。 NL 获得 !${modID}:metal! 点 fgo:金属化 。 NL 每回合获得 10 % fgo:宝具值 。 NL 获得 !${modID}:damageReduction! % fgo:伤害减免 。"
+  },
+  "${modID}:MagicBulletCharging": {
+    "NAME": "魔弹装填",
+    "DESCRIPTION": "获得 5 点 力量 。 NL 依次打出 X 张手牌中的攻击牌。 NL 如果能量超过手牌中攻击牌数量，最后一张攻击牌伤害增加 5 × 多余能量。",
+    "EXTENDED_DESCRIPTION": [
+      " NL 增加 %d 。"
+    ]
   },
   "${modID}:SwifterThanSound": {
     "NAME": "越音",
@@ -479,6 +481,10 @@
   "${modID}:HollowHeartAlbion": {
     "NAME": "无人知晓的无垢搏动",
     "DESCRIPTION": "所有敌人失去 !D! 点生命。 NL 获得 !Star! 颗 fgo:暴击星 。"
+  },
+  "${modID}:ChaosLabyrinthos": {
+    "NAME": "万古不变的迷宫",
+    "DESCRIPTION": "所有敌人本回合失去 !M! 点 力量 。"
   },
   "${modID}:Camelot": {
     "NAME": "拟似展开／人理之础",

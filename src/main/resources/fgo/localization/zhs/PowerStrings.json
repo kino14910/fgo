@@ -72,12 +72,6 @@
       "在每回合开始时失去 #b%d 点 #y生命 。"
     ]
   },
-  "${modID}:BeastMagicPower": {
-    "NAME": "对兽魔术",
-    "DESCRIPTIONS": [
-      "每当你获得负面效果时，就获得 #b%d 点 #y格挡 。"
-    ]
-  },
   "${modID}:AvalonPower": {
     "NAME": "阿瓦隆",
     "DESCRIPTIONS": [
@@ -615,6 +609,18 @@
     "NAME": "咒层生成",
     "DESCRIPTIONS": [
       "在每回合结束时， #y科尔努诺斯 获得 #b3 层 #y诅呪 。 NL 每当 #y科尔努诺斯 攻击时，获得 #b1 层 #y诅呪 。"
+    ]
+  },
+  "${modID}:WorldsEndFlowerGardenPower": {
+    "NAME": "万花盛放的辉彩花园",
+    "DESCRIPTIONS": [
+      "每当你造成 #y暴击 时，获得 #b%d%% #y宝具值 。"
+    ]
+  },
+  "${modID}:NPRegenPower": {
+    "NAME": "宝具值回复",
+    "DESCRIPTIONS": [
+      "在每回合开始时，获得 #b%d%% #y宝具值 。"
     ]
   }
 }

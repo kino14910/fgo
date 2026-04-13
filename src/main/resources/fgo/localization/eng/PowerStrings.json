@@ -73,12 +73,6 @@
       "At the start of turn, lose #b%1$s #yHP."
     ]
   },
-  "${modID}:BeastMagicPower": {
-    "NAME": "Beast Magic",
-    "DESCRIPTIONS": [
-      "Whenever you gain a buff or debuff, gain #b%d #yBlock."
-    ]
-  },
   "${modID}:AvalonPower": {
     "NAME": "Avalon",
     "DESCRIPTIONS": [
@@ -638,6 +632,18 @@
     "NAME": "Gains Curse Layer",
     "DESCRIPTIONS": [
       "At the end of each turn, #yCernunnos gain #b3 #yEvil #yCurses. NL Whenever #yCernunnos attack, gain #b1 #yEvil #yCurses."
+    ]
+  },
+  "${modID}:WorldsEndFlowerGardenPower": {
+    "NAME": "World's End Flower Garden",
+    "DESCRIPTIONS": [
+      "Whenever you deal #yCritical damage, gain #b%d%% #yNP."
+    ]
+  },
+  "${modID}:NPRegenPower": {
+    "NAME": "NP Regen",
+    "DESCRIPTIONS": [
+      "At the start of each turn, gain #b%d%% #yNP."
     ]
   }
 }

@@ -5,7 +5,7 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 
 import fgo.cards.FGOCard;
-import fgo.powers.EnergyRegenPower;
+import fgo.powers.NPRegenPower;
 
 public class DesiresSalvation extends FGOCard {
     public static final String ID = makeID(DesiresSalvation.class.getSimpleName());
@@ -18,7 +18,7 @@ public class DesiresSalvation extends FGOCard {
 
     @Override
     public void use(AbstractPlayer p, AbstractMonster m) {
-        addToBot(new ApplyPowerAction(p, p, new EnergyRegenPower(p, np)));
+        addToBot(new ApplyPowerAction(p, p, new NPRegenPower(p, np)));
     }
 }
 

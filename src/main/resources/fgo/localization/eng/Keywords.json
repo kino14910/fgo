@@ -205,20 +205,22 @@
     "DESCRIPTION": "Inflicts Stun on enemies who are not already stunned."
   },
   {
-    "PROPER_NAME": "Anti-Terror Advantage",
+    "PROPER_NAME": "vs. Terror Damage +",
     "NAMES": [
-      "anti-terror advantage",
-      "anti-terror_advantage"
+      "vs. terror damage",
+      "vs_terror_damage",
+      "Vs_Terror_Damage"
     ],
-    "DESCRIPTION": "This turn, deal #y50% extra damage to enemies afflicted with Terror."
+    "DESCRIPTION": "This turn, deal extra damage to enemies afflicted with Terror."
   },
   {
-    "PROPER_NAME": "Anti-Terror Advantage+",
+    "PROPER_NAME": "vs. Curse Damage +",
     "NAMES": [
-      "anti-terror advantage+",
-      "anti-terror_advantage+"
+      "vs. curse damage",
+      "vs_curse_damage",
+      "Vs_Curse_Damage"
     ],
-    "DESCRIPTION": "This turn, deal #y100% extra damage to enemies afflicted with Terror."
+    "DESCRIPTION": "This turn, deal e damage to enemies afflicted with Evil Curse."
   },
   {
     "PROPER_NAME": "Metallicize",

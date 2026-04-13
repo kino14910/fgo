@@ -9,7 +9,7 @@
   },
   "${modID}:DreamUponTheStars": {
     "NAME": "Dream Upon Stars",
-    "DESCRIPTION": "Gain !NP!% fgo:NP. NL Gain !M!% fgo:NP_Damage. NL fgo:OverCharge ."
+    "DESCRIPTION": "Gain !B! Block. NL Gain !M!% fgo:NP_Damage. NL fgo:OverCharge ."
   },
   "${modID}:CharismaOfHope": {
     "NAME": "Charisma of Hope",
@@ -102,10 +102,6 @@
     "DESCRIPTION": "{@@}Choose !M! card{!M!|1=|@=s} to copy, make them cost 0.",
     "FLAVOR": "Test art can be changed."
   },
-  "${modID}:BeastMagic": {
-    "NAME": "Beast Magic",
-    "DESCRIPTION": "Whenever you gain a debuff, gain !M! Block."
-  },
   "${modID}:YinYangFish": {
     "NAME": "Yin Yang Fish",
     "DESCRIPTION": "Lose !NP!% fgo:NP. NL Heal !M! HP. NL Exhaust.",
@@ -129,7 +125,7 @@
   },
   "${modID}:GodsExecution": {
     "NAME": "God's Execution",
-    "DESCRIPTION": "Deal !D! damage. NL If you have a debuff, gain [E] and draw 1 card."
+    "DESCRIPTION": "Deal !D! damage to ALL enemies. NL ALL enemies lose 2 Strength. NL If you have played a fgo:Noble Phantasm card this turn, this card costs 0."
   },
   "${modID}:CrownedWithLife": {
     "NAME": "Crowned With Life",
@@ -263,15 +259,6 @@
     "NAME": "Animal Dialogue",
     "DESCRIPTION": "Gain [E] for each !M!% fgo:NP. NL Lose all fgo:NP."
   },
-  "${modID}:Chasmatis": {
-    "NAME": "Chasmatis",
-    "DESCRIPTION": " fgo:OverCharge ."
-  },
-  "${modID}:WindsweptSlash": {
-    "NAME": "Windswept Slash",
-    "DESCRIPTION": "Deal !D! damage. NL Draw !M! cards.",
-    "FLAVOR": "Test art can be changed."
-  },
   "${modID}:DesiresSalvation": {
     "NAME": "Desires Salvation",
     "DESCRIPTION": "{@@}{!Upgrades!|1=Innate . NL }At the start of your turn, gain !NP!% fgo:NP."
@@ -338,10 +325,6 @@
     "NAME": "Maidens Willpower",
     "DESCRIPTION": "Gain 5 fgo:Guts. NL Gain 1 Artifact . NL Exhaust."
   },
-  "${modID}:LamplightOfTheSoul": {
-    "NAME": "Lamplight of the Soul",
-    "DESCRIPTION": "Gain !M! fgo:Guts. NL At the end of your turn, gain !M! Block. NL Exhaust."
-  },
   "${modID}:Indomitable": {
     "NAME": "Indomitable",
     "DESCRIPTION": "Gain !M! fgo:Guts (stackable with other fgo:Guts ). NL Each time fgo:Guts triggered,gain 2 Strength ."
@@ -364,18 +347,12 @@
   },
   "${modID}:WitchOfSalem": {
     "NAME": "Witch of Salem",
-    "DESCRIPTION": "{@@}Apply 3 Vulnerable, Weak and fgo:Terror (!M!%chance) to ALL enemies. NL Gain {!Upgrades!|@=fgo:Anti-Terror|1=fgo:Anti-Terror+} . NL Gain !NP!% fgo:NP.",
-    "UPGRADE_DESCRIPTION": "Apply fgo:Terror (!M!% chance) to ALL enemies. NL Gain 3 Vulnerable and Weak. NL Gain fgo:Anti-Terror+. NL Gain !NP!% fgo:NP.",
+    "DESCRIPTION": "{@@}Apply 3 Vulnerable, Weak and fgo:Terror (!M!%chance) to ALL enemies. NL Gain !${modID}:terror!% ${modID}:vs_terror_damage. NL Gain !NP!% fgo:NP.",
     "FLAVOR": "Life beyond the domain."
   },
   "${modID}:ExtraterrestrialOctopus": {
     "NAME": "Extraterrestrial Octopus",
     "DESCRIPTION": "Deal !D! damage( !M! × your fgo:Stars amount).",
-    "FLAVOR": "Life beyond the domain."
-  },
-  "${modID}:Swingby": {
-    "NAME": "Swingby",
-    "DESCRIPTION": "Gain !B! Block . NL Gain !Star!  fgo:Stars .",
     "FLAVOR": "Life beyond the domain."
   },
   "${modID}:FacelessMoon": {
@@ -404,6 +381,25 @@
   "${modID}:ExtremityOfVillains": {
     "NAME": "Extremity of Villains",
     "DESCRIPTION": "{@@}Deal !D! damage. NL If this card cause critical, Gain [E] and draw !M! card{!M!|1=|@=s}."
+  },
+  "${modID}:EarthHeartRhythm": {
+    "NAME": "Earth Heart Rhythm",
+    "DESCRIPTION": "Gain !NP!% fgo:NP. NL Gain !M!% fgo:NP_Damage. NL fgo:OverCharge."
+  },
+  "${modID}:WorldsEndFlowerGarden": {
+    "NAME": "World's End Flower Garden",
+    "DESCRIPTION": "Whenever you deal fgo:Critical, gain 10% fgo:NP."
+  },
+  "${modID}:ImitationImmortality": {
+    "NAME": "Imitation Immortality",
+    "DESCRIPTION": "Gain !M! fgo:guts. NL Gain !${modID}:metal! fgo:Metallicize. NL Gain 10% fgo:NP each turn. NL Gain !${modID}:damageReduction!% fgo:Damage_Reduction."
+  },
+  "${modID}:MagicBulletCharging": {
+    "NAME": "Magic Bullet Charging",
+    "DESCRIPTION": "Gain 5 Strength. NL Sequentially play X Attack cards through your hand. NL If Energy exceeds Attack cards in hand, the last Attack card's damage increases by 5 × excess Energy.",
+    "EXTENDED_DESCRIPTION": [
+      " NL Increases by %d."
+    ]
   },
   "${modID}:SwifterThanSound": {
     "NAME": "Swifter Than Sound",
@@ -485,6 +481,10 @@
   "${modID}:HollowHeartAlbion": {
     "NAME": "Hollow Heart Albion",
     "DESCRIPTION": "All enemies lose !D! HP. NL  Gain !Star! fgo:Stars."
+  },
+  "${modID}:ChaosLabyrinthos": {
+    "NAME": "Chaos Labyrinthos",
+    "DESCRIPTION": "ALL enemies lose !M! Strength this turn."
   },
   "${modID}:Camelot": {
     "NAME": "Lord Chaldeas",

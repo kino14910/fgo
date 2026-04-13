@@ -13,7 +13,7 @@ import com.megacrit.cardcrawl.powers.BufferPower;
 
 import fgo.characters.CustomEnums.FGOCardColor;
 import fgo.powers.AntiPurgeDefensePower;
-import fgo.powers.EnergyRegenPower;
+import fgo.powers.NPRegenPower;
 import fgo.powers.StarRegenPower;
 
 public class ArchetypeORT extends BaseRelic implements SuperRareRelic, OnReceivePowerRelic {
@@ -43,6 +43,6 @@ public class ArchetypeORT extends BaseRelic implements SuperRareRelic, OnReceive
     public void atBattleStart() {
         AbstractPlayer p = AbstractDungeon.player;
         addToBot(new ApplyPowerAction(p, p, new StarRegenPower(p, 10)));
-        addToBot(new ApplyPowerAction(p, p, new EnergyRegenPower(p, 3)));
+        addToBot(new ApplyPowerAction(p, p, new NPRegenPower(p, 3)));
     }
 }

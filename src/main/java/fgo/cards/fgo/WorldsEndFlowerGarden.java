@@ -5,21 +5,17 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 
 import fgo.cards.FGOCard;
-import fgo.powers.NPOverChargePower;
+import fgo.powers.WorldsEndFlowerGardenPower;
 
-public class Chasmatis extends FGOCard {
-    public static final String ID = makeID(Chasmatis.class.getSimpleName());
+public class WorldsEndFlowerGarden extends FGOCard {
+    public static final String ID = makeID(WorldsEndFlowerGarden.class.getSimpleName());
 
-    public Chasmatis() {
+    public WorldsEndFlowerGarden() {
         super(ID, 1, CardType.POWER, CardTarget.SELF, CardRarity.UNCOMMON);
-        setMagic(1);
-        setCostUpgrade(0);
     }
 
     @Override
     public void use(AbstractPlayer p, AbstractMonster m) {
-        addToBot(new ApplyPowerAction(p, p, new NPOverChargePower(magicNumber)));
+        addToBot(new ApplyPowerAction(p, p, new WorldsEndFlowerGardenPower(p, 10)));
     }
 }
-
-
