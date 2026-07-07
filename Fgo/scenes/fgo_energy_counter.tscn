@@ -1,0 +1,112 @@
+[gd_scene load_steps=6 format=3 uid="uid://cghhpt1j7pxnr"]
+
+[ext_resource type="Texture2D" uid="uid://dufj12dswcvv4" path="res://icon.svg" id="1_85qf2"]
+[ext_resource type="Texture2D" uid="uid://5qjqib4p1u0k" path="res://Fgo/images/ui/EPanel/layer0.png" id="1_iiep1"]
+[ext_resource type="Texture2D" uid="uid://bjve1a3qhaq6x" path="res://Fgo/images/ui/EPanel/layer1.png" id="2_qkpfl"]
+[ext_resource type="Texture2D" uid="uid://dred3uxaxq5vh" path="res://Fgo/images/ui/EPanel/layer2.png" id="3_7itwa"]
+[ext_resource type="Texture2D" uid="uid://b5vm5rr3ebj1v" path="res://Fgo/images/ui/EPanel/layer3.png" id="4_wo4nj"]
+
+[node name="TestEnergyCounter" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 128.0
+offset_bottom = 128.0
+metadata/_edit_lock_ = true
+
+[node name="EnergyVfxBack" type="Node2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(64, 64)
+
+[node name="Layers" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="RotationLayers" type="Control" parent="Layers"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Sprite2D" type="TextureRect" parent="Layers/RotationLayers"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_iiep1")
+
+[node name="Sprite2D2" type="TextureRect" parent="Layers/RotationLayers"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_qkpfl")
+
+[node name="Sprite2D3" type="TextureRect" parent="Layers/RotationLayers"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_7itwa")
+
+[node name="Sprite2D4" type="TextureRect" parent="Layers/RotationLayers"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_wo4nj")
+
+[node name="Layer1" type="TextureRect" parent="Layers"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_85qf2")
+expand_mode = 1
+
+[node name="EnergyVfxFront" type="Node2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(64, 64)
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = -29.0
+offset_right = -16.0
+offset_bottom = 29.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.76862746, 0.49411765, 0.03529412, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.1882353)
+theme_override_colors/font_outline_color = Color(0.9647059, 0.8980392, 0.33333334, 1)
+theme_override_constants/shadow_offset_x = 3
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 16
+theme_override_constants/shadow_outline_size = 16
+theme_override_font_sizes/font_size = 36
+text = "3/3"
+horizontal_alignment = 1
+vertical_alignment = 1

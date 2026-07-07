@@ -1,0 +1,96 @@
+<Project Sdk="Godot.NET.Sdk/4.5.1">
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>true</ImplicitUsings>
+        <LangVersion>13.0</LangVersion>
+        <Nullable>enable</Nullable>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+
+        <Sts2Dir>D:/Steam/steamapps/common/Slay the Spire 2</Sts2Dir>
+        <GodotExe>D:/megadot-4.5.1-m.13-windows-x86_64-llvm-editor-csharp/MegaDot_v4.5.1-stable_mono_win64.exe</GodotExe>
+        <Sts2DataDir>$(Sts2Dir)/data_sts2_windows_x86_64</Sts2DataDir>
+        <RitsuLibDeployDir>$(Sts2Dir)/mods/STS2-RitsuLib/</RitsuLibDeployDir>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+        <Optimize>false</Optimize>
+        <DebugType>portable</DebugType>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+        <Optimize>true</Optimize>
+        <DebugType>none</DebugType>
+        <PathMap>$(AppOutputBase)=.\</PathMap>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Reference Include="sts2">
+            <HintPath>$(Sts2DataDir)/sts2.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+
+        <Reference Include="0Harmony">
+            <HintPath>$(Sts2DataDir)/0Harmony.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+
+        <PackageReference Include="STS2.RitsuLib" Version="*"/>
+        <PackageReference Include="Nothing.STS2RitsuLib.ModAnalyzers" Version="0.8.0" PrivateAssets="all"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="Fgo\**" />
+        <Compile Remove="materials/**"/>
+        <Compile Remove="shaders/**"/>
+        <Compile Remove="images/**"/>
+        <Content Include="Scripts\Events\BeyondThe.cs.uid" />
+        <Content Include="Scripts\Events\DevilSlot.cs.uid" />
+        <Content Include="Scripts\Events\FGOLibrary.cs.uid" />
+        <Content Include="Scripts\Events\ManofChaldea.cs.uid" />
+        <Content Include="Scripts\Events\ProofAndRebuttal.cs.uid" />
+        <Content Include="Scripts\Potions\CursePotion.cs.uid" />
+        <Content Include="Scripts\Potions\ElixirofRejuvenation.cs.uid" />
+        <Content Include="Scripts\Potions\ExtremelySpicyMapoTofu.cs.uid" />
+        <Content Include="Scripts\Potions\FgoPotion.cs.uid" />
+        <Content Include="Scripts\Potions\StarPotion.cs.uid" />
+        <Content Include="Scripts\Relics\BB.cs.uid" />
+        <Content Include="Scripts\Relics\BowInsignia.cs.uid" />
+        <Content Include="Scripts\Relics\CosmicMedallion.cs.uid" />
+        <Content Include="Scripts\Relics\DoubleMuscleBurger.cs.uid" />
+        <Content Include="Scripts\Relics\FanNight.cs.uid" />
+        <Content Include="Scripts\Relics\FgoRelic.cs.uid" />
+        <Content Include="Scripts\Relics\LockChocolate.cs.uid" />
+        <Content Include="Scripts\Relics\MidsummerNightDream.cs.uid" />
+        <Content Include="Scripts\Relics\Salem.cs.uid" />
+        <Content Include="Scripts\Relics\StargazerTeapot.cs.uid" />
+        <Content Include="Scripts\Relics\SuitcaseFgo.cs.uid" />
+        <Content Include="Scripts\UI\FgoCombatUi.cs.uid" />
+        <EmbeddedResource Remove="Fgo/**"/>
+        <EmbeddedResource Remove="materials/**"/>
+        <EmbeddedResource Remove="shaders/**"/>
+        <EmbeddedResource Remove="images/**"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include=".gitignore"/>
+        <None Include="Fgo.json" />
+        <None Include="project.godot"/>
+        <None Include="Fgo/**"/>
+    </ItemGroup>
+    
+    <Target Name="Copy Mod" AfterTargets="PostBuildEvent">
+        <Message Text="Copying mod to Slay the Spire 2 mods folder..." Importance="high"/>
+        <MakeDir Directories="$(Sts2Dir)/mods/"/>
+        <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(Sts2Dir)/mods/$(MSBuildProjectName)/"/>
+        <Copy SourceFiles="$(TargetDir)$(TargetName).pdb"
+              DestinationFolder="$(Sts2Dir)/mods/$(MSBuildProjectName)/"
+              Condition="Exists('$(TargetDir)$(TargetName).pdb')"/>
+        <Copy SourceFiles="$(MSBuildProjectName).json" DestinationFolder="$(Sts2Dir)/mods/$(MSBuildProjectName)/"/>
+    </Target>
+
+    <Target Name="ExportPck" AfterTargets="Publish">
+        <Message Text="Copying PCK to Slay the Spire 2 mods folder..." Importance="high"/>
+        <Exec Command="&quot;$(GodotExe)&quot; --headless --export-pack &quot;Windows Desktop&quot; &quot;$(Sts2Dir)/mods/$(MSBuildProjectName)/$(MSBuildProjectName).pck&quot;"
+              EnvironmentVariables="IsInnerGodotExport=true;MSBUILDDISABLENODEREUSE=1"
+              ContinueOnError="WarnAndContinue"/>
+    </Target>
+</Project>

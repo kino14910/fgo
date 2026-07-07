@@ -1,0 +1,17 @@
+{
+  "FGO_STATIC_HOVER_TIPS_NP.title": "NP",
+  "FGO_STATIC_HOVER_TIPS_NP.description": "Noble Phantasm gauge. At 100%+, you can use your Noble Phantasm.",
+  "FGO_STATIC_HOVER_TIPS_STAR.title": "Critical Stars",
+  "FGO_STATIC_HOVER_TIPS_STAR.description": "At 10+ stars, your next attack deals double damage and consumes 10 stars.",
+  "FGO_STATIC_HOVER_TIPS_NP_DAMAGE.title": "NP Damage",
+  "FGO_STATIC_HOVER_TIPS_NP_DAMAGE.description": "Increases NP attack damage by this percentage.",
+  "FGO_STATIC_HOVER_TIPS_CRITICAL_DAMAGE.title": "Critical Damage",
+  "FGO_STATIC_HOVER_TIPS_CRITICAL_DAMAGE.description": "Increases critical hit damage by this percentage.",
+  "FGO_STATIC_HOVER_TIPS_EVIL_CURSE.title": "Evil Curse",
+  "FGO_STATIC_HOVER_TIPS_EVIL_CURSE.description": "At the start of turn, lose HP equal to curse stacks.",
+  "FGO_STATIC_HOVER_TIPS_COMMAND_SPELL.title": "Command Spell",
+  "FGO_STATIC_HOVER_TIPS_COMMAND_SPELL.description": "[gold]Noble[/gold] Phantasm Release[gold]:[/gold] Gain 100% [gold]Noble[/gold] Phantasm Gauge[gold].[/gold]\nActivated by using 1 [gold]Command[/gold] Spell[gold].[/gold]\n\n[gold]Spiritron[/gold] Repair[gold]:[/gold] Restore 30 HP.\nActivated by using 1 [gold]Command[/gold] Spell[gold].[/gold]\n\n[gold]Spiritron[/gold] Restoration[gold]:[/gold] Survive fatal damage and restore all HP.\nGain 300% [gold]Noble[/gold] Phantasm Gauge[gold].[/gold]\nActivates when you are about to be defeated, consuming 3 [gold]Command[/gold] Spells[gold].[/gold] ",
+  "FGO_CARDPILE_NOBLE_DECK.description": "",
+  "FGO_CARDPILE_NOBLE_DECK.empty": "",
+  "FGO_CARDPILE_NOBLE_DECK.title": ""
+}

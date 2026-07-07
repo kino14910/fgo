@@ -1,0 +1,76 @@
+[gd_scene load_steps=2 format=3 uid="uid://qg2aceayakso"]
+
+[ext_resource type="Texture2D" uid="uid://bw1mi8gmy747y" path="res://Fgo/images/charui/fgo_bg.jpg" id="1_c8lhi"]
+
+[node name="FgoBg" type="Control"]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -960.0
+offset_top = -540.0
+offset_right = 1600.0
+offset_bottom = 660.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(1280, 600)
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -1280.0
+offset_top = -600.0
+offset_right = 640.0
+offset_bottom = 478.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Icon" type="TextureRect" parent="Control"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1760.4856
+grow_horizontal = 0
+grow_vertical = 2
+texture = ExtResource("1_c8lhi")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="ash1" type="CPUParticles2D" parent="."]
+position = Vector2(1832, -17)
+amount = 40
+lifetime = 15.0
+preprocess = 15.0
+local_coords = true
+emission_shape = 3
+emission_rect_extents = Vector2(2000, 1)
+gravity = Vector2(27, 27)
+orbit_velocity_max = 0.03
+angle_min = 45.0
+angle_max = 90.0
+scale_amount_min = 10.0
+scale_amount_max = 10.0
+
+[node name="ash2" type="CPUParticles2D" parent="."]
+position = Vector2(1832, -17)
+amount = 40
+lifetime = 15.0
+preprocess = 15.0
+local_coords = true
+emission_shape = 3
+emission_rect_extents = Vector2(2000, 1)
+gravity = Vector2(27, 27)
+orbit_velocity_max = 0.03
+angle_min = 45.0
+angle_max = 90.0
+scale_amount_min = 10.0
+scale_amount_max = 10.0
+color = Color(0.121879734, 0.15283081, 0.33476263, 1)

@@ -1,0 +1,21 @@
+{
+  "FGO_CHARACTER_FGO_CHARACTER.aromaPrinciple": "[sine][blue]……等待……[/blue][/sine]",
+  "FGO_CHARACTER_FGO_CHARACTER.banter.alive.endTurnPing": "……",
+  "FGO_CHARACTER_FGO_CHARACTER.banter.dead.endTurnPing": "……",
+  "FGO_CHARACTER_FGO_CHARACTER.cardsModifierDescription": "御主的卡牌现在会出现在奖励和商店中。",
+  "FGO_CHARACTER_FGO_CHARACTER.cardsModifierTitle": "御主卡牌",
+  "FGO_CHARACTER_FGO_CHARACTER.description": "被圣杯选中的魔术师。\n依靠从者进行战斗。",
+  "FGO_CHARACTER_FGO_CHARACTER.eventDeathPrevention": "我还得继续等下去……",
+  "FGO_CHARACTER_FGO_CHARACTER.goldMonologue": "[sine]这些金币……也许能派上用场……[/sine]",
+  "FGO_CHARACTER_FGO_CHARACTER.possessiveAdjective": "她的",
+  "FGO_CHARACTER_FGO_CHARACTER.pronounObject": "她",
+  "FGO_CHARACTER_FGO_CHARACTER.pronounPossessive": "她的",
+  "FGO_CHARACTER_FGO_CHARACTER.pronounSubject": "她",
+  "FGO_CHARACTER_FGO_CHARACTER.title": "御主",
+  "FGO_CHARACTER_FGO_CHARACTER.titleObject": "御主",
+  "FGO_CHARACTER_FGO_CHARACTER.unlockText": "用[pink]{Prerequisite}[/pink]进行一局游戏来解锁这个角色。",
+  "FGO_CHARACTER_FGO_CHARACTER.defeatMessage": "……",
+  "FGO_CHARACTER_FGO_CHARACTER.flavor": "……",
+  "FGO_CHARACTER_FGO_CHARACTER.selectMessage": "……",
+  "FGO_CHARACTER_FGO_CHARACTER.victoryMessage": "……"
+}

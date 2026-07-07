@@ -1,0 +1,20 @@
+{
+  "FGO_TUTORIALS_COMMAND_SPELL.label_0": "令咒",
+  "FGO_TUTORIALS_COMMAND_SPELL.text_0": " 宝具解放 : 获得 100%*宝具值*。 \n 使用 1 划 令咒 发动。 \n\n",
+  "FGO_TUTORIALS_COMMAND_SPELL.text_1": " 灵基修复 : 回复 30 点生命。 \n 使用 1 划 令咒 发动。 \n\n",
+  "FGO_TUTORIALS_COMMAND_SPELL.text_2": " 灵基复原 : 免死并回复所有生命。 \n 获得 300%*宝具值*。 \n 在你要被杀死时显现，消耗 3 划 令咒 发动。 ",
+  "FGO_TUTORIALS_NOBLE_PHANTASM.label_0": "宝具解放",
+  "FGO_TUTORIALS_NOBLE_PHANTASM.text_0": "当*宝具值*达到 100% 时，点击可以选择一张宝具卡加入你的手牌，并且 清空 你的*宝具值*。 \n\n",
+  "FGO_TUTORIALS_NOBLE_PHANTASM.text_1": "当*宝具值*超过 100% 时，每超过 100% 额外 升级 一次可以选择的 宝具卡 。",
+  "FGO_TUTORIALS_MYSTIC_CODE.label_0": "魔术礼装",
+  "FGO_TUTORIALS_MYSTIC_CODE.text_0": "闪耀的陪同: 获得 {M:diff()} 颗 暴击星 。 \n 获得 {NP:diff()} %*宝具值*。 冷却：8回合 ",
+  "FGO_TUTORIALS_MYSTIC_CODE.text_1": "纯洁的搭配: 在本回合获得 2 次 无敌 。 冷却：8回合",
+  "FGO_TUTORIALS_MYSTIC_CODE.text_2": "幸福的再生: 获得 2 点能量 。 \n 抽 2 张牌。 冷却：8回合",
+  "FGO_TUTORIALS_MYSTIC_CODE.text_3": "预测演算: 丢弃1张牌。 \n 从抽牌堆中选择 1 张牌放入你的手牌。 \n 在第二幕追加。 冷却：8回合",
+  "FGO_TUTORIALS_NOBLE_DECK_PANEL_ITEM.text_0": "宝具卡组",
+  "FGO_TUTORIALS_NOBLE_DECK_PANEL_ITEM.text_1": "你可以查看当前 已解锁 的宝具卡。随着深入探索尖塔等都会解锁更多的宝具卡。",
+  "FGO_TUTORIALS_NOBLE_DECK_PANEL_ITEM.text_2": "当前已解锁的宝具卡。",
+  "FGO_TUTORIALS_NOBLE_DECK_VIEW_SCREEN.text_0": "这些卡会被保留且打出后移除本场战斗。",
+  "FGO_TUTORIALS_NOBLE_DECK_VIEW_SCREEN.text_1": "返回",
+  "FGO_TUTORIALS_NOBLE_DECK_VIEW_SCREEN.text_2": "点击查看详情"
+}

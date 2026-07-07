@@ -1,0 +1,23 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://c333sucyfnvv2"]
+
+[ext_resource type="Texture2D" uid="uid://w2aeki7brmgn" path="res://Fgo/images/charui/fgo_transition.webp" id="1_2pnya"]
+
+[sub_resource type="Shader" id="Shader_wjwex"]
+code = "shader_type canvas_item;
+
+uniform sampler2D transitionTex;
+uniform float threshold : hint_range(0,1);
+
+void fragment() {
+    float falloff = 1.0 - texture(transitionTex, UV).r;
+    
+    // helps with falloff artifacts issues towards the transition extremes
+    float remap  = mix(-0.1, 1.1, threshold);
+    falloff = step(falloff, remap);
+    COLOR.a = falloff;
+}"
+
+[resource]
+shader = SubResource("Shader_wjwex")
+shader_parameter/transitionTex = ExtResource("1_2pnya")
+shader_parameter/threshold = 0.0

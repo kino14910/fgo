@@ -1,0 +1,17 @@
+{
+  "FGO_STATIC_HOVER_TIPS_NP.title": "宝具值",
+  "FGO_STATIC_HOVER_TIPS_NP.description": "1.每当你打出一张打出非宝具卡，每消耗1点能量可获取 %d%% 的宝具值。 \n 2.获得受到的攻击伤害的宝具值。\n 3.达到100%以上时可以使用宝具。",
+  "FGO_STATIC_HOVER_TIPS_STAR.title": "暴击星",
+  "FGO_STATIC_HOVER_TIPS_STAR.description": "达到10颗以上时，下一次攻击造成双倍伤害并消耗10颗暴击星。",
+  "FGO_STATIC_HOVER_TIPS_NP_DAMAGE.title": "宝具威力",
+  "FGO_STATIC_HOVER_TIPS_NP_DAMAGE.description": "宝具攻击伤害提升此百分比。",
+  "FGO_STATIC_HOVER_TIPS_CRITICAL_DAMAGE.title": "暴击威力",
+  "FGO_STATIC_HOVER_TIPS_CRITICAL_DAMAGE.description": "暴击伤害提升此百分比。",
+  "FGO_STATIC_HOVER_TIPS_EVIL_CURSE.title": "诅呪",
+  "FGO_STATIC_HOVER_TIPS_EVIL_CURSE.description": "回合开始时，失去等于诅呪层数的生命值。",
+  "FGO_STATIC_HOVER_TIPS_COMMAND_SPELL.title": "令咒",
+  "FGO_STATIC_HOVER_TIPS_COMMAND_SPELL.description": "[gold]宝具解放[/gold]: 获得100%[gold]宝具值[/gold]。\n使用1划[gold]令咒[/gold]发动。\n[gold]灵基修复[/gold]:回复30点生命。\n使用1划[gold]令咒[/gold]发动。\n[gold]灵基复原[/gold]:在你要被杀死时，消耗3划[gold]令咒[/gold]，免死并回复所有生命，获得300%[gold]宝具值[/gold]",
+  "FGO_CARDPILE_NOBLE_DECK.description": "宝具卡默认具有保留且打出后移出本场战斗",
+  "FGO_CARDPILE_NOBLE_DECK.empty": "宝具卡",
+  "FGO_CARDPILE_NOBLE_DECK.title": "宝具卡"
+}

@@ -1,0 +1,14 @@
+{
+  "FGO_POTION_FGO_POTION_MODEL.description": "看到这个请向作者反馈此能力缺少本地化",
+  "FGO_POTION_FGO_POTION_MODEL.title": "看到这个请向作者反馈此能力缺少本地化",
+  "FGO_POTION_POTION_I_D.title": "某种药水",
+  "FGO_POTION_POTION_I_D.description": "一些组合成描述的碎片。具体如何取决于药水，你可以随意设置。",
+  "FGO_POTION_ELIXIROF_REJUVENATION.title": "返老还童的灵药",
+  "FGO_POTION_ELIXIROF_REJUVENATION.description": "回复 10 点生命。移除你身上的所有负面效果。",
+  "FGO_POTION_EXTREMELY_SPICY_MAPO_TOFU.title": "罐装特辣麻婆豆腐",
+  "FGO_POTION_EXTREMELY_SPICY_MAPO_TOFU.description": "获得 40%*宝具值*和 40% 宝具威力 。",
+  "FGO_POTION_CURSE_POTION.title": "诅呪药水",
+  "FGO_POTION_CURSE_POTION.description": "给予 5 层*诅呪*。",
+  "FGO_POTION_STAR_POTION.title": "星之药水",
+  "FGO_POTION_STAR_POTION.description": "获得 10 颗 暴击星 。"
+}

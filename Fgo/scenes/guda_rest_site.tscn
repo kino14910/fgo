@@ -1,0 +1,44 @@
+[gd_scene load_steps=2 format=3 uid="uid://dafyi8fbg1vof"]
+
+[ext_resource type="Texture2D" uid="uid://dlq48vael6cis" path="res://Fgo/images/char/Master14.png" id="1_5u4bu"]
+
+[node name="FgoCharacterRestSite" type="Node2D"]
+
+[node name="ControlRoot" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="SelectionReticle" type="Control" parent="ControlRoot"]
+unique_name_in_owner = true
+anchors_preset = 0
+offset_left = -153.0
+offset_top = -350.0
+offset_right = 267.0
+offset_bottom = 320.0
+
+[node name="Hitbox" type="Control" parent="ControlRoot"]
+unique_name_in_owner = true
+anchors_preset = 0
+offset_left = -155.0
+offset_top = -165.0
+offset_right = 154.0
+offset_bottom = 166.0
+
+[node name="ThoughtBubbleRight" type="Control" parent="ControlRoot"]
+unique_name_in_owner = true
+anchors_preset = 0
+offset_left = 121.0
+offset_top = -125.0
+offset_right = 121.0
+offset_bottom = -125.0
+
+[node name="ThoughtBubbleLeft" type="Control" parent="ControlRoot"]
+unique_name_in_owner = true
+anchors_preset = 0
+offset_left = -113.0
+offset_top = -95.0
+offset_right = -113.0
+offset_bottom = -95.0
+
+[node name="Sprite" type="Sprite2D" parent="ControlRoot"]
+texture = ExtResource("1_5u4bu")
