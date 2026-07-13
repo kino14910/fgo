@@ -2,15 +2,22 @@ using Fgo.Scripts.Commands;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.ValueProps;
+using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards.NoblePhantasm;
 
-public class Excalibur : NobleCardModel
-{
-    public Excalibur() : base(2, CardType.Attack, TargetType.Self)
+public class Excalibur(): NobleCardModel(2, CardType.Attack, TargetType.Self) {
+
+    protected override IEnumerable<DynamicVar> CanonicalVars => [
+        new DamageVar(25, ValueProp.Move),
+        ModCardVars.Int("Np", 30)
+    ];
+
+    protected override void OnUpgrade()
     {
-        WithDamage(25, 7);
-        WithNp(30);
+        DynamicVars.Damage.UpgradeValueBy(7);
     }
 
     protected override async Task OnPlay(
@@ -22,6 +29,6 @@ public class Excalibur : NobleCardModel
             .TargetingAllOpponents(CombatState!)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
-        await FgoNpCmd.AddNp(DynamicVars["NP"].IntValue);
+        await FgoNpCmd.AddNp(DynamicVars["Np"].IntValue);
     }
 }

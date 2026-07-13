@@ -6,12 +6,11 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace Fgo.Scripts.Cards.NoblePhantasm;
 
-public class Failnaught : NobleCardModel
+public class Failnaught() : NobleCardModel(0, CardType.Attack, TargetType.AnyEnemy)
 {
-    public Failnaught() : base(0, CardType.Attack, TargetType.AnyEnemy)
-    {
-        WithVar(new DamageVar(48m, ValueProp.Unblockable | ValueProp.Unpowered | ValueProp.Move));
-    }
+    protected override IEnumerable<DynamicVar> CanonicalVars => [
+        new DamageVar(48m, ValueProp.Unblockable | ValueProp.Unpowered | ValueProp.Move)
+    ];
 
     protected override async Task OnPlay(
         PlayerChoiceContext choiceContext,

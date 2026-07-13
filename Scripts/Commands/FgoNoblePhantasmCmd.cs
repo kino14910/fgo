@@ -41,7 +41,7 @@ public static class FgoNoblePhantasmCmd
 
         if (cards.Count == 0) return false;
 
-        var prefs = new CardSelectorPrefs(new LocString("gameplay_ui", "FGO-NP_TEXT.text_2"), 1)
+        var prefs = new CardSelectorPrefs(new LocString("gameplay_ui", "FGO_GAMEPLAY_UI_NP_TEXT.text_2"), 1)
         {
             RequireManualConfirmation = true
         };

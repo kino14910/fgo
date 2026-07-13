@@ -7,12 +7,17 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace Fgo.Scripts.Cards.NoblePhantasm;
 
-public class IraLupus : NobleCardModel
-{
-    public IraLupus() : base(1, CardType.Attack, TargetType.AnyEnemy)
+public class IraLupus(): NobleCardModel(1, CardType.Attack, TargetType.AnyEnemy) {
+
+    protected override IEnumerable<DynamicVar> CanonicalVars => [
+        new DamageVar(24m, ValueProp.Unblockable | ValueProp.Unpowered | ValueProp.Move),
+        new PowerVar<VulnerablePower>(2)
+    ];
+
+    protected override void OnUpgrade()
     {
-        WithVar(new DamageVar(24m, ValueProp.Unblockable | ValueProp.Unpowered | ValueProp.Move));
-        WithPower<VulnerablePower>(2, 1);
+        DynamicVars.Damage.UpgradeValueBy(3m);
+        DynamicVars[nameof(VulnerablePower)].UpgradeValueBy(1m);
     }
 
     protected override async Task OnPlay(
@@ -22,13 +27,6 @@ public class IraLupus : NobleCardModel
         await CreatureCmd.Damage(choiceContext, play.Target!, DynamicVars.Damage.BaseValue,
             ValueProp.Unblockable | ValueProp.Unpowered | ValueProp.Move, Owner.Creature);
         await PowerCmd.Apply<VulnerablePower>(choiceContext, play.Target!,
-            DynamicVars[typeof(VulnerablePower).Name].BaseValue, Owner.Creature, this);
-    }
-
-    protected override void OnUpgrade()
-    {
-        base.OnUpgrade();
-        DynamicVars.Damage.UpgradeValueBy(3m);
-        DynamicVars.Vulnerable.UpgradeValueBy(1m);
+            DynamicVars[nameof(VulnerablePower)].BaseValue, Owner.Creature, this);
     }
 }

@@ -1,18 +1,25 @@
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models.Powers;
+using MegaCrit.Sts2.Core.ValueProps;
+using STS2RitsuLib.Scaffolding.Content;
 
 namespace Fgo.Scripts.Cards.Colorless;
 
-public class PoisonousDagger : FgoColorlessCard
+public class PoisonousDagger() : ModCardTemplate(0, CardType.Attack,
+    CardRarity.Token, TargetType.AnyEnemy)
 {
-    public PoisonousDagger() : base(0, CardType.Attack,
-        CardRarity.Token, TargetType.AnyEnemy)
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
+    protected override IEnumerable<DynamicVar> CanonicalVars => [
+        new DamageVar(2, ValueProp.Move),
+        new PowerVar<PoisonPower>(2)
+    ];
+
+    protected override void OnUpgrade()
     {
-        WithKeywords(CardKeyword.Exhaust);
-        WithDamage(2);
-        WithPower<PoisonPower>(2, 2);
+        DynamicVars[nameof(PoisonPower)].UpgradeValueBy(2);
     }
 
     protected override async Task OnPlay(
@@ -24,7 +31,7 @@ public class PoisonousDagger : FgoColorlessCard
             .Targeting(play.Target!)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
-        await PowerCmd.Apply<PoisonPower>(choiceContext, play.Target!, DynamicVars[typeof(PoisonPower).Name].BaseValue,
+        await PowerCmd.Apply<PoisonPower>(choiceContext, play.Target!, DynamicVars[nameof(PoisonPower)].BaseValue,
             Owner.Creature, this);
     }
 }

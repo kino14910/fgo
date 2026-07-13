@@ -20,6 +20,7 @@ public class SchwarzwaldFalkePower : FgoPowerModel
     public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side,
         IEnumerable<Creature> participants)
     {
+        if (!participants.Contains(base.Owner)) return;
         if (side == CombatSide.Player)
         {
             Flash();

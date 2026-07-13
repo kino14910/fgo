@@ -1,18 +1,19 @@
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models.Powers;
+using STS2RitsuLib.Scaffolding.Content;
 
 namespace Fgo.Scripts.Cards.Colorless;
 
-public class PrimevalRune : FgoColorlessCard
+public class PrimevalRune() : ModCardTemplate(1, CardType.Skill,
+    CardRarity.Rare, TargetType.Self)
 {
-    public PrimevalRune() : base(1, CardType.Skill,
-        CardRarity.Rare, TargetType.Self)
-    {
-        WithPower<WeakPower>(2);
-        WithPower<VulnerablePower>(2);
-    }
+    protected override IEnumerable<DynamicVar> CanonicalVars => [
+        new PowerVar<WeakPower>(2),
+        new PowerVar<VulnerablePower>(2)
+    ];
 
     protected override async Task OnPlay(
         PlayerChoiceContext choiceContext,
@@ -20,10 +21,10 @@ public class PrimevalRune : FgoColorlessCard
     {
         foreach (var enemy in CombatState!.HittableEnemies)
         {
-            await PowerCmd.Apply<WeakPower>(choiceContext, enemy, DynamicVars[typeof(WeakPower).Name].BaseValue,
+            await PowerCmd.Apply<WeakPower>(choiceContext, enemy, DynamicVars[nameof(WeakPower)].BaseValue,
                 Owner.Creature, this);
             await PowerCmd.Apply<VulnerablePower>(choiceContext, enemy,
-                DynamicVars[typeof(VulnerablePower).Name].BaseValue, Owner.Creature, this);
+                DynamicVars[nameof(VulnerablePower)].BaseValue, Owner.Creature, this);
         }
     }
 }

@@ -2,16 +2,23 @@ using Fgo.Scripts.Commands;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.ValueProps;
+using STS2RitsuLib.Scaffolding.Content;
 
 namespace Fgo.Scripts.Cards.Colorless;
 
-public class TheAbsoluteSword : FgoColorlessCard
+public class TheAbsoluteSword() : ModCardTemplate(3, CardType.Attack,
+    CardRarity.Token, TargetType.Self)
 {
-    public TheAbsoluteSword() : base(3, CardType.Attack,
-        CardRarity.Token, TargetType.Self)
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
+    protected override IEnumerable<DynamicVar> CanonicalVars => [
+        new DamageVar(10, ValueProp.Move)
+    ];
+
+    protected override void OnUpgrade()
     {
-        WithKeywords(CardKeyword.Exhaust);
-        WithDamage(10, 3);
+        DynamicVars.Damage.UpgradeValueBy(3);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)

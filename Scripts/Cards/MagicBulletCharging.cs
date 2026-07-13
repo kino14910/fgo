@@ -1,16 +1,24 @@
 using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
 
-public class MagicBulletCharging : FgoCardModel
-{
-    public MagicBulletCharging() : base(-1, CardType.Skill,
+public class MagicBulletCharging() : FgoCardModel(-1, CardType.Skill,
         CardRarity.Rare, TargetType.Self)
+{
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
+
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        ModCardVars.Int("ExcessBonus", 5)
+    ];
+
+    protected override void OnUpgrade()
     {
-        WithKeywords(CardKeyword.Exhaust);
-        WithVar("ExcessBonus", 5, 2);
+        DynamicVars["ExcessBonus"].UpgradeValueBy(2);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)

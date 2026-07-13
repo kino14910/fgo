@@ -3,16 +3,14 @@ using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization;
+using STS2RitsuLib.Scaffolding.Content;
 
 namespace Fgo.Scripts.Cards.Colorless;
 
-public class ProofAndRebuttal : FgoColorlessCard
+public class ProofAndRebuttal() : ModCardTemplate(1, CardType.Skill,
+    CardRarity.Token, TargetType.Self)
 {
-    public ProofAndRebuttal() : base(1, CardType.Skill,
-        CardRarity.Token, TargetType.Self)
-    {
-        WithKeywords(CardKeyword.Exhaust);
-    }
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {

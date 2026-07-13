@@ -1,8 +1,6 @@
 using Fgo.Scripts.Character;
-using Fgo.Scripts.Commands;
 using Godot;
 using MegaCrit.Sts2.Core.Entities.Cards;
-using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Scaffolding.Content;
 
@@ -15,7 +13,7 @@ public abstract class FgoCardModel(
     CardRarity rarity,
     TargetType targetType,
     bool shouldShowInCardLibrary = true)
-    : FgoCardBase(energyCost, type, rarity, targetType, shouldShowInCardLibrary)
+    : ModCardTemplate(energyCost, type, rarity, targetType, shouldShowInCardLibrary)
 {
     /// <summary>
     ///     默认 AssetProfile：根据 CardType 选择卡框；派生类可重写。
@@ -34,8 +32,6 @@ public abstract class FgoCardModel(
         }
     );
 
-    protected override Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
-    {
-        return FgoNpCmd.AddNp(cardPlay.Card.EnergyCost.Canonical);
-    }
+    // NP 增加逻辑已移至 FgoPlayerResources.AfterCardPlayed 全局钩子，
+    // 子类重写 OnPlay 时无需再调用 base.OnPlay。
 }

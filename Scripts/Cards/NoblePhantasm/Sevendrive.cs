@@ -2,17 +2,24 @@ using Fgo.Scripts.Commands;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models.Powers;
+using MegaCrit.Sts2.Core.ValueProps;
+using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards.NoblePhantasm;
 
-public class Sevendrive : NobleCardModel
-{
-    public Sevendrive() : base(3, CardType.Attack, TargetType.Self)
+public class Sevendrive(): NobleCardModel(3, CardType.Attack, TargetType.Self) {
+
+    protected override IEnumerable<DynamicVar> CanonicalVars => [
+        new DamageVar(12, ValueProp.Move),
+        ModCardVars.Int("Strength", 2),
+        ModCardVars.Int("Np", 20)
+    ];
+
+    protected override void OnUpgrade()
     {
-        WithDamage(12, 4);
-        WithVar("Strength", 2);
-        WithNp(20);
+        DynamicVars.Damage.UpgradeValueBy(4m);
     }
 
     protected override async Task OnPlay(
@@ -29,12 +36,6 @@ public class Sevendrive : NobleCardModel
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
 
-        await FgoNpCmd.AddNp(DynamicVars["NP"].IntValue);
-    }
-
-    protected override void OnUpgrade()
-    {
-        base.OnUpgrade();
-        DynamicVars.Damage.UpgradeValueBy(4m);
+        await FgoNpCmd.AddNp(DynamicVars["Np"].IntValue);
     }
 }

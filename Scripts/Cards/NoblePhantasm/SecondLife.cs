@@ -3,18 +3,20 @@ using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.Nodes.CommonUi;
+using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards.NoblePhantasm;
 
-public class SecondLife : NobleCardModel
-{
-    public SecondLife() : base(1, CardType.Skill, TargetType.Self)
-    {
-        WithKeywords(CardKeyword.Exhaust);
-        WithNp(20);
-    }
+public class SecondLife(): NobleCardModel(1, CardType.Skill, TargetType.Self) {
+
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
+
+    protected override IEnumerable<DynamicVar> CanonicalVars => [
+        ModCardVars.Int("Np", 20)
+    ];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
@@ -31,7 +33,7 @@ public class SecondLife : NobleCardModel
             if (enemy.HasPower<MinionPower>())
             {
                 await CreatureCmd.Kill(enemy);
-                await FgoNpCmd.AddNp(DynamicVars["NP"].IntValue);
+                await FgoNpCmd.AddNp(DynamicVars["Np"].IntValue);
             }
     }
 }

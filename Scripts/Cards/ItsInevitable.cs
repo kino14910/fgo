@@ -2,16 +2,25 @@ using Fgo.Scripts.Powers;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.ValueProps;
+using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
 
-public class ItsInevitable : FgoCardModel
-{
-    public ItsInevitable() : base(1, CardType.Attack,
+public class ItsInevitable() : FgoCardModel(1, CardType.Attack,
         CardRarity.Common, TargetType.AllEnemies)
+{
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        new DamageVar(4, ValueProp.Move),
+        ModCardVars.Int("Boost", 4)
+    ];
+
+    protected override void OnUpgrade()
     {
-        WithDamage(4, 1);
-        WithVar("Boost", 4, 1);
+        DynamicVars.Damage.UpgradeValueBy(1);
+        DynamicVars["Boost"].UpgradeValueBy(1);
     }
 
     protected override async Task OnPlay(

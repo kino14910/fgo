@@ -4,17 +4,25 @@ using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards.Colorless;
 
-public class SoulOfWaterChannels : FgoCardModel
-{
-    public SoulOfWaterChannels() : base(0, CardType.Skill,
+public class SoulOfWaterChannels() : FgoCardModel(0, CardType.Skill,
         CardRarity.Token, TargetType.Self)
+{
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust, CardKeyword.Retain];
+    protected override HashSet<CardTag> CanonicalTags => [FgoTags.Foreigner];
+
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        ModCardVars.Int("Stars", 10)
+    ];
+
+    protected override void OnUpgrade()
     {
-        WithKeywords(CardKeyword.Exhaust, CardKeyword.Retain);
-        WithTags(FgoTags.Foreigner);
-        WithVar("Stars", 10, 5);
+        DynamicVars["Stars"].UpgradeValueBy(5);
     }
 
     protected override async Task OnPlay(

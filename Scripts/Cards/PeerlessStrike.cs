@@ -4,17 +4,25 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models.Powers;
+using MegaCrit.Sts2.Core.ValueProps;
+using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
 
-public class PeerlessStrike : FgoCardModel
-{
-    public PeerlessStrike() : base(2, CardType.Attack,
+public class PeerlessStrike() : FgoCardModel(2, CardType.Attack,
         CardRarity.Rare, TargetType.AnyEnemy)
+{
+    protected override HashSet<CardTag> CanonicalTags => [CardTag.Strike];
+
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        new DamageVar(24, ValueProp.Move),
+        new IntVar("CritDamage", 100m)
+    ];
+
+    protected override void OnUpgrade()
     {
-        WithTags(CardTag.Strike);
-        WithDamage(24, 8);
-        WithVar(new IntVar("CritDamage", 100m));
+        DynamicVars.Damage.UpgradeValueBy(8);
     }
 
     protected override bool IsPlayable =>

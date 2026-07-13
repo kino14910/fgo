@@ -9,7 +9,8 @@
       "Fgo/1.0.0": {
         "dependencies": {
           "GodotSharp": "4.5.1",
-          "STS2.RitsuLib": "0.4.54"
+          "GodotSharpEditor": "4.5.1",
+          "STS2.RitsuLib": "0.4.57"
         },
         "runtime": {
           "Fgo.dll": {}
@@ -23,15 +24,26 @@
           }
         }
       },
-      "STS2.RitsuLib/0.4.54": {
+      "GodotSharpEditor/4.5.1": {
+        "dependencies": {
+          "GodotSharp": "4.5.1"
+        },
+        "runtime": {
+          "lib/net8.0/GodotSharpEditor.dll": {
+            "assemblyVersion": "4.5.1.0",
+            "fileVersion": "4.5.1.0"
+          }
+        }
+      },
+      "STS2.RitsuLib/0.4.57": {
         "dependencies": {
           "GodotSharp": "4.5.1",
           "System.IO.Hashing": "9.0.0"
         },
         "runtime": {
           "lib/net9.0/STS2-RitsuLib.dll": {
-            "assemblyVersion": "0.4.54.0",
-            "fileVersion": "0.4.54.0"
+            "assemblyVersion": "0.4.57.0",
+            "fileVersion": "0.4.57.0"
           }
         }
       },
@@ -58,12 +70,19 @@
       "path": "godotsharp/4.5.1",
       "hashPath": "godotsharp.4.5.1.nupkg.sha512"
     },
-    "STS2.RitsuLib/0.4.54": {
+    "GodotSharpEditor/4.5.1": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-Z3K7AfMWS4ZE3HU/x+A/IXB1YozKZAJIRGD/fCoOa9IbylZ8W5tvVxAEoTmxPf9/j0t7Peu07dOoKTlt6Syt9Q==",
-      "path": "sts2.ritsulib/0.4.54",
-      "hashPath": "sts2.ritsulib.0.4.54.nupkg.sha512"
+      "sha512": "sha512-8CM49047b0Us3qPJo6L7kdldreOvR7JCoXlKoSHzpA0TQP6+Qnoxz/26GZ1ONg2wW4vV9uzor0AHXSGUFP9XSw==",
+      "path": "godotsharpeditor/4.5.1",
+      "hashPath": "godotsharpeditor.4.5.1.nupkg.sha512"
+    },
+    "STS2.RitsuLib/0.4.57": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-sB5XWmsax8Kh2tPjgyaFYdXXyi+FF3NY1V7rJvbAMvjL+W1EXqhr2tbp01FLDk+HzN25wjO30QEkpMg9v7da5w==",
+      "path": "sts2.ritsulib/0.4.57",
+      "hashPath": "sts2.ritsulib.0.4.57.nupkg.sha512"
     },
     "System.IO.Hashing/9.0.0": {
       "type": "package",

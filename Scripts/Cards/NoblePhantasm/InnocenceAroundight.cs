@@ -3,15 +3,21 @@ using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.ValueProps;
 
 namespace Fgo.Scripts.Cards.NoblePhantasm;
 
-public class InnocenceAroundight : NobleCardModel
-{
-    public InnocenceAroundight() : base(2, CardType.Attack, TargetType.AnyEnemy)
+public class InnocenceAroundight(): NobleCardModel(2, CardType.Attack, TargetType.AnyEnemy) {
+
+    protected override IEnumerable<DynamicVar> CanonicalVars => [
+        new DamageVar(32, ValueProp.Move),
+        new PowerVar<NpRatePower>(3)
+    ];
+
+    protected override void OnUpgrade()
     {
-        WithDamage(32, 8);
-        WithPower<NpRatePower>(3);
+        DynamicVars.Damage.UpgradeValueBy(8);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
@@ -22,7 +28,7 @@ public class InnocenceAroundight : NobleCardModel
             .WithHitFx("vfx/vfx_attack_blunt")
             .Execute(choiceContext);
         await PowerCmd.Apply<NpRatePower>(choiceContext, Owner.Creature,
-            DynamicVars[typeof(NpRatePower).Name].BaseValue, Owner.Creature, this);
+            DynamicVars[nameof(NpRatePower)].BaseValue, Owner.Creature, this);
         await FgoCardActions.AddToPile(FgoCardActions.CreateCard<RayHorizon>(true), PileType.Draw);
     }
 }

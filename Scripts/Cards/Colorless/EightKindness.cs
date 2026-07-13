@@ -1,18 +1,19 @@
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models.Powers;
+using STS2RitsuLib.Scaffolding.Content;
 
 namespace Fgo.Scripts.Cards.Colorless;
 
-public class EightKindness : FgoColorlessCard
+public class EightKindness() : ModCardTemplate(3, CardType.Power,
+    CardRarity.Rare, TargetType.Self)
 {
-    public EightKindness() : base(3, CardType.Power,
-        CardRarity.Rare, TargetType.Self)
-    {
-        WithKeywords(CardKeyword.Exhaust);
-        WithPower<StrengthPower>(1);
-    }
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
+    protected override IEnumerable<DynamicVar> CanonicalVars => [
+        new PowerVar<StrengthPower>(1)
+    ];
 
     protected override async Task OnPlay(
         PlayerChoiceContext choiceContext,
@@ -22,7 +23,7 @@ public class EightKindness : FgoColorlessCard
         var amount = DynamicVars.Strength.BaseValue;
 
         await PowerCmd.Apply<StrengthPower>(choiceContext, Owner.Creature,
-            DynamicVars[typeof(StrengthPower).Name].BaseValue, Owner.Creature, this);
+            DynamicVars[nameof(StrengthPower)].BaseValue, Owner.Creature, this);
         await PowerCmd.Apply<DexterityPower>(choiceContext, self, amount, Owner.Creature, this);
         await PowerCmd.Apply<PlatingPower>(choiceContext, self, amount, Owner.Creature, this);
         await PowerCmd.Apply<RegenPower>(choiceContext, self, amount, Owner.Creature, this);

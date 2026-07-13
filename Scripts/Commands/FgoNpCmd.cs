@@ -29,7 +29,7 @@ public static class FgoNpCmd
     /// </summary>
     public static Task AddNp(CardModel card)
     {
-        return AddNp(card.DynamicVars["NP"].IntValue, card.Owner);
+        return AddNp(card.DynamicVars["Np"].IntValue, card.Owner);
     }
 
     /// <summary>
@@ -37,7 +37,7 @@ public static class FgoNpCmd
     /// </summary>
     public static Task AddNp(CardModel card, PlayerChoiceContext choiceContext)
     {
-        return AddNp(card.DynamicVars["NP"].IntValue, choiceContext, card.Owner);
+        return AddNp(card.DynamicVars["Np"].IntValue, choiceContext, card.Owner);
     }
 
     public static Task ResetNp()

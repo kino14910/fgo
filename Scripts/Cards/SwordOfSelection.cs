@@ -3,16 +3,23 @@ using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
 
-public class SwordOfSelection : FgoCardModel
-{
-    public SwordOfSelection() : base(1, CardType.Skill,
+public class SwordOfSelection() : FgoCardModel(1, CardType.Skill,
         CardRarity.Uncommon, TargetType.Self)
+{
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        new CardsVar(2),
+        ModCardVars.Int("Np", 20)
+    ];
+
+    protected override void OnUpgrade()
     {
-        WithCards(2, 1);
-        WithNp(20);
+        DynamicVars.Cards.UpgradeValueBy(1);
     }
 
     protected override async Task OnPlay(
@@ -20,6 +27,6 @@ public class SwordOfSelection : FgoCardModel
         CardPlay play)
     {
         await CardPileCmd.Draw(choiceContext, DynamicVars.Cards.BaseValue, Owner);
-        await FgoNpCmd.AddNp(FgoCardActions.HandSize(Owner) * DynamicVars["NP"].IntValue / 10);
+        await FgoNpCmd.AddNp(FgoCardActions.HandSize(Owner) * DynamicVars["Np"].IntValue / 10);
     }
 }

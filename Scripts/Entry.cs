@@ -1,9 +1,12 @@
 using System.Reflection;
+using Fgo.Scripts.UI;
 using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.Logging;
 using MegaCrit.Sts2.Core.Modding;
 using STS2RitsuLib;
 using STS2RitsuLib.Interop;
+using STS2RitsuLib.Scaffolding.Godot.NodeAttachments;
+
 // using Fgo.Scripts.Utils;
 
 namespace Fgo.Scripts;
@@ -22,5 +25,6 @@ public class Entry
         ModTypeDiscoveryHub.RegisterModAssembly(ModId, assembly);
         RitsuLibFramework.RegisterModSettingsReflectionProvider<FgoReflectedSettings>();
         FgoEnums.Initialize(ModId);
+        FgoCombatUi.Initialize();
     }
 }

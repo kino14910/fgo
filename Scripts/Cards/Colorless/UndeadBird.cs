@@ -2,16 +2,23 @@ using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Factories;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using STS2RitsuLib.Cards.DynamicVars;
+using STS2RitsuLib.Scaffolding.Content;
 
 namespace Fgo.Scripts.Cards.Colorless;
 
-public class UndeadBird : FgoColorlessCard
+public class UndeadBird() : ModCardTemplate(1, CardType.Skill,
+    CardRarity.Uncommon, TargetType.Self)
 {
-    public UndeadBird() : base(1, CardType.Skill,
-        CardRarity.Uncommon, TargetType.Self)
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
+    protected override IEnumerable<DynamicVar> CanonicalVars => [
+        ModCardVars.Int("Cards", 3)
+    ];
+
+    protected override void OnUpgrade()
     {
-        WithKeywords(CardKeyword.Exhaust);
-        WithVar("Cards", 3, 2);
+        DynamicVars["Cards"].UpgradeValueBy(2);
     }
 
     protected override async Task OnPlay(

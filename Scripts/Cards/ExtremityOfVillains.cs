@@ -3,17 +3,27 @@ using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.ValueProps;
+using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
 
-public class ExtremityOfVillains : FgoCardModel
-{
-    public ExtremityOfVillains() : base(1, CardType.Attack,
+public class ExtremityOfVillains() : FgoCardModel(1, CardType.Attack,
         CardRarity.Uncommon, TargetType.AnyEnemy)
+{
+    protected override HashSet<CardTag> CanonicalTags => [FgoTags.Foreigner];
+
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        new DamageVar(8, ValueProp.Move),
+        new CardsVar(2)
+    ];
+
+    protected override void OnUpgrade()
     {
-        WithTags(FgoTags.Foreigner);
-        WithDamage(8, 4);
-        WithCards(2, 1);
+        DynamicVars.Damage.UpgradeValueBy(4);
+        DynamicVars.Cards.UpgradeValueBy(1);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)

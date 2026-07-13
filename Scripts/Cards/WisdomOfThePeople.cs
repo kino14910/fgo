@@ -3,18 +3,21 @@ using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
 
-public class WisdomOfThePeople : FgoCardModel
-{
-    public WisdomOfThePeople() : base(3, CardType.Skill,
+public class WisdomOfThePeople() : FgoCardModel(3, CardType.Skill,
         CardRarity.Rare, TargetType.Self)
-    {
-        WithKeywords(CardKeyword.Exhaust);
-        WithHeal(20);
-        WithNp(30);
-    }
+{
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
+
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        new HealVar(20),
+        ModCardVars.Int("Np", 30)
+    ];
 
     protected override async Task OnPlay(
         PlayerChoiceContext choiceContext,
@@ -30,6 +33,6 @@ public class WisdomOfThePeople : FgoCardModel
             await PowerCmd.Remove(random);
         }
 
-        if (IsUpgraded) await FgoNpCmd.AddNp(DynamicVars["NP"].IntValue);
+        if (IsUpgraded) await FgoNpCmd.AddNp(DynamicVars["Np"].IntValue);
     }
 }

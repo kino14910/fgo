@@ -4,6 +4,9 @@ using Fgo.Scripts.Powers;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.ValueProps;
+using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards.DerivativeMash;
 
@@ -15,9 +18,19 @@ public class LordChaldeasAtlas : NobleCardModel
     public LordChaldeasAtlas() : base(1, CardType.Attack,
         TargetType.AnyEnemy)
     {
-        WithDamage(20, 10);
-        WithPower<NpDamagePower>(30);
-        WithNp(30, 20);
+    }
+
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        new DamageVar(20, ValueProp.Move),
+        new PowerVar<NpDamagePower>(30),
+        ModCardVars.Int("Np", 30)
+    ];
+
+    protected override void OnUpgrade()
+    {
+        DynamicVars.Damage.UpgradeValueBy(10);
+        DynamicVars["Np"].UpgradeValueBy(20);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
@@ -28,7 +41,7 @@ public class LordChaldeasAtlas : NobleCardModel
             .WithHitFx("vfx/vfx_attack_blunt")
             .Execute(choiceContext);
         await PowerCmd.Apply<NpDamagePower>(choiceContext, Owner.Creature,
-            DynamicVars[typeof(NpDamagePower).Name].BaseValue, Owner.Creature, this);
-        await FgoNpCmd.AddNp(DynamicVars["NP"].IntValue);
+            DynamicVars[nameof(NpDamagePower)].BaseValue, Owner.Creature, this);
+        await FgoNpCmd.AddNp(DynamicVars["Np"].IntValue);
     }
 }

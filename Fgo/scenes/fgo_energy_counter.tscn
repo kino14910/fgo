@@ -35,6 +35,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+pivot_offset = Vector2(64, 64)
 mouse_filter = 2
 
 [node name="Sprite2D" type="TextureRect" parent="Layers/RotationLayers"]
@@ -44,7 +45,9 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+pivot_offset = Vector2(64, 64)
 texture = ExtResource("1_iiep1")
+expand_mode = 1
 
 [node name="Sprite2D2" type="TextureRect" parent="Layers/RotationLayers"]
 layout_mode = 1
@@ -53,7 +56,9 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+pivot_offset = Vector2(64, 64)
 texture = ExtResource("2_qkpfl")
+expand_mode = 1
 
 [node name="Sprite2D3" type="TextureRect" parent="Layers/RotationLayers"]
 layout_mode = 1
@@ -62,7 +67,9 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+pivot_offset = Vector2(64, 64)
 texture = ExtResource("3_7itwa")
+expand_mode = 1
 
 [node name="Sprite2D4" type="TextureRect" parent="Layers/RotationLayers"]
 layout_mode = 1
@@ -71,7 +78,9 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+pivot_offset = Vector2(64, 64)
 texture = ExtResource("4_wo4nj")
+expand_mode = 1
 
 [node name="Layer1" type="TextureRect" parent="Layers"]
 visible = false
@@ -100,7 +109,7 @@ offset_bottom = 29.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.76862746, 0.49411765, 0.03529412, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.1882353)
+theme_override_colors/font_shadow_color = Color(0, 0, 0.01882353, 1)
 theme_override_colors/font_outline_color = Color(0.9647059, 0.8980392, 0.33333334, 1)
 theme_override_constants/shadow_offset_x = 3
 theme_override_constants/shadow_offset_y = 2

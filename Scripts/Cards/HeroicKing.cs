@@ -2,16 +2,24 @@ using Fgo.Scripts.Powers;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.ValueProps;
+using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
 
-public class HeroicKing : FgoCardModel
-{
-    public HeroicKing() : base(1, CardType.Attack,
+public class HeroicKing() : FgoCardModel(1, CardType.Attack,
         CardRarity.Uncommon, TargetType.Self)
+{
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        new DamageVar(5, ValueProp.Move),
+        ModCardVars.Int("Hits", 4)
+    ];
+
+    protected override void OnUpgrade()
     {
-        WithDamage(5);
-        WithVar("Hits", 4, 3);
+        DynamicVars["Hits"].UpgradeValueBy(3);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)

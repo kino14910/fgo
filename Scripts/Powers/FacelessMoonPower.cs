@@ -16,6 +16,7 @@ public class FacelessMoonPower : FgoPowerModel
     public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side,
         IEnumerable<Creature> participants)
     {
+        if (!participants.Contains(base.Owner)) return;
         if (side != CombatSide.Player) return;
         Flash();
         await CreatureCmd.GainBlock(Owner, Amount, ValueProp.Unpowered, null);

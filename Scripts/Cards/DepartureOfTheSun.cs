@@ -3,17 +3,20 @@ using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
 
-public class DepartureOfTheSun : FgoCardModel
-{
-    public DepartureOfTheSun() : base(1, CardType.Power,
+public class DepartureOfTheSun() : FgoCardModel(1, CardType.Power,
         CardRarity.Rare, TargetType.Self)
-    {
-        WithTags(FgoTags.Foreigner);
-        WithVar("StarThreshold", 10);
-    }
+{
+    protected override HashSet<CardTag> CanonicalTags => [FgoTags.Foreigner];
+
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        ModCardVars.Int("StarThreshold", 10)
+    ];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {

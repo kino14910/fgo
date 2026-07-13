@@ -1,18 +1,26 @@
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models.Powers;
+using MegaCrit.Sts2.Core.ValueProps;
+using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
 
-public class Executioner : FgoCardModel
-{
-    public Executioner() : base(1, CardType.Attack,
+public class Executioner() : FgoCardModel(1, CardType.Attack,
         CardRarity.Uncommon, TargetType.AnyEnemy)
+{
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        new DamageVar(7, ValueProp.Move),
+        new PowerVar<StrengthPower>(2),
+        ModCardVars.Int("Energy", 1)
+    ];
+
+    protected override void OnUpgrade()
     {
-        WithDamage(7, 4);
-        WithPower<StrengthPower>(2);
-        WithEnergy(1);
+        DynamicVars.Damage.UpgradeValueBy(4);
     }
 
     protected override async Task OnPlay(
@@ -25,7 +33,7 @@ public class Executioner : FgoCardModel
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
         await PowerCmd.Apply<StrengthPower>(choiceContext, play.Target!,
-            DynamicVars[typeof(StrengthPower).Name].BaseValue, Owner.Creature, this);
-        await PlayerCmd.GainEnergy(DynamicVars.Energy.IntValue, Owner);
+            DynamicVars[nameof(StrengthPower)].BaseValue, Owner.Creature, this);
+        await PlayerCmd.GainEnergy(DynamicVars["Energy"].IntValue, Owner);
     }
 }

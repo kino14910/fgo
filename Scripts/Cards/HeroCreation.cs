@@ -2,17 +2,25 @@ using Fgo.Scripts.Powers;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models.Powers;
+using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
 
-public class HeroCreation : FgoCardModel
-{
-    public HeroCreation() : base(0, CardType.Skill,
+public class HeroCreation() : FgoCardModel(0, CardType.Skill,
         CardRarity.Common, TargetType.Self)
+{
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        new PowerVar<StrengthPower>(2),
+        ModCardVars.Int("CriticalDamage", 50)
+    ];
+
+    protected override void OnUpgrade()
     {
-        WithPower<StrengthPower>(2, 2);
-        WithVar("CriticalDamage", 50, 50);
+        DynamicVars[nameof(StrengthPower)].UpgradeValueBy(2);
+        DynamicVars["CriticalDamage"].UpgradeValueBy(50);
     }
 
     protected override async Task OnPlay(
@@ -20,7 +28,7 @@ public class HeroCreation : FgoCardModel
         CardPlay play)
     {
         var self = Owner.Creature;
-        var strAmt = DynamicVars.Strength.BaseValue;
+        var strAmt = DynamicVars[nameof(StrengthPower)].BaseValue;
         var critAmt = DynamicVars["CriticalDamage"].BaseValue;
 
         await PowerCmd.Apply<StrengthPower>(choiceContext, self, strAmt, self, this);

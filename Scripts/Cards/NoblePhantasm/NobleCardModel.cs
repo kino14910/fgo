@@ -2,6 +2,7 @@ using Fgo.Scripts.Character;
 using Fgo.Scripts.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Models;
 using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Scaffolding.Content;
 
@@ -14,7 +15,7 @@ public abstract class NobleCardModel(
     CardRarity rarity,
     TargetType targetType,
     bool shouldShowInCardLibrary = true)
-    : FgoCardBase(energyCost, type, rarity, targetType, shouldShowInCardLibrary)
+    : ModCardTemplate(energyCost, type, rarity, targetType, shouldShowInCardLibrary)
 {
     /// <summary>
     ///     便捷构造器：不指定稀有度（默认 Rare）和 shouldShowInCardLibrary（默认 true）。
@@ -23,6 +24,13 @@ public abstract class NobleCardModel(
         : this(energyCost, type, CardRarity.Rare, targetType)
     {
     }
+
+    /// <summary>
+    ///     NobleCardPool 不在 ModelDb.AllCardPools 中（既非角色卡池，也不在硬编码的共享卡池列表里），
+    ///     因此基类 Pool 的默认查找会抛出 InvalidProgramException。
+    ///     这里直接返回 NobleCardPool，绕过 AllCardPools 搜索。
+    /// </summary>
+    public override CardPoolModel Pool => ModelDb.CardPool<NobleCardPool>();
 
     public override CardAssetProfile AssetProfile => new(
         $"res://Fgo/images/cards/noble/{GetType().Name}.png"

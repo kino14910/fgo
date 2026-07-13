@@ -7,7 +7,7 @@
   "FGO_TUTORIALS_NOBLE_PHANTASM.text_0": "When Noble Phantasm Gauge reaches 100%, click to select a Noble Phantasm card to add to your hand, and reset your Noble Phantasm Gauge. \n\n",
   "FGO_TUTORIALS_NOBLE_PHANTASM.text_1": "When Noble Phantasm Gauge exceeds 100%, upgrade the selectable Noble Phantasm card for each 100% exceeded.",
   "FGO_TUTORIALS_MYSTIC_CODE.label_0": "Mystic Code",
-  "FGO_TUTORIALS_MYSTIC_CODE.text_0": "Shining Accompaniment: Gain {M:diff()} Critical Stars. \n Gain {NP:diff()} % Noble Phantasm Gauge. Cooldown: 8 turns",
+  "FGO_TUTORIALS_MYSTIC_CODE.text_0": "Shining Accompaniment: Gain {M:diff()} Critical Stars. \n Gain {Np:diff()} % Noble Phantasm Gauge. Cooldown: 8 turns",
   "FGO_TUTORIALS_MYSTIC_CODE.text_1": "Pure Combination: Gain Invincible 2 times this turn. Cooldown: 8 turns",
   "FGO_TUTORIALS_MYSTIC_CODE.text_2": "Happy Regeneration: Gain 2 Energy. \n Draw 2 cards. Cooldown: 8 turns",
   "FGO_TUTORIALS_MYSTIC_CODE.text_3": "Prediction Calculation: Discard 1 card. \n Select 1 card from draw pile and add to your hand. \n Added in Act 2. Cooldown: 8 turns",

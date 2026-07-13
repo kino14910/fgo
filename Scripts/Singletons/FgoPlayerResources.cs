@@ -1,7 +1,10 @@
 // using Fgo.Scripts.Cards.NoblePhantasm;
 
+using Fgo.Scripts;
+using Fgo.Scripts.Cards;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Context;
+using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -28,8 +31,20 @@ public class FgoPlayerResources() : HookedSingletonModel(HookType.Combat)
     public int Np
     {
         get => _np;
-        private set => _np = Math.Clamp(value, 0, 300);
+        private set
+        {
+            var clamped = Math.Clamp(value, 0, 300);
+            if (_np == clamped) return;
+            _np = clamped;
+            NpChanged?.Invoke(_np);
+        }
     }
+
+    /// <summary>
+    ///     宝具值变化时触发，参数为变更后的当前 NP 值（已 clamp 到 0~300）。
+    ///     UI 层订阅此事件实现实时刷新，无需轮询。
+    /// </summary>
+    public event Action<int>? NpChanged;
 
     public int Stars
     {
@@ -97,7 +112,7 @@ public class FgoPlayerResources() : HookedSingletonModel(HookType.Combat)
 
     public void SpendNpForNoblePhantasm()
     {
-        _np = 0;
+        Np = 0;
         // FgoCombatUi.UpdateAll();
     }
 
@@ -130,7 +145,7 @@ public class FgoPlayerResources() : HookedSingletonModel(HookType.Combat)
 
     public void Reset()
     {
-        _np = 0;
+        Np = 0;
         _stars = 0;
         OverCharge = 0;
         _commandSpell = MaxCommandSpell;
@@ -142,6 +157,21 @@ public class FgoPlayerResources() : HookedSingletonModel(HookType.Combat)
     public void SetNpButtonPressed()
     {
         _npButtonPressed = true;
+    }
+
+    /// <summary>
+    ///     全局钩子：每张 FgoCardModel 卡牌打出后自动增加 NP（能量花费 × BaseNpPerCost）。
+    ///     子类无需在 OnPlay 中调用 base.OnPlay 即可生效。
+    /// </summary>
+    public override async Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+    {
+        if (cardPlay.Card is FgoCardModel)
+        {
+            await AddNp(
+                cardPlay.Card.EnergyCost.Canonical * FgoReflectedSettings.BaseNpPerCost,
+                choiceContext,
+                cardPlay.Card.Owner);
+        }
     }
 
     public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)

@@ -2,15 +2,23 @@ using Fgo.Scripts.Powers;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.ValueProps;
+using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards.NoblePhantasm;
 
-public class FetchFailnaught : NobleCardModel
-{
-    public FetchFailnaught() : base(1, CardType.Attack, TargetType.AnyEnemy)
+public class FetchFailnaught(): NobleCardModel(1, CardType.Attack, TargetType.AnyEnemy) {
+
+    protected override IEnumerable<DynamicVar> CanonicalVars => [
+        new DamageVar(30, ValueProp.Move),
+        ModCardVars.Int("CurseMultiplier", 1)
+    ];
+
+    protected override void OnUpgrade()
     {
-        WithDamage(30, 8);
-        WithVar("CurseMultiplier", 1, 1);
+        DynamicVars.Damage.UpgradeValueBy(8);
+        DynamicVars["CurseMultiplier"].UpgradeValueBy(1);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)

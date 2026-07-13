@@ -1,15 +1,19 @@
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.ValueProps;
 
 namespace Fgo.Scripts.Cards;
 
-public class SongOfThePoet : FgoCardModel
-{
-    public SongOfThePoet() : base(1, CardType.Attack,
+public class SongOfThePoet() : FgoCardModel(1, CardType.Attack,
         CardRarity.Common, TargetType.AnyEnemy)
+{
+    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(6, ValueProp.Move)];
+
+    protected override void OnUpgrade()
     {
-        WithDamage(6, 2);
+        DynamicVars.Damage.UpgradeValueBy(2);
     }
 
     protected override async Task OnPlay(

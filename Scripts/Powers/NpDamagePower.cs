@@ -1,3 +1,4 @@
+using Fgo.Scripts.Cards.NoblePhantasm;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
@@ -18,6 +19,7 @@ public class NpDamagePower : FgoPowerModel
     {
         if (Owner != dealer) return 1m;
         if (!props.IsPoweredAttack()) return 1m;
+        if (cardSource is not NobleCardModel) return 1m;
         return (100m + Amount) / 100m;
     }
 }

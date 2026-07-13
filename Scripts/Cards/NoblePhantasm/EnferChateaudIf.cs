@@ -6,11 +6,7 @@ using MegaCrit.Sts2.Core.Models.Relics;
 
 namespace Fgo.Scripts.Cards.NoblePhantasm;
 
-public class EnferChateaudIf : NobleCardModel
-{
-    public EnferChateaudIf() : base(1, CardType.Power, TargetType.Self)
-    {
-    }
+public class EnferChateaudIf(): NobleCardModel(1, CardType.Power, TargetType.Self) {
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {

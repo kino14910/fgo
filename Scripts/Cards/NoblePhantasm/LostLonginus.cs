@@ -2,16 +2,23 @@ using Fgo.Scripts.Powers;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models.Powers;
+using MegaCrit.Sts2.Core.ValueProps;
 
 namespace Fgo.Scripts.Cards.NoblePhantasm;
 
-public class LostLonginus : NobleCardModel
-{
-    public LostLonginus() : base(2, CardType.Attack, TargetType.Self)
+public class LostLonginus(): NobleCardModel(2, CardType.Attack, TargetType.Self) {
+
+    protected override IEnumerable<DynamicVar> CanonicalVars => [
+        new DamageVar(24, ValueProp.Move),
+        new PowerVar<RegenPower>(6)
+    ];
+
+    protected override void OnUpgrade()
     {
-        WithDamage(24, 6);
-        WithPower<RegenPower>(6, 3);
+        DynamicVars.Damage.UpgradeValueBy(6);
+        DynamicVars[nameof(RegenPower)].UpgradeValueBy(3);
     }
 
     protected override async Task OnPlay(
@@ -28,7 +35,7 @@ public class LostLonginus : NobleCardModel
             .Execute(choiceContext);
 
         // 获得再生
-        await PowerCmd.Apply<RegenPower>(choiceContext, Owner.Creature, DynamicVars[typeof(RegenPower).Name].BaseValue,
+        await PowerCmd.Apply<RegenPower>(choiceContext, Owner.Creature, DynamicVars[nameof(RegenPower)].BaseValue,
             Owner.Creature, this);
     }
 }

@@ -18,6 +18,7 @@ public class SquireOfProphecyPower : ModTemporaryAppliedPowerTemplate<SquireOfPr
     public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side,
         IEnumerable<Creature> participants)
     {
+        if (!participants.Contains(base.Owner)) return;
         if (side == CombatSide.Player) await PowerCmd.Decrement(this);
     }
 }

@@ -1,16 +1,23 @@
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models.Powers;
+using MegaCrit.Sts2.Core.ValueProps;
 
 namespace Fgo.Scripts.Cards;
 
-public class WildRule : FgoCardModel
+public class WildRule() : FgoCardModel(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
 {
-    public WildRule() : base(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        new DamageVar(10, ValueProp.Move),
+        new PowerVar<VulnerablePower>(1)
+    ];
+
+    protected override void OnUpgrade()
     {
-        WithDamage(10, 4);
-        WithPower<VulnerablePower>(1);
+        DynamicVars.Damage.UpgradeValueBy(4);
     }
 
     protected override bool ShouldGlowGoldInternal =>
@@ -32,7 +39,7 @@ public class WildRule : FgoCardModel
         {
             await PowerCmd.Apply<StrengthPower>(choiceContext, play.Target!, -1m, Owner.Creature, this);
             await PowerCmd.Apply<VulnerablePower>(choiceContext, play.Target!,
-                DynamicVars[typeof(VulnerablePower).Name].BaseValue, Owner.Creature, this);
+                DynamicVars[nameof(VulnerablePower)].BaseValue, Owner.Creature, this);
         }
     }
 }

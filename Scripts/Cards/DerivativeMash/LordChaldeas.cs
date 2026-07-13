@@ -3,18 +3,26 @@ using Fgo.Scripts.Powers;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.Nodes.CommonUi;
+using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards.DerivativeMash;
 
-public class LordChaldeas : NobleCardModel
-{
-    public LordChaldeas() : base(1, CardType.Power, TargetType.Self)
+public class LordChaldeas(): NobleCardModel(1, CardType.Power, TargetType.Self) {
+
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        ModCardVars.Int("DamageReduction", 30),
+        new PowerVar<PlatingPower>(5)
+    ];
+
+    protected override void OnUpgrade()
     {
-        WithVar("DamageReduction", 30, 20);
-        WithPower<PlatingPower>(5, 5);
+        DynamicVars["DamageReduction"].UpgradeValueBy(20);
+        DynamicVars[nameof(PlatingPower)].UpgradeValueBy(5);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
@@ -22,7 +30,7 @@ public class LordChaldeas : NobleCardModel
         await PowerCmd.Apply<ReducePercentDamagePower>(choiceContext, Owner.Creature,
             DynamicVars["DamageReduction"].BaseValue, Owner.Creature, this);
         await PowerCmd.Apply<PlatingPower>(choiceContext, Owner.Creature,
-            DynamicVars[typeof(PlatingPower).Name].BaseValue, Owner.Creature, this);
+            DynamicVars[nameof(PlatingPower)].BaseValue, Owner.Creature, this);
         await PowerCmd.Apply<ArtifactPower>(choiceContext, Owner.Creature, 1m, Owner.Creature, this);
         await PowerCmd.Apply<StrengthPower>(choiceContext, Owner.Creature, 3m, Owner.Creature, this);
         await PowerCmd.Apply<NpDamagePower>(choiceContext, Owner.Creature, 30m, Owner.Creature, this);
