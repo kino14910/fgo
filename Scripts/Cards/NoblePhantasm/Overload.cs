@@ -24,10 +24,10 @@ public class Overload(): NobleCardModel(2, CardType.Attack, TargetType.AnyEnemy)
     {
         var self = Owner.Creature;
         // 宝具值获取提升
-        await PowerCmd.Apply<NpRatePower>(choiceContext, Owner.Creature, 1m, Owner.Creature, this);
+        await PowerCmd.Apply<NpRatePower>(choiceContext, self, 1m, self, this);
 
         // 去除敌人的格挡值
-        if (play.Target!.Block > 0) await CreatureCmd.LoseBlock(play.Target!, play.Target.Block);
+        if (play.Target!.Block > 0) await CreatureCmd.LoseBlock(choiceContext, play.Target!, play.Target.Block, self);
 
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
             .FromCard(this, play)

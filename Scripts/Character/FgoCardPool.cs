@@ -23,10 +23,10 @@ public class FgoCardPool : TypeListCardPoolModel
     public override string? BigEnergyIconPath => "res://Fgo/images/ui/energy_fgo_big.png";
 
     // 卡池的主题色。
-    public override Color DeckEntryCardColor => new(0.5f, 0.5f, 1f);
+    public override Color DeckEntryCardColor => new(0.42f, 0.36f, 0.08f);
 
     // 能量表盘文字轮廓颜色
-    public override Color EnergyOutlineColor => new(0.5f, 0.5f, 1f);
+    public override Color EnergyOutlineColor => new(0.42f, 0.36f, 0.08f);
     public override Material? PoolFrameMaterial => _poolFrameMaterial;
 
     // 卡池是否是无色。例如事件、状态等卡池就是无色的。

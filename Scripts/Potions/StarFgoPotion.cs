@@ -6,7 +6,7 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 
 namespace Fgo.Scripts.Potions;
 
-public class StarPotion : FgoPotionModel
+public class StarFgoPotion : FgoPotionModel
 {
     public override PotionRarity Rarity => PotionRarity.Common;
     public override PotionUsage Usage => PotionUsage.CombatOnly;

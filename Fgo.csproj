@@ -51,7 +51,7 @@
         <Content Include="Scripts\Potions\ElixirofRejuvenation.cs.uid" />
         <Content Include="Scripts\Potions\ExtremelySpicyMapoTofu.cs.uid" />
         <Content Include="Scripts\Potions\FgoPotion.cs.uid" />
-        <Content Include="Scripts\Potions\StarPotion.cs.uid" />
+        <Content Include="Scripts\Potions\StarFgoPotion.cs.uid" />
         <Content Include="Scripts\Relics\BB.cs.uid" />
         <Content Include="Scripts\Relics\BowInsignia.cs.uid" />
         <Content Include="Scripts\Relics\CosmicMedallion.cs.uid" />

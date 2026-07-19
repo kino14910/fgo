@@ -9,6 +9,6 @@
   "FGO_POTION_EXTREMELY_SPICY_MAPO_TOFU.description": "获得 40%*宝具值*和 40% 宝具威力 。",
   "FGO_POTION_CURSE_POTION.title": "诅呪药水",
   "FGO_POTION_CURSE_POTION.description": "给予 5 层*诅呪*。",
-  "FGO_POTION_STAR_POTION.title": "星之药水",
-  "FGO_POTION_STAR_POTION.description": "获得 10 颗 暴击星 。"
+  "FGO_POTION_STAR_FGO_POTION.title": "星之药水",
+  "FGO_POTION_STAR_FGO_POTION.description": "获得 10 颗 暴击星 。"
 }

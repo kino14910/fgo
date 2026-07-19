@@ -1,5 +1,6 @@
 using System.Collections.Concurrent;
 using Fgo.Scripts.Cards.NoblePhantasm;
+using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Players;
@@ -16,9 +17,9 @@ public static class FgoCardActions
     // 按 Player 存储强制 NP 卡，避免多人游戏下的竞态
     private static readonly ConcurrentDictionary<Player, CardModel> ForcedNpCards = new();
 
-    public static CardModel CreateGeneratedCopy(CardModel card, bool free = false, bool exhaust = false)
+    public static CardModel CreateGeneratedCopy(CardModel card, Player owner, bool free = false, bool exhaust = false)
     {
-        var copy = card.CreateDupe();
+        var copy = card.CreateDupe(owner);
         if (free) copy.SetToFreeThisCombat();
         if (exhaust) copy.AddKeyword(CardKeyword.Exhaust);
         return copy;
@@ -42,7 +43,7 @@ public static class FgoCardActions
     public static async Task AddCopiesToHand(IEnumerable<CardModel> cards, bool free = false, bool exhaust = false)
     {
         foreach (var card in cards)
-            await AddToPile(CreateGeneratedCopy(card, free, exhaust), PileType.Hand);
+            await AddToPile(CreateGeneratedCopy(card, card.Owner, exhaust), PileType.Hand);
     }
 
     public static async Task AddRandomAttacksToHand(CardModel source, int amount, bool free = true,
