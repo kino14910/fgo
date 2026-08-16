@@ -1,3 +1,15 @@
 # Godot 4+ specific ignores
 .godot/
-/android/
+export.cfg
+export_presets.cfg
+
+# C# build outputs
+bin/
+
+# IDE specific files
+.idea/
+
+# Build artifacts
+Fgo.sln.DotSettings.user
+
+qodana.yaml
