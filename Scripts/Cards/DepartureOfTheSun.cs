@@ -1,25 +1,36 @@
 using Fgo.Scripts.Powers;
+using Fgo.Scripts.Singletons;
 using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
 
-public class DepartureOfTheSun : FgoCardModel
+public class DepartureOfTheSun() : FgoCardModel(0, CardType.Skill,
+    CardRarity.Rare, TargetType.Self)
 {
-    public DepartureOfTheSun() : base(1, CardType.Power,
-        CardRarity.Rare, TargetType.Self)
-    {
-        WithTags(FgoTags.Foreigner);
-        WithVar("StarThreshold", 10);
-    }
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
+    [
+        FgoHoverTipHelper.CreateStarHoverTip()
+    ];
+
+    protected override HashSet<CardTag> CanonicalTags => [FgoTags.Foreigner];
+
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
+
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        ModCardVars.ComputedPowerAmountGiven<CriticalDamagePower>("DepartureOfTheSunCriticalDamage", 0,
+            (_, _) => this.FgoRes().Stars / 10 * 30)
+    ];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await PowerCmd.Apply<DepartureOfTheSunPower>(choiceContext, Owner.Creature, 1m, Owner.Creature, this);
-        var power = Owner.Creature.GetPower<DepartureOfTheSunPower>();
-        if (power != null)
-            power.StarThreshold = DynamicVars["StarThreshold"].IntValue;
+        await PowerCmd.Apply<CriticalDamagePower>(choiceContext, Owner.Creature,
+            DynamicVars["DepartureOfTheSunCriticalDamage"].BaseValue, Owner.Creature, this);
     }
 }

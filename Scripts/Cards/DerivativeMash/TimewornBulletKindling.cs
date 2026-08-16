@@ -1,36 +1,57 @@
 using Fgo.Scripts.Commands;
 using Fgo.Scripts.Powers;
 using Fgo.Scripts.Singletons;
+using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Nodes.CommonUi;
 using MegaCrit.Sts2.Core.ValueProps;
+using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards.DerivativeMash;
 
-public class TimewornBulletKindling : FgoColorlessCard
+/// <summary>
+///     测定时间的紫弹之薪: LordChaldeas(构筑希望的人理之盾)发动后获得
+/// </summary>
+public class TimewornBulletKindling() : FgoColorlessCardModel(1, CardType.Attack,
+    CardRarity.Token, TargetType.Self)
 {
-    public TimewornBulletKindling() : base(1, CardType.Attack,
-        CardRarity.Token, TargetType.Self)
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
+    [
+        HoverTipFactory.Static(StaticHoverTip.Transform),
+        HoverTipFactory.FromCard<ObscurantWallofChalk>(),
+        HoverTipFactory.FromPower<NpDamagePower>(),
+        FgoHoverTipHelper.CreateNpHoverTip(),
+        FgoHoverTipHelper.CreateStarHoverTip()
+    ];
+
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        ModCardVars.Power<NpDamagePower>(30),
+        ModCardVars.Int("Np", 30)
+    ];
+
+    protected override void OnUpgrade()
     {
-        WithPower<NpDamagePower>(30);
-        WithNp(30, 20);
+        DynamicVars["Np"].UpgradeValueBy(20);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
         await PowerCmd.Apply<NpDamagePower>(choiceContext, Owner.Creature,
-            DynamicVars[typeof(NpDamagePower).Name].BaseValue, Owner.Creature, this);
+            DynamicVars[nameof(NpDamagePower)].BaseValue, Owner.Creature, this);
         var stars = ModelDb.Singleton<FgoPlayerResources>().Stars;
         if (stars > 0)
         {
-            await FgoStarCmd.ConsumeStars(stars);
-            await FgoNpCmd.AddNp(stars * 4);
+            await FgoResCmd.ResetStars();
+            await FgoResCmd.ModifyNp(stars * 4, play.Player);
         }
 
-        await FgoNpCmd.AddNp(DynamicVars["NP"].IntValue);
+        await FgoResCmd.ModifyNp(this);
         await CreatureCmd.Damage(choiceContext, Owner.Creature, 4m,
             ValueProp.Unblockable | ValueProp.Unpowered, Owner.Creature);
         await CardCmd.Transform(this, ModelDb.Card<ObscurantWallofChalk>().ToMutable(), CardPreviewStyle.None);

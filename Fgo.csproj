@@ -33,37 +33,16 @@
             <Private>false</Private>
         </Reference>
 
-        <PackageReference Include="STS2.RitsuLib" Version="*"/>
-        <PackageReference Include="Nothing.STS2RitsuLib.ModAnalyzers" Version="0.8.0" PrivateAssets="all"/>
+        <PackageReference Include="JetBrains.Annotations" Version="2026.2.0"/>
+
+        <PackageReference Include="STS2.RitsuLib" Version="0.5.12" />
     </ItemGroup>
 
     <ItemGroup>
-        <Content Include="Fgo\**" />
+        <Content Include="Fgo\**"/>
         <Compile Remove="materials/**"/>
         <Compile Remove="shaders/**"/>
         <Compile Remove="images/**"/>
-        <Content Include="Scripts\Events\BeyondThe.cs.uid" />
-        <Content Include="Scripts\Events\DevilSlot.cs.uid" />
-        <Content Include="Scripts\Events\FGOLibrary.cs.uid" />
-        <Content Include="Scripts\Events\ManofChaldea.cs.uid" />
-        <Content Include="Scripts\Events\ProofAndRebuttal.cs.uid" />
-        <Content Include="Scripts\Potions\CursePotion.cs.uid" />
-        <Content Include="Scripts\Potions\ElixirofRejuvenation.cs.uid" />
-        <Content Include="Scripts\Potions\ExtremelySpicyMapoTofu.cs.uid" />
-        <Content Include="Scripts\Potions\FgoPotion.cs.uid" />
-        <Content Include="Scripts\Potions\StarPotion.cs.uid" />
-        <Content Include="Scripts\Relics\BB.cs.uid" />
-        <Content Include="Scripts\Relics\BowInsignia.cs.uid" />
-        <Content Include="Scripts\Relics\CosmicMedallion.cs.uid" />
-        <Content Include="Scripts\Relics\DoubleMuscleBurger.cs.uid" />
-        <Content Include="Scripts\Relics\FanNight.cs.uid" />
-        <Content Include="Scripts\Relics\FgoRelic.cs.uid" />
-        <Content Include="Scripts\Relics\LockChocolate.cs.uid" />
-        <Content Include="Scripts\Relics\MidsummerNightDream.cs.uid" />
-        <Content Include="Scripts\Relics\Salem.cs.uid" />
-        <Content Include="Scripts\Relics\StargazerTeapot.cs.uid" />
-        <Content Include="Scripts\Relics\SuitcaseFgo.cs.uid" />
-        <Content Include="Scripts\UI\FgoCombatUi.cs.uid" />
         <EmbeddedResource Remove="Fgo/**"/>
         <EmbeddedResource Remove="materials/**"/>
         <EmbeddedResource Remove="shaders/**"/>
@@ -72,11 +51,11 @@
 
     <ItemGroup>
         <None Include=".gitignore"/>
-        <None Include="Fgo.json" />
+        <None Include="Fgo.json"/>
         <None Include="project.godot"/>
         <None Include="Fgo/**"/>
     </ItemGroup>
-    
+
     <Target Name="Copy Mod" AfterTargets="PostBuildEvent">
         <Message Text="Copying mod to Slay the Spire 2 mods folder..." Importance="high"/>
         <MakeDir Directories="$(Sts2Dir)/mods/"/>

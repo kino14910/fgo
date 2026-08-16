@@ -1,16 +1,29 @@
+using Fgo.Scripts.Powers;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
-using MegaCrit.Sts2.Core.Models.Powers;
+using MegaCrit.Sts2.Core.HoverTips;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
 
-public class CharismaOfConflict : FgoCardModel
+public class CharismaOfConflict() : FgoCardModel(1, CardType.Attack,
+    CardRarity.Common, TargetType.AllEnemies)
 {
-    public CharismaOfConflict() : base(2, CardType.Attack,
-        CardRarity.Common, TargetType.Self)
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
+    [
+        HoverTipFactory.FromPower<GutsPower>()
+    ];
+
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        ModCardVars.Damage(7)
+    ];
+
+    protected override void OnUpgrade()
     {
-        WithDamage(8, 3);
+        DynamicVars.Damage.UpgradeValueBy(3);
     }
 
     protected override async Task OnPlay(
@@ -23,7 +36,7 @@ public class CharismaOfConflict : FgoCardModel
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
 
-        if (Owner.Creature.HasPower<RegenPower>())
+        if (Owner.Creature.HasPower<GutsPower>())
             await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
                 .FromCard(this, play)
                 .TargetingAllOpponents(CombatState!)

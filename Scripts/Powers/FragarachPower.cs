@@ -34,7 +34,7 @@ public class FragarachPower : FgoPowerModel
         if (dealer == null || dealer == Owner) return;
         if (result.TotalDamage <= 0) return;
         Flash();
-        await FgoStarCmd.AddStars(4);
+        await FgoResCmd.ModifyStars(4, Owner.Player);
         await CreatureCmd.Damage(choiceContext, dealer, Amount,
             ValueProp.Unpowered | ValueProp.Move, Owner);
     }

@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bcs2bjf0v3tx4"
-path="res://.godot/imported/PursuerofLove.png-8cb6c59f95285fc6920b5f85f678fed8.ctex"
+path="res://.godot/imported/PursuerOfLove.png-3d01d5d3d0ae566104ff3fc44e440073.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Fgo/images/cards/big/PursuerofLove.png"
-dest_files=["res://.godot/imported/PursuerofLove.png-8cb6c59f95285fc6920b5f85f678fed8.ctex"]
+source_file="res://Fgo/images/cards/big/PursuerOfLove.png"
+dest_files=["res://.godot/imported/PursuerOfLove.png-3d01d5d3d0ae566104ff3fc44e440073.ctex"]
 
 [params]
 

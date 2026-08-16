@@ -20,7 +20,7 @@ public class NpPerTurnPower : FgoPowerModel
     public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
     {
         Flash();
-        await FgoNpCmd.AddNp(Amount);
+        await FgoResCmd.ModifyNp(Amount, player);
         await PowerCmd.Decrement(this);
     }
 }

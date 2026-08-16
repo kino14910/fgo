@@ -1,4 +1,5 @@
 using Fgo.Scripts.Cards;
+using Fgo.Scripts.Singletons;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
@@ -15,18 +16,18 @@ public class HeroicKingPower : FgoPowerModel
     public override PowerStackType StackType => PowerStackType.Counter;
 
     /// <summary>
-    ///     暴击联动：每次暴击触发时，为玩家赋予 1 层王威。
+    ///     暴击联动: 每次暴击触发时，为玩家赋予 1 层王威。
     /// </summary>
     public override async Task AfterDamageGiven(
         PlayerChoiceContext choiceContext, Creature? dealer, DamageResult result,
         ValueProp props, Creature target, CardModel? cardSource)
     {
-        if (Owner != dealer) return;
-        if (!CriticalDamagePower.CritTriggered) return;
+        if (Owner != target || Owner != dealer) return;
+        if (!this.FgoRes().CritTriggered) return;
         if (Amount <= 0) return;
 
         Flash();
-        await PowerCmd.Apply<HeroicKingPower>(choiceContext, dealer, 1, dealer, cardSource);
+        await PowerCmd.Apply<HeroicKingPower>(choiceContext, target, 1, dealer, cardSource);
     }
 
     public override async Task AfterDamageReceived(
@@ -34,16 +35,15 @@ public class HeroicKingPower : FgoPowerModel
         DamageResult result, ValueProp props, Creature? dealer, CardModel? cardSource)
     {
         if (target != Owner || result.TotalDamage <= 0) return;
+        if (Owner != target || Owner != dealer) return;
 
         var player = Owner.Player;
-        if (player?.PlayerCombatState?.DiscardPile?.Cards == null) return;
 
-        var card = player.PlayerCombatState.DiscardPile.Cards
-            .FirstOrDefault(card => card is HeroicKing);
+        var card = player?.PlayerCombatState?.DiscardPile.Cards.FirstOrDefault(card => card is HeroicKing);
         if (card == null) return;
 
         Flash();
         await CardPileCmd.Add(card, PileType.Hand, CardPilePosition.Top, this, true);
-        await PowerCmd.Decrement(this);
+        await PowerCmd.Apply<HeroicKingPower>(choiceContext, target, 1, dealer, cardSource);
     }
 }

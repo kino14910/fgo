@@ -1,24 +1,39 @@
+using Fgo.Scripts.Powers;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models.Powers;
+using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
 
-public class PursuerofLove : FgoCardModel
+public class PursuerOfLove() : FgoCardModel(1, CardType.Skill,
+    CardRarity.Common, TargetType.AnyEnemy)
 {
-    public PursuerofLove() : base(1, CardType.Skill,
-        CardRarity.Common, TargetType.AnyEnemy)
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
+    [
+        HoverTipFactory.FromPower<StrengthPower>(),
+        HoverTipFactory.FromPower<PursuePower>()
+    ];
+
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        ModCardVars.Power<StrengthPower>(1),
+        ModCardVars.Int("Pursue", 2)
+    ];
+
+    protected override void OnUpgrade()
     {
-        WithPower<StrengthPower>(1);
-        WithVar("Pursue", 2, 1);
+        DynamicVars["Pursue"].UpgradeValueBy(1);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
         await PowerCmd.Apply<StrengthPower>(choiceContext, play.Target!,
-            DynamicVars[typeof(StrengthPower).Name].BaseValue, Owner.Creature, this);
-        await PowerCmd.Apply<WeakPower>(choiceContext, play.Target!, DynamicVars["Pursue"].BaseValue, Owner.Creature,
+            DynamicVars[nameof(StrengthPower)].BaseValue, Owner.Creature, this);
+        await PowerCmd.Apply<PursuePower>(choiceContext, play.Target!, DynamicVars["Pursue"].BaseValue, Owner.Creature,
             this);
     }
 }

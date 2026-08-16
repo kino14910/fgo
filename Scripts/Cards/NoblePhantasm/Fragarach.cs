@@ -1,15 +1,29 @@
 using Fgo.Scripts.Powers;
+using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards.NoblePhantasm;
 
-public class Fragarach : NobleCardModel
+public class Fragarach() : NobleCardModel(1, CardType.Power, TargetType.Self)
 {
-    public Fragarach() : base(1, CardType.Power, TargetType.Self)
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
+    [
+        FgoHoverTipHelper.CreateStarHoverTip()
+    ];
+
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        ModCardVars.Damage(15)
+    ];
+
+    protected override void OnUpgrade()
     {
-        WithDamage(15, 5);
+        DynamicVars.Damage.UpgradeValueBy(5);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)

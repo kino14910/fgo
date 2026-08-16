@@ -1,26 +1,40 @@
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
 
-public class TrueClash : FgoCardModel
+public class TrueClash() : FgoCardModel(1, CardType.Attack,
+    CardRarity.Common, TargetType.AnyEnemy)
 {
-    protected override bool ShouldGlowGoldInternal =>
-        CombatState!.HittableEnemies.Any(enemy =>
-            enemy.Monster?.IntendsToAttack == true);
+    public override bool GainsBlock => true;
 
-    public TrueClash() : base(1, CardType.Attack,
-        CardRarity.Common, TargetType.AnyEnemy)
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        ModCardVars.Damage(8),
+        ModCardVars.Block(6)
+    ];
+
+    protected override bool ShouldGlowGoldInternal =>
+        CombatState != null &&
+        CombatState.HittableEnemies.Any(e =>
+            e.Monster?.IntendsToAttack ?? false);
+
+    protected override void OnUpgrade()
     {
-        WithDamage(8, 3);
-        WithBlock(6, 3);
+        DynamicVars.Damage.UpgradeValueBy(3);
+        DynamicVars.Block.UpgradeValueBy(3);
     }
 
     protected override async Task OnPlay(
         PlayerChoiceContext choiceContext,
         CardPlay play)
     {
+        if (play.Target is not null && !play.Target.Monster!.IntendsToAttack)
+            return;
+
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
             .FromCard(this, play)
             .Targeting(play.Target!)

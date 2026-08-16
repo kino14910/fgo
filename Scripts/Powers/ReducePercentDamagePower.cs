@@ -16,8 +16,8 @@ public class ReducePercentDamagePower : FgoPowerModel
     public override PowerStackType StackType => PowerStackType.Counter;
 
     public override PowerAssetProfile AssetProfile => new(
-        "res://Fgo/images/powers/DefPower.png",
-        "res://Fgo/images/powers/big/DefPower.png"
+        "res://Fgo/images/powers/DefUpPower.png",
+        "res://Fgo/images/powers/big/DefUpPower.png"
     );
 
     public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)

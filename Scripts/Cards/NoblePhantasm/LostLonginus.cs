@@ -2,16 +2,27 @@ using Fgo.Scripts.Powers;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
-using MegaCrit.Sts2.Core.Models.Powers;
+using MegaCrit.Sts2.Core.HoverTips;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards.NoblePhantasm;
 
-public class LostLonginus : NobleCardModel
+public class LostLonginus() : NobleCardModel(2, CardType.Attack, TargetType.Self)
 {
-    public LostLonginus() : base(2, CardType.Attack, TargetType.Self)
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
+    [
+        HoverTipFactory.FromPower<IgnoresInvincibilityPower>()
+    ];
+
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        ModCardVars.Damage(24)
+    ];
+
+    protected override void OnUpgrade()
     {
-        WithDamage(24, 6);
-        WithPower<RegenPower>(6, 3);
+        DynamicVars.Damage.UpgradeValueBy(6);
     }
 
     protected override async Task OnPlay(
@@ -26,9 +37,5 @@ public class LostLonginus : NobleCardModel
             .TargetingAllOpponents(CombatState!)
             .WithHitFx("vfx/vfx_attack_blunt")
             .Execute(choiceContext);
-
-        // 获得再生
-        await PowerCmd.Apply<RegenPower>(choiceContext, Owner.Creature, DynamicVars[typeof(RegenPower).Name].BaseValue,
-            Owner.Creature, this);
     }
 }

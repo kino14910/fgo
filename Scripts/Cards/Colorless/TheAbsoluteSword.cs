@@ -1,29 +1,45 @@
-using Fgo.Scripts.Commands;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards.Colorless;
 
-public class TheAbsoluteSword : FgoColorlessCard
+public class TheAbsoluteSword() : FgoColorlessCardModel(3, CardType.Attack,
+    CardRarity.Token, TargetType.AllEnemies)
 {
-    public TheAbsoluteSword() : base(3, CardType.Attack,
-        CardRarity.Token, TargetType.Self)
+    private const int DamageThreshold = 80;
+
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        ModCardVars.Damage(32)
+    ];
+
+    protected override void OnUpgrade()
     {
-        WithKeywords(CardKeyword.Exhaust);
-        WithDamage(10, 3);
+        DynamicVars.Damage.UpgradeValueBy(8);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        for (var i = 0; i < 2; i++)
+        // 通过 AttackCommand.Results 直接读取本次伤害，无需施加追踪能力
+        var attack = DamageCmd.Attack(DynamicVars.Damage.BaseValue)
+            .FromCard(this, play)
+            .TargetingAllOpponents(CombatState!)
+            .WithHitFx("vfx/vfx_attack_slash");
+        await attack.Execute(choiceContext);
+
+        var totalDamage = attack.Results
+            .SelectMany(hit => hit)
+            .Sum(r => r.TotalDamage);
+
+        // 总伤害 >= 阈值，再次造成等量伤害（翻倍）
+        if (totalDamage >= DamageThreshold)
             await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
                 .FromCard(this, play)
                 .TargetingAllOpponents(CombatState!)
                 .WithHitFx("vfx/vfx_attack_slash")
                 .Execute(choiceContext);
-        await CardPileCmd.Draw(choiceContext, 1m, Owner);
-        await PlayerCmd.GainEnergy(3m, Owner);
-        await FgoNpCmd.AddNp(30);
     }
 }

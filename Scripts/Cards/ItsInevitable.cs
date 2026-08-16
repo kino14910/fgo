@@ -2,16 +2,30 @@ using Fgo.Scripts.Powers;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
 
-public class ItsInevitable : FgoCardModel
+public class ItsInevitable() : FgoCardModel(1, CardType.Attack,
+    CardRarity.Common, TargetType.AllEnemies)
 {
-    public ItsInevitable() : base(1, CardType.Attack,
-        CardRarity.Common, TargetType.AllEnemies)
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
+    [
+        HoverTipFactory.FromPower<BurningPower>()
+    ];
+
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        ModCardVars.Damage(4),
+        ModCardVars.Power<BurningPower>(4)
+    ];
+
+    protected override void OnUpgrade()
     {
-        WithDamage(4, 1);
-        WithVar("Boost", 4, 1);
+        DynamicVars.Damage.UpgradeValueBy(1);
+        DynamicVars["BurningPower"].UpgradeValueBy(1);
     }
 
     protected override async Task OnPlay(
@@ -21,12 +35,10 @@ public class ItsInevitable : FgoCardModel
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
             .FromCard(this, play)
             .TargetingAllOpponents(CombatState!)
-            .WithHitFx("vfx/vfx_attack_fire")
+            .WithHitFx("vfx/vfx_fire_burst")
+            .SpawningHitVfxOnEachCreature()
             .Execute(choiceContext);
-        await PowerCmd.Apply<ItsInevitablePower>(choiceContext, Owner.Creature, DynamicVars.Damage.IntValue,
+        await PowerCmd.Apply<BurningPower>(choiceContext, Owner.Creature, DynamicVars["BurningPower"].BaseValue,
             Owner.Creature, this);
-        var power = Owner.Creature.GetPower<ItsInevitablePower>();
-        if (power != null)
-            power.Boost = DynamicVars["Boost"].IntValue;
     }
 }

@@ -1,6 +1,4 @@
-using Fgo.Scripts.Cards.DerivativeMash;
 using Fgo.Scripts.Cards.NoblePhantasm;
-using Fgo.Scripts.Character;
 using Fgo.Scripts.Powers;
 using Fgo.Scripts.Singletons;
 using Fgo.Scripts.Utils;
@@ -20,71 +18,58 @@ public static class FgoNoblePhantasmCmd
     public static async Task<bool> TryChooseNoblePhantasm(PlayerChoiceContext choiceContext, Player player)
     {
         var resources = ModelDb.Singleton<FgoPlayerResources>();
-        if (!resources.CanUseNp) return false;
-        if (player.Creature.HasPower<SealNpPower>()) return false;
+        if (!resources.CanUseNp)
+            return false;
+
+        if (player.Creature.HasPower<SealNpPower>())
+            return false;
 
         var overCharge = resources.OverCharge;
-        var forcedCard = FgoCardActions.TakeForcedNpCard(player);
-        if (forcedCard != null)
-        {
-            await AddNobleCardToHand(forcedCard, player, overCharge);
-            resources.SpendNpForNoblePhantasm();
-            return true;
-        }
 
-        var cards = ModelDb.CardPool<NobleCardPool>()
-            .GetUnlockedCards(player.UnlockState, player.RunState.CardMultiplayerConstraint)
-            .OfType<NobleCardModel>()
-            .Where(card => IsMashNpCardAvailable(card, player))
-            .Select(card => PrepareNobleCard(card, player, overCharge))
-            .ToList();
+        // 候选来自 NobleDeck pile（由 SaintQuartz 遗物管理初始卡 + 右键加入的卡）。
+        var noblePile = CardPile.Get(FgoEnums.NobleDeck, player);
+        if (noblePile == null || noblePile.IsEmpty) return false;
+
+        // pile 里的卡已经是注册到战斗的 mutable 实例，可直接用作候选。
+        var cards = noblePile.Cards.OfType<NobleCardModel>().ToList();
+
+        // NpCardPower: 角色拥有此 power 时，将对应的特定宝具卡加入候选列表。
+        // NobleCard 存储的是 canonical singleton，可直接用作候选。
+        // 选择宝具牌后 NpCardPower 会被移除，之后无法再选择这些卡。
+        var npCardPower = player.Creature.GetPower<NpCardPower>();
+        if (npCardPower?.NobleCard is { } nobleCard
+            && cards.All(c => c.Id != nobleCard.Id))
+            cards.Add(nobleCard);
 
         if (cards.Count == 0) return false;
 
-        var prefs = new CardSelectorPrefs(new LocString("gameplay_ui", "FGO-NP_TEXT.text_2"), 1)
+        var prefs = new CardSelectorPrefs(new LocString("gameplay_ui", "FGO_GAMEPLAY_UI_NP_TEXT.text_2"), 1)
         {
             RequireManualConfirmation = true
         };
         var selected = (await CardSelectCmd.FromSimpleGrid(choiceContext, cards, player, prefs)).FirstOrDefault();
         if (selected == null) return false;
 
-        await CardPileCmd.AddGeneratedCardToCombat(selected, PileType.Hand, player, CardPilePosition.Top);
-        resources.SpendNpForNoblePhantasm();
+        // 选择宝具牌后，移除 NpCardPower（无论选了哪张牌）。
+        // 移除后，下次选择宝具牌时不再有 NpCardPower 添加的特定卡。
+        if (npCardPower != null)
+            await PowerCmd.Remove(npCardPower);
+
+        // NobleDeck 是 RunPersistent 牌堆，卡需跨战斗保留，因此不打出去原卡。
+        // 改为从 canonical singleton 创建副本，按 OverCharge 升级后加入手牌。
+        // 玩家手动打出副本；NobleCardModel.OnPlay 末尾会调用 CardPileCmd.RemoveFromCombat，
+        // 让副本从本次战斗消失（不进弃牌堆/消耗堆），原卡仍留在 NobleDeck。
+        // 通过 ModelId 获取 canonical singleton，避免反射。
+        var canonical = ModelDb.GetByIdOrNull<NobleCardModel>(selected.Id);
+        if (canonical == null)
+            return false;
+
+        var playCopy = (NobleCardModel)player.Creature.CombatState!.CreateCard(canonical, player);
+        for (var i = 0; i < overCharge && playCopy.IsUpgradable; i++)
+            CardCmd.Upgrade(playCopy, CardPreviewStyle.None);
+
+        await FgoCardActions.AddToPile(playCopy, PileType.Hand);
+        await resources.SpendNpForNoblePhantasm();
         return true;
-    }
-
-    private static async Task AddNobleCardToHand(NobleCardModel card, Player player, int overCharge)
-    {
-        var copy = PrepareNobleCard(card, player, overCharge);
-        await CardPileCmd.AddGeneratedCardToCombat(copy, PileType.Hand, player, CardPilePosition.Top);
-    }
-
-    private static NobleCardModel PrepareNobleCard(NobleCardModel source, Player player, int overCharge)
-    {
-        var card = (NobleCardModel)player.Creature.CombatState.CreateCard(source, player);
-        for (var i = 0; i < overCharge && card.IsUpgradable; i++)
-            CardCmd.Upgrade(card, CardPreviewStyle.None);
-        return card;
-    }
-
-    /// <summary>
-    ///     根据马修卡牌强化等级过滤宝具卡。
-    ///     Level 0: Camelot
-    ///     Level 1: LordCamelot + ObscurantWallOfChalk
-    ///     Level 2: LordChaldeas + ObscurantWallOafChalk
-    /// </summary>
-    private static bool IsMashNpCardAvailable(NobleCardModel card, Player _)
-    {
-        var resources = ModelDb.Singleton<FgoPlayerResources>();
-        var level = resources?.MashUpgradeLevel ?? 0;
-
-        return card switch
-        {
-            Camelot => level == 0,
-            LordCamelot => level == 1,
-            LordChaldeas => level == 2,
-            ObscurantWallofChalk => level >= 1,
-            _ => true
-        };
     }
 }

@@ -1,0 +1,141 @@
+[gd_scene load_steps=5 format=3 uid="uid://crbgne60l2ele"]
+
+[ext_resource type="Texture2D" uid="uid://57ugexyx88sd" path="res://Fgo/images/ui/health_bar_bg.png" id="1_bg"]
+[ext_resource type="Texture2D" uid="uid://belfwubumqyu" path="res://Fgo/images/ui/health_bar_fill.png" id="2_fill"]
+[ext_resource type="Texture2D" uid="uid://dplbtqogdvnyl" path="res://Fgo/images/ui/health_bar.png" id="2_rq2s1"]
+[ext_resource type="Texture2D" uid="uid://cvt6chkcqwy1q" path="res://Fgo/images/ui/np_max.png" id="3_npmax"]
+
+[node name="FgoNpBar" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -130.0
+offset_right = 120.0
+offset_bottom = 16.0
+mouse_filter = 2
+
+[node name="Background" type="NinePatchRect" parent="."]
+modulate = Color(0.12, 0.16, 0.32, 0.82)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_right = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_bg")
+patch_margin_left = 9
+patch_margin_right = 9
+
+[node name="NpForegroundContainer" type="Control" parent="."]
+clip_children = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = 3.0
+offset_right = -5.0
+offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Mask" type="NinePatchRect" parent="NpForegroundContainer"]
+clip_children = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_rq2s1")
+patch_margin_left = 6
+patch_margin_right = 6
+
+[node name="Bar0" type="NinePatchRect" parent="NpForegroundContainer/Mask"]
+unique_name_in_owner = true
+self_modulate = Color(0.8, 0.5019608, 0.10980392, 1)
+clip_children = 2
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -4.0
+offset_bottom = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_fill")
+patch_margin_left = 6
+patch_margin_right = 6
+
+[node name="Bar1" type="NinePatchRect" parent="NpForegroundContainer/Mask"]
+unique_name_in_owner = true
+self_modulate = Color(0.93333334, 0.6862745, 0.039215688, 1)
+clip_children = 2
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -4.0
+offset_bottom = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_fill")
+patch_margin_left = 6
+patch_margin_right = 6
+
+[node name="Bar2" type="NinePatchRect" parent="NpForegroundContainer/Mask"]
+unique_name_in_owner = true
+self_modulate = Color(0.9490196, 0.9254902, 0.40392157, 1)
+clip_children = 2
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -4.0
+offset_bottom = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_fill")
+patch_margin_left = 6
+patch_margin_right = 6
+
+[node name="NpLabel" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -7.0
+offset_bottom = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 0.96, 0.88, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.25)
+theme_override_colors/font_outline_color = Color(0.8, 0.5019608, 0.10980392, 1)
+theme_override_constants/shadow_offset_x = 6
+theme_override_constants/shadow_offset_y = 4
+theme_override_constants/outline_size = 16
+theme_override_constants/shadow_outline_size = 0
+theme_override_font_sizes/font_size = 24
+text = "0/300"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="NpButton" type="TextureButton" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -56.0
+offset_top = -20.0
+offset_right = -8.0
+offset_bottom = 20.0
+grow_horizontal = 0
+grow_vertical = 2
+mouse_filter = 1
+texture_normal = ExtResource("3_npmax")
+ignore_texture_size = true
+stretch_mode = 5

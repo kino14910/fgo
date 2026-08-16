@@ -1,8 +1,14 @@
+using Fgo.Scripts.Commands;
 using Godot;
 using MegaCrit.Sts2.Core.Entities.Characters;
+using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Nodes.Combat;
+using MegaCrit.Sts2.Core.ValueProps;
 using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Scaffolding.Characters;
+using STS2RitsuLib.Scaffolding.Content;
 using STS2RitsuLib.Scaffolding.Godot;
 
 namespace Fgo.Scripts.Character;
@@ -11,13 +17,13 @@ namespace Fgo.Scripts.Character;
 public class FgoCharacter : ModCharacterTemplate<FgoCardPool, FgoRelicPool, FgoPotionPool>
 {
     // 角色名称颜色
-    public override Color NameColor => new(0.5f, 0.5f, 1f);
+    public override Color NameColor => new("c47e09");
 
     // 能量图标轮廓颜色
-    public override Color EnergyLabelOutlineColor => new(0.5f, 0.5f, 1f);
+    public override Color EnergyLabelOutlineColor => new("c47e09");
 
     // 地图绘制颜色
-    public override Color MapDrawingColor => new(0.5f, 0.5f, 1f);
+    public override Color MapDrawingColor => new("c47e09");
 
     // 人物性别（男女中立）
     public override CharacterGender Gender => CharacterGender.Masculine;
@@ -52,46 +58,48 @@ public class FgoCharacter : ModCharacterTemplate<FgoCardPool, FgoRelicPool, FgoP
                 // 人物选择图标-锁定状态。
                 CharacterSelectLockedIconPath: "res://Fgo/images/charui/char_select_fgo_locked.png",
                 // 人物选择过渡动画。
-                // CharacterSelectTransitionPath: "res://Fgo/materials/transitions/ironclad_transition_mat.tres",
+                CharacterSelectTransitionPath: "res://Fgo/materials/transitions/fgo_transition.tres",
                 // 地图上的角色标记图标、表情轮盘上的角色头像。
                 MapMarkerPath: "res://Fgo/images/charui/map_marker_fgo.png"
             ),
-            new CharacterVfxAssetSet(
-                // 卡牌拖尾场景。
-                // TrailPath: "res://Fgo/scenes/vfx/card_trail_ironclad.tscn"
-            ),
-            Audio: new CharacterAudioAssetSet(
-                // 攻击音效
-                // AttackSfx: null,
-                // 施法音效
-                // CastSfx: null,
-                // 死亡音效
-                // DeathSfx: null,
-                // 角色选择音效
-                // CharacterSelectSfx: null,
-                // 过渡音效
-                // CharacterTransitionSfx: "event:/sfx/ui/wipe_ironclad"
-            ),
-            Multiplayer: new CharacterMultiplayerAssetSet(
-                // 多人模式-手指。
-                // ArmPointingTexturePath: null,
-                // 多人模式剪刀石头布-石头。
-                // ArmRockTexturePath: null,
-                // 多人模式剪刀石头布-布。
-                // ArmPaperTexturePath: null,
-                // 多人模式剪刀石头布-剪刀。
-                // ArmScissorsTexturePath: null
-            )
+            // new CharacterVfxAssetSet(
+            // 卡牌拖尾场景。
+            // TrailPath: "res://Fgo/scenes/vfx/card_trail_ironclad.tscn"
+            // ),
+            // Audio: new CharacterAudioAssetSet(
+            // 攻击音效
+            // AttackSfx: null,
+            // 施法音效
+            // CastSfx: null,
+            // 死亡音效
+            // DeathSfx: null,
+            // 角色选择音效
+            // CharacterSelectSfx: null,
+            // 过渡音效
+            // CharacterTransitionSfx: "event:/sfx/ui/wipe_ironclad"
+            // ),
+            // Multiplayer: new CharacterMultiplayerAssetSet(
+            // 多人模式-手指。
+            // ArmPointingTexturePath: null,
+            // 多人模式剪刀石头布-石头。
+            // ArmRockTexturePath: null,
+            // 多人模式剪刀石头布-布。
+            // ArmPaperTexturePath: null,
+            // 多人模式剪刀石头布-剪刀。
+            // ArmScissorsTexturePath: null
+            // )
             // 其余如果有需要自行取消注释使用
             // Spine: null,
             // VisualCues: null, // 帧动画静态图人物使用，查看角色动画一章
             // WorldProceduralVisuals: null,
             // 以下为让遗物根据你的人物展现不同的图像资源，在列表里添加即可
-            // VanillaCardVisualOverrides: [],
-            // VanillaRelicVisualOverrides: [
-            //     new (CharacterOwnedVanillaRelicModelId.YummyCookie, new("res://Fgo/icon.svg")) // 美味饼干覆盖
-            // ],
-            // VanillaPotionVisualOverrides: []
+            VanillaCardVisualOverrides: [],
+            VanillaRelicVisualOverrides:
+            [
+                new CharacterVanillaRelicVisualOverride(CharacterOwnedVanillaRelicModelId.YummyCookie,
+                    new RelicAssetProfile("res://Fgo/images/relics/big/yummy_cookie_fgo.png")) // 美味饼干覆盖
+            ],
+            VanillaPotionVisualOverrides: []
         ));
 
     // 攻击和施法动画延迟，以对齐动画
@@ -122,11 +130,22 @@ public class FgoCharacter : ModCharacterTemplate<FgoCardPool, FgoRelicPool, FgoP
     {
         return
         [
+            "vfx/vfx_attack_lightning",
             "vfx/vfx_attack_blunt",
-            "vfx/vfx_heavy_blunt",
+            "vfx/vfx_scratch",
             "vfx/vfx_attack_slash",
-            "vfx/vfx_bloody_impact",
-            "vfx/vfx_rock_shatter"
+            "vfx/vfx_heavy_blunt"
         ];
+    }
+
+    public override async Task AfterDamageReceived(PlayerChoiceContext choiceContext, Creature target,
+        DamageResult result, ValueProp props,
+        Creature? dealer, CardModel? cardSource)
+    {
+        if (target is { IsPlayer: true }
+            && dealer is { IsMonster: true }
+            && result.TotalDamage > 0
+            && props.IsPoweredAttack())
+            await FgoResCmd.ModifyNp(result.TotalDamage, dealer.Player);
     }
 }

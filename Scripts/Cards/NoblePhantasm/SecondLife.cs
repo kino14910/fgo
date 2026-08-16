@@ -3,18 +3,28 @@ using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.Nodes.CommonUi;
+using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards.NoblePhantasm;
 
-public class SecondLife : NobleCardModel
+public class SecondLife() : NobleCardModel(1, CardType.Skill, TargetType.Self)
 {
-    public SecondLife() : base(1, CardType.Skill, TargetType.Self)
-    {
-        WithKeywords(CardKeyword.Exhaust);
-        WithNp(20);
-    }
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
+
+
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
+    [
+        FgoHoverTipHelper.CreateNpHoverTip()
+    ];
+
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        ModCardVars.Int("Np", 20)
+    ];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
@@ -22,7 +32,9 @@ public class SecondLife : NobleCardModel
         if (exhaustCards.Count == 0) return;
 
         var card = exhaustCards[Random.Shared.Next(exhaustCards.Count)];
-        var copy = card.ToMutable();
+        // 用 CombatState.CreateCard 非泛型重载: 内部完成 ToMutable + 设 Owner + 注册 CombatState + AfterCreated。
+        // 直接 ToMutable() 出来的副本无 Owner、未注册 CombatState，传入 AddToPile 会抛 InvalidOperationException。
+        var copy = CombatState!.CreateCard(card, Owner);
         if (copy.IsUpgradable)
             CardCmd.Upgrade(copy, CardPreviewStyle.None);
         await FgoCardActions.AddToPile(copy, PileType.Hand);
@@ -31,7 +43,7 @@ public class SecondLife : NobleCardModel
             if (enemy.HasPower<MinionPower>())
             {
                 await CreatureCmd.Kill(enemy);
-                await FgoNpCmd.AddNp(DynamicVars["NP"].IntValue);
+                await FgoResCmd.ModifyNp(DynamicVars["Np"].BaseValue, play.Player);
             }
     }
 }

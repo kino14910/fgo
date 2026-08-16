@@ -1,14 +1,21 @@
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards.NoblePhantasm;
 
-public class EnumaElish : NobleCardModel
+public class EnumaElish() : NobleCardModel(2, CardType.Attack, TargetType.Self)
 {
-    public EnumaElish() : base(2, CardType.Attack, TargetType.Self)
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        ModCardVars.Damage(32)
+    ];
+
+    protected override void OnUpgrade()
     {
-        WithDamage(32, 8);
+        DynamicVars.Damage.UpgradeValueBy(8);
     }
 
     protected override async Task OnPlay(

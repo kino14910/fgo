@@ -1,18 +1,27 @@
 using Fgo.Scripts.Commands;
 using Fgo.Scripts.Singletons;
+using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
 
-public class AnimalDialogue : FgoCardModel
+public class AnimalDialogue() : FgoCardModel(1, CardType.Skill,
+    CardRarity.Uncommon, TargetType.Self)
 {
-    public AnimalDialogue() : base(1, CardType.Skill,
-        CardRarity.Uncommon, TargetType.Self)
-    {
-        WithVar("Threshold", 20);
-    }
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
+    [
+        FgoHoverTipHelper.CreateNpHoverTip()
+    ];
+
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        ModCardVars.Int("Threshold", 20)
+    ];
 
     protected override bool ShouldGlowGoldInternal =>
         this.FgoRes().Np >= DynamicVars["Threshold"].IntValue;
@@ -25,7 +34,7 @@ public class AnimalDialogue : FgoCardModel
         {
             var energyGain = np / threshold;
             await PlayerCmd.GainEnergy(energyGain, Owner);
-            await FgoNpCmd.ResetNp();
+            await FgoResCmd.ResetNp();
         }
     }
 }

@@ -1,36 +1,37 @@
+using Fgo.Scripts.Character;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using STS2RitsuLib.Cards.DynamicVars;
+using STS2RitsuLib.Interop.AutoRegistration;
 
 namespace Fgo.Scripts.Cards.DerivativeMash;
 
-public class WallOfSnowflakes : FgoCardModel
+/// <summary>
+///     现为脆弱的雪花之壁: 初始卡
+/// </summary>
+[RegisterCharacterStarterCard(typeof(FgoCharacter))]
+public class WallOfSnowflakes() : FgoCardModel(1, CardType.Skill,
+    CardRarity.Basic, TargetType.Self)
 {
-    private int _cachedMaxLevel;
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        ModCardVars.Block(7)
+    ];
 
-    public WallOfSnowflakes() : base(1, CardType.Skill,
-        CardRarity.Token, TargetType.Self)
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Eternal];
+    public override bool GainsBlock => true;
+
+    protected override void OnUpgrade()
     {
-        WithBlock(7, 3);
-        WithKeyword(CardKeyword.Eternal);
+        DynamicVars.Block.UpgradeValueBy(3);
     }
-
-    private bool BypassUpgradeCheck { get; set; }
-    public override int MaxUpgradeLevel => BypassUpgradeCheck ? _cachedMaxLevel : 0;
 
     protected override async Task OnPlay(
         PlayerChoiceContext choiceContext,
         CardPlay play)
     {
         await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, play);
-    }
-
-    public void ForceUpgrade()
-    {
-        BypassUpgradeCheck = true;
-        _cachedMaxLevel++;
-        UpgradeInternal();
-        FinalizeUpgradeInternal();
-        BypassUpgradeCheck = false;
     }
 }

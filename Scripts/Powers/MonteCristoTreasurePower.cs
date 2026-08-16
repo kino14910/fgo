@@ -5,6 +5,7 @@ using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.ValueProps;
+using STS2RitsuLib.Scaffolding.Content;
 
 namespace Fgo.Scripts.Powers;
 
@@ -12,6 +13,11 @@ public class MonteCristoTreasurePower : FgoPowerModel
 {
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Counter;
+
+    public override PowerAssetProfile AssetProfile => new(
+        "res://Fgo/images/powers/TriggerAfterAttacksPower.png",
+        "res://Fgo/images/powers/big/TriggerAfterAttacksPower.png"
+    );
 
     public override async Task AfterDamageGiven(
         PlayerChoiceContext choiceContext, Creature? dealer,

@@ -1,24 +1,38 @@
 using Fgo.Scripts.Commands;
 using Fgo.Scripts.Powers;
+using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
 
-public class GraceUnexpectedBirth : FgoCardModel
+public class GraceUnexpectedBirth() : FgoCardModel(0, CardType.Skill,
+    CardRarity.Common, TargetType.Self)
 {
-    public GraceUnexpectedBirth() : base(0, CardType.Skill,
-        CardRarity.Common, TargetType.Self)
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
+    [
+        FgoHoverTipHelper.CreateNpHoverTip()
+    ];
+
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        ModCardVars.Power<SealNpPower>(1),
+        ModCardVars.Int("Np", 30)
+    ];
+
+    protected override void OnUpgrade()
     {
-        WithPower<SealNpPower>(1);
-        WithNp(30);
+        DynamicVars["Np"].UpgradeValueBy(20);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await FgoNpCmd.AddNp(DynamicVars["NP"].IntValue);
+        await FgoResCmd.ModifyNp(this);
         await PowerCmd.Apply<SealNpPower>(choiceContext, Owner.Creature,
-            DynamicVars[typeof(SealNpPower).Name].BaseValue, Owner.Creature, this);
+            DynamicVars[nameof(SealNpPower)].BaseValue, Owner.Creature, this);
     }
 }

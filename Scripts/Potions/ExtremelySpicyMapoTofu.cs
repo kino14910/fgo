@@ -16,7 +16,7 @@ public class ExtremelySpicyMapoTofu : FgoPotionModel
 
     protected override async Task OnUse(PlayerChoiceContext choiceContext, Creature? target)
     {
-        await FgoNpCmd.AddNp(40);
+        await FgoResCmd.ModifyNp(40, Owner);
         await PowerCmd.Apply<NpDamagePower>(choiceContext, Owner.Creature, 40m, Owner.Creature, null);
     }
 }

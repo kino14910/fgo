@@ -1,21 +1,31 @@
 using Fgo.Scripts.Utils;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
 
-public class MagicBulletCharging : FgoCardModel
+public class MagicBulletCharging() : FgoCardModel(0, CardType.Skill,
+    CardRarity.Uncommon, TargetType.Self)
 {
-    public MagicBulletCharging() : base(-1, CardType.Skill,
-        CardRarity.Rare, TargetType.Self)
+    protected override bool HasEnergyCostX => true;
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
+
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        ModCardVars.Int("ExcessBonus", 5)
+    ];
+
+    protected override void OnUpgrade()
     {
-        WithKeywords(CardKeyword.Exhaust);
-        WithVar("ExcessBonus", 5, 2);
+        DynamicVars["ExcessBonus"].UpgradeValueBy(2);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        var energy = play.Resources.EnergySpent;
+        var energy = ResolveEnergyXValue();
         if (energy <= 0) return;
 
         var attacks = Owner.PlayerCombatState!.Hand.Cards
@@ -28,6 +38,12 @@ public class MagicBulletCharging : FgoCardModel
         if (excess > 0) FgoCardActions.BoostDamage(attacks[^1], excess * DynamicVars["ExcessBonus"].IntValue);
 
         foreach (var attack in attacks)
-            await FgoCardActions.AutoPlayCard(choiceContext, attack, Owner);
+        {
+            var target = attack.TargetType == TargetType.AnyEnemy
+                ? attack.CombatState?.HittableEnemies.FirstOrDefault()
+                : null;
+
+            await CardCmd.AutoPlay(choiceContext, attack, target, AutoPlayType.Default, false, true);
+        }
     }
 }

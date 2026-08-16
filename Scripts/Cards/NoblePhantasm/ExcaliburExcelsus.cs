@@ -1,21 +1,38 @@
 using Fgo.Scripts.Commands;
 using Fgo.Scripts.Powers;
+using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.ValueProps;
+using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards.NoblePhantasm;
 
-public class ExcaliburExcelsus : NobleCardModel
+public class ExcaliburExcelsus() : NobleCardModel(3, CardType.Attack, TargetType.Self)
 {
-    public ExcaliburExcelsus() : base(3, CardType.Attack, TargetType.Self)
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
+    [
+        HoverTipFactory.FromPower<StrengthPower>(),
+        FgoHoverTipHelper.CreateNpHoverTip()
+    ];
+
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        ModCardVars.Damage(16),
+        ModCardVars.Block(6),
+        ModCardVars.Power<StrengthPower>(1),
+        ModCardVars.Int("Np", 10)
+    ];
+
+    public override bool GainsBlock => true;
+
+    protected override void OnUpgrade()
     {
-        WithDamage(16, 6);
-        WithBlock(6);
-        WithVar("Strength", 1);
-        WithNp(10);
+        DynamicVars.Damage.UpgradeValueBy(6);
     }
 
     protected override async Task OnPlay(
@@ -25,15 +42,15 @@ public class ExcaliburExcelsus : NobleCardModel
         // 无敌贯通
         await PowerCmd.Apply<IgnoresInvincibilityPower>(choiceContext, Owner.Creature, 1m, Owner.Creature, this);
 
-        var enemyCount = CombatState!.HittableEnemies.Count();
+        var enemyCount = CombatState!.HittableEnemies.Count;
         // 每有一名敌人，获得格挡、力量、宝具值
         if (enemyCount > 0)
         {
-            await CreatureCmd.GainBlock(Owner.Creature, DynamicVars["Block"].BaseValue * enemyCount,
+            await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block.BaseValue * enemyCount,
                 ValueProp.Unpowered, play);
             await PowerCmd.Apply<StrengthPower>(choiceContext, Owner.Creature,
-                DynamicVars["Strength"].BaseValue * enemyCount, Owner.Creature, this);
-            await FgoNpCmd.AddNp(DynamicVars["NP"].IntValue * enemyCount);
+                DynamicVars.Strength.BaseValue * enemyCount, Owner.Creature, this);
+            await FgoResCmd.ModifyNp(DynamicVars["Np"].IntValue * enemyCount, play.Player);
         }
 
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)

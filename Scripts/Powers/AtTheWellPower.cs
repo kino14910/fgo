@@ -1,4 +1,4 @@
-﻿﻿﻿using Fgo.Scripts.Commands;
+﻿using Fgo.Scripts.Commands;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Powers;
@@ -21,7 +21,11 @@ public class AtTheWellPower : FgoPowerModel
     {
         Flash();
         await PowerCmd.Apply<GutsPower>(choiceContext, Owner, Amount, Owner, null);
-        await FgoNpCmd.AddNp(80);
+        await FgoResCmd.ModifyNp(80, player);
+        await DamageCmd.Attack(9999)
+            .Targeting(player.Creature)
+            .WithHitFx("vfx/vfx_attack_lightning")
+            .Execute(choiceContext);
         await PowerCmd.Remove(this);
     }
 }

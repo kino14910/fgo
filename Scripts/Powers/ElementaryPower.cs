@@ -24,7 +24,7 @@ public class ElementaryPower : FgoPowerModel
         {
             if (enemy.Block <= 0) continue;
             var blockAmount = enemy.Block;
-            await CreatureCmd.LoseBlock(enemy, blockAmount);
+            await CreatureCmd.LoseBlock(choiceContext, enemy, blockAmount, player.Creature);
             await CreatureCmd.Damage(choiceContext, enemy, blockAmount,
                 ValueProp.Unpowered, Owner);
             await PowerCmd.Apply<VulnerablePower>(choiceContext, enemy, Amount, Owner, null);

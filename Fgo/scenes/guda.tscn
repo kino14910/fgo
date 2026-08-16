@@ -1,30 +1,39 @@
-[gd_scene load_steps=2 format=3 uid="uid://1vst4tlrfvma"]
+[gd_scene load_steps=3 format=3 uid="uid://1vst4tlrfvma"]
 
 [ext_resource type="Texture2D" uid="uid://cytqlhe6w7bkx" path="res://Fgo/images/char/Master0.png" id="1_2ri6t"]
+[ext_resource type="PackedScene" path="res://Fgo/scenes/fgo_np_bar.tscn" id="2_npbar"]
 
 [node name="FgoCharacter" type="Node2D"]
 
 [node name="Visuals" type="Sprite2D" parent="."]
 unique_name_in_owner = true
-position = Vector2(0, -73)
+position = Vector2(-26, -160)
 texture = ExtResource("1_2ri6t")
 
 [node name="Bounds" type="Control" parent="."]
 unique_name_in_owner = true
 layout_mode = 3
 anchors_preset = 0
-offset_left = -70.0
-offset_top = -140.0
-offset_right = 70.0
+offset_left = -130.0
+offset_top = -320.0
+offset_right = 130.0
 
 [node name="IntentPos" type="Marker2D" parent="."]
 unique_name_in_owner = true
-position = Vector2(0, -159)
+position = Vector2(0, -320)
 
 [node name="CenterPos" type="Marker2D" parent="."]
 unique_name_in_owner = true
-position = Vector2(0, -72)
+position = Vector2(0, -160)
 
 [node name="TalkPos" type="Marker2D" parent="."]
 unique_name_in_owner = true
-position = Vector2(0, -144)
+position = Vector2(0, -240)
+
+[node name="NpBar" parent="." instance=ExtResource("2_npbar")]
+unique_name_in_owner = true
+visible = false
+offset_left = -120.0
+offset_top = -345.0
+offset_right = 120.0
+offset_bottom = -323.0

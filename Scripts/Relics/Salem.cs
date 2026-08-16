@@ -21,7 +21,7 @@ public class Salem : FgoRelic
         {
             Flash();
             await PowerCmd.Apply<VigorPower>(choiceContext, Owner.Creature, foreignerCount * 2, Owner.Creature, null);
-            await FgoStarCmd.AddStars(foreignerCount * 2);
+            await FgoResCmd.ModifyStars(foreignerCount * 2, Owner.Creature.Player);
         }
     }
 }

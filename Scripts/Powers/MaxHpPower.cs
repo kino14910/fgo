@@ -1,4 +1,3 @@
-using System;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
@@ -6,15 +5,16 @@ using MegaCrit.Sts2.Core.Models;
 using STS2RitsuLib.Scaffolding.Content;
 
 namespace Fgo.Scripts.Powers;
+
 public class MaxHpPower : ModPowerTemplate
 {
     private decimal _appliedHpBoost;
-    private int _lastAmount;
     private bool _eventsSubscribed;
+    private int _lastAmount;
 
     protected override IEnumerable<DynamicVar> CanonicalVars => new[]
     {
-        new DynamicVar("HpPerStack", 10m),  // 在这里配置每层HP
+        new DynamicVar("HpPerStack", 10m) // 在这里配置每层HP
     };
 
     private decimal HpPerStack => DynamicVars["HpPerStack"].BaseValue;
@@ -42,6 +42,7 @@ public class MaxHpPower : ModPowerTemplate
             Owner.PowerDecreased += OnPowerDecreased;
             _eventsSubscribed = true;
         }
+
         await Task.CompletedTask;
     }
 
@@ -54,7 +55,7 @@ public class MaxHpPower : ModPowerTemplate
             _eventsSubscribed = false;
         }
 
-        decimal newMax = Math.Max(1, oldOwner.MaxHp - _appliedHpBoost);
+        var newMax = Math.Max(1, oldOwner.MaxHp - _appliedHpBoost);
         oldOwner.SetMaxHpInternal(newMax);
         if (oldOwner.CurrentHp > newMax)
             oldOwner.SetCurrentHpInternal(newMax);
@@ -78,10 +79,10 @@ public class MaxHpPower : ModPowerTemplate
 
     private void SyncAfterAmountChange()
     {
-        int delta = Amount - _lastAmount;
+        var delta = Amount - _lastAmount;
         if (delta == 0) return;
 
-        decimal hpChange = delta * HpPerStack;
+        var hpChange = delta * HpPerStack;
         _appliedHpBoost += hpChange;
         _lastAmount = Amount;
 

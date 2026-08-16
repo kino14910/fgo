@@ -1,21 +1,37 @@
 using Fgo.Scripts.Powers;
+using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
 
-public class SpringOfFire : FgoCardModel
+public class SpringOfFire() : FgoCardModel(3, CardType.Power,
+    CardRarity.Rare, TargetType.Self)
 {
-    public SpringOfFire() : base(2, CardType.Power,
-        CardRarity.Rare, TargetType.Self)
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
+    [
+        HoverTipFactory.FromPower<NonStackableGutsPower>(),
+        HoverTipFactory.FromPower<SpringOfFirePower>(),
+        HoverTipFactory.FromPower<NpDamagePower>(),
+        FgoHoverTipHelper.CreateNpHoverTip()
+    ];
+
+    protected override IEnumerable<DynamicVar> CanonicalVars => [ModCardVars.Heal(3)];
+
+    protected override void OnUpgrade()
     {
-        WithHeal(20, 10);
+        DynamicVars.Heal.UpgradeValueBy(3);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
         await PowerCmd.Apply<NonStackableGutsPower>(choiceContext, Owner.Creature, DynamicVars.Heal.BaseValue,
+            Owner.Creature, this);
+        await PowerCmd.Apply<SpringOfFirePower>(choiceContext, Owner.Creature, DynamicVars.Heal.BaseValue,
             Owner.Creature, this);
     }
 }

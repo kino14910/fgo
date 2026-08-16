@@ -1,18 +1,33 @@
 using Fgo.Scripts.Commands;
+using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
 
-public class WarriorsBlade : FgoCardModel
+public class WarriorsBlade() : FgoCardModel(1, CardType.Attack,
+    CardRarity.Common, TargetType.AnyEnemy)
 {
-    public WarriorsBlade() : base(1, CardType.Attack,
-        CardRarity.Common, TargetType.AnyEnemy)
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
+    [
+        FgoHoverTipHelper.CreateStarHoverTip()
+    ];
+
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        ModCardVars.Damage(1),
+        ModCardVars.Int("Hits", 4),
+        ModCardVars.Int("Star", 4)
+    ];
+
+    protected override void OnUpgrade()
     {
-        WithDamage(2);
-        WithVar("Hits", 4, 1);
-        WithStar(6);
+        DynamicVars["Hits"].UpgradeValueBy(1);
+        DynamicVars["Star"].UpgradeValueBy(1);
     }
 
     protected override async Task OnPlay(
@@ -26,6 +41,6 @@ public class WarriorsBlade : FgoCardModel
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
 
-        await FgoStarCmd.AddStars(6);
+        await FgoResCmd.ModifyStars(DynamicVars["Star"].BaseValue, Owner);
     }
 }

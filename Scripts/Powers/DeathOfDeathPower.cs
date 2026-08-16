@@ -1,5 +1,4 @@
 ﻿using Fgo.Scripts.Cards;
-using Fgo.Scripts.Commands;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
@@ -16,18 +15,19 @@ public class DeathOfDeathPower : FgoPowerModel
     public override PowerStackType StackType => PowerStackType.Counter;
 
     public override PowerAssetProfile AssetProfile => new(
-        "res://Fgo/images/powers/TriggerAfterAttacksPower.png",
-        "res://Fgo/images/powers/big/TriggerAfterAttacksPower.png"
+        "res://Fgo/images/powers/TriggerAfterGutsPowerPower.png",
+        "res://Fgo/images/powers/big/TriggerAfterGutsPowerPower.png"
     );
 
-
-    public override async Task BeforeDeath(Creature creature)
+    public override async Task AfterPowerAmountChanged(PlayerChoiceContext choiceContext, PowerModel power,
+        decimal amount, Creature? applier,
+        CardModel? cardSource)
     {
-        if (creature != Owner || Amount <= 0) return;
-
-        Flash();
-        await ReviveCmd.Execute(creature, Amount);
-        await PowerCmd.Apply<ShadowStepPower>(
-            new BlockingPlayerChoiceContext(), Owner, 1m, Owner, ModelDb.Card<AbyssOfDeath>());
+        if (power is GutsPower or NonStackableGutsPower)
+        {
+            Flash();
+            await PowerCmd.Apply<ShadowStepPower>(
+                new BlockingPlayerChoiceContext(), Owner, 1m, Owner, ModelDb.Card<AbyssOfDeath>());
+        }
     }
 }

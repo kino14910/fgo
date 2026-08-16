@@ -1,19 +1,39 @@
+using Fgo.Scripts.Cards.NoblePhantasm;
 using Fgo.Scripts.Powers;
+using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models.Powers;
+using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards.DerivativeMash;
 
-public class RayProofKyrielight : FgoColorlessCard
+/// <summary>
+///     印证希望的人理之剑: LordChaldeas(构筑希望的人理之盾)发动后获得
+/// </summary>
+public class RayProofKyrielight() : NobleCardModel(1, CardType.Attack, TargetType.Self)
 {
-    public RayProofKyrielight() : base(1, CardType.Attack,
-        CardRarity.Status, TargetType.Self)
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
+    [
+        HoverTipFactory.FromPower<VulnerablePower>(),
+        HoverTipFactory.FromPower<IgnoresInvincibilityPower>(),
+        FgoHoverTipHelper.CreateNpHoverTip()
+    ];
+
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        ModCardVars.Damage(30),
+        ModCardVars.Power<VulnerablePower>(3)
+    ];
+
+    protected override void OnUpgrade()
     {
-        WithDamage(30, 10);
-        WithPower<VulnerablePower>(3, 1);
+        DynamicVars.Damage.UpgradeValueBy(10);
+        DynamicVars[nameof(VulnerablePower)].UpgradeValueBy(1);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
@@ -21,12 +41,12 @@ public class RayProofKyrielight : FgoColorlessCard
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
             .FromCard(this, play)
             .TargetingAllOpponents(CombatState!)
-            .WithHitFx("vfx/vfx_attack_heavy")
+            .WithHitFx("vfx/vfx_heavy_blunt")
             .Execute(choiceContext);
         foreach (var enemy in CombatState!.HittableEnemies)
         {
             await PowerCmd.Apply<VulnerablePower>(choiceContext, enemy,
-                DynamicVars[typeof(VulnerablePower).Name].BaseValue, Owner.Creature, this);
+                DynamicVars[nameof(VulnerablePower)].BaseValue, Owner.Creature, this);
             if (!enemy.IsPrimaryEnemy)
             {
                 var buffs = enemy.Powers.Where(power => power.Type == PowerType.Buff).ToList();

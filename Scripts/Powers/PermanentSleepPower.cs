@@ -1,4 +1,5 @@
-﻿using MegaCrit.Sts2.Core.Entities.Cards;
+﻿using Fgo.Scripts.Cards.NoblePhantasm;
+using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.Models;
@@ -22,8 +23,8 @@ public class PermanentSleepPower : FgoPowerModel
         Creature? dealer, CardModel? cardSource,
         CardPlay? cardPlay)
     {
-        if (dealer != Owner) return 1m;
-        if (!props.HasFlag(ValueProp.Move)) return 1m;
-        return 2m;
+        if (dealer == Owner && props.HasFlag(ValueProp.Move) && cardSource is NobleCardModel) return 2m;
+
+        return 1m;
     }
 }

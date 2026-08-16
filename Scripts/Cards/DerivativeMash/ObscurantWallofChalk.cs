@@ -1,22 +1,44 @@
-using Fgo.Scripts.Cards.NoblePhantasm;
+using Fgo.Scripts.Character;
 using Fgo.Scripts.Commands;
-using Fgo.Scripts.Powers;
+using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.Models.Powers;
+using STS2RitsuLib.Cards.DynamicVars;
+using STS2RitsuLib.Interop.AutoRegistration;
 
 namespace Fgo.Scripts.Cards.DerivativeMash;
 
-public class ObscurantWallofChalk : NobleCardModel
+/// <summary>
+///     时为朦胧的白垩之壁:初始卡
+/// </summary>
+[RegisterCharacterStarterCard(typeof(FgoCharacter))]
+public class ObscurantWallofChalk() : FgoCardModel(3, CardType.Skill, CardRarity.Basic, TargetType.Self)
 {
-    public ObscurantWallofChalk() : base(0, CardType.Skill, TargetType.Self)
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
+    [
+        HoverTipFactory.FromPower<BufferPower>(),
+        FgoHoverTipHelper.CreateNpHoverTip()
+    ];
+
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Eternal];
+
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        ModCardVars.Int("Np", 30)
+    ];
+
+    protected override void OnUpgrade()
     {
-        WithNp(30, 20);
+        DynamicVars["Np"].UpgradeValueBy(20);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await PowerCmd.Apply<AntiPurgeDefensePower>(choiceContext, Owner.Creature, 1m, Owner.Creature, this);
-        await FgoNpCmd.AddNp(DynamicVars["NP"].IntValue);
+        await PowerCmd.Apply<BufferPower>(choiceContext, Owner.Creature, 1m, Owner.Creature, this);
+        await FgoResCmd.ModifyNp(this);
     }
 }

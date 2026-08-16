@@ -1,27 +1,41 @@
 using Fgo.Scripts.Commands;
-using Fgo.Scripts.Powers;
+using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards.NoblePhantasm;
 
-public class BeautifulJourney : NobleCardModel
+public class BeautifulJourney() : NobleCardModel(2, CardType.Attack, TargetType.Self)
 {
-    public BeautifulJourney() : base(2, CardType.Attack, TargetType.Self)
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
+    [
+        FgoHoverTipHelper.CreateNpHoverTip()
+    ];
+
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        ModCardVars.Damage(24),
+        ModCardVars.Int("NpPerEnemies", 20),
+        ModCardVars.Computed("Np", context =>
+            context.GetCardBaseValueOrDefault("NpPerEnemies") * (context.CombatState?.HittableEnemies.Count ?? 0))
+    ];
+
+    protected override void OnUpgrade()
     {
-        WithDamage(24, 6);
-        WithNp(20);
+        DynamicVars.Damage.UpgradeValueBy(6);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await PowerCmd.Apply<NpRatePower>(choiceContext, Owner.Creature, 1m, Owner.Creature, this);
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
             .FromCard(this, play)
             .TargetingAllOpponents(CombatState!)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
-        await FgoNpCmd.AddNp(DynamicVars["NP"].IntValue * CombatState!.HittableEnemies.Count);
+        await FgoResCmd.ModifyNp(this);
     }
 }

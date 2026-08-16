@@ -8,7 +8,7 @@ using MegaCrit.Sts2.Core.ValueProps;
 namespace Fgo.Scripts.Powers;
 
 /// <summary>
-///     对兽魔术：每次获得 Power 时，获得等量格挡。
+///     对兽魔术: 每次获得 Power 时，获得格挡。
 /// </summary>
 public class AntiBeastMagecraftPower : FgoPowerModel
 {

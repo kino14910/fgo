@@ -28,7 +28,10 @@ public static class FgoCommandSpellCmd
         var selected = await CardSelectCmd.FromChooseACardScreen(choiceContext, cards, player);
         if (selected == null) return false;
 
-        resources.UseCommandSpell();
+        await resources.UseCommandSpell();
+        // 注意: 不在此处立即同步到 RunSavedData。
+        // 令咒的保存语义: 使用后仅更新内存值，在战斗结束时（AfterCombatVictory）才同步到 RunSavedData。
+        // 这样退出战斗中再继续会恢复到战前值，而打赢后下一场战斗保留战后值。
 
         switch (selected)
         {
@@ -36,7 +39,7 @@ public static class FgoCommandSpellCmd
                 await CreatureCmd.Heal(player.Creature, HealAmount);
                 break;
             case ReleaseNoblePhantasm:
-                await resources.AddNp(NpAmount, choiceContext, player);
+                await resources.ModifyNp(NpAmount, player);
                 break;
         }
 

@@ -1,3 +1,4 @@
+using Fgo.Scripts.Cards.NoblePhantasm;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Powers;
@@ -13,6 +14,14 @@ public class BlessingOfKurPower : FgoPowerModel
 
     public override async Task AfterCardPlayed(PlayerChoiceContext context, CardPlay cardPlay)
     {
-        await PowerCmd.Apply<StrengthPower>(context, Owner, 2m, Owner, cardPlay.Card);
+        if (cardPlay.Card is KurKigalIrkalla)
+        {
+            Flash();
+            if (Owner.Player is null) return;
+            await CreatureCmd.Heal(Owner.Player.Creature, Amount, false);
+            await PowerCmd.Apply<StrengthPower>(context, Owner.Player.Creature, Amount / 3m, Owner.Player.Creature,
+                cardPlay.Card);
+            await PowerCmd.Remove(this);
+        }
     }
 }

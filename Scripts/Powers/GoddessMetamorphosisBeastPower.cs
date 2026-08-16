@@ -23,6 +23,6 @@ public class GoddessMetamorphosisBeastPower : FgoPowerModel
         if (cardPlay.Target == null) return;
         Flash();
         await PowerCmd.Apply<PoisonPower>(choiceContext, cardPlay.Target, Amount, Owner, null);
-        await PowerCmd.Apply<CursePower>(choiceContext, cardPlay.Target, 1m, Owner, null);
+        await PowerCmd.Apply<CursePower>(choiceContext, cardPlay.Target, Amount, Owner, null);
     }
 }

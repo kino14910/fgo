@@ -1,17 +1,33 @@
+using Fgo.Scripts.Powers;
+using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models.Powers;
+using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
 
-public class GodsExecution : FgoCardModel
+public class GodsExecution() : FgoCardModel(3, CardType.Attack,
+    CardRarity.Uncommon, TargetType.AllEnemies)
 {
-    public GodsExecution() : base(2, CardType.Attack,
-        CardRarity.Uncommon, TargetType.AllEnemies)
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
+    [
+        HoverTipFactory.FromPower<StrengthPower>(),
+        FgoHoverTipHelper.CreateNpHoverTip()
+    ];
+
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        ModCardVars.Damage(21),
+        ModCardVars.Power<GodsExecutionPower>(2)
+    ];
+
+    protected override void OnUpgrade()
     {
-        WithDamage(21, 7);
-        WithPower<StrengthPower>(2);
+        DynamicVars.Damage.UpgradeValueBy(7);
     }
 
     protected override async Task OnPlay(
@@ -25,7 +41,9 @@ public class GodsExecution : FgoCardModel
             .Execute(choiceContext);
 
         foreach (var enemy in CombatState!.HittableEnemies)
-            await PowerCmd.Apply<StrengthPower>(choiceContext, enemy, -DynamicVars.Strength.BaseValue, Owner.Creature,
+            await PowerCmd.Apply<GodsExecutionPower>(choiceContext, enemy,
+                -DynamicVars[nameof(GodsExecutionPower)].BaseValue,
+                Owner.Creature,
                 this);
     }
 }

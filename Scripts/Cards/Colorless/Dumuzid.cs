@@ -4,7 +4,7 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 
 namespace Fgo.Scripts.Cards.Colorless;
 
-public class Dumuzid() : FgoColorlessCard(1, CardType.Curse, CardRarity.Curse, TargetType.None)
+public class Dumuzid() : FgoColorlessCardModel(3, CardType.Curse, CardRarity.Curse, TargetType.None)
 {
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {

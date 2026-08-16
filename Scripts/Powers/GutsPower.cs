@@ -1,4 +1,5 @@
 using Fgo.Scripts.Commands;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
 
@@ -15,5 +16,6 @@ public class GutsPower : FgoPowerModel
 
         Flash();
         await ReviveCmd.Execute(creature, Amount);
+        await PowerCmd.Remove<GutsPower>(creature);
     }
 }

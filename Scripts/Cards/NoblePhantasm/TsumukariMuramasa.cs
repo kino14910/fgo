@@ -1,15 +1,28 @@
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models.Powers;
+using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards.NoblePhantasm;
 
-public class TsumukariMuramasa : NobleCardModel
+public class TsumukariMuramasa() : NobleCardModel(2, CardType.Attack, TargetType.Self)
 {
-    public TsumukariMuramasa() : base(3, CardType.Attack, TargetType.Self)
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
+    [
+        HoverTipFactory.FromPower<StrengthPower>()
+    ];
+
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        ModCardVars.Damage(3)
+    ];
+
+    protected override void OnUpgrade()
     {
-        WithDamage(6, 2);
+        DynamicVars.Damage.UpgradeValueBy(1m);
     }
 
     protected override async Task OnPlay(
@@ -24,11 +37,5 @@ public class TsumukariMuramasa : NobleCardModel
             .Execute(choiceContext);
 
         await PowerCmd.Remove<StrengthPower>(Owner.Creature);
-    }
-
-    protected override void OnUpgrade()
-    {
-        base.OnUpgrade();
-        DynamicVars.Damage.UpgradeValueBy(2m);
     }
 }

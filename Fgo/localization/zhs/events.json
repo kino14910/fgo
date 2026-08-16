@@ -1,4 +1,4 @@
-{
+﻿{
   "FGO_EVENT_WINTER_EVENT.title": "冬之结晶",
   "FGO_EVENT_WINTER_EVENT.description_0": "诞生于常冬之城， \n 某个炼金术师一族的最高杰作。 \n\n刻在全身， \n 作为魔术回路毫无用处的那个， \n 是骄傲少女的存在理由， \n 也是与伟大“英雄”的——牵绊的证明。",
   "FGO_EVENT_WINTER_EVENT.description_1": "有一种想带走她的欲望，并为之了付诸行动。",
@@ -17,7 +17,7 @@
   "FGO_EVENT_CONFLICT_EVENT.description_0": "“哟！来做个交易吧，御主。”",
   "FGO_EVENT_CONFLICT_EVENT.description_1": "“交易成立。战士，尽情战斗下去吧。”",
   "FGO_EVENT_CONFLICT_EVENT.description_2": "“交易成立。东西不错，我喜欢。”",
-  "FGO_EVENT_CONFLICT_EVENT.option_0": "[交出： ",
+  "FGO_EVENT_CONFLICT_EVENT.option_0": "[交出:  ",
   "FGO_EVENT_CONFLICT_EVENT.option_1": "] 失去这件遗物。 升级所有攻击牌。",
   "FGO_EVENT_CONFLICT_EVENT.option_2": "] 失去这件遗物。 获得一件特别的遗物。",
   "FGO_EVENT_CONFLICT_EVENT.option_3": "[离开]",
@@ -25,7 +25,7 @@
   "FGO_EVENT_PROOF_AND_REBUTTAL.pages.INITIAL.description": "正因为是献身与算式之人，在同一张棋盘上对弈的话，还在证明当中者和已经抵达结果者的差距才会如此分明。 \n 经验值的差别，真是无趣。然而另一方面， \n ”嫩！太嫩了！我觉得挺好的哦？毕竟年轻，就是花大力气买教训也不亏的嘛？这可是前辈送给你的值得感激涕零的讲义呢」“ \n ”我无法认同……就算这是早已得出的答案，也无法认同！我是绝对，不会成为这副样子的大人的！“ \n 精神性这种东西，或许也时常会有逆行的现象发生。 \n ”哎呀呀，真是孩子气啊。见识到了我宿敌的这般姿态，不得不说，其感触真是难以用语言形容……”",
   "FGO_EVENT_PROOF_AND_REBUTTAL.pages.INITIAL.options.WITNESS.title": "[见证] 获得一张 证明与反证。",
   "FGO_EVENT_PROOF_AND_REBUTTAL.pages.INITIAL.options.ENJOY.title": "[享受] 随机升级 2 张牌。 失去  %d 金币 。",
-  "FGO_EVENT_PROOF_AND_REBUTTAL.pages.INITIAL.options.LOCKED.title": "[锁定] 需要：可以升级的牌。",
+  "FGO_EVENT_PROOF_AND_REBUTTAL.pages.INITIAL.options.LOCKED.title": "[锁定] 需要: 可以升级的牌。",
   "FGO_EVENT_PROOF_AND_REBUTTAL.pages.WITNESS.description": "你选择记录下这个时刻。",
   "FGO_EVENT_PROOF_AND_REBUTTAL.pages.ENJOY.description": "你很享受这个时刻。",
   "FGO_EVENT_MANOF_CHALDEA.title": "迦勒底的男人",

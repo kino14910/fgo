@@ -3,12 +3,12 @@
   "name": "Fgo",
   "author": "Kino",
   "description": "添加了Fate/Grand Order中御主到杀戮尖塔。",
-  "version": "v0.0.0",
-  "min_game_version": "0.107.0",
+  "version": "v0.1.0",
+  "min_game_version": "0.111.0",
   "has_pck": true,
   "has_dll": true,
   "dependencies": [
-    { "id": "STS2-RitsuLib", "min_version": "0.4.54" }
+    { "id": "STS2-RitsuLib", "min_version": "0.5.12" }
   ],
   "affects_gameplay": true
 }

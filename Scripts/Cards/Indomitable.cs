@@ -2,16 +2,30 @@ using Fgo.Scripts.Powers;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
 
-public class Indomitable : FgoCardModel
+public class Indomitable() : FgoCardModel(1, CardType.Power,
+    CardRarity.Rare, TargetType.Self)
 {
-    public Indomitable() : base(2, CardType.Power,
-        CardRarity.Rare, TargetType.Self)
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
+    [
+        HoverTipFactory.FromPower<NonStackableGutsPower>(),
+        HoverTipFactory.FromPower<IndomitablePower>()
+    ];
+
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        ModCardVars.Power<NonStackableGutsPower>(5),
+        ModCardVars.Power<IndomitablePower>(2)
+    ];
+
+    protected override void OnUpgrade()
     {
-        WithPower<NonStackableGutsPower>(3, 2);
-        WithPower<IndomitablePower>(2, 1);
+        DynamicVars[nameof(NonStackableGutsPower)].UpgradeValueBy(10);
     }
 
     protected override async Task OnPlay(
@@ -19,8 +33,8 @@ public class Indomitable : FgoCardModel
         CardPlay play)
     {
         await PowerCmd.Apply<NonStackableGutsPower>(choiceContext, Owner.Creature,
-            DynamicVars[typeof(NonStackableGutsPower).Name].BaseValue, Owner.Creature, this);
+            DynamicVars[nameof(NonStackableGutsPower)].BaseValue, Owner.Creature, this);
         await PowerCmd.Apply<IndomitablePower>(choiceContext, Owner.Creature,
-            DynamicVars[typeof(IndomitablePower).Name].BaseValue, Owner.Creature, this);
+            DynamicVars[nameof(IndomitablePower)].BaseValue, Owner.Creature, this);
     }
 }

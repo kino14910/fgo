@@ -2,27 +2,36 @@ using Fgo.Scripts.Powers;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models.Powers;
+using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
 
-public class CalamityOfTheNorth : FgoCardModel
+public class CalamityOfTheNorth() : FgoCardModel(2, CardType.Skill,
+    CardRarity.Uncommon, TargetType.AllEnemies)
 {
-    public CalamityOfTheNorth() : base(2, CardType.Skill,
-        CardRarity.Uncommon, TargetType.Self)
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Retain];
+
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        ModCardVars.Power<PoisonPower>(5),
+        ModCardVars.Power<CursePower>(5)
+    ];
+
+    protected override void OnUpgrade()
     {
-        WithKeywords(CardKeyword.Retain);
-        WithPower<PoisonPower>(5, 3);
-        WithPower<CursePower>(5, 3);
+        DynamicVars[nameof(PoisonPower)].UpgradeValueBy(3);
+        DynamicVars[nameof(CursePower)].UpgradeValueBy(3);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
         foreach (var enemy in CombatState!.HittableEnemies)
         {
-            await PowerCmd.Apply<PoisonPower>(choiceContext, enemy, DynamicVars[typeof(PoisonPower).Name].BaseValue,
+            await PowerCmd.Apply<PoisonPower>(choiceContext, enemy, DynamicVars[nameof(PoisonPower)].BaseValue,
                 Owner.Creature, this);
-            await PowerCmd.Apply<CursePower>(choiceContext, enemy, DynamicVars[typeof(CursePower).Name].BaseValue,
+            await PowerCmd.Apply<CursePower>(choiceContext, enemy, DynamicVars[nameof(CursePower)].BaseValue,
                 Owner.Creature, this);
         }
     }

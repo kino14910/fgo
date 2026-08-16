@@ -1,17 +1,32 @@
 using Fgo.Scripts.Commands;
+using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
 
-public class TameshiMono : FgoCardModel
+public class TameshiMono() : FgoCardModel(1, CardType.Skill,
+    CardRarity.Uncommon, TargetType.Self)
 {
-    public TameshiMono() : base(1, CardType.Skill,
-        CardRarity.Uncommon, TargetType.Self)
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
+    [
+        FgoHoverTipHelper.CreateStarHoverTip()
+    ];
+
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
+
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        ModCardVars.Int("ExhaustCount", 3)
+    ];
+
+    protected override void OnUpgrade()
     {
-        WithKeywords(CardKeyword.Exhaust);
-        WithVar("ExhaustCount", 3, 2);
+        DynamicVars["ExhaustCount"].UpgradeValueBy(1);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
@@ -21,8 +36,8 @@ public class TameshiMono : FgoCardModel
             .ToList();
 
         foreach (var card in cards)
-            await CardCmd.Exhaust(choiceContext, card, true);
+            await CardCmd.Exhaust(choiceContext, card);
 
-        await FgoStarCmd.AddStars(cards.Count * 4);
+        await FgoResCmd.ModifyStars(cards.Count * 4, play.Player);
     }
 }

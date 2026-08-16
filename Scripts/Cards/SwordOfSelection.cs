@@ -3,16 +3,37 @@ using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using STS2RitsuLib.Cards.DynamicVars;
+using STS2RitsuLib.Combat.HandSize;
 
 namespace Fgo.Scripts.Cards;
 
-public class SwordOfSelection : FgoCardModel
+public class SwordOfSelection() : FgoCardModel(1, CardType.Skill,
+    CardRarity.Uncommon, TargetType.Self)
 {
-    public SwordOfSelection() : base(1, CardType.Skill,
-        CardRarity.Uncommon, TargetType.Self)
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
+    [
+        FgoHoverTipHelper.CreateNpHoverTip()
+    ];
+
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        ModCardVars.Cards(3),
+        ModCardVars.Int("NpPerHands", 2),
+        ModCardVars.Computed("Np", context =>
+        {
+            var npPerHands = context.GetCardBaseValueOrDefault("NpPerHands");
+            var handCount = context.Player?.PlayerCombatState?.Hand.Cards.Count ?? 0;
+            var maxHand = context.HasPlayer ? MaxHandSizeCalculator.Calculate(context.Player!) : 0;
+            return npPerHands * Math.Min(handCount - 1 + DynamicVars.Cards.BaseValue, maxHand);
+        })
+    ];
+
+    protected override void OnUpgrade()
     {
-        WithCards(2, 1);
-        WithNp(20);
+        DynamicVars.Cards.UpgradeValueBy(1);
     }
 
     protected override async Task OnPlay(
@@ -20,6 +41,6 @@ public class SwordOfSelection : FgoCardModel
         CardPlay play)
     {
         await CardPileCmd.Draw(choiceContext, DynamicVars.Cards.BaseValue, Owner);
-        await FgoNpCmd.AddNp(FgoCardActions.HandSize(Owner) * DynamicVars["NP"].IntValue / 10);
+        await FgoResCmd.ModifyNp(this);
     }
 }

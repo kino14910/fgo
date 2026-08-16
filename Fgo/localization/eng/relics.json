@@ -1,7 +1,10 @@
-{
+﻿{
   "FGO_RELIC_SUITCASE_FGO.title": "Suitcase",
   "FGO_RELIC_SUITCASE_FGO.description": "At the start of combat, gain 20% NP.",
   "FGO_RELIC_SUITCASE_FGO.flavor": "",
+  "FGO_RELIC_SAINT_QUARTZ.title": "Saint Quartz",
+  "FGO_RELIC_SAINT_QUARTZ.description": "Each room entered increases the counter by 1. At counter ≥ 3,[gold]right-click[/gold]this relic to add a Noble card, consuming 3 counter.",
+  "FGO_RELIC_SAINT_QUARTZ.flavor": "A rare holy crystal used to summon Heroic Spirits.",
   "FGO_RELIC_HALLOWEEN_ROYALTY.title": "Mystic Code",
   "FGO_RELIC_HALLOWEEN_ROYALTY.description": "Every 5 turns, use Mystic Code's Master skill. Every 5 turns, use Mystic Code's Master skill(+).",
   "FGO_RELIC_HALLOWEEN_ROYALTY.flavor": "A prestigious and noble product. Now you can be the (Halloween) Crown Prince!",
@@ -12,7 +15,7 @@
   "FGO_RELIC_SURPRISE_CHOCOLATE.description": "At the start of combat, gain 1 random buff.",
   "FGO_RELIC_SURPRISE_CHOCOLATE.flavor": "The first time seems like just an attempt... let's do it again!",
   "FGO_RELIC_LOCK_CHOCOLATE.title": "Lock Chocolate",
-  "FGO_RELIC_LOCK_CHOCOLATE.description": "Gain [E] at the start of your turn. At the start of combat, gain 1 Evil_Curse.",
+  "FGO_RELIC_LOCK_CHOCOLATE.description": "Gain{energyPrefix:energyIcons(1)}at the start of your turn. At the start of combat, gain 1 Evil_Curse.",
   "FGO_RELIC_LOCK_CHOCOLATE.flavor": "Make a choice and give it to someone important to you.",
   "FGO_RELIC_LOCK_CHOCOLATE_STRAWBERRY.title": "Lock Chocolate Strawberry",
   "FGO_RELIC_LOCK_CHOCOLATE_STRAWBERRY.description": "Upon pickup, add a Wall of Snow Flakes and Black Barrel to your deck.",
@@ -47,7 +50,7 @@
   "FGO_RELIC_MIDSUMMER_NIGHT_DREAM.description": "You can no longer become Evil_Curse.",
   "FGO_RELIC_MIDSUMMER_NIGHT_DREAM.flavor": "While these visions did appear. And this weak and idle theme, no more yielding but a dream.",
   "FGO_RELIC_SALEM.title": "Salem",
-  "FGO_RELIC_SALEM.description": "每张领域外生命牌：回合开始获得2活力和暴击星。",
+  "FGO_RELIC_SALEM.description": "每张领域外生命牌: 回合开始获得2活力和[gold]暴击星[/gold]。",
   "FGO_RELIC_SALEM.flavor": "Visitors from the void.",
   "FGO_RELIC_SKULL_CANDY.title": "Skull Candy",
   "FGO_RELIC_SKULL_CANDY.description": "Upgrade your Mystic Code's Master skill.",
@@ -70,10 +73,7 @@
   "FGO_RELIC_MECHANICAL_PROTECTOR.title": "Mechanical Protector",
   "FGO_RELIC_MECHANICAL_PROTECTOR.description": "Whenever you play a Power card for 3 times, a random enemy Stunned. This relic has been used up.",
   "FGO_RELIC_MECHANICAL_PROTECTOR.flavor": "",
-  "FGO_RELIC_WING_BOOTS_FGO.title": "Wing Boots",
-  "FGO_RELIC_WING_BOOTS_FGO.description": "At the start of combat, gain 1 Intangible.",
-  "FGO_RELIC_WING_BOOTS_FGO.flavor": "",
-  "FGO_RELIC_FGO_RELIC.description": "",
-  "FGO_RELIC_FGO_RELIC.flavor": "",
-  "FGO_RELIC_FGO_RELIC.title": ""
+  "FGO_RELIC_FGO_RELIC.description": "Feedback to author if you see this",
+  "FGO_RELIC_FGO_RELIC.flavor": "Feedback to author if you see this",
+  "FGO_RELIC_FGO_RELIC.title": "Feedback to author if you see this"
 }

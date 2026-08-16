@@ -1,21 +1,26 @@
-using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using HarmonyLib;
+using JetBrains.Annotations;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.Models;
+using STS2RitsuLib.Scaffolding.Content;
 
 namespace Fgo.Scripts.Powers;
 
 /// <summary>
-///     不叠加的毅力：每次施加独立存在（各占一个图标），死亡时消耗一层并按该层的回血量恢复。
+///     不叠加的毅力: 每次施加独立存在（各占一个图标），死亡时消耗一层并按该层的回血量恢复。
 ///     不同回血量的实例互不合并，各自显示独立的图标与数值。
 /// </summary>
-[SuppressMessage("ReSharper", "UnusedType.Local")]
 public class NonStackableGutsPower : GutsPower
 {
     public override PowerStackType StackType => PowerStackType.Counter;
+
+    public override PowerAssetProfile AssetProfile => new(
+        "res://Fgo/images/powers/GutsPower.png",
+        "res://Fgo/images/powers/big/GutsPower.png"
+    );
 
     /// <summary>
     ///     基类 GutsPower 在 BeforeDeath 中治疗并移除自身，但 BeforeDeath 无法阻止死亡。
@@ -43,6 +48,7 @@ public class NonStackableGutsPower : GutsPower
     }
 
     [HarmonyPatch]
+    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     private class OldInstancedPatch
     {
         private static readonly MethodInfo?
@@ -68,6 +74,7 @@ public class NonStackableGutsPower : GutsPower
     }
 
     [HarmonyPatch]
+    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     private class NewInstancedPatch
     {
         private static readonly MethodInfo? TargetMethod =

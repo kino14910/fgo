@@ -21,13 +21,13 @@ public class LuckySpinningPower : FgoPowerModel
         if (dealer != Owner) return;
         if (!props.HasFlag(ValueProp.Move)) return;
         Flash();
-        await FgoStarCmd.AddStars(Amount);
+        await FgoResCmd.ModifyStars(Amount, Owner.Player);
     }
 
     public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side,
         IEnumerable<Creature> participants)
     {
-        if (side == CombatSide.Player)
+        if (side == CombatSide.Player && participants.Contains(Owner))
             await PowerCmd.Remove(this);
     }
 }

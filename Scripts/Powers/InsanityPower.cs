@@ -27,6 +27,6 @@ public class InsanityPower : FgoPowerModel
         Flash();
         await PowerCmd.Decrement(curse);
         await PowerCmd.Apply<StrengthPower>(choiceContext, Owner, 1m, Owner, cardPlay.Card);
-        await FgoNpCmd.AddNp(Amount);
+        await FgoResCmd.ModifyNp(Amount, cardPlay.Player);
     }
 }

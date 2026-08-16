@@ -1,17 +1,33 @@
 using Fgo.Scripts.Powers;
+using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
 
-public class HeroicKing : FgoCardModel
+public class HeroicKing() : FgoCardModel(1, CardType.Attack,
+    CardRarity.Uncommon, TargetType.RandomEnemy)
 {
-    public HeroicKing() : base(1, CardType.Attack,
-        CardRarity.Uncommon, TargetType.Self)
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
+    [
+        HoverTipFactory.FromPower<HeroicKingPower>(),
+        FgoHoverTipHelper.CreateStarHoverTip()
+    ];
+
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        ModCardVars.Damage(5),
+        ModCardVars.Computed("Hits",
+            context => 2 + Owner.Creature.GetPower<HeroicKingPower>()?.Amount ?? context.BaseValue, 2)
+    ];
+
+    protected override void OnUpgrade()
     {
-        WithDamage(5);
-        WithVar("Hits", 4, 3);
+        DynamicVars.Damage.UpgradeValueBy(2);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
