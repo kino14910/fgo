@@ -22,7 +22,7 @@ public class RayProofKyrielight() : NobleCardModel(1, CardType.Attack, TargetTyp
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
         HoverTipFactory.FromPower<VulnerablePower>(),
-        HoverTipFactory.FromPower<IgnoreInvincibilityPower>(),
+        HoverTipFactory.FromPower<IgnoreInvinciblePower>(),
         FgoHoverTipHelper.CreateNpHoverTip()
     ];
 
@@ -57,7 +57,7 @@ public class RayProofKyrielight() : NobleCardModel(1, CardType.Attack, TargetTyp
                     await PowerCmd.Remove(buff);
             }
 
-            await PowerCmd.Apply<IgnoreInvincibilityPower>(choiceContext, enemy, 1m, Owner.Creature, this);
+            await PowerCmd.Apply<IgnoreInvinciblePower>(choiceContext, enemy, 1m, Owner.Creature, this);
         }
     }
 }

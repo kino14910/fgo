@@ -16,7 +16,7 @@ public class OriginBullet() : FgoCardModel(1, CardType.Skill,
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
-        HoverTipFactory.FromPower<IgnoreInvincibilityPower>()
+        HoverTipFactory.FromPower<IgnoreInvinciblePower>()
     ];
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
@@ -25,6 +25,6 @@ public class OriginBullet() : FgoCardModel(1, CardType.Skill,
     {
         if(play.Target is null) return;
         var amount = await IgnoreInvincibleAction(play);
-        await PowerCmd.Apply<IgnoreInvincibilityPower>(choiceContext, Owner.Creature, amount, Owner.Creature, this);
+        await PowerCmd.Apply<IgnoreInvinciblePower>(choiceContext, Owner.Creature, amount, Owner.Creature, this);
     }
 }

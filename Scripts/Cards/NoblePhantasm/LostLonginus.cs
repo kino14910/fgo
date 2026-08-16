@@ -14,7 +14,7 @@ public class LostLonginus() : NobleCardModel(2, CardType.Attack, TargetType.Self
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
-        HoverTipFactory.FromPower<IgnoreInvincibilityPower>()
+        HoverTipFactory.FromPower<IgnoreInvinciblePower>()
     ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
