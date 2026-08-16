@@ -14,6 +14,8 @@ namespace Fgo.Scripts.Cards.NoblePhantasm;
 
 public class ExcaliburExcelsus() : NobleCardModel(3, CardType.Attack, TargetType.Self)
 {
+    protected override bool IgnoreInvincible => true;
+
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
         HoverTipFactory.FromPower<StrengthPower>(),
@@ -39,8 +41,7 @@ public class ExcaliburExcelsus() : NobleCardModel(3, CardType.Attack, TargetType
         PlayerChoiceContext choiceContext,
         CardPlay play)
     {
-        // 无敌贯通
-        await PowerCmd.Apply<IgnoresInvincibilityPower>(choiceContext, Owner.Creature, 1m, Owner.Creature, this);
+        await IgnoreInvincibleAction(play);
 
         var enemyCount = CombatState!.HittableEnemies.Count;
         // 每有一名敌人，获得格挡、力量、宝具值

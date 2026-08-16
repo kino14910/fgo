@@ -17,10 +17,12 @@ namespace Fgo.Scripts.Cards.DerivativeMash;
 /// </summary>
 public class RayProofKyrielight() : NobleCardModel(1, CardType.Attack, TargetType.Self)
 {
+    protected override bool IgnoreInvincible => true;
+
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
         HoverTipFactory.FromPower<VulnerablePower>(),
-        HoverTipFactory.FromPower<IgnoresInvincibilityPower>(),
+        HoverTipFactory.FromPower<IgnoreInvincibilityPower>(),
         FgoHoverTipHelper.CreateNpHoverTip()
     ];
 
@@ -38,6 +40,7 @@ public class RayProofKyrielight() : NobleCardModel(1, CardType.Attack, TargetTyp
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
+        await IgnoreInvincibleAction(play);
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
             .FromCard(this, play)
             .TargetingAllOpponents(CombatState!)
@@ -54,7 +57,7 @@ public class RayProofKyrielight() : NobleCardModel(1, CardType.Attack, TargetTyp
                     await PowerCmd.Remove(buff);
             }
 
-            await PowerCmd.Apply<IgnoresInvincibilityPower>(choiceContext, enemy, 1m, Owner.Creature, this);
+            await PowerCmd.Apply<IgnoreInvincibilityPower>(choiceContext, enemy, 1m, Owner.Creature, this);
         }
     }
 }

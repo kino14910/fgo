@@ -1,3 +1,4 @@
+using Fgo.Scripts.Powers;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -20,15 +21,18 @@ public class EightKindness() : FgoCardModel(2, CardType.Power,
         HoverTipFactory.FromPower<ThornsPower>(),
         HoverTipFactory.FromPower<VigorPower>(),
         HoverTipFactory.FromPower<IntangiblePower>(),
-        HoverTipFactory.FromPower<ArtifactPower>()
+        HoverTipFactory.FromPower<NpRatePower>()
     ];
-
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         ModCardVars.Power<StrengthPower>(1)
     ];
+
+    protected override void OnUpgrade()
+    {
+        AddKeyword(CardKeyword.Retain);
+    }
 
     protected override async Task OnPlay(
         PlayerChoiceContext choiceContext,
@@ -45,6 +49,6 @@ public class EightKindness() : FgoCardModel(2, CardType.Power,
         await PowerCmd.Apply<ThornsPower>(choiceContext, self, amount, Owner.Creature, this);
         await PowerCmd.Apply<VigorPower>(choiceContext, self, amount, Owner.Creature, this);
         await PowerCmd.Apply<IntangiblePower>(choiceContext, self, amount, Owner.Creature, this);
-        await PowerCmd.Apply<ArtifactPower>(choiceContext, self, amount, Owner.Creature, this);
+        await PowerCmd.Apply<NpRatePower>(choiceContext, self, amount, Owner.Creature, this);
     }
 }

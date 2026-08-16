@@ -37,6 +37,5 @@ public class RayHorizon() : FgoColorlessCardModel(0, CardType.Skill,
         if (npCardPower != null)
             npCardPower.NobleCard = ModelDb.Card<HollowHeartAlbion>();
         await FgoResCmd.ModifyNp(this);
-        await PowerCmd.Apply<InvincibilityTurnPower>(choiceContext, Owner.Creature, 1m, Owner.Creature, this);
     }
 }

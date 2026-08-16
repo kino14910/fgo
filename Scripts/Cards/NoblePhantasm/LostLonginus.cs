@@ -10,9 +10,11 @@ namespace Fgo.Scripts.Cards.NoblePhantasm;
 
 public class LostLonginus() : NobleCardModel(2, CardType.Attack, TargetType.Self)
 {
+    protected override bool IgnoreInvincible => true;
+
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
-        HoverTipFactory.FromPower<IgnoresInvincibilityPower>()
+        HoverTipFactory.FromPower<IgnoreInvincibilityPower>()
     ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
@@ -29,9 +31,8 @@ public class LostLonginus() : NobleCardModel(2, CardType.Attack, TargetType.Self
         PlayerChoiceContext choiceContext,
         CardPlay play)
     {
-        // 无敌贯通
-        await PowerCmd.Apply<IgnoresInvincibilityPower>(choiceContext, Owner.Creature, 1m, Owner.Creature, this);
-
+        await IgnoreInvincibleAction(play);
+        
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
             .FromCard(this, play)
             .TargetingAllOpponents(CombatState!)

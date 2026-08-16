@@ -1,23 +1,30 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Fgo.Scripts.Powers;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
+using MegaCrit.Sts2.Core.Models.Powers;
 
 namespace Fgo.Scripts.Cards;
 
 public class OriginBullet() : FgoCardModel(1, CardType.Skill,
     CardRarity.Uncommon, TargetType.AnyEnemy)
 {
+    protected override bool IgnoreInvincible => true;
+
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
-        HoverTipFactory.FromPower<IgnoresInvincibilityPower>()
+        HoverTipFactory.FromPower<IgnoreInvincibilityPower>()
     ];
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await PowerCmd.Apply<IgnoresInvincibilityPower>(choiceContext, play.Target!, 1m, Owner.Creature, this);
+        if(play.Target is null) return;
+        var amount = await IgnoreInvincibleAction(play);
+        await PowerCmd.Apply<IgnoreInvincibilityPower>(choiceContext, Owner.Creature, amount, Owner.Creature, this);
     }
 }

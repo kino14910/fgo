@@ -9,7 +9,7 @@ using STS2RitsuLib.Cards.DynamicVars;
 namespace Fgo.Scripts.Cards;
 
 public class PrimevalRune() : FgoCardModel(1, CardType.Skill,
-    CardRarity.Rare, TargetType.Self)
+    CardRarity.Uncommon, TargetType.Self)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
@@ -22,6 +22,12 @@ public class PrimevalRune() : FgoCardModel(1, CardType.Skill,
         ModCardVars.Power<WeakPower>(2),
         ModCardVars.Power<VulnerablePower>(2)
     ];
+
+    protected override void OnUpgrade()
+    {
+        DynamicVars["WeakPower"].UpgradeValueBy(1);
+        DynamicVars["VulnerablePower"].UpgradeValueBy(1);
+    }
 
     protected override async Task OnPlay(
         PlayerChoiceContext choiceContext,

@@ -21,6 +21,5 @@ public class NpPerTurnPower : FgoPowerModel
     {
         Flash();
         await FgoResCmd.ModifyNp(Amount, player);
-        await PowerCmd.Decrement(this);
     }
 }

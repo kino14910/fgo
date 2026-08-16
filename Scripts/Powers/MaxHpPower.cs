@@ -2,22 +2,21 @@ using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
+using STS2RitsuLib.Cards.DynamicVars;
 using STS2RitsuLib.Scaffolding.Content;
 
 namespace Fgo.Scripts.Powers;
 
-public class MaxHpPower : ModPowerTemplate
+public class MaxHpPower : FgoPowerModel
 {
     private decimal _appliedHpBoost;
     private bool _eventsSubscribed;
     private int _lastAmount;
 
-    protected override IEnumerable<DynamicVar> CanonicalVars => new[]
-    {
-        new DynamicVar("HpPerStack", 10m) // 在这里配置每层HP
-    };
-
-    private decimal HpPerStack => DynamicVars["HpPerStack"].BaseValue;
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        ModCardVars.Int("HpPerStack", 1m)
+    ];
 
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Counter;
@@ -33,7 +32,7 @@ public class MaxHpPower : ModPowerTemplate
     public override async Task AfterApplied(Creature? applier, CardModel? cardSource)
     {
         _lastAmount = Amount;
-        _appliedHpBoost = _lastAmount * HpPerStack;
+        _appliedHpBoost = _lastAmount * DynamicVars["HpPerStack"].BaseValue;
         ApplyMaxHpBoost(_appliedHpBoost);
 
         if (!_eventsSubscribed)
@@ -82,7 +81,7 @@ public class MaxHpPower : ModPowerTemplate
         var delta = Amount - _lastAmount;
         if (delta == 0) return;
 
-        var hpChange = delta * HpPerStack;
+        var hpChange = delta * DynamicVars["HpPerStack"].BaseValue;
         _appliedHpBoost += hpChange;
         _lastAmount = Amount;
 
@@ -94,6 +93,6 @@ public class MaxHpPower : ModPowerTemplate
     private void ApplyMaxHpBoost(decimal amount)
     {
         Owner.SetMaxHpInternal(Owner.MaxHp + amount);
-        // 不恢复CurrentHp — 这正是你要的效果
+        // 不恢复CurrentHp
     }
 }

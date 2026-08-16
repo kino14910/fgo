@@ -16,7 +16,7 @@ public abstract class NobleCardModel(
     CardRarity rarity,
     TargetType targetType,
     bool shouldShowInCardLibrary = true)
-    : ModCardTemplate(energyCost, type, rarity, targetType, shouldShowInCardLibrary)
+    : FgoBaseCardModel(energyCost, type, rarity, targetType, shouldShowInCardLibrary)
 {
     /// <summary>
     ///     便捷构造器: 不指定稀有度（默认 Rare）和 shouldShowInCardLibrary（默认 true）。

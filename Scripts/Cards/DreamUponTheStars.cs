@@ -34,7 +34,7 @@ public class DreamUponTheStars() : FgoCardModel(1, CardType.Skill,
 
     protected override void OnUpgrade()
     {
-        DynamicVars[nameof(NpDamagePower)].UpgradeValueBy(3);
+        DynamicVars[nameof(NpDamagePower)].UpgradeValueBy(10);
     }
 
     protected override async Task OnPlay(

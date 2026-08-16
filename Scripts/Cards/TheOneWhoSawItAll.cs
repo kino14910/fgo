@@ -1,8 +1,10 @@
 using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.Extensions;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.Logging;
 using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
@@ -27,13 +29,12 @@ public class TheOneWhoSawItAll() : FgoCardModel(0, CardType.Skill,
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        var attack = Owner.PlayerCombatState!.DrawPile.Cards
-            .Where(card => card.Type == CardType.Attack)
-            .OrderBy(_ => Random.Shared.Next())
-            .FirstOrDefault();
-        if (attack == null) return;
+        var attack = PileType.Draw.GetPile(Owner).Cards.Where(card => card.Type == CardType.Attack)
+            .TakeRandom(1, Owner.RunState.Rng.CombatCardSelection).FirstOrDefault();
 
+        if (attack == null) return;
+        
         FgoCardActions.BoostDamage(attack, DynamicVars["DamageBoost"].IntValue);
-        await CardPileCmd.Add(attack, PileType.Hand, CardPilePosition.Top, this, true);
+        await CardPileCmd.Add(attack, PileType.Hand, CardPilePosition.Top, this);
     }
 }
