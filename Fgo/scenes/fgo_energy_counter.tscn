@@ -1,6 +1,5 @@
-[gd_scene load_steps=6 format=3 uid="uid://cghhpt1j7pxnr"]
+[gd_scene load_steps=5 format=3 uid="uid://cghhpt1j7pxnr"]
 
-[ext_resource type="Texture2D" uid="uid://dufj12dswcvv4" path="res://icon.svg" id="1_85qf2"]
 [ext_resource type="Texture2D" uid="uid://5qjqib4p1u0k" path="res://Fgo/images/ui/EPanel/layer0.png" id="1_iiep1"]
 [ext_resource type="Texture2D" uid="uid://bjve1a3qhaq6x" path="res://Fgo/images/ui/EPanel/layer1.png" id="2_qkpfl"]
 [ext_resource type="Texture2D" uid="uid://dred3uxaxq5vh" path="res://Fgo/images/ui/EPanel/layer2.png" id="3_7itwa"]
@@ -80,17 +79,6 @@ grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(64, 64)
 texture = ExtResource("4_wo4nj")
-expand_mode = 1
-
-[node name="Layer1" type="TextureRect" parent="Layers"]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("1_85qf2")
 expand_mode = 1
 
 [node name="EnergyVfxFront" type="Node2D" parent="."]

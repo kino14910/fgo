@@ -1,14 +1,14 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=2 format=3 uid="uid://swm414tvd4f1"]
 
-[ext_resource type="Texture2D" path="res://icon.svg" id="1_by5rm"]
+[ext_resource type="Texture2D" uid="uid://ck2wyj0a5ybbr" path="res://Fgo/images/charui/character_icon_fgo.png" id="1_aci6t"]
 
-[node name="TestIcon" type="TextureRect"]
+[node name="FgoIcon" type="TextureRect"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-texture = ExtResource("1_by5rm")
+texture = ExtResource("1_aci6t")
 expand_mode = 1
 stretch_mode = 5
