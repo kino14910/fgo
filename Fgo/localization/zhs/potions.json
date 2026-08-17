@@ -3,12 +3,12 @@
   "FGO_POTION_FGO_POTION_MODEL.title": "看到这个请向作者反馈此能力缺少本地化",
   "FGO_POTION_POTION_I_D.title": "某种药水",
   "FGO_POTION_POTION_I_D.description": "一些组合成描述的碎片。具体如何取决于药水，你可以随意设置。",
-  "FGO_POTION_ELIXIROF_REJUVENATION.title": "返老还童的灵药",
-  "FGO_POTION_ELIXIROF_REJUVENATION.description": "回复 10 点生命。移除你身上的所有负面效果。",
-  "FGO_POTION_EXTREMELY_SPICY_MAPO_TOFU.title": "罐装特辣麻婆豆腐",
-  "FGO_POTION_EXTREMELY_SPICY_MAPO_TOFU.description": "获得 40%[gold]宝具值[/gold]和 40%[gold]宝具威力[/gold]。",
-  "FGO_POTION_CURSE_POTION.title": "[gold]诅呪[/gold]药水",
-  "FGO_POTION_CURSE_POTION.description": "给予 5 层*[gold]诅呪[/gold]*。",
+  "FGO_POTION_ELIXIR_OF_REJUVENATION.title": "返老还童的灵药",
+  "FGO_POTION_ELIXIR_OF_REJUVENATION.description": "回复10点生命。移除你身上的所有负面效果。",
+  "FGO_POTION_EXTREMELY_SPICY_MAPO_TOFU.title": "特辣麻婆豆腐",
+  "FGO_POTION_EXTREMELY_SPICY_MAPO_TOFU.description": "获得40%[gold]宝具值[/gold]和40%[gold]宝具威力[/gold]。",
+  "FGO_POTION_CURSE_POTION.title": "诅呪药水",
+  "FGO_POTION_CURSE_POTION.description": "给予5层[gold]诅呪[/gold]。",
   "FGO_POTION_STAR_FGO_POTION.title": "星之药水",
-  "FGO_POTION_STAR_FGO_POTION.description": "获得 10 颗[gold]暴击星[/gold]。"
+  "FGO_POTION_STAR_FGO_POTION.description": "获得10颗[gold]暴击星[/gold]。"
 }

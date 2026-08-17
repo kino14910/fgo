@@ -1,4 +1,5 @@
 using Fgo.Scripts.Commands;
+using Fgo.Scripts.Keywords;
 using Fgo.Scripts.Powers;
 using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.Commands;
@@ -14,7 +15,7 @@ namespace Fgo.Scripts.Cards.NoblePhantasm;
 
 public class ExcaliburExcelsus() : NobleCardModel(3, CardType.Attack, TargetType.Self)
 {
-    protected override bool IgnoreInvincible => true;
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [FgoKeywords.IgnoreInvincible];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [

@@ -3,6 +3,7 @@ using Godot;
 using MegaCrit.Sts2.Core.Entities.Characters;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Logging;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Nodes.Combat;
 using MegaCrit.Sts2.Core.ValueProps;
@@ -10,6 +11,7 @@ using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Scaffolding.Characters;
 using STS2RitsuLib.Scaffolding.Content;
 using STS2RitsuLib.Scaffolding.Godot;
+using Logger = MegaCrit.Sts2.Core.Logging.Logger;
 
 namespace Fgo.Scripts.Character;
 
@@ -97,7 +99,7 @@ public class FgoCharacter : ModCharacterTemplate<FgoCardPool, FgoRelicPool, FgoP
             VanillaRelicVisualOverrides:
             [
                 new CharacterVanillaRelicVisualOverride(CharacterOwnedVanillaRelicModelId.YummyCookie,
-                    new RelicAssetProfile("res://Fgo/images/relics/big/yummy_cookie_fgo.png")) // 美味饼干覆盖
+                    new RelicAssetProfile("res://Fgo/images/relics/big/YummyCookieFgo.png")) // 美味饼干覆盖
             ],
             VanillaPotionVisualOverrides: []
         ));
@@ -136,16 +138,5 @@ public class FgoCharacter : ModCharacterTemplate<FgoCardPool, FgoRelicPool, FgoP
             "vfx/vfx_attack_slash",
             "vfx/vfx_heavy_blunt"
         ];
-    }
-
-    public override async Task AfterDamageReceived(PlayerChoiceContext choiceContext, Creature target,
-        DamageResult result, ValueProp props,
-        Creature? dealer, CardModel? cardSource)
-    {
-        if (target is { IsPlayer: true }
-            && dealer is { IsMonster: true }
-            && result.TotalDamage > 0
-            && props.IsPoweredAttack())
-            await FgoResCmd.ModifyNp(result.TotalDamage, dealer.Player);
     }
 }

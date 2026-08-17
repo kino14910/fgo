@@ -2,9 +2,12 @@ using Fgo.Scripts.Powers;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Relics;
 using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Models.RelicPools;
+using STS2RitsuLib.Interop.AutoRegistration;
 
 namespace Fgo.Scripts.Relics;
 
+[RegisterRelic(typeof(DeprecatedRelicPool))]
 public class MidsummerNightDream : FgoRelic
 {
     public override RelicRarity Rarity => RelicRarity.Uncommon;

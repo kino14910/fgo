@@ -22,20 +22,19 @@ public class FromTheWorldsEndPower : FgoPowerModel
         IEnumerable<Creature> participants)
     {
         if (!participants.Contains(Owner)) return;
-        if (side == CombatSide.Player)
+        if (side != CombatSide.Player) return;
+        
+        var combatState = Owner.CombatState;
+        if (combatState != null)
         {
-            var combatState = Owner.CombatState;
-            if (combatState != null)
+            Flash();
+            foreach (var enemy in combatState.HittableEnemies)
             {
-                Flash();
-                foreach (var enemy in combatState.HittableEnemies)
-                {
-                    await PowerCmd.Apply<StrengthPower>(choiceContext, enemy, -1m, Owner, null);
-                    await PowerCmd.Apply<WeakPower>(choiceContext, enemy, 1m, Owner, null);
-                }
+                await PowerCmd.Apply<StrengthPower>(choiceContext, enemy, -1m, Owner, null);
+                await PowerCmd.Apply<WeakPower>(choiceContext, enemy, 1m, Owner, null);
             }
-
-            await PowerCmd.Decrement(this);
         }
+
+        await PowerCmd.Decrement(this);
     }
 }

@@ -1,8 +1,8 @@
 ﻿{
   "FGO_POTION_POTION_I_D.title": "Some Kind of Potion",
   "FGO_POTION_POTION_I_D.description": "Little pieces that get put together into a description. Exactly how depends on the potion, and you can set it up however you want.",
-  "FGO_POTION_ELIXIROF_REJUVENATION.title": "Elixir of Rejuvenation",
-  "FGO_POTION_ELIXIROF_REJUVENATION.description": "Heal 10 HP. Remove all of your debuffs.",
+  "FGO_POTION_ELIXIR_OF_REJUVENATION.title": "Elixir of Rejuvenation",
+  "FGO_POTION_ELIXIR_OF_REJUVENATION.description": "Heal 10 HP. Remove all of your debuffs.",
   "FGO_POTION_EXTREMELY_SPICY_MAPO_TOFU.title": "Mapo Tofu",
   "FGO_POTION_EXTREMELY_SPICY_MAPO_TOFU.description": "Gain 40% NP and 40% NP Damage.",
   "FGO_POTION_CURSE_POTION.title": "Curse Potion",

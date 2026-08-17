@@ -18,7 +18,7 @@ public class CharismaOfConflict() : FgoCardModel(1, CardType.Attack,
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        ModCardVars.Damage(7)
+        ModCardVars.Damage(8)
     ];
 
     protected override void OnUpgrade()

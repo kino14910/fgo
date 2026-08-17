@@ -54,6 +54,8 @@ public class FifthForcePower : FgoPowerModel, IPowerExtraIconAmountLabelSpecsPro
         IEnumerable<Creature> participants)
     {
         if (!participants.Contains(Owner)) return;
-        if (side == CombatSide.Player) await PowerCmd.Decrement(this);
+        if (side != CombatSide.Player) return;
+        
+        await PowerCmd.Decrement(this);
     }
 }

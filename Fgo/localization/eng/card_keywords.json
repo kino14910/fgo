@@ -1,1 +1,4 @@
-{}
+{
+  "FGO_KEYWORD_IGNORE_INVINCIBLE.title": "Ignores Invincibility",
+  "FGO_KEYWORD_IGNORE_INVINCIBLE.description": "Remove the target's [gold]Block[/gold], [gold]Hardened Shell[/gold], and [gold]Hard to Kill[/gold]."
+}

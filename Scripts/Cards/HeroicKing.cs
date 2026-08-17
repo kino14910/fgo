@@ -9,8 +9,11 @@ using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
 
-public class HeroicKing() : FgoCardModel(1, CardType.Attack,
-    CardRarity.Uncommon, TargetType.RandomEnemy)
+public class HeroicKing() : FgoCardModel(
+    1,
+    CardType.Attack,
+    CardRarity.Uncommon,
+    TargetType.RandomEnemy)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
@@ -21,8 +24,19 @@ public class HeroicKing() : FgoCardModel(1, CardType.Attack,
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         ModCardVars.Damage(5),
-        ModCardVars.Computed("Hits",
-            context => 2 + Owner.Creature.GetPower<HeroicKingPower>()?.Amount ?? context.BaseValue, 2)
+
+        ModCardVars.Computed(
+            "Hits",
+            static ctx =>
+            {
+                var bonus =
+                    ctx.SourceCreature?
+                        .GetPower<HeroicKingPower>()?
+                        .Amount ?? 0m;
+
+                return ctx.BaseValue + bonus;
+            },
+            baseValue: 2)
     ];
 
     protected override void OnUpgrade()
@@ -30,14 +44,27 @@ public class HeroicKing() : FgoCardModel(1, CardType.Attack,
         DynamicVars.Damage.UpgradeValueBy(2);
     }
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    protected override async Task OnPlay(
+        PlayerChoiceContext choiceContext,
+        CardPlay play)
     {
+        if (CombatState is null)
+            return;
+
+        var hits = (int)DynamicVars.EvaluateValueOrDefault("Hits");
+
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-            .WithHitCount(DynamicVars["Hits"].IntValue)
+            .WithHitCount(hits)
             .FromCard(this, play)
-            .TargetingRandomOpponents(CombatState!)
+            .TargetingRandomOpponents(CombatState)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
-        await PowerCmd.Apply<HeroicKingPower>(choiceContext, Owner.Creature, 1m, Owner.Creature, this);
+
+        await PowerCmd.Apply<HeroicKingPower>(
+            choiceContext,
+            Owner.Creature,
+            1m,
+            Owner.Creature,
+            this);
     }
 }

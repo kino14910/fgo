@@ -21,8 +21,10 @@ public class FacelessMoonPower : FgoPowerModel
     {
         if (!participants.Contains(Owner)) return;
         if (side != CombatSide.Player) return;
+        if (Owner.Player?.PlayerCombatState is null) return;
+        
         Flash();
-        await CreatureCmd.GainBlock(Owner, Amount, ValueProp.Unpowered, null);
+        await CreatureCmd.GainBlock(Owner, Owner.Player.PlayerCombatState.Hand.Cards.Count, ValueProp.Unpowered, null);
         await FgoResCmd.ModifyStars(Amount, Owner.Player);
         await PowerCmd.Remove(this);
     }

@@ -16,6 +16,7 @@ public class OverchargePower : FgoPowerModel
     {
         if (!participants.Contains(Owner)) return;
         if (side != CombatSide.Player) return;
+        
         Flash();
         await PowerCmd.Remove(this);
     }

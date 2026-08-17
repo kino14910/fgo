@@ -1,8 +1,7 @@
-using Fgo.Scripts.Powers;
+using Fgo.Scripts.Keywords;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
-using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using STS2RitsuLib.Cards.DynamicVars;
 
@@ -10,12 +9,7 @@ namespace Fgo.Scripts.Cards.NoblePhantasm;
 
 public class LostLonginus() : NobleCardModel(2, CardType.Attack, TargetType.Self)
 {
-    protected override bool IgnoreInvincible => true;
-
-    protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
-    [
-        HoverTipFactory.FromPower<IgnoreInvinciblePower>()
-    ];
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [FgoKeywords.IgnoreInvincible];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [

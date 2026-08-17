@@ -1,6 +1,7 @@
 using System.Reflection;
 using Fgo.Scripts.Cards;
 using Fgo.Scripts.Character;
+using Fgo.Scripts.Relics;
 using Fgo.Scripts.Singletons;
 using Fgo.Scripts.UI;
 using Fgo.Scripts.Utils;
@@ -48,7 +49,7 @@ public class Entry
         var assembly = Assembly.GetExecutingAssembly();
         RitsuLibFramework.EnsureGodotScriptsRegistered(assembly, Logger);
         RitsuLibFramework.RegisterArchaicToothTranscendenceMapping<Intuition, RoadOfFallingFlowers>();
-        // RitsuLibFramework.RegisterTouchOfOrobasRefinementMapping<TestRelic, Akabeko>();
+        RitsuLibFramework.RegisterTouchOfOrobasRefinementMapping<SaintQuartz, SummonTicket>();
         ModTypeDiscoveryHub.RegisterModAssembly(ModId, assembly);
         RitsuLibFramework.RegisterModSettingsReflectionProvider<FgoReflectedSettings>();
         FgoEnums.Initialize(ModId);

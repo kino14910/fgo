@@ -1,6 +1,7 @@
 using Fgo.Scripts.Singletons;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Models;
+using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Commands;
 
@@ -21,7 +22,7 @@ public static class FgoResCmd
     /// </summary>
     public static async Task ModifyNp(CardModel card)
     {
-        await ModifyNp(card.DynamicVars["Np"].IntValue, card.Owner);
+        await ModifyNp(card.DynamicVars.EvaluateValueOrDefault("Np"), card.Owner);
     }
     
     public static async Task ResetNp()
@@ -45,7 +46,7 @@ public static class FgoResCmd
     /// </summary>
     public static async Task ModifyStars(CardModel card)
     {
-        await ModifyStars(card.DynamicVars["Stars"].IntValue, card.Owner);
+        await ModifyStars(card.DynamicVars.EvaluateValueOrDefault("Stars"), card.Owner);
     }
 
     public static async Task ResetStars()

@@ -1,4 +1,5 @@
 using Fgo.Scripts.Cards.NoblePhantasm;
+using Fgo.Scripts.Keywords;
 using Fgo.Scripts.Powers;
 using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.Commands;
@@ -17,12 +18,11 @@ namespace Fgo.Scripts.Cards.DerivativeMash;
 /// </summary>
 public class RayProofKyrielight() : NobleCardModel(1, CardType.Attack, TargetType.Self)
 {
-    protected override bool IgnoreInvincible => true;
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [FgoKeywords.IgnoreInvincible];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
         HoverTipFactory.FromPower<VulnerablePower>(),
-        HoverTipFactory.FromPower<IgnoreInvinciblePower>(),
         FgoHoverTipHelper.CreateNpHoverTip()
     ];
 

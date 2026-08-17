@@ -2,12 +2,10 @@ using Fgo.Scripts.Cards.DerivativeMash;
 using Fgo.Scripts.Cards.NoblePhantasm;
 using Fgo.Scripts.Character;
 using Fgo.Scripts.Utils;
-using MegaCrit.Sts2.Core.CardSelection;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Relics;
-using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Nodes;
 using MegaCrit.Sts2.Core.Rooms;
@@ -20,8 +18,8 @@ namespace Fgo.Scripts.Relics;
 /// <summary>
 ///     圣晶石: FGO 角色的初始遗物，管理宝具卡堆（NobleDeck）。
 ///     - 每进入一个房间（每层）+1 计数。
-///     - 计数 ≥ 3 时，可右键此遗物弹出 NobleCardPool 中尚未在 NobleDeck 的宝具卡网格，
-///     选一张加入 NobleDeck，并消耗 3 计数。
+///     - 计数 ≥ 3 时，可右键此遗物随机获得一张尚未在 NobleDeck 的宝具卡，并消耗 3 计数。
+///     - 被 [gold]点金石[/gold] 祝福后升级为[gold]召唤券[/gold]（SummonTicket），可手动选择要加入的宝具卡。
 ///     - NobleDeck 为 RunPersistent 牌堆: 在获得遗物时（run 开始）初始化初始宝具卡，
 ///     跨战斗保留、随存档保存。退出战斗不会清空。
 /// </summary>
@@ -51,19 +49,13 @@ public class SaintQuartz : FgoRelic, IModRightClickableRelic
     }
 
     /// <summary>
-    ///     右键触发: 弹出 NobleCardPool 中未在 NobleDeck 的卡，选一张加入 NobleDeck。
+    ///     右键触发: 从 NobleCardPool 中尚未在 NobleDeck 的宝具卡中随机选一张加入 NobleDeck。
     /// </summary>
     public async Task OnRightClick(ModRightClickExecutionContext context)
     {
         if (_counter < CostPerChoice) return;
 
         var player = context.Player;
-        var prefs = new CardSelectorPrefs(
-            new LocString("gameplay_ui", "FGO_GAMEPLAY_UI_SAINT_QUARTZ.text"),
-            1)
-        {
-            RequireManualConfirmation = true
-        };
 
         var existing = CardPile.Get(FgoEnums.NobleDeck, player)?.Cards
             .Select(c => c.GetType())
@@ -93,19 +85,19 @@ public class SaintQuartz : FgoRelic, IModRightClickableRelic
             return;
         }
 
-        var selected = (await CardSelectCmd.FromSimpleGrid(
-                context.PlayerChoiceContext!, candidates, player, prefs))
-            .FirstOrDefault();
-
+        // 随机选择一张（使用 run RNG，保证种子可复现）。
+        var selected = player.RunState.Rng.CombatCardSelection.NextItem(candidates);
         if (selected == null) return;
 
         var noblePile = CardPile.Get(FgoEnums.NobleDeck, player);
         if (noblePile != null)
         {
-            noblePile.AddInternal(selected);
+            // 用 CardPileCmd.Add 加卡以获得 CardPileAddResult，再触发卡牌进入牌堆的预览特效。
+            var result = await CardPileCmd.Add(selected, noblePile);
             _counter -= CostPerChoice;
             InvokeDisplayAmountChanged();
             Flash();
+            CardCmd.PreviewCardPileAdd(result, 2.2f);
         }
     }
 

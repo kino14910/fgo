@@ -7,7 +7,7 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 
 namespace Fgo.Scripts.Potions;
 
-public class ElixirofRejuvenation : FgoPotionModel
+public class ElixirOfRejuvenation : FgoPotionModel
 {
     public override PotionRarity Rarity => PotionRarity.Rare;
     public override PotionUsage Usage => PotionUsage.CombatOnly;

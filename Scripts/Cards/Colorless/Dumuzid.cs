@@ -8,6 +8,7 @@ public class Dumuzid() : FgoColorlessCardModel(3, CardType.Curse, CardRarity.Cur
 {
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
+        await CardPileCmd.RemoveFromCombat(this);
         await CardPileCmd.RemoveFromDeck(this);
     }
 }

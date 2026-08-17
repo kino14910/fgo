@@ -2,6 +2,7 @@ using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Rooms;
 using STS2RitsuLib.Cards.DynamicVars;
 using STS2RitsuLib.Scaffolding.Content;
 
@@ -28,12 +29,16 @@ public class MaxHpPower : FgoPowerModel
         _lastAmount = 0;
         _eventsSubscribed = false;
     }
-
-    public override async Task AfterApplied(Creature? applier, CardModel? cardSource)
+    public override Task AfterApplied(Creature? applier, CardModel? cardSource)
     {
-        _lastAmount = Amount;
-        _appliedHpBoost = _lastAmount * DynamicVars["HpPerStack"].BaseValue;
-        ApplyMaxHpBoost(_appliedHpBoost);
+        var delta = Amount - _lastAmount; // 相对于上次的增量
+        if (delta != 0)
+        {
+            decimal hpChange = delta * DynamicVars["HpPerStack"].BaseValue;
+            _appliedHpBoost += hpChange;
+            _lastAmount = Amount;
+            Owner.SetMaxHpInternal(Owner.MaxHp + hpChange);
+        }
 
         if (!_eventsSubscribed)
         {
@@ -42,26 +47,26 @@ public class MaxHpPower : FgoPowerModel
             _eventsSubscribed = true;
         }
 
-        await Task.CompletedTask;
+        return Task.CompletedTask;
     }
 
-    public override async Task AfterRemoved(Creature oldOwner)
+    public override Task AfterCombatEnd(CombatRoom room)
     {
         if (_eventsSubscribed)
         {
-            oldOwner.PowerIncreased -= OnPowerIncreased;
-            oldOwner.PowerDecreased -= OnPowerDecreased;
+            Owner.PowerIncreased -= OnPowerIncreased;
+            Owner.PowerDecreased -= OnPowerDecreased;
             _eventsSubscribed = false;
         }
 
-        var newMax = Math.Max(1, oldOwner.MaxHp - _appliedHpBoost);
-        oldOwner.SetMaxHpInternal(newMax);
-        if (oldOwner.CurrentHp > newMax)
-            oldOwner.SetCurrentHpInternal(newMax);
+        var newMax = Math.Max(1, Owner.MaxHp - _appliedHpBoost);
+        Owner.SetMaxHpInternal(newMax);
+        if (Owner.CurrentHp > newMax)
+            Owner.SetCurrentHpInternal(newMax);
 
         _appliedHpBoost = 0;
         _lastAmount = 0;
-        await Task.CompletedTask;
+        return Task.CompletedTask;
     }
 
     private void OnPowerIncreased(PowerModel power, int change, bool silent)
@@ -88,11 +93,5 @@ public class MaxHpPower : FgoPowerModel
         Owner.SetMaxHpInternal(Owner.MaxHp + hpChange);
         if (Owner.CurrentHp > Owner.MaxHp)
             Owner.SetCurrentHpInternal(Owner.MaxHp);
-    }
-
-    private void ApplyMaxHpBoost(decimal amount)
-    {
-        Owner.SetMaxHpInternal(Owner.MaxHp + amount);
-        // 不恢复CurrentHp
     }
 }

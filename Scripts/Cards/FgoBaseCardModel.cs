@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Fgo.Scripts.Keywords;
 using Godot;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -18,8 +19,6 @@ public abstract class FgoBaseCardModel(
     bool shouldShowInCardLibrary = true)
     : ModCardTemplate(energyCost, type, rarity, targetType, shouldShowInCardLibrary)
 {
-    protected virtual bool IgnoreInvincible => false;
-    
     /// <summary>
     ///     默认 AssetProfile: 根据 CardType 选择卡框；派生类可重写。
     /// </summary>
@@ -37,9 +36,13 @@ public abstract class FgoBaseCardModel(
         }
     );
 
+    /// <summary>
+    ///     无敌贯通效果：仅当卡牌自身带有 [gold]无敌贯通[/gold] 关键词时生效，
+    ///     去除目标的格挡、[gold]硬化外壳[/gold] 和 [gold]难以杀灭[/gold]。
+    /// </summary>
     protected async Task<int> IgnoreInvincibleAction(CardPlay play)
     {
-        if (!IgnoreInvincible) return 0;
+        if (!Keywords.Contains(FgoKeywords.IgnoreInvincible)) return 0;
         if (play.Target is null) return 0;
 
         var amount = 0;

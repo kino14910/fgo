@@ -9,7 +9,7 @@ using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
 
-public class HolyShroud() : FgoCardModel(1, CardType.Skill,
+public class HolyShroud() : FgoCardModel(0, CardType.Skill,
     CardRarity.Uncommon, TargetType.Self)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
@@ -19,38 +19,57 @@ public class HolyShroud() : FgoCardModel(1, CardType.Skill,
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        ModCardVars.ComputedPowerAmountGiven<ReducePercentDamagePower>(
-            20,
-            (card, _) =>
-            {
-                var combatState = card?.CombatState;
-                if (combatState == null)
-                    return 0m;
-
-                return combatState.Enemies
-                    .Where(e => e.IsAlive)
-                    .Sum(enemy =>
-                    {
-                        if (enemy.Monster is not { } monster)
-                            return 0m;
-
-                        var move = monster.NextMove;
-                        return move.Intents
-                            .Where(intent => intent.IntentType == IntentType.Attack
-                                             || intent.IntentType == IntentType.DeathBlow)
-                            .OfType<AttackIntent>()
-                            .Sum(intent => (decimal)intent.GetTotalDamage(
-                                combatState.PlayerCreatures,
-                                enemy));
-                    });
-            })
+        ModCardVars.Power<ReducePercentDamagePower>(20),
     ];
+
+    protected override void OnUpgrade()
+    {
+        DynamicVars["ReducePercentDamagePower"].UpgradeValueBy(10);
+    }
+
+    protected override bool ShouldGlowGoldInternal
+    {
+        get
+        {
+            if (CombatState is null)
+                return false;
+
+            var incomingDamage = CombatState.Enemies
+                .Where(e => e.IsAlive)
+                .Sum(enemy =>
+                {
+                    if (enemy.Monster is not { } monster)
+                        return 0m;
+
+                    return monster.NextMove.Intents
+                        .Where(intent =>
+                            intent.IntentType is IntentType.Attack or IntentType.DeathBlow)
+                        .OfType<AttackIntent>()
+                        .Sum(intent =>
+                            (decimal)intent.GetTotalDamage(
+                                CombatState.PlayerCreatures,
+                                enemy));
+                });
+
+            return incomingDamage >= 20;
+        }
+    }
 
     protected override async Task OnPlay(
         PlayerChoiceContext choiceContext,
         CardPlay play)
     {
-        await PowerCmd.Apply<ReducePercentDamagePower>(choiceContext, Owner.Creature,
-            DynamicVars[nameof(ReducePercentDamagePower)].BaseValue, Owner.Creature, this);
+        var amount = DynamicVars.EvaluateValueOrDefault(
+            nameof(ReducePercentDamagePower));
+
+        if (amount <= 0)
+            return;
+
+        await PowerCmd.Apply<ReducePercentDamagePower>(
+            choiceContext,
+            Owner.Creature,
+            amount,
+            Owner.Creature,
+            this);
     }
 }

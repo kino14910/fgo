@@ -18,7 +18,8 @@ public class FetchFailnaught() : NobleCardModel(1, CardType.Attack, TargetType.A
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         // 计算伤害：基础伤害 * (1 + 诅咒层数 * 0.1)
-        ModCardVars.ComputedDamage("FetchFailnaughtDamage", 30,
+        ModCardVars.ComputedDamage("FetchFailnaughtDamage",
+            30,
             (card, target) =>
             {
                 var baseDmg = card?.DynamicVars["FetchFailnaughtDamage"].BaseValue ?? 30;
@@ -39,7 +40,7 @@ public class FetchFailnaught() : NobleCardModel(1, CardType.Attack, TargetType.A
         var target = play.Target;
         if (target == null) return;
 
-        var finalDamage = DynamicVars["FetchFailnaughtDamage"].BaseValue;
+        var finalDamage = DynamicVars.EvaluateValueOrDefault("FetchFailnaughtDamage");
 
         await DamageCmd.Attack(finalDamage)
             .FromCard(this, play)
@@ -53,7 +54,7 @@ public class FetchFailnaught() : NobleCardModel(1, CardType.Attack, TargetType.A
         if (target.HasPower<CursePower>())
         {
             var curAmt = target.GetPowerAmount<CursePower>();
-            var multiplier = DynamicVars["CurseMultiplier"].IntValue;
+            var multiplier = DynamicVars.EvaluateValueOrDefault("CurseMultiplier");
             await PowerCmd.Apply<CursePower>(choiceContext, target, curAmt * multiplier,
                 Owner.Creature, this);
         }

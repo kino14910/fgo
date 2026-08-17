@@ -32,11 +32,10 @@ public class SunlightPower : FgoPowerModel
         IEnumerable<Creature> participants)
     {
         if (!participants.Contains(Owner)) return;
-        if (side == CombatSide.Player)
-        {
-            Flash();
-            await PowerCmd.Apply<VigorPower>(choiceContext, Owner, Amount, Owner, null);
-            await PowerCmd.Decrement(this);
-        }
+        if (side != CombatSide.Player) return;
+
+        Flash();
+        await PowerCmd.Apply<VigorPower>(choiceContext, Owner, Amount, Owner, null);
+        await PowerCmd.Decrement(this);
     }
 }

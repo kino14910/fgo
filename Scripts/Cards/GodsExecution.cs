@@ -1,3 +1,4 @@
+using Fgo.Scripts.Cards.NoblePhantasm;
 using Fgo.Scripts.Powers;
 using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.Commands;
@@ -22,7 +23,7 @@ public class GodsExecution() : FgoCardModel(3, CardType.Attack,
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         ModCardVars.Damage(21),
-        ModCardVars.Power<GodsExecutionPower>(2)
+        ModCardVars.Power<GodsExecutionPower>(2),
     ];
 
     protected override void OnUpgrade()
@@ -45,5 +46,14 @@ public class GodsExecution() : FgoCardModel(3, CardType.Attack,
                 -DynamicVars[nameof(GodsExecutionPower)].BaseValue,
                 Owner.Creature,
                 this);
+    }
+
+    public override Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+    {
+        if (cardPlay.Card is NobleCardModel)
+        {
+            SetToFreeThisTurn();
+        }
+        return Task.CompletedTask;
     }
 }

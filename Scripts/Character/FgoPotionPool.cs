@@ -1,4 +1,5 @@
-﻿using STS2RitsuLib.Scaffolding.Content;
+﻿using Godot;
+using STS2RitsuLib.Scaffolding.Content;
 
 namespace Fgo.Scripts.Character;
 
@@ -11,4 +12,6 @@ public class FgoPotionPool : TypeListPotionPoolModel
     public override string? BigEnergyIconPath => "res://Fgo/images/ui/energy_fgo_big.png";
 
     public override string EnergyColorName => "fgo";
+
+    public override Color LabOutlineColor => new ("c47e09");
 }

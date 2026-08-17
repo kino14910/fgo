@@ -40,7 +40,7 @@ public static class FgoCardActions
     public static async Task AddCopiesToHand(IEnumerable<CardModel> cards, bool free = false, bool exhaust = false)
     {
         foreach (var card in cards)
-            await AddToPile(CreateGeneratedCopy(card, card.Owner, exhaust), PileType.Hand);
+            await AddToPile(CreateGeneratedCopy(card, card.Owner, free, exhaust), PileType.Hand);
     }
 
     public static void BoostDamage(CardModel card, decimal amount)

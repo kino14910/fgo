@@ -31,10 +31,12 @@ public sealed partial class FgoNpBar : Node
     private FgoPlayerResources? _subscribed;
 
     private int _lastNp = -1;
+    private bool _hoverTipShown;
 
     private Vector2 _lastHpBarPosition;
     private Vector2 _lastHpBarSize;
     private Vector2 _lastHpLabelPosition;
+
     private static readonly PackedScene? NpBarScene =
         GD.Load<PackedScene>("res://Fgo/scenes/fgo_np_bar.tscn");
 
@@ -62,12 +64,12 @@ public sealed partial class FgoNpBar : Node
 
         var creatureNode = FindParentOfType<NCreature>();
 
-        if (creatureNode?.Entity.IsPlayer != true )
+        if (creatureNode?.Entity.IsPlayer != true)
         {
             SetProcess(false);
             return;
         }
-        
+
         var healthBar = stateDisplay.GetNodeOrNull<NHealthBar>("%HealthBar");
 
         if (healthBar?.HpBarContainer == null)
@@ -106,6 +108,8 @@ public sealed partial class FgoNpBar : Node
             _button.MouseExited += OnNpButtonMouseExited;
         }
 
+        // 根节点 mouse_filter 为 IGNORE，Godot 的 MouseEntered/MouseExited 不会触发，
+        // 因此条区域的悬停提示统一在 _Process 中通过鼠标位置检测实现。
         InitializeBarLayout();
         SyncWithHealthBar();
 
@@ -123,6 +127,7 @@ public sealed partial class FgoNpBar : Node
         }
 
         SyncWithHealthBar();
+        UpdateHoverTip();
 
         if (!CombatManager.Instance.IsInProgress &&
             !CombatManager.Instance.IsStarting)
@@ -144,10 +149,11 @@ public sealed partial class FgoNpBar : Node
         if (_button != null)
         {
             _button.Pressed -= OnNpButtonPressed;
-            _button.MouseEntered -= OnNpButtonMouseEntered;
-            _button.MouseExited -= OnNpButtonMouseExited;
             NHoverTipSet.Remove(_button);
         }
+
+        if (_npBarRoot != null)
+            NHoverTipSet.Remove(_npBarRoot);
 
         if (_subscribed != null)
         {
@@ -313,8 +319,35 @@ public sealed partial class FgoNpBar : Node
     {
         if (_button == null)
             return;
-
+        
         NHoverTipSet.Remove(_button);
+    }
+
+    /// <summary>
+    ///     条区域（含 NpButton）的悬停提示：根节点 mouse_filter 为 IGNORE，
+    ///     无法使用 MouseEntered 信号，改为每帧检测鼠标是否位于条矩形内。
+    /// </summary>
+    private void UpdateHoverTip()
+    {
+        if (_npBarRoot == null)
+            return;
+
+        var inside = _npBarRoot.GetGlobalRect().HasPoint(GetViewport().GetMousePosition());
+
+        if (inside && !_hoverTipShown)
+        {
+            _hoverTipShown = true;
+            NHoverTipSet.CreateAndShow(
+                _npBarRoot,
+                FgoHoverTipHelper.CreateNpBarHoverTip(),
+                HoverTipAlignment.Right
+            );
+        }
+        else if (!inside && _hoverTipShown)
+        {
+            _hoverTipShown = false;
+            NHoverTipSet.Remove(_npBarRoot);
+        }
     }
 
     private async void DoNpButtonPressed()

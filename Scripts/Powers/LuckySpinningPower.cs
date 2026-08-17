@@ -27,7 +27,9 @@ public class LuckySpinningPower : FgoPowerModel
     public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side,
         IEnumerable<Creature> participants)
     {
-        if (side == CombatSide.Player && participants.Contains(Owner))
-            await PowerCmd.Remove(this);
+        if (!participants.Contains(Owner)) return;
+        if (side != CombatSide.Player) return;
+        
+        await PowerCmd.Remove(this);
     }
 }

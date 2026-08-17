@@ -19,7 +19,7 @@ public class ImitationGodForce() : NobleCardModel(1, CardType.Attack, TargetType
     [
         ModCardVars.Damage(8),
         ModCardVars.Power<WeakPower>(3),
-        ModCardVars.Int("Hits", 4)
+        ModCardVars.Int("Hits", 3)
     ];
 
     protected override void OnUpgrade()

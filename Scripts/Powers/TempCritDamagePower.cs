@@ -8,7 +8,6 @@ using STS2RitsuLib.Scaffolding.Content;
 
 namespace Fgo.Scripts.Powers;
 
-[RegisterPower]
 public class TempCritDamagePower : CriticalDamagePower
 {
     public override PowerType Type => PowerType.Buff;

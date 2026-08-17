@@ -40,15 +40,16 @@ public class TerrorPower : FgoPowerModel, IPowerExtraIconAmountLabelSpecsProvide
         ];
     }
 
-    public override async Task AfterSideTurnEnd(
-        PlayerChoiceContext choiceContext, CombatSide side, IEnumerable<Creature> participants)
+    public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side, 
+        IEnumerable<Creature> participants)
     {
         if (!participants.Contains(Owner)) return;
+        if (side != CombatSide.Player) return;
         if (Amount <= 0) return;
 
         // 概率判定眩晕（RNG 来自施加者，敌人本身没有 Player）
         var applier = Applier;
-        if (applier != null && applier.Player != null && Probability > 0m)
+        if (applier is { Player: not null } && Probability > 0m)
         {
             var rng = applier.Player.RunState.Rng.CombatTargets;
             var roll = rng.NextFloat() * 100f;

@@ -10,7 +10,7 @@ using STS2RitsuLib.Cards.DynamicVars;
 namespace Fgo.Scripts.Cards;
 
 public class BlessedScion() : FgoCardModel(1, CardType.Skill,
-    CardRarity.Uncommon, TargetType.Self)
+    CardRarity.Rare, TargetType.Self)
 {
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [

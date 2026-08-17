@@ -5,6 +5,7 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.ValueProps;
 using STS2RitsuLib.Cards.DynamicVars;
 
@@ -23,8 +24,8 @@ public class ExtraterrestrialOctopus() : FgoCardModel(0, CardType.Attack,
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         ModCardVars.Int("StarMultiplier", 2),
-        new ComputedDynamicVar("StarsDamage", 0,
-            (_, _) => this.FgoRes().Stars * DynamicVars["StarMultiplier"].BaseValue)
+        ModCardVars.Computed("StarsDamage", context =>
+            ModelDb.Singleton<FgoPlayerResources>().Stars * context.GetCardBaseValueOrDefault("StarMultiplier"), 0)
     ];
 
     protected override void OnUpgrade()
@@ -35,7 +36,7 @@ public class ExtraterrestrialOctopus() : FgoCardModel(0, CardType.Attack,
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
         await CreatureCmd.Damage(choiceContext, play.Target!,
-            DynamicVars["StarsDamage"].BaseValue,
+            DynamicVars.EvaluateValueOrDefault("StarsDamage"),
             ValueProp.Unpowered | ValueProp.Move, Owner.Creature);
     }
 }

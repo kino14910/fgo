@@ -31,6 +31,6 @@ public class DepartureOfTheSun() : FgoCardModel(0, CardType.Skill,
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
         await PowerCmd.Apply<CriticalDamagePower>(choiceContext, Owner.Creature,
-            DynamicVars["DepartureOfTheSunCriticalDamage"].BaseValue, Owner.Creature, this);
+            DynamicVars.EvaluateValueOrDefault("DepartureOfTheSunCriticalDamage"), Owner.Creature, this);
     }
 }

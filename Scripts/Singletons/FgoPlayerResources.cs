@@ -1,5 +1,6 @@
 using Fgo.Scripts.Cards;
 using Fgo.Scripts.Cards.NoblePhantasm;
+using Fgo.Scripts.Commands;
 using Fgo.Scripts.Powers;
 using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.Combat;
@@ -250,6 +251,17 @@ public class FgoPlayerResources() : HookedSingletonModel(HookType.Combat)
             || result.TotalDamage <= 0) return;
 
         await ModifyStars(1, dealer.Player);
+    }
+    
+    public override async Task AfterDamageReceived(PlayerChoiceContext choiceContext, Creature target,
+        DamageResult result, ValueProp props,
+        Creature? dealer, CardModel? cardSource)
+    {
+        if (target is { IsPlayer: true }
+            && dealer is { IsMonster: true }
+            && result.TotalDamage > 0
+            && props.IsPoweredAttack())
+            await FgoResCmd.ModifyNp(result.TotalDamage, dealer.Player);
     }
 
     public override Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side,
