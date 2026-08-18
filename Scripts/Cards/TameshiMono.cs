@@ -1,5 +1,6 @@
 using Fgo.Scripts.Commands;
 using Fgo.Scripts.Utils;
+using MegaCrit.Sts2.Core.CardSelection;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -31,9 +32,16 @@ public class TameshiMono() : FgoCardModel(1, CardType.Skill,
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        var cards = Owner.PlayerCombatState!.DiscardPile.Cards
-            .Take(DynamicVars["ExhaustCount"].IntValue)
-            .ToList();
+        var prefs = new CardSelectorPrefs(CardSelectorPrefs.ExhaustSelectionPrompt,
+            0, DynamicVars["ExhaustCount"].IntValue)
+        {
+            RequireManualConfirmation = true
+        };
+        var cards = (await CardSelectCmd.FromSimpleGrid(
+            choiceContext,
+            PileType.Discard.GetPile(Owner).Cards,
+            Owner,
+            prefs)).ToList();
 
         foreach (var card in cards)
             await CardCmd.Exhaust(choiceContext, card);

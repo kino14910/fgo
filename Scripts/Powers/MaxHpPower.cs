@@ -69,6 +69,25 @@ public class MaxHpPower : FgoPowerModel
         return Task.CompletedTask;
     }
 
+    public override Task AfterRemoved(Creature oldOwner)
+    {
+        if (_eventsSubscribed)
+        {
+            oldOwner.PowerIncreased -= OnPowerIncreased;
+            oldOwner.PowerDecreased -= OnPowerDecreased;
+            _eventsSubscribed = false;
+        }
+
+        var newMax = Math.Max(1, oldOwner.MaxHp - _appliedHpBoost);
+        oldOwner.SetMaxHpInternal(newMax);
+        if (oldOwner.CurrentHp > newMax)
+            oldOwner.SetCurrentHpInternal(newMax);
+
+        _appliedHpBoost = 0;
+        _lastAmount = 0;
+        return Task.CompletedTask;
+    }
+
     private void OnPowerIncreased(PowerModel power, int change, bool silent)
     {
         if (power != this) return;

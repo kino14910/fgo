@@ -13,7 +13,7 @@ public class HalberdUsurpation() : FgoCardModel(2, CardType.Attack,
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         ModCardVars.ComputedDamage("Usurpation", 15,
-            (card, target) => card.DynamicVars["ExtraDamage"].BaseValue + (target?.GetPower<StrengthPower>()?.Amount ?? 0))
+            (card, target) => card.DynamicVars["Usurpation"].BaseValue + (target?.GetPower<StrengthPower>()?.Amount ?? 0))
     ];
 
     protected override void OnUpgrade()

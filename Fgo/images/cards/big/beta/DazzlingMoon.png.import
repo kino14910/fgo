@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c62ho8w4j6t26"
-path="res://.godot/imported/primeval_rune.png-c1c8290d499afdb3a1e18fbeebcff347.ctex"
+uid="uid://brmq25tj1sba8"
+path="res://.godot/imported/DazzlingMoon.png-9cfb101a7cb87144e9bc8a0307a8ced8.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Fgo/images/cards/big/beta/primeval_rune.png"
-dest_files=["res://.godot/imported/primeval_rune.png-c1c8290d499afdb3a1e18fbeebcff347.ctex"]
+source_file="res://Fgo/images/cards/big/beta/DazzlingMoon.png"
+dest_files=["res://.godot/imported/DazzlingMoon.png-9cfb101a7cb87144e9bc8a0307a8ced8.ctex"]
 
 [params]
 

@@ -9,7 +9,7 @@ namespace Fgo.Scripts.Cards.NoblePhantasm;
 
 public class LostLonginus() : NobleCardModel(2, CardType.Attack, TargetType.Self)
 {
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [FgoKeywords.IgnoreInvincible];
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Retain, FgoKeywords.IgnoreInvincible];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [

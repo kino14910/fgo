@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://t0ajxby86gns"
-path="res://.godot/imported/departure_of_the_sun.png-cc53bf81dfebd81c6203306b3ffbd116.ctex"
+path="res://.godot/imported/DepartureOfTheSun.png-004f0eade8b8adda7b60e928e8a8207f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Fgo/images/cards/big/beta/departure_of_the_sun.png"
-dest_files=["res://.godot/imported/departure_of_the_sun.png-cc53bf81dfebd81c6203306b3ffbd116.ctex"]
+source_file="res://Fgo/images/cards/big/beta/DepartureOfTheSun.png"
+dest_files=["res://.godot/imported/DepartureOfTheSun.png-004f0eade8b8adda7b60e928e8a8207f.ctex"]
 
 [params]
 

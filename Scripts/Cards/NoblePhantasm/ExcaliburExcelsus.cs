@@ -15,7 +15,7 @@ namespace Fgo.Scripts.Cards.NoblePhantasm;
 
 public class ExcaliburExcelsus() : NobleCardModel(3, CardType.Attack, TargetType.Self)
 {
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [FgoKeywords.IgnoreInvincible];
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Retain, FgoKeywords.IgnoreInvincible];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [

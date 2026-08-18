@@ -24,13 +24,18 @@ public class DepartureOfTheSun() : FgoCardModel(0, CardType.Skill,
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        ModCardVars.ComputedPowerAmountGiven<CriticalDamagePower>("DepartureOfTheSunCriticalDamage", 0,
-            (_, _) => this.FgoRes().Stars / 10 * 30)
+        ModCardVars.ComputedPowerAmountGiven<CriticalDamagePower>(
+            ctx => this.FgoRes().Stars / 10 * ctx.BaseValue, 20)
     ];
+
+    protected override void OnUpgrade()
+    {
+        DynamicVars["CriticalDamagePower"].UpgradeValueBy(10);
+    }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
         await PowerCmd.Apply<CriticalDamagePower>(choiceContext, Owner.Creature,
-            DynamicVars.EvaluateValueOrDefault("DepartureOfTheSunCriticalDamage"), Owner.Creature, this);
+            DynamicVars.EvaluateValueOrDefault("CriticalDamagePower"), Owner.Creature, this);
     }
 }

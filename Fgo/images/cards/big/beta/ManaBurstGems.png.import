@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dm05ol6ndtd3h"
-path="res://.godot/imported/worlds_end_flower_garden.png-22daecc70364c5745f5fe23e3eb3c211.ctex"
+uid="uid://gbvilebjlt3a"
+path="res://.godot/imported/ManaBurstGems.png-1e8f222e57a0dc5b3ace9ec5915dfe15.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Fgo/images/cards/big/beta/worlds_end_flower_garden.png"
-dest_files=["res://.godot/imported/worlds_end_flower_garden.png-22daecc70364c5745f5fe23e3eb3c211.ctex"]
+source_file="res://Fgo/images/cards/big/beta/ManaBurstGems.png"
+dest_files=["res://.godot/imported/ManaBurstGems.png-1e8f222e57a0dc5b3ace9ec5915dfe15.ctex"]
 
 [params]
 

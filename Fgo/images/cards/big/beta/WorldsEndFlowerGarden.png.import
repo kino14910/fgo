@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dhb01tjtq6qc2"
-path="res://.godot/imported/sparks_route.png-234c8867c02cc3f5cf2248f3c87f5834.ctex"
+uid="uid://dm05ol6ndtd3h"
+path="res://.godot/imported/WorldsEndFlowerGarden.png-c36cf6b3cc72fa8ea83a603e056609bb.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Fgo/images/cards/big/beta/sparks_route.png"
-dest_files=["res://.godot/imported/sparks_route.png-234c8867c02cc3f5cf2248f3c87f5834.ctex"]
+source_file="res://Fgo/images/cards/big/beta/WorldsEndFlowerGarden.png"
+dest_files=["res://.godot/imported/WorldsEndFlowerGarden.png-c36cf6b3cc72fa8ea83a603e056609bb.ctex"]
 
 [params]
 

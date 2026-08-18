@@ -18,5 +18,7 @@
   "FGO_STATIC_HOVER_TIPS_NOBLE.title": "宝具卡",
   "FGO_CARDPILE_NOBLE.description": "查看所有拥有的宝具卡。",
   "FGO_CARDPILE_NOBLE.empty": "宝具卡堆为空",
-  "FGO_CARDPILE_NOBLE.title": "宝具卡堆"
+  "FGO_CARDPILE_NOBLE.title": "宝具卡堆",
+  "FGO_STATIC_HOVER_TIPS_FOREIGNER.title": "领域外生命",
+  "FGO_STATIC_HOVER_TIPS_FOREIGNER.description": ""
 }

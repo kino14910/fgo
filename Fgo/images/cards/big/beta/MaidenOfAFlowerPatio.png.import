@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://in0atjvo72uy"
-path="res://.godot/imported/void_space_fine_arts.png-c1ba74c73fba89f9b9e19e8099731fbb.ctex"
+uid="uid://cybubjtuja61q"
+path="res://.godot/imported/MaidenOfAFlowerPatio.png-a59aa07618004188414ba25764abaaab.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Fgo/images/cards/big/beta/void_space_fine_arts.png"
-dest_files=["res://.godot/imported/void_space_fine_arts.png-c1ba74c73fba89f9b9e19e8099731fbb.ctex"]
+source_file="res://Fgo/images/cards/big/beta/MaidenOfAFlowerPatio.png"
+dest_files=["res://.godot/imported/MaidenOfAFlowerPatio.png-a59aa07618004188414ba25764abaaab.ctex"]
 
 [params]
 

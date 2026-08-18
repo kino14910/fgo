@@ -13,9 +13,8 @@ namespace Fgo.Scripts.Cards.NoblePhantasm;
 
 public class SecondLife() : NobleCardModel(1, CardType.Skill, TargetType.Self)
 {
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
-
-
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Retain, CardKeyword.Exhaust];
+    
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
         FgoHoverTipHelper.CreateNpHoverTip()
@@ -26,6 +25,11 @@ public class SecondLife() : NobleCardModel(1, CardType.Skill, TargetType.Self)
         ModCardVars.Int("Np", 20)
     ];
 
+    protected override void OnUpgrade()
+    {
+        DynamicVars["Np"].UpgradeValueBy(20);
+    }
+
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
         var exhaustCards = Owner.PlayerCombatState!.ExhaustPile.Cards.ToList();
@@ -35,7 +39,7 @@ public class SecondLife() : NobleCardModel(1, CardType.Skill, TargetType.Self)
         // 用 CombatState.CreateCard 非泛型重载: 内部完成 ToMutable + 设 Owner + 注册 CombatState + AfterCreated。
         // 直接 ToMutable() 出来的副本无 Owner、未注册 CombatState，传入 AddToPile 会抛 InvalidOperationException。
         var copy = CombatState!.CreateCard(card, Owner);
-        if (copy.IsUpgradable)
+        if (copy.IsUpgradable && IsUpgraded)
             CardCmd.Upgrade(copy, CardPreviewStyle.None);
         await FgoCardActions.AddToPile(copy, PileType.Hand);
 

@@ -35,7 +35,7 @@
 
         <PackageReference Include="JetBrains.Annotations" Version="2026.2.0"/>
 
-        <PackageReference Include="STS2.RitsuLib" Version="0.5.12" />
+        <PackageReference Include="STS2.RitsuLib" Version="0.5.13" />
     </ItemGroup>
 
     <ItemGroup>

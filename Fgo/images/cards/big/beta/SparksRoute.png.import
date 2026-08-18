@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://brmq25tj1sba8"
-path="res://.godot/imported/dazzling_moon.png-9de0e2de9644141c15b8b0f3b0ef6cf4.ctex"
+uid="uid://dhb01tjtq6qc2"
+path="res://.godot/imported/SparksRoute.png-deddf57beae7fbe76cfed7bc7873298a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Fgo/images/cards/big/beta/dazzling_moon.png"
-dest_files=["res://.godot/imported/dazzling_moon.png-9de0e2de9644141c15b8b0f3b0ef6cf4.ctex"]
+source_file="res://Fgo/images/cards/big/beta/SparksRoute.png"
+dest_files=["res://.godot/imported/SparksRoute.png-deddf57beae7fbe76cfed7bc7873298a.ctex"]
 
 [params]
 

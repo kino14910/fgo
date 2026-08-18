@@ -61,7 +61,7 @@ public class SummonTicket : FgoRelic, IModRightClickableRelic
             typeof(Camelot),
             typeof(LordCamelot),
             typeof(LordChaldeas),
-            typeof(ObscurantWallofChalk)
+            typeof(ObscurantWallOfChalk)
         };
 
         var candidates = ModelDb.CardPool<NobleCardPool>()

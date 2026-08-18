@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://daf6ck3vh25hn"
-path="res://.godot/imported/witch_of_salem.png-bc82fa62603cdfc7f061d02de9c7f33f.ctex"
+uid="uid://in0atjvo72uy"
+path="res://.godot/imported/VoidSpaceFineArts.png-28628482f593a315740dbc45a8eba0c7.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Fgo/images/cards/big/beta/witch_of_salem.png"
-dest_files=["res://.godot/imported/witch_of_salem.png-bc82fa62603cdfc7f061d02de9c7f33f.ctex"]
+source_file="res://Fgo/images/cards/big/beta/VoidSpaceFineArts.png"
+dest_files=["res://.godot/imported/VoidSpaceFineArts.png-28628482f593a315740dbc45a8eba0c7.ctex"]
 
 [params]
 

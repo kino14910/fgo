@@ -27,16 +27,10 @@ public class HeroicKing() : FgoCardModel(
 
         ModCardVars.Computed(
             "Hits",
-            static ctx =>
-            {
-                var bonus =
-                    ctx.SourceCreature?
-                        .GetPower<HeroicKingPower>()?
-                        .Amount ?? 0m;
-
-                return ctx.BaseValue + bonus;
-            },
-            baseValue: 2)
+            2,
+            (card, _) => card.DynamicVars["Hits"].BaseValue + card.Owner.Creature
+                .GetPower<HeroicKingPower>()?
+                .Amount ?? 0m)
     ];
 
     protected override void OnUpgrade()

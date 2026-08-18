@@ -24,17 +24,25 @@ public class VoidSpaceFineArts() : FgoCardModel(1, CardType.Power,
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         ModCardVars.Power<GutsPower>(10),
-        ModCardVars.Int("CurseStacks", 1)
+        ModCardVars.Int("CurseStacks", 5),
+        ModCardVars.Computed("Np", 
+            static ctx =>
+                ctx.BaseValue * ctx.Player?.Creature.GetPowerAmount<CursePower>() ?? 0,
+            5)
     ];
+
+    protected override void OnUpgrade()
+    {
+        DynamicVars["CurseStacks"].UpgradeValueBy(5);
+        DynamicVars["Np"].UpgradeValueBy(5);
+    }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        var self = Owner.Creature;
-        await PowerCmd.Apply<GutsPower>(choiceContext, self, DynamicVars[nameof(GutsPower)].BaseValue, self,
+        await PowerCmd.Apply<GutsPower>(choiceContext, Owner.Creature, DynamicVars[nameof(GutsPower)].BaseValue, Owner.Creature,
             this);
-        for (var i = 0; i < 3; i++) await PowerCmd.Apply<CursePower>(choiceContext, self, 1m, self, this);
+        for (var i = 0; i < 3; i++) await PowerCmd.Apply<CursePower>(choiceContext, Owner.Creature, 1m, Owner.Creature, this);
 
-        var curseCount = self.GetPowerAmount<CursePower>();
-        await FgoResCmd.ModifyNp(DynamicVars["CurseStacks"].BaseValue * curseCount, play.Player);
+        await FgoResCmd.ModifyNp(DynamicVars.EvaluateValueOrDefault("Np"), play.Player);
     }
 }

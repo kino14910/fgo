@@ -22,12 +22,13 @@ public class SwordOfSelection() : FgoCardModel(1, CardType.Skill,
     [
         ModCardVars.Cards(3),
         ModCardVars.Int("NpPerHands", 2),
-        ModCardVars.Computed("Np", context =>
+        ModCardVars.Computed("Np", static ctx =>
         {
-            var npPerHands = context.GetCardBaseValueOrDefault("NpPerHands");
-            var handCount = context.Player?.PlayerCombatState?.Hand.Cards.Count ?? 0;
-            var maxHand = context.HasPlayer ? MaxHandSizeCalculator.Calculate(context.Player!) : 0;
-            var cards = context.GetCardBaseValueOrDefault("Cards");
+            if (!ctx.HasPlayer) return 0;
+            var npPerHands = ctx.GetCardBaseValueOrDefault("NpPerHands");
+            var handCount = ctx.Player.PlayerCombatState?.Hand.Cards.Count ?? 0;
+            var maxHand = MaxHandSizeCalculator.Calculate(ctx.Player);
+            var cards = ctx.GetCardBaseValueOrDefault("Cards");
             return npPerHands * Math.Min(handCount - 1 + cards, maxHand);
         })
     ];

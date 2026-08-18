@@ -24,8 +24,8 @@ public class ExtraterrestrialOctopus() : FgoCardModel(0, CardType.Attack,
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         ModCardVars.Int("StarMultiplier", 2),
-        ModCardVars.Computed("StarsDamage", context =>
-            ModelDb.Singleton<FgoPlayerResources>().Stars * context.GetCardBaseValueOrDefault("StarMultiplier"), 0)
+        ModCardVars.Computed("StarsDamage", static ctx =>
+            ModelDb.Singleton<FgoPlayerResources>().Stars * ctx.GetCardBaseValueOrDefault("StarMultiplier"))
     ];
 
     protected override void OnUpgrade()

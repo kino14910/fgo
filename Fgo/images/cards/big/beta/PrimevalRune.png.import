@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://gbvilebjlt3a"
-path="res://.godot/imported/mana_burst_gems.png-26f35e2d83d4b6a5eb5b950e6e99877f.ctex"
+uid="uid://c62ho8w4j6t26"
+path="res://.godot/imported/PrimevalRune.png-84a253350a74a31e79b3dce96e2a9cb2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Fgo/images/cards/big/beta/mana_burst_gems.png"
-dest_files=["res://.godot/imported/mana_burst_gems.png-26f35e2d83d4b6a5eb5b950e6e99877f.ctex"]
+source_file="res://Fgo/images/cards/big/beta/PrimevalRune.png"
+dest_files=["res://.godot/imported/PrimevalRune.png-84a253350a74a31e79b3dce96e2a9cb2.ctex"]
 
 [params]
 

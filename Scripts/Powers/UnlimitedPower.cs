@@ -2,8 +2,10 @@ using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.Factories;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
 using STS2RitsuLib.Scaffolding.Content;
 
@@ -19,26 +21,21 @@ public class UnlimitedPower : FgoPowerModel
         "res://Fgo/images/powers/big/EveryTurnPower.png"
     );
 
-    public override async Task AfterSideTurnStart(CombatSide side, IReadOnlyList<Creature> participants,
-        ICombatState combatState)
+    public override async Task BeforeHandDraw(Player player, PlayerChoiceContext choiceContext, ICombatState combatState)
     {
-        if (!participants.Contains(Owner.Player.Creature)) return;
-        IReadOnlyList<CardModel> readOnlyList =
-            (from c in Owner.Player.Character.CardPool.GetUnlockedCards(Owner.Player.UnlockState,
-                    Owner.Player.RunState.CardMultiplayerConstraint)
-                where c.Type == CardType.Attack
-                select c).ToList();
-        if (readOnlyList.Count == 0) return;
-        Flash();
-        var list = CardFactory
-            .GetDistinctForCombat(Owner.Player, readOnlyList, 1, Owner.Player.RunState.Rng.CombatCardGeneration)
-            .ToList();
-        foreach (var item in list)
+        if (player != Owner.Player)
         {
-            item.SetToFreeThisTurn();
-            item.AddKeyword(CardKeyword.Exhaust);
+            return;
         }
-
-        await CardPileCmd.AddGeneratedCardsToCombat(list, PileType.Hand, Owner.Player);
+        for (var i = 0; i < Amount; i++)
+        {
+            var cardModel = CardFactory.GetDistinctForCombat(player, from c in player.Character.CardPool.GetUnlockedCards(player.UnlockState, player.RunState.CardMultiplayerConstraint)
+                where c.Type == CardType.Attack
+                select c, 1, player.RunState.Rng.CombatCardGeneration).FirstOrDefault();
+            if (cardModel != null)
+            {
+                await CardPileCmd.AddGeneratedCardToCombat(cardModel, PileType.Hand, Owner.Player);
+            }
+        }
     }
 }

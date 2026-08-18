@@ -66,7 +66,7 @@ public class SaintQuartz : FgoRelic, IModRightClickableRelic
             typeof(Camelot),
             typeof(LordCamelot),
             typeof(LordChaldeas),
-            typeof(ObscurantWallofChalk)
+            typeof(ObscurantWallOfChalk)
         };
 
         // 用 RunState.CreateCard 而非 CombatState.CreateCard，使右键在地图上也能使用。

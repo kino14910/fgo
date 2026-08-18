@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://m64834ucw8e1"
-path="res://.godot/imported/undead_bird.png-925b2c9b62aac11fd32914fb96e31ec7.ctex"
+uid="uid://daf6ck3vh25hn"
+path="res://.godot/imported/WitchOfSalem.png-f4b2fd4a104813d66c5307a201779baa.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Fgo/images/cards/big/beta/undead_bird.png"
-dest_files=["res://.godot/imported/undead_bird.png-925b2c9b62aac11fd32914fb96e31ec7.ctex"]
+source_file="res://Fgo/images/cards/big/beta/WitchOfSalem.png"
+dest_files=["res://.godot/imported/WitchOfSalem.png-f4b2fd4a104813d66c5307a201779baa.ctex"]
 
 [params]
 

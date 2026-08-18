@@ -20,8 +20,8 @@ public class BeautifulJourney() : NobleCardModel(2, CardType.Attack, TargetType.
     [
         ModCardVars.Damage(24),
         ModCardVars.Int("NpPerEnemies", 20),
-        ModCardVars.Computed("Np", context =>
-            context.GetCardBaseValueOrDefault("NpPerEnemies") * (context.CombatState?.HittableEnemies.Count ?? 0))
+        ModCardVars.Computed("Np", static ctx =>
+            ctx.GetCardBaseValueOrDefault("NpPerEnemies") * (ctx.CombatState?.HittableEnemies.Count ?? 0))
     ];
 
     protected override void OnUpgrade()

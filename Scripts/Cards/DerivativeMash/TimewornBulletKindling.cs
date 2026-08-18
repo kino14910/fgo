@@ -23,7 +23,7 @@ public class TimewornBulletKindling() : FgoColorlessCardModel(1, CardType.Attack
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
         HoverTipFactory.Static(StaticHoverTip.Transform),
-        HoverTipFactory.FromCard<ObscurantWallofChalk>(),
+        HoverTipFactory.FromCard<ObscurantWallOfChalk>(),
         HoverTipFactory.FromPower<NpDamagePower>(),
         FgoHoverTipHelper.CreateNpHoverTip(),
         FgoHoverTipHelper.CreateStarHoverTip()
@@ -54,6 +54,6 @@ public class TimewornBulletKindling() : FgoColorlessCardModel(1, CardType.Attack
         await FgoResCmd.ModifyNp(this);
         await CreatureCmd.Damage(choiceContext, Owner.Creature, 4m,
             ValueProp.Unblockable | ValueProp.Unpowered, Owner.Creature);
-        await CardCmd.Transform(this, ModelDb.Card<ObscurantWallofChalk>().ToMutable(), CardPreviewStyle.None);
+        await CardCmd.Transform(this, ModelDb.Card<ObscurantWallOfChalk>().ToMutable(), CardPreviewStyle.None);
     }
 }

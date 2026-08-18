@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cybubjtuja61q"
-path="res://.godot/imported/maiden_of_a_flower_patio.png-74eafac7ef3dfb851566656da8bed1c7.ctex"
+uid="uid://m64834ucw8e1"
+path="res://.godot/imported/UndeadBird.png-d3a209f99e6b5a7fc8640fd7acc8ac7a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Fgo/images/cards/big/beta/maiden_of_a_flower_patio.png"
-dest_files=["res://.godot/imported/maiden_of_a_flower_patio.png-74eafac7ef3dfb851566656da8bed1c7.ctex"]
+source_file="res://Fgo/images/cards/big/beta/UndeadBird.png"
+dest_files=["res://.godot/imported/UndeadBird.png-d3a209f99e6b5a7fc8640fd7acc8ac7a.ctex"]
 
 [params]
 

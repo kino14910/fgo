@@ -16,7 +16,7 @@ namespace Fgo.Scripts.Cards.DerivativeMash;
 ///     时为朦胧的白垩之壁:初始卡
 /// </summary>
 [RegisterCharacterStarterCard(typeof(FgoCharacter))]
-public class ObscurantWallofChalk() : FgoCardModel(3, CardType.Skill, CardRarity.Basic, TargetType.Self)
+public class ObscurantWallOfChalk() : FgoCardModel(3, CardType.Skill, CardRarity.Basic, TargetType.Self)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [

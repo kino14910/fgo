@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bkxcgdfnjpnrm"
-path="res://.godot/imported/ObscurantWallofChalk.png-e3b452e702d00e46c96dd00f6f5ada1c.ctex"
+path="res://.godot/imported/ObscurantWallOfChalk.png-47e24b085dd0d6af8a07e4d86d706cd2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Fgo/images/cards/big/ObscurantWallofChalk.png"
-dest_files=["res://.godot/imported/ObscurantWallofChalk.png-e3b452e702d00e46c96dd00f6f5ada1c.ctex"]
+source_file="res://Fgo/images/cards/big/ObscurantWallOfChalk.png"
+dest_files=["res://.godot/imported/ObscurantWallOfChalk.png-47e24b085dd0d6af8a07e4d86d706cd2.ctex"]
 
 [params]
 

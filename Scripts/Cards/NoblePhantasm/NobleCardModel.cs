@@ -2,6 +2,7 @@ using Fgo.Scripts.Character;
 using Fgo.Scripts.Commands;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
 using STS2RitsuLib.Interop.AutoRegistration;
@@ -25,6 +26,8 @@ public abstract class NobleCardModel(
         : this(energyCost, type, CardRarity.Token, targetType)
     {
     }
+
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Retain];
 
     /// <summary>
     ///     直接返回 NobleCardPool，绕过基类基于 AllCardIds.Contains 的查找。
@@ -50,15 +53,8 @@ public abstract class NobleCardModel(
         // BannerTexturePath: "" // 横幅（不同类型）
     );
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+    public override async Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await FgoResCmd.ModifyNp(cardPlay.Card.EnergyCost.Canonical, cardPlay.Player);
-
-        // 打出后从本次战斗移除: 不进弃牌堆、不进消耗堆，直接消失。
-        // NobleDeck 中的原卡位于 RunPersistent 牌堆（非战斗 pile），OnPlay 永远不会被调用，
-        // 因此 RemoveFromCombat 只影响 NP 按钮触发时加入手牌的副本。
-        // 此时卡牌位于 PileType.Play（mid-play pile），RemoveFromCombat 会把它从 Play pile 移除，
-        // 后续"移到 result pile"步骤因卡牌已不在任何战斗 pile 中而被跳过。
         await CardPileCmd.RemoveFromCombat(cardPlay.Card);
     }
 }

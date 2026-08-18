@@ -10,11 +10,13 @@
   "FGO_STATIC_HOVER_TIPS_EVIL_CURSE.title": "Evil Curse",
   "FGO_STATIC_HOVER_TIPS_EVIL_CURSE.description": "At the start of turn, lose HP equal to curse stacks.",
   "FGO_STATIC_HOVER_TIPS_COMMAND_SPELL.title": "Command Spell",
-  "FGO_STATIC_HOVER_TIPS_COMMAND_SPELL.description": "[gold]Noble[/gold]Phantasm Release[gold]:[/gold]Gain 100%[gold]Noble[/gold]Phantasm Gauge[gold].[/gold]\nActivated by using 1[gold]Command[/gold]Spell[gold].[/gold]\n\n[gold]Spiritron[/gold]Repair[gold]:[/gold]Restore 30 HP.\nActivated by using 1[gold]Command[/gold]Spell[gold].[/gold]\n\n[gold]Spiritron[/gold]Restoration[gold]:[/gold]Survive fatal damage and restore all HP.\nGain 300%[gold]Noble[/gold]Phantasm Gauge[gold].[/gold]\nActivates when you are about to be defeated, consuming 3[gold]Command[/gold]Spells[gold].[/gold]",
-  "FGO_STATIC_HOVER_TIPS_NOBLE.description": "宝具卡默认具有保留且打出后移出本场战斗",
-  "FGO_STATIC_HOVER_TIPS_NOBLE.empty": "宝具卡",
-  "FGO_STATIC_HOVER_TIPS_NOBLE.title": "宝具卡",
+  "FGO_STATIC_HOVER_TIPS_COMMAND_SPELL.description": "[gold]Noble Phantasm Release[/gold]: Gain 100% [gold]NP[/gold].\nActivated by using 1 [gold]Command Spell[/gold].\n\n[gold]Spiritron Repair[/gold]: Restore 30 HP.\nActivated by using 1 [gold]Command Spell[/gold].\n\n[gold]Spiritron Restoration[/gold]: Survive fatal damage and restore all HP.\nGain 300% [gold]NP[/gold].\nActivates when you are about to be defeated, consuming 3 [gold]Command Spells[/gold].",
+  "FGO_STATIC_HOVER_TIPS_NOBLE.description": "[gold]Noble Phantasm[/gold] has [gold]Retain[/gold] and remove from the combat when played.",
+  "FGO_STATIC_HOVER_TIPS_NOBLE.empty": "Noble Phantasm",
+  "FGO_STATIC_HOVER_TIPS_NOBLE.title": "Noble Phantasm",
   "FGO_CARDPILE_NOBLE.description": "Your[gold]Noble Deck[/gold].\nInitially contains[gold]BeautifulJourney[/gold]and[gold]Camelot[/gold].\nRight-click the[gold]Saint Quartz[/gold]relic to add more Noble cards.\nCards are removed from this pile after being played.",
   "FGO_CARDPILE_NOBLE.empty": "Noble Deck is empty",
-  "FGO_CARDPILE_NOBLE.title": "Noble Deck"
+  "FGO_CARDPILE_NOBLE.title": "Noble Deck",
+  "FGO_STATIC_HOVER_TIPS_FOREIGNER.title": "领域外生命",
+  "FGO_STATIC_HOVER_TIPS_FOREIGNER.description": ""
 }

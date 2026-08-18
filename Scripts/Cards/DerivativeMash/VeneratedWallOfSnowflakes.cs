@@ -33,9 +33,9 @@ public class VeneratedWallOfSnowflakes() : FgoColorlessCardModel(1, CardType.Ski
 
 
     public override CardAssetProfile AssetProfile => new(
-        "res://Fgo/images/cards/big/ObscurantWallofChalk.png",
-        ResourceLoader.Exists("res://Fgo/images/cards/big/beta/ObscurantWallofChalk.png")
-            ? "res://Fgo/images/cards/big/beta/ObscurantWallofChalk.png"
+        "res://Fgo/images/cards/big/ObscurantWallOfChalk.png",
+        ResourceLoader.Exists("res://Fgo/images/cards/big/beta/ObscurantWallOfChalk.png")
+            ? "res://Fgo/images/cards/big/beta/ObscurantWallOfChalk.png"
             : null,
         Type switch
         {
