@@ -21,7 +21,7 @@ public class GoddessMetamorphosisBeast() : FgoCardModel(2, CardType.Power,
         RemoveKeyword(CardKeyword.Ethereal);
     }
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await PowerCmd.Apply<GoddessMetamorphosisBeastPower>(choiceContext, Owner.Creature,
             1, Owner.Creature, this);

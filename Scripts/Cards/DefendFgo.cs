@@ -20,10 +20,8 @@ public class DefendFgo() : FgoCardModel(1, CardType.Skill, CardRarity.Basic, Tar
         DynamicVars.Block.UpgradeValueBy(3);
     }
 
-    protected override async Task OnPlay(
-        PlayerChoiceContext choiceContext,
-        CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, play);
+        await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, cardPlay);
     }
 }

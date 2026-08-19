@@ -41,19 +41,18 @@ public class WitchOfSalem() : FgoCardModel(3, CardType.Skill,
         DynamicVars[nameof(VsTerrorDamagePower)].UpgradeValueBy(50);
     }
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        foreach (var enemy in CombatState!.HittableEnemies)
-        {
-            await PowerCmd.Apply<VulnerablePower>(choiceContext, enemy,
-                DynamicVars[nameof(VulnerablePower)].BaseValue, Owner.Creature, this);
-            await PowerCmd.Apply<WeakPower>(choiceContext, enemy, DynamicVars[nameof(WeakPower)].BaseValue,
-                Owner.Creature, this);
-            await TerrorPower.Apply(choiceContext, enemy,
-                DynamicVars[nameof(TerrorPower)].IntValue,
-                DynamicVars["TerrorChance"].BaseValue,
-                Owner.Creature, this);
-        }
+        await PowerCmd.Apply<VulnerablePower>(choiceContext, CombatState!.HittableEnemies,
+            DynamicVars[nameof(VulnerablePower)].BaseValue, Owner.Creature, this);
+        await PowerCmd.Apply<WeakPower>(choiceContext, CombatState.HittableEnemies,
+            DynamicVars[nameof(WeakPower)].BaseValue,
+            Owner.Creature, this);
+        var terror = await PowerCmd.Apply<TerrorPower>(choiceContext, CombatState.HittableEnemies,
+            DynamicVars[nameof(TerrorPower)].IntValue,
+            Owner.Creature, this);
+
+        terror.FirstOrDefault()!.TerrorChance = DynamicVars["TerrorChance"].BaseValue;
 
         await PowerCmd.Apply<VsTerrorDamagePower>(choiceContext, Owner.Creature,
             DynamicVars[nameof(VsTerrorDamagePower)].BaseValue, Owner.Creature, this);

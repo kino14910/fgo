@@ -19,7 +19,7 @@ public class MahaPralaya() : NobleCardModel(1, CardType.Attack, TargetType.Self)
         DynamicVars.Damage.UpgradeValueBy(3m);
     }
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         var debuffTypes = CombatState!.HittableEnemies
             .SelectMany(enemy => enemy.Powers)
@@ -30,7 +30,7 @@ public class MahaPralaya() : NobleCardModel(1, CardType.Attack, TargetType.Self)
 
         var hitCount = Math.Max(1, debuffTypes);
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-            .FromCard(this, play)
+            .FromCard(this, cardPlay)
             .TargetingAllOpponents(CombatState!)
             .WithHitCount(hitCount)
             .WithHitFx("vfx/vfx_attack_blunt")

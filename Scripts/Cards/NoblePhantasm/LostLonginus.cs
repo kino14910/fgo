@@ -21,15 +21,13 @@ public class LostLonginus() : NobleCardModel(2, CardType.Attack, TargetType.Self
         DynamicVars.Damage.UpgradeValueBy(6);
     }
 
-    protected override async Task OnPlay(
-        PlayerChoiceContext choiceContext,
-        CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await IgnoreInvincibleAction(play);
+        await IgnoreInvincibleAction(CombatState!.HittableEnemies);
         
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-            .FromCard(this, play)
-            .TargetingAllOpponents(CombatState!)
+            .FromCard(this, cardPlay)
+            .TargetingAllOpponents(CombatState)
             .WithHitFx("vfx/vfx_attack_blunt")
             .Execute(choiceContext);
     }

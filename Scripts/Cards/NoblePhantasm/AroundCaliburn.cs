@@ -28,7 +28,7 @@ public class AroundCaliburn() : NobleCardModel(2, CardType.Power, TargetType.Sel
         DynamicVars[nameof(AntiPurgeDefensePower)].UpgradeValueBy(1);
     }
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await PowerCmd.Apply<StrengthPower>(choiceContext, Owner.Creature,
             DynamicVars[nameof(StrengthPower)].BaseValue, Owner.Creature, this);

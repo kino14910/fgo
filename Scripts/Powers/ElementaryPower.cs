@@ -15,11 +15,10 @@ public class ElementaryPower : FgoPowerModel
     public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
     {
         if (player != Owner.Player) return;
-        Flash();
-
         var enemies = Owner.CombatState?.HittableEnemies;
         if (enemies == null) return;
 
+        Flash();
         foreach (var enemy in enemies)
         {
             if (enemy.Block <= 0) continue;

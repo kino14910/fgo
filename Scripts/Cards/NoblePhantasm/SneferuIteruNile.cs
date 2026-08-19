@@ -31,19 +31,19 @@ public class SneferuIteruNile() : NobleCardModel(2, CardType.Attack, TargetType.
         DynamicVars.Doom.UpgradeValueBy(2);
     }
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-            .FromCard(this, play)
+            .FromCard(this, cardPlay)
             .TargetingAllOpponents(CombatState!)
             .WithHitFx("vfx/vfx_attack_blunt")
             .Execute(choiceContext);
-        foreach (var enemy in CombatState!.HittableEnemies)
-        {
-            await PowerCmd.Apply<VulnerablePower>(choiceContext, enemy, 3m, Owner.Creature, this);
-            await PowerCmd.Apply<DoomPower>(choiceContext, enemy, DynamicVars.Doom.BaseValue, Owner.Creature,
-                this);
-        }
+
+        await PowerCmd.Apply<VulnerablePower>(choiceContext, CombatState!.HittableEnemies, 3m, Owner.Creature, this);
+        await PowerCmd.Apply<DoomPower>(choiceContext, CombatState!.HittableEnemies, DynamicVars.Doom.BaseValue,
+            Owner.Creature,
+            this);
+
 
         await PowerCmd.Apply<WatersidePower>(choiceContext, Owner.Creature, 1m, Owner.Creature, this);
     }

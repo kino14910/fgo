@@ -38,9 +38,7 @@ public class HeroicKing() : FgoCardModel(
         DynamicVars.Damage.UpgradeValueBy(2);
     }
 
-    protected override async Task OnPlay(
-        PlayerChoiceContext choiceContext,
-        CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         if (CombatState is null)
             return;
@@ -49,7 +47,7 @@ public class HeroicKing() : FgoCardModel(
 
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
             .WithHitCount(hits)
-            .FromCard(this, play)
+            .FromCard(this, cardPlay)
             .TargetingRandomOpponents(CombatState)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);

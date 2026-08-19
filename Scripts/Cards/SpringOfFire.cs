@@ -27,7 +27,7 @@ public class SpringOfFire() : FgoCardModel(3, CardType.Power,
         DynamicVars.Heal.UpgradeValueBy(3);
     }
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await PowerCmd.Apply<NonStackableGutsPower>(choiceContext, Owner.Creature, DynamicVars.Heal.BaseValue,
             Owner.Creature, this);

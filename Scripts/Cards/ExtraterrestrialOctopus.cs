@@ -33,9 +33,11 @@ public class ExtraterrestrialOctopus() : FgoCardModel(0, CardType.Attack,
         DynamicVars["StarMultiplier"].UpgradeValueBy(1);
     }
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await CreatureCmd.Damage(choiceContext, play.Target!,
+        ArgumentNullException.ThrowIfNull(cardPlay.Target, nameof(cardPlay.Target));
+
+        await CreatureCmd.Damage(choiceContext, cardPlay.Target,
             DynamicVars.EvaluateValueOrDefault("StarsDamage"),
             ValueProp.Unpowered | ValueProp.Move, Owner.Creature);
     }

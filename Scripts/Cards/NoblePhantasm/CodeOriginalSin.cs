@@ -31,16 +31,13 @@ public class CodeOriginalSin() : NobleCardModel(1, CardType.Attack, TargetType.S
         DynamicVars.Damage.UpgradeValueBy(8);
     }
 
-    protected override async Task OnPlay(
-        PlayerChoiceContext choiceContext,
-        CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await CreatureCmd.Damage(choiceContext, CombatState!.HittableEnemies,
             DynamicVars.Damage.BaseValue, ValueProp.Unblockable | ValueProp.Unpowered | ValueProp.Move,
             Owner.Creature);
-        foreach (var enemy in CombatState!.HittableEnemies)
-            await PowerCmd.Apply<DoomPower>(choiceContext, enemy, DynamicVars.Doom.BaseValue,
-                Owner.Creature, this);
+        await PowerCmd.Apply<DoomPower>(choiceContext, CombatState!.HittableEnemies, DynamicVars.Doom.BaseValue,
+            Owner.Creature, this);
         await FgoResCmd.ModifyNp(this);
     }
 }

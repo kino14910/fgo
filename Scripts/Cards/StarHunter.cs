@@ -32,9 +32,7 @@ public class StarHunter() : FgoCardModel(1, CardType.Skill,
         DynamicVars[nameof(CriticalDamageOncePower)].UpgradeValueBy(50);
     }
 
-    protected override async Task OnPlay(
-        PlayerChoiceContext choiceContext,
-        CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await FgoResCmd.ModifyStars(DynamicVars["Star"].BaseValue, Owner);
         var power = await PowerCmd.Apply<CriticalDamageOncePower>(choiceContext, Owner.Creature,

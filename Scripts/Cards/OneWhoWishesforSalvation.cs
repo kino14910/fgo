@@ -28,7 +28,7 @@ public class OneWhoWishesforSalvation() : FgoCardModel(1, CardType.Power,
         AddKeyword(CardKeyword.Innate);
     }
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await PowerCmd.Apply<NpPerTurnPower>(choiceContext, Owner.Creature,
             DynamicVars[nameof(NpPerTurnPower)].BaseValue, Owner.Creature, this);

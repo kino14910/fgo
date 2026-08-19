@@ -19,8 +19,9 @@ public class GoddessMetamorphosisBeastPower : FgoPowerModel
 
     public override async Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
+        ArgumentNullException.ThrowIfNull(cardPlay.Target, nameof(cardPlay.Target));
+
         if (cardPlay.Card.Type != CardType.Attack) return;
-        if (cardPlay.Target is null) return;
         Flash();
         await PowerCmd.Apply<PoisonPower>(choiceContext, cardPlay.Target, Amount, Owner, null);
         await PowerCmd.Apply<CursePower>(choiceContext, cardPlay.Target, Amount, Owner, null);

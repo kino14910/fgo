@@ -29,9 +29,7 @@ public class NffSpecial() : FgoCardModel(0, CardType.Skill,
         DynamicVars.Cards.UpgradeValueBy(1);
     }
 
-    protected override async Task OnPlay(
-        PlayerChoiceContext choiceContext,
-        CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await CardPileCmd.Draw(choiceContext, DynamicVars.Cards.BaseValue, Owner);
         for (var i = 0; i < 2; i++)

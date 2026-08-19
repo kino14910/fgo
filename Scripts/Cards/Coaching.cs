@@ -24,9 +24,7 @@ public class Coaching() : FgoCardModel(0, CardType.Skill,
         DynamicVars["Energy"].UpgradeValueBy(1);
     }
 
-    protected override async Task OnPlay(
-        PlayerChoiceContext choiceContext,
-        CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await PlayerCmd.GainEnergy(DynamicVars["Energy"].IntValue, Owner);
         await CreatureCmd.Damage(choiceContext, Owner.Creature, DynamicVars.Damage.BaseValue,

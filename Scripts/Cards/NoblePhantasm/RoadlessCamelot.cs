@@ -26,18 +26,17 @@ public class RoadlessCamelot() : NobleCardModel(3, CardType.Attack, TargetType.S
         DynamicVars.Damage.UpgradeValueBy(8);
     }
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-            .FromCard(this, play)
+            .FromCard(this, cardPlay)
             .TargetingAllOpponents(CombatState!)
             .WithHitCount(3)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
 
-        // 给予所有敌人3层诅呪
-        foreach (var enemy in CombatState!.HittableEnemies)
-            await PowerCmd.Apply<CursePower>(choiceContext, enemy, DynamicVars["Curse"].BaseValue, Owner.Creature,
-                this);
+        await PowerCmd.Apply<CursePower>(choiceContext, CombatState!.HittableEnemies, DynamicVars["Curse"].BaseValue,
+            Owner.Creature,
+            this);
     }
 }

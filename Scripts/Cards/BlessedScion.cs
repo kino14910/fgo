@@ -22,9 +22,7 @@ public class BlessedScion() : FgoCardModel(1, CardType.Skill,
         DynamicVars["Copies"].UpgradeValueBy(1);
     }
 
-    protected override async Task OnPlay(
-        PlayerChoiceContext choiceContext,
-        CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         var player = Owner.Creature.Player;
         var selectable = player!.PlayerCombatState!.Hand.Cards.ToList();

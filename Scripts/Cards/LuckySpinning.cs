@@ -28,7 +28,7 @@ public class LuckySpinning() : FgoCardModel(1, CardType.Skill,
         DynamicVars["Star"].UpgradeValueBy(1);
     }
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await PowerCmd.Apply<LuckySpinningPower>(choiceContext, Owner.Creature, DynamicVars["Star"].BaseValue,
             Owner.Creature, this);

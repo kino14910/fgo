@@ -29,13 +29,11 @@ public class YinYangFish() : FgoCardModel(1, CardType.Skill,
         DynamicVars.Heal.UpgradeValueBy(2);
     }
 
-    protected override async Task OnPlay(
-        PlayerChoiceContext choiceContext,
-        CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         if (IsUpgraded)
-            await FgoResCmd.ModifyNp(30, play.Player);
+            await FgoResCmd.ModifyNp(30, cardPlay.Player);
         await CreatureCmd.Heal(Owner.Creature, DynamicVars.Heal.BaseValue, false);
-        await FgoResCmd.ModifyNp(-10, play.Player);
+        await FgoResCmd.ModifyNp(-10, cardPlay.Player);
     }
 }

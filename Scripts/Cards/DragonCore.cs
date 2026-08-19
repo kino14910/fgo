@@ -11,7 +11,7 @@ public class DragonCore() : FgoCardModel(2, CardType.Skill,
 {
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         var player = Owner.Creature.Player;
         if (player == null) return;

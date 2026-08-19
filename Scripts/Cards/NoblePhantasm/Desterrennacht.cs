@@ -41,14 +41,13 @@ public class Desterrennacht() : NobleCardModel(3, CardType.Power, TargetType.Sel
         DynamicVars[nameof(CriticalDamagePower)].UpgradeValueBy(10);
     }
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        // 给予所有敌人恐怖（TerrorAmount 层，TerrorChance% 眩晕概率）
-        foreach (var enemy in CombatState!.HittableEnemies)
-            await TerrorPower.Apply(choiceContext, enemy,
-                DynamicVars[nameof(TerrorPower)].IntValue,
-                DynamicVars["TerrorChance"].BaseValue,
-                Owner.Creature, this);
+        var terror = await PowerCmd.Apply<TerrorPower>(choiceContext, CombatState!.HittableEnemies,
+            DynamicVars[nameof(TerrorPower)].IntValue,
+            Owner.Creature, this);
+
+        terror.FirstOrDefault()!.TerrorChance = DynamicVars["TerrorChance"].BaseValue;
 
         await PowerCmd.Apply<StrengthPower>(choiceContext, Owner.Creature,
             DynamicVars[nameof(StrengthPower)].BaseValue, Owner.Creature, this);

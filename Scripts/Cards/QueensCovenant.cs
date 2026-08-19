@@ -31,9 +31,7 @@ public class QueensCovenant() : FgoCardModel(1, CardType.Skill,
         DynamicVars[nameof(DexterityPower)].UpgradeValueBy(1);
     }
 
-    protected override async Task OnPlay(
-        PlayerChoiceContext choiceContext,
-        CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         var strAmount = DynamicVars[nameof(StrengthPower)].BaseValue;
 

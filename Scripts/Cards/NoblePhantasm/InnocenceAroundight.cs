@@ -28,11 +28,13 @@ public class InnocenceAroundight() : NobleCardModel(2, CardType.Attack, TargetTy
         DynamicVars.Damage.UpgradeValueBy(8);
     }
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
+        ArgumentNullException.ThrowIfNull(cardPlay.Target, nameof(cardPlay.Target));
+
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-            .FromCard(this, play)
-            .Targeting(play.Target!)
+            .FromCard(this, cardPlay)
+            .Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_attack_blunt")
             .Execute(choiceContext);
         await PowerCmd.Apply<NpRatePower>(choiceContext, Owner.Creature,

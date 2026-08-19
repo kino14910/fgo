@@ -26,9 +26,7 @@ public class FifthForce() : FgoCardModel(0, CardType.Skill,
         ModCardVars.Int("DamageReduction", 50)
     ];
 
-    protected override async Task OnPlay(
-        PlayerChoiceContext choiceContext,
-        CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         var power = await PowerCmd.Apply<FifthForcePower>(choiceContext, Owner.Creature,
             DynamicVars[nameof(FifthForcePower)].BaseValue,

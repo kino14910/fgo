@@ -29,10 +29,10 @@ public class BlackdogGalatine() : NobleCardModel(1, CardType.Attack, TargetType.
         DynamicVars[nameof(MaxHpPower)].UpgradeValueBy(3);
     }
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-            .FromCard(this, play)
+            .FromCard(this, cardPlay)
             .TargetingAllOpponents(CombatState!)
             .WithHitFx("vfx/vfx_fire_burning")
             .Execute(choiceContext);

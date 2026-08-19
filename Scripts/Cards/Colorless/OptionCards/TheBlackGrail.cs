@@ -4,11 +4,14 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.Models.CardPools;
 using STS2RitsuLib.Cards.DynamicVars;
+using STS2RitsuLib.Interop.AutoRegistration;
 
 namespace Fgo.Scripts.Cards.Colorless.OptionCards;
 
-public class TheBlackGrail() : FgoColorlessCardModel(0, CardType.Skill,
+[RegisterCard(typeof(TokenCardPool))]
+public class TheBlackGrail() : FgoBaseCardModel(0, CardType.Skill,
     CardRarity.Token, TargetType.Self)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
@@ -26,7 +29,7 @@ public class TheBlackGrail() : FgoColorlessCardModel(0, CardType.Skill,
         DynamicVars[nameof(NpDamagePower)].UpgradeValueBy(20);
     }
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await PowerCmd.Apply<NpDamagePower>(choiceContext, Owner.Creature,
             DynamicVars[nameof(NpDamagePower)].BaseValue, Owner.Creature, this);

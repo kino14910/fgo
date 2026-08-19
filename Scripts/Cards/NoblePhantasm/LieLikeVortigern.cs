@@ -27,20 +27,17 @@ public class LieLikeVortigern() : NobleCardModel(3, CardType.Attack, TargetType.
         DynamicVars.Damage.UpgradeValueBy(7m);
     }
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-            .FromCard(this, play)
+            .FromCard(this, cardPlay)
             .TargetingAllOpponents(CombatState!)
             .WithHitFx("vfx/vfx_attack_blunt")
             .Execute(choiceContext);
 
-        foreach (var enemy in CombatState!.HittableEnemies)
-        {
-            await PowerCmd.Apply<StrengthPower>(choiceContext, enemy, -2m, Owner.Creature, this);
-            await PowerCmd.Apply<IntangiblePower>(choiceContext, enemy,
-                DynamicVars[nameof(IntangiblePower)].BaseValue, Owner.Creature, this);
-        }
+        await PowerCmd.Apply<StrengthPower>(choiceContext, CombatState!.HittableEnemies, -2m, Owner.Creature, this);
+        await PowerCmd.Apply<IntangiblePower>(choiceContext, CombatState!.HittableEnemies,
+            DynamicVars[nameof(IntangiblePower)].BaseValue, Owner.Creature, this);
 
         await PowerCmd.Apply<IntangiblePower>(choiceContext, Owner.Creature,
             DynamicVars[nameof(IntangiblePower)].BaseValue, Owner.Creature, this);

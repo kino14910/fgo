@@ -26,19 +26,17 @@ public class CharismaOfConflict() : FgoCardModel(1, CardType.Attack,
         DynamicVars.Damage.UpgradeValueBy(3);
     }
 
-    protected override async Task OnPlay(
-        PlayerChoiceContext choiceContext,
-        CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-            .FromCard(this, play)
+            .FromCard(this, cardPlay)
             .TargetingAllOpponents(CombatState!)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
 
         if (Owner.Creature.HasPower<GutsPower>())
             await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-                .FromCard(this, play)
+                .FromCard(this, cardPlay)
                 .TargetingAllOpponents(CombatState!)
                 .WithHitFx("vfx/vfx_attack_slash")
                 .Execute(choiceContext);

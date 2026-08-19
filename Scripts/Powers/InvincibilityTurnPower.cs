@@ -20,7 +20,7 @@ public class InvincibilityTurnPower : FgoPowerModel
         CardPlay? cardPlay)
     {
         if (target != Owner) return 1m;
-        if (!props.HasFlag(ValueProp.Move)) return 1m;
+        if (!props.IsCardOrMonsterMove()) return 1m;
         return 0m;
     }
 

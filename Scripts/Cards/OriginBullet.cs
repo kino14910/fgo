@@ -19,10 +19,11 @@ public class OriginBullet() : FgoCardModel(1, CardType.Skill,
         EnergyCost.UpgradeBy(-1);
     }
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        if(play.Target is null) return;
-        var amount = await IgnoreInvincibleAction(play);
+        ArgumentNullException.ThrowIfNull(cardPlay.Target, nameof(cardPlay.Target));
+
+        var amount = await IgnoreInvincibleAction(cardPlay.Target);
         await PowerCmd.Apply<IgnoreInvinciblePower>(choiceContext, Owner.Creature, amount, Owner.Creature, this);
     }
 }

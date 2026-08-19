@@ -27,19 +27,17 @@ public class ImitationGodForce() : NobleCardModel(1, CardType.Attack, TargetType
         DynamicVars.Damage.UpgradeValueBy(3m);
     }
 
-    protected override async Task OnPlay(
-        PlayerChoiceContext choiceContext,
-        CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-            .FromCard(this, play)
+            .FromCard(this, cardPlay)
             .TargetingAllOpponents(CombatState!)
             .WithHitCount(DynamicVars["Hits"].IntValue)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
 
-        foreach (var enemy in CombatState!.HittableEnemies)
-            await PowerCmd.Apply<WeakPower>(choiceContext, enemy, DynamicVars[nameof(WeakPower)].BaseValue,
-                Owner.Creature, this);
+        await PowerCmd.Apply<WeakPower>(choiceContext, CombatState!.HittableEnemies,
+            DynamicVars[nameof(WeakPower)].BaseValue,
+            Owner.Creature, this);
     }
 }

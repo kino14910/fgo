@@ -16,14 +16,13 @@ namespace Fgo.Scripts.Cards.DerivativeMash;
 /// <summary>
 ///     印证希望的人理之剑: LordChaldeas(构筑希望的人理之盾)发动后获得
 /// </summary>
-public class RayProofKyrielight() : NobleCardModel(1, CardType.Attack, TargetType.Self)
+public class RayProofKyrielight() : NobleCardModel(1, CardType.Attack, TargetType.AllEnemies)
 {
     public override IEnumerable<CardKeyword> CanonicalKeywords => [FgoKeywords.IgnoreInvincible];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
-        HoverTipFactory.FromPower<VulnerablePower>(),
-        FgoHoverTipHelper.CreateNpHoverTip()
+        HoverTipFactory.FromPower<VulnerablePower>()
     ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
@@ -38,18 +37,21 @@ public class RayProofKyrielight() : NobleCardModel(1, CardType.Attack, TargetTyp
         DynamicVars[nameof(VulnerablePower)].UpgradeValueBy(1);
     }
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await IgnoreInvincibleAction(play);
+        await IgnoreInvincibleAction(CombatState!.HittableEnemies);
+        
+        await PowerCmd.Apply<VulnerablePower>(choiceContext, CombatState!.HittableEnemies,
+            DynamicVars[nameof(VulnerablePower)].BaseValue, Owner.Creature, this);
+
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-            .FromCard(this, play)
-            .TargetingAllOpponents(CombatState!)
+            .FromCard(this, cardPlay)
+            .TargetingAllOpponents(CombatState)
             .WithHitFx("vfx/vfx_heavy_blunt")
             .Execute(choiceContext);
-        foreach (var enemy in CombatState!.HittableEnemies)
+        
+        foreach (var enemy in CombatState.HittableEnemies)
         {
-            await PowerCmd.Apply<VulnerablePower>(choiceContext, enemy,
-                DynamicVars[nameof(VulnerablePower)].BaseValue, Owner.Creature, this);
             if (!enemy.IsPrimaryEnemy)
             {
                 var buffs = enemy.Powers.Where(power => power.Type == PowerType.Buff).ToList();

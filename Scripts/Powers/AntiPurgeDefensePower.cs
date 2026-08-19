@@ -16,7 +16,7 @@ public class AntiPurgeDefensePower : FgoPowerModel
         PlayerChoiceContext choiceContext, Creature target,
         decimal amount, ValueProp props, Creature? dealer, CardModel? cardSource)
     {
-        if (target == Owner && amount > 0 && props.HasFlag(ValueProp.Move))
+        if (target == Owner && amount > 0 && props.IsCardOrMonsterMove())
         {
             Flash();
             await CreatureCmd.Heal(Owner, 5m, false);

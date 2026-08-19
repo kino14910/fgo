@@ -29,11 +29,13 @@ public class PursuerOfLove() : FgoCardModel(1, CardType.Skill,
         DynamicVars["Pursue"].UpgradeValueBy(1);
     }
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await PowerCmd.Apply<StrengthPower>(choiceContext, play.Target!,
+        ArgumentNullException.ThrowIfNull(cardPlay.Target, nameof(cardPlay.Target));
+
+        await PowerCmd.Apply<StrengthPower>(choiceContext, cardPlay.Target,
             DynamicVars[nameof(StrengthPower)].BaseValue, Owner.Creature, this);
-        await PowerCmd.Apply<PursuePower>(choiceContext, play.Target!, DynamicVars["Pursue"].BaseValue, Owner.Creature,
+        await PowerCmd.Apply<PursuePower>(choiceContext, cardPlay.Target, DynamicVars["Pursue"].BaseValue, Owner.Creature,
             this);
     }
 }

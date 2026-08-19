@@ -28,7 +28,7 @@ public class ElementaryMyDear() : NobleCardModel(1, CardType.Power, TargetType.S
         DynamicVars[nameof(VulnerablePower)].UpgradeValueBy(1m);
     }
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await PowerCmd.Apply<ElementaryPower>(choiceContext, Owner.Creature,
             DynamicVars[nameof(ElementaryPower)].BaseValue, Owner.Creature, this);

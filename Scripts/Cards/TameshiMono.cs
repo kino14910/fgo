@@ -30,7 +30,7 @@ public class TameshiMono() : FgoCardModel(1, CardType.Skill,
         DynamicVars["ExhaustCount"].UpgradeValueBy(1);
     }
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         var prefs = new CardSelectorPrefs(CardSelectorPrefs.ExhaustSelectionPrompt,
             0, DynamicVars["ExhaustCount"].IntValue)
@@ -46,6 +46,6 @@ public class TameshiMono() : FgoCardModel(1, CardType.Skill,
         foreach (var card in cards)
             await CardCmd.Exhaust(choiceContext, card);
 
-        await FgoResCmd.ModifyStars(cards.Count * 4, play.Player);
+        await FgoResCmd.ModifyStars(cards.Count * 4, cardPlay.Player);
     }
 }

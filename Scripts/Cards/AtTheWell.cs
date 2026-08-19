@@ -29,9 +29,7 @@ public class AtTheWell() : FgoCardModel(0, CardType.Skill,
         DynamicVars[nameof(GutsPower)].UpgradeValueBy(6);
     }
 
-    protected override async Task OnPlay(
-        PlayerChoiceContext choiceContext,
-        CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         var self = Owner.Creature;
         var debuffs = self.Powers.Where(p => p.Type == PowerType.Debuff).ToList();

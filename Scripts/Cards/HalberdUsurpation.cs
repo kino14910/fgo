@@ -21,18 +21,18 @@ public class HalberdUsurpation() : FgoCardModel(2, CardType.Attack,
         DynamicVars["Usurpation"].UpgradeValueBy(5);
     }
 
-    protected override async Task OnPlay(
-        PlayerChoiceContext choiceContext,
-        CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
+        ArgumentNullException.ThrowIfNull(cardPlay.Target, nameof(cardPlay.Target));
+
         await DamageCmd.Attack(DynamicVars.EvaluateValueOrDefault("Usurpation"))
-            .FromCard(this, play)
-            .Targeting(play.Target!)
+            .FromCard(this, cardPlay)
+            .Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_heavy_blunt")
             .Execute(choiceContext);
 
-        var enemyStrength = play.Target!.GetPowerAmount<StrengthPower>();
+        var enemyStrength = cardPlay.Target.GetPowerAmount<StrengthPower>();
         if (enemyStrength > 0)
-            await PowerCmd.Apply<StrengthPower>(choiceContext, play.Target!, -enemyStrength * 2, Owner.Creature, this);
+            await PowerCmd.Apply<StrengthPower>(choiceContext, cardPlay.Target, -enemyStrength * 2, Owner.Creature, this);
     }
 }

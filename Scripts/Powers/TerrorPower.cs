@@ -11,7 +11,7 @@ namespace Fgo.Scripts.Powers;
 
 /// <summary>
 ///     恐怖 Power。
-///     amount 为层数（每回合减 1），Probability 为眩晕概率（0-100）。
+///     amount 为层数（每回合减 1），TerrorChance 为眩晕概率（0-100）。
 ///     每回合结束时按概率让怪物眩晕，然后层数 -1。
 /// </summary>
 public class TerrorPower : FgoPowerModel, IPowerExtraIconAmountLabelSpecsProvider
@@ -27,16 +27,16 @@ public class TerrorPower : FgoPowerModel, IPowerExtraIconAmountLabelSpecsProvide
     /// <summary>
     ///     眩晕概率（0-100）。叠加时取较大值。
     /// </summary>
-    public decimal Probability { get; set; }
+    public decimal TerrorChance { get; set; }
 
     public IReadOnlyList<ExtraIconAmountLabelSpec> GetPowerExtraIconAmountLabelSpecs()
     {
         return
         [
             // 左上角: 层数
-            ExtraIconAmountLabelSpec.Plain(ExtraIconAmountLabelCorner.TopLeft, Amount.ToString()),
+            ExtraIconAmountLabelSpec.Plain(ExtraIconAmountLabelCorner.TopRight, Amount.ToString()),
             // 右上角: 眩晕概率 %
-            ExtraIconAmountLabelSpec.Plain(ExtraIconAmountLabelCorner.TopRight, $"{Probability:F0}%")
+            ExtraIconAmountLabelSpec.Plain(ExtraIconAmountLabelCorner.BottomRight, $"{TerrorChance}%")
         ];
     }
 
@@ -49,11 +49,11 @@ public class TerrorPower : FgoPowerModel, IPowerExtraIconAmountLabelSpecsProvide
 
         // 概率判定眩晕（RNG 来自施加者，敌人本身没有 Player）
         var applier = Applier;
-        if (applier is { Player: not null } && Probability > 0m)
+        if (applier is { Player: not null } && TerrorChance > 0m)
         {
             var rng = applier.Player.RunState.Rng.CombatTargets;
             var roll = rng.NextFloat() * 100f;
-            if (roll < (float)Probability)
+            if (roll < (float)TerrorChance)
             {
                 Flash();
                 await CreatureCmd.Stun(Owner);
@@ -62,20 +62,5 @@ public class TerrorPower : FgoPowerModel, IPowerExtraIconAmountLabelSpecsProvide
 
         // 每回合减一层
         await PowerCmd.Decrement(this);
-    }
-
-    /// <summary>
-    ///     应用恐怖 Power 的辅助方法，同时设置层数和概率。
-    ///     叠加时层数累加，概率取较大值。
-    /// </summary>
-    public static async Task<TerrorPower?> Apply(
-        PlayerChoiceContext choiceContext, Creature target,
-        int amount, decimal probability,
-        Creature? applier, CardModel? cardSource)
-    {
-        var power = await PowerCmd.Apply<TerrorPower>(choiceContext, target, amount, applier, cardSource);
-        if (power != null && probability > power.Probability)
-            power.Probability = probability;
-        return power;
     }
 }

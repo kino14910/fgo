@@ -13,11 +13,11 @@ public class Failnaught() : NobleCardModel(2, CardType.Attack, TargetType.AnyEne
         new DamageVar(48m, ValueProp.Unblockable | ValueProp.Unpowered | ValueProp.Move)
     ];
 
-    protected override async Task OnPlay(
-        PlayerChoiceContext choiceContext,
-        CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await CreatureCmd.Damage(choiceContext, play.Target!, DynamicVars.Damage.BaseValue,
+        ArgumentNullException.ThrowIfNull(cardPlay.Target, nameof(cardPlay.Target));
+        
+        await CreatureCmd.Damage(choiceContext, cardPlay.Target, DynamicVars.Damage.BaseValue,
             ValueProp.Unblockable | ValueProp.Unpowered | ValueProp.Move, Owner.Creature);
     }
 

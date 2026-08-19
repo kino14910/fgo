@@ -28,20 +28,20 @@ public class YewBow() : NobleCardModel(1, CardType.Attack, TargetType.AnyEnemy)
         DynamicVars.Damage.UpgradeValueBy(3m);
     }
 
-    protected override async Task OnPlay(
-        PlayerChoiceContext choiceContext,
-        CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
+        ArgumentNullException.ThrowIfNull(cardPlay.Target, nameof(cardPlay.Target));
+
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-            .FromCard(this, play)
-            .Targeting(play.Target!)
+            .FromCard(this, cardPlay)
+            .Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_dagger_spray_flurry")
             .Execute(choiceContext);
 
-        if (play.Target!.HasPower<PoisonPower>())
+        if (cardPlay.Target.HasPower<PoisonPower>())
             await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-                .FromCard(this, play)
-                .Targeting(play.Target!)
+                .FromCard(this, cardPlay)
+                .Targeting(cardPlay.Target)
                 .WithHitFx("vfx/vfx_dagger_spray_flurry")
                 .Execute(choiceContext);
     }

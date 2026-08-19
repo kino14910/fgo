@@ -3,6 +3,7 @@ using Fgo.Scripts.Keywords;
 using Godot;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models.CardPools;
 using MegaCrit.Sts2.Core.Models.Powers;
@@ -40,29 +41,42 @@ public abstract class FgoBaseCardModel(
     ///     无敌贯通效果：仅当卡牌自身带有 [gold]无敌贯通[/gold] 关键词时生效，
     ///     去除目标的格挡、[gold]硬化外壳[/gold] 和 [gold]难以杀灭[/gold]。
     /// </summary>
-    protected async Task<int> IgnoreInvincibleAction(CardPlay play)
+    protected async Task<int> IgnoreInvincibleAction(Creature target)
     {
         if (!Keywords.Contains(FgoKeywords.IgnoreInvincible)) return 0;
-        if (play.Target is null) return 0;
+        if (!target.IsMonster) return 0;
 
         var amount = 0;
-        if (play.Target.Block != 0)
+        if (target.Block != 0)
         {
-            play.Target.LoseBlockInternal(play.Target.Block);
+            target.LoseBlockInternal(target.Block);
             amount++;
         }
         
-        if (play.Target.HasPower<HardenedShellPower>())
+        if (target.HasPower<HardenedShellPower>())
         {
-            await PowerCmd.Remove<HardenedShellPower>(play.Target);
+            await PowerCmd.Remove<HardenedShellPower>(target);
             amount++;
         }
 
-        if (play.Target.HasPower<HardToKillPower>())
+        if (target.HasPower<HardToKillPower>())
         {
-            await PowerCmd.Remove<HardToKillPower>(play.Target);
+            await PowerCmd.Remove<HardToKillPower>(target);
             amount++;
         }
+        return amount;
+    }
+    
+    protected async Task<int> IgnoreInvincibleAction(IEnumerable<Creature>? targets)
+    {
+        
+        if (targets == null) return 0;
+        var amount = 0;
+        foreach (var target in targets)
+        {
+            amount += await IgnoreInvincibleAction(target);
+        }
+
         return amount;
     }
 }

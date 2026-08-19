@@ -33,7 +33,7 @@ public class MorningLark() : FgoCardModel(0, CardType.Skill,
         DynamicVars["Star"].UpgradeValueBy(10);
     }
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await FgoResCmd.ModifyNp(this);
         await FgoResCmd.ModifyStars(DynamicVars["Star"].BaseValue, Owner);

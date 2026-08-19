@@ -24,7 +24,7 @@ public class MagicBulletCharging() : FgoCardModel(0, CardType.Skill,
         DynamicVars["ExcessBonus"].UpgradeValueBy(2);
     }
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         var energy = ResolveEnergyXValue();
         if (energy <= 0) return;

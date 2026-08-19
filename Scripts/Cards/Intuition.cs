@@ -28,7 +28,7 @@ public class Intuition() : FgoCardModel(0, CardType.Skill, CardRarity.Basic, Tar
         DynamicVars["Stars"].UpgradeValueBy(5);
     }
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await FgoResCmd.ModifyStars(this);
     }

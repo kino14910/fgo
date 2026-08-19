@@ -12,7 +12,7 @@ namespace Fgo.Scripts.Powers;
 public class MonteCristoTreasurePower : FgoPowerModel
 {
     public override PowerType Type => PowerType.Buff;
-    public override PowerStackType StackType => PowerStackType.Counter;
+    public override PowerStackType StackType => PowerStackType.Single;
 
     public override PowerAssetProfile AssetProfile => new(
         "res://Fgo/images/powers/TriggerAfterAttacksPower.png",
@@ -23,11 +23,10 @@ public class MonteCristoTreasurePower : FgoPowerModel
         PlayerChoiceContext choiceContext, Creature? dealer,
         DamageResult result, ValueProp props, Creature target, CardModel? cardSource)
     {
-        if (dealer != Owner) return;
-        if (target == Owner) return;
-        if (!props.HasFlag(ValueProp.Move)) return;
+        if (dealer != Owner || target == Owner) return;
+        if (!props.IsCardOrMonsterMove()) return;
         if (!this.FgoRes().CanCrit) return;
         Flash();
-        await CreatureCmd.GainBlock(Owner, result.TotalDamage * Amount, ValueProp.Unpowered, null);
+        await CreatureCmd.GainBlock(Owner, result.TotalDamage, ValueProp.Unpowered, null);
     }
 }

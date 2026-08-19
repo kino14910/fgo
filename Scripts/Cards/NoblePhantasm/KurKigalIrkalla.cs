@@ -30,14 +30,14 @@ public class KurKigalIrkalla() : NobleCardModel(1, CardType.Attack, TargetType.S
         DynamicVars.Damage.UpgradeValueBy(8m);
     }
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         foreach (var enemy in CombatState!.HittableEnemies)
             await CreatureCmd.Damage(choiceContext, enemy,
                 (int)(enemy.MaxHp / 10.0f), ValueProp.Unblockable | ValueProp.Unpowered | ValueProp.Move,
                 Owner.Creature);
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-            .FromCard(this, play)
+            .FromCard(this, cardPlay)
             .TargetingAllOpponents(CombatState!)
             .WithHitFx("vfx/vfx_attack_blunt")
             .Execute(choiceContext);

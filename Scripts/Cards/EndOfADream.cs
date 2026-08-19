@@ -23,8 +23,11 @@ public class EndOfADream() : FgoCardModel(1, CardType.Power,
         ModCardVars.Int("ExhaustCount", 1)
     ];
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await PowerCmd.Apply<PermanentSleepPower>(choiceContext, Owner.Creature, 1m, Owner.Creature, this);
+        if (IsUpgraded)
+            await PowerCmd.Apply<SleepPower>(choiceContext, Owner.Creature, 1m, Owner.Creature, this);
+        else 
+            await PowerCmd.Apply<PermanentSleepPower>(choiceContext, Owner.Creature, 1m, Owner.Creature, this);
     }
 }

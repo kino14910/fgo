@@ -11,7 +11,7 @@ public class EvilGodOfTheFlowers() : FgoCardModel(1, CardType.Skill, CardRarity.
 {
     protected override HashSet<CardTag> CanonicalTags => [FgoTags.Foreigner];
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         var allUnlocked = Owner.Character.CardPool
             .GetUnlockedCards(Owner.UnlockState, Owner.RunState.CardMultiplayerConstraint);

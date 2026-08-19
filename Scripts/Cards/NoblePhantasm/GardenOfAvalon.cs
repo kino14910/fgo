@@ -33,9 +33,7 @@ public class GardenOfAvalon() : NobleCardModel(1, CardType.Power, TargetType.Sel
         DynamicVars[nameof(StarsPerTurnPower)].UpgradeValueBy(5);
     }
 
-    protected override async Task OnPlay(
-        PlayerChoiceContext choiceContext,
-        CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await PowerCmd.Apply<RegenPower>(choiceContext, Owner.Creature,
             DynamicVars[nameof(RegenPower)].BaseValue, Owner.Creature, this);

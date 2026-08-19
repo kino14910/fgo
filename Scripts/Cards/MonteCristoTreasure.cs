@@ -28,7 +28,7 @@ public class MonteCristoTreasure() : FgoCardModel(3, CardType.Power,
         EnergyCost.UpgradeBy(-1);
     }
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await PowerCmd.Apply<MonteCristoTreasurePower>(choiceContext, Owner.Creature,
             DynamicVars["Multiplier"].BaseValue, Owner.Creature, this);

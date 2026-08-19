@@ -24,7 +24,7 @@ public class WorldsEndFlowerGardenPower : FgoPowerModel
         DamageResult result, ValueProp props, Creature target, CardModel? cardSource)
     {
         if (dealer != Owner) return;
-        if (!props.HasFlag(ValueProp.Move)) return;
+        if (!props.IsCardOrMonsterMove()) return;
         if (this.FgoRes().Stars < 10) return;
         Flash();
         await FgoResCmd.ModifyNp(Amount, Owner.Player);

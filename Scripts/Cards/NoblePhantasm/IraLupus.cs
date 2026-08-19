@@ -28,13 +28,13 @@ public class IraLupus() : NobleCardModel(1, CardType.Attack, TargetType.AnyEnemy
         DynamicVars[nameof(VulnerablePower)].UpgradeValueBy(1m);
     }
 
-    protected override async Task OnPlay(
-        PlayerChoiceContext choiceContext,
-        CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await CreatureCmd.Damage(choiceContext, play.Target!, DynamicVars.Damage.BaseValue,
+        ArgumentNullException.ThrowIfNull(cardPlay.Target, nameof(cardPlay.Target));
+
+        await CreatureCmd.Damage(choiceContext, cardPlay.Target, DynamicVars.Damage.BaseValue,
             ValueProp.Unblockable | ValueProp.Unpowered | ValueProp.Move, Owner.Creature);
-        await PowerCmd.Apply<VulnerablePower>(choiceContext, play.Target!,
+        await PowerCmd.Apply<VulnerablePower>(choiceContext, cardPlay.Target,
             DynamicVars[nameof(VulnerablePower)].BaseValue, Owner.Creature, this);
     }
 }

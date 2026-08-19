@@ -27,20 +27,20 @@ public class Overload() : NobleCardModel(1, CardType.Attack, TargetType.AnyEnemy
         DynamicVars.Damage.UpgradeValueBy(4m);
     }
 
-    protected override async Task OnPlay(
-        PlayerChoiceContext choiceContext,
-        CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
+        ArgumentNullException.ThrowIfNull(cardPlay.Target, nameof(cardPlay.Target));
+
         // 宝具值获取提升
         await PowerCmd.Apply<NpRatePower>(choiceContext, Owner.Creature, 1m, Owner.Creature, this);
 
         // 去除敌人的格挡值
-        if (play.Target!.Block > 0)
-            await CreatureCmd.LoseBlock(choiceContext, play.Target!, play.Target.Block, Owner.Creature);
+        if (cardPlay.Target.Block > 0)
+            await CreatureCmd.LoseBlock(choiceContext, cardPlay.Target, cardPlay.Target.Block, Owner.Creature);
 
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-            .FromCard(this, play)
-            .Targeting(play.Target!)
+            .FromCard(this, cardPlay)
+            .Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_attack_blunt")
             .Execute(choiceContext);
     }

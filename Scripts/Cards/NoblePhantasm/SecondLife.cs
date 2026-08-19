@@ -30,7 +30,7 @@ public class SecondLife() : NobleCardModel(1, CardType.Skill, TargetType.Self)
         DynamicVars["Np"].UpgradeValueBy(20);
     }
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         var exhaustCards = Owner.PlayerCombatState!.ExhaustPile.Cards.ToList();
         if (exhaustCards.Count == 0) return;
@@ -47,7 +47,7 @@ public class SecondLife() : NobleCardModel(1, CardType.Skill, TargetType.Self)
             if (enemy.HasPower<MinionPower>())
             {
                 await CreatureCmd.Kill(enemy);
-                await FgoResCmd.ModifyNp(DynamicVars["Np"].BaseValue, play.Player);
+                await FgoResCmd.ModifyNp(DynamicVars["Np"].BaseValue, cardPlay.Player);
             }
     }
 }

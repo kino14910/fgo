@@ -66,7 +66,7 @@
   "FGO_POWER_FROM_THE_WORLDS_END_POWER.smartDescription": "在你的回合结束时，所有敌人失去[blue]1[/blue]点[gold]力量[/gold]。",
   "FGO_POWER_PERMANENT_SLEEP_POWER.title": "永久睡眠",
   "FGO_POWER_PERMANENT_SLEEP_POWER.description": "在每回合结束时，[gold]消耗[/gold]一张随机手牌。",
-  "FGO_POWER_PERMANENT_SLEEP_POWER.smartDescription": "在每回合结束时，[gold]消耗[/gold]一张随机手牌。 在每回合结束时，[gold]消耗[/gold]一张手牌。",
+  "FGO_POWER_PERMANENT_SLEEP_POWER.smartDescription": "在每回合结束时，[gold]消耗[/gold]一张随机手牌。",
   "FGO_POWER_ENERGY_REGEN_POWER.title": "每回合获得NP",
   "FGO_POWER_ENERGY_REGEN_POWER.description": "在每回合开始时获得[gold]宝具值[/gold]。",
   "FGO_POWER_ENERGY_REGEN_POWER.smartDescription": "在每回合开始时获得[blue]{Amount}[/blue]%[gold]宝具值[/gold]。",

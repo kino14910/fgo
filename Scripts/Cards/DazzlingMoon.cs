@@ -28,9 +28,7 @@ public class DazzlingMoon() : FgoCardModel(3, CardType.Power,
         AddKeyword(CardKeyword.Innate);
     }
 
-    protected override async Task OnPlay(
-        PlayerChoiceContext choiceContext,
-        CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await PowerCmd.Apply<DazzlingMoonPower>(choiceContext, Owner.Creature, 3m, Owner.Creature, this);
     }

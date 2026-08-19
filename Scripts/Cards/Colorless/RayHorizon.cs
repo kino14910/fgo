@@ -8,11 +8,14 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Models.CardPools;
 using STS2RitsuLib.Cards.DynamicVars;
+using STS2RitsuLib.Interop.AutoRegistration;
 
 namespace Fgo.Scripts.Cards.Colorless;
 
-public class RayHorizon() : FgoColorlessCardModel(0, CardType.Skill,
+[RegisterCard(typeof(TokenCardPool))]
+public class RayHorizon() : FgoBaseCardModel(0, CardType.Skill,
     CardRarity.Token, TargetType.Self)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
@@ -31,7 +34,7 @@ public class RayHorizon() : FgoColorlessCardModel(0, CardType.Skill,
         DynamicVars["Np"].UpgradeValueBy(50);
     }
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         var npCardPower = await PowerCmd.Apply<NpCardPower>(choiceContext, Owner.Creature, 1m, Owner.Creature, this);
         if (npCardPower != null)

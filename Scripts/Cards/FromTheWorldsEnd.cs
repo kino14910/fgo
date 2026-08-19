@@ -30,13 +30,11 @@ public class FromTheWorldsEnd() : FgoCardModel(2, CardType.Power,
         DynamicVars["Turns"].UpgradeValueBy(1);
     }
 
-    protected override async Task OnPlay(
-        PlayerChoiceContext choiceContext,
-        CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        foreach (var enemy in CombatState!.HittableEnemies)
-            await PowerCmd.Apply<WeakPower>(choiceContext, enemy, DynamicVars[nameof(WeakPower)].BaseValue,
-                Owner.Creature, this);
+        await PowerCmd.Apply<WeakPower>(choiceContext, CombatState!.HittableEnemies,
+            DynamicVars[nameof(WeakPower)].BaseValue,
+            Owner.Creature, this);
         await PowerCmd.Apply<FromTheWorldsEndPower>(choiceContext, Owner.Creature, DynamicVars["Turns"].BaseValue,
             Owner.Creature, this);
     }

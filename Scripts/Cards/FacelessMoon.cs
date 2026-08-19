@@ -33,9 +33,9 @@ public class FacelessMoon() : FgoCardModel(1, CardType.Skill,
         AddKeyword(CardKeyword.Retain);
     }
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await PowerCmd.Apply<FacelessMoonPower>(choiceContext, Owner.Creature,
-            DynamicVars[nameof(FacelessMoonPower)].BaseValue, Owner.Creature, play.Card);
+            DynamicVars[nameof(FacelessMoonPower)].BaseValue, Owner.Creature, cardPlay.Card);
     }
 }

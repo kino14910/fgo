@@ -26,9 +26,7 @@ public class WisdomOfThePeople() : FgoCardModel(3, CardType.Skill,
         ModCardVars.Int("Np", 30)
     ];
 
-    protected override async Task OnPlay(
-        PlayerChoiceContext choiceContext,
-        CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await CreatureCmd.Heal(Owner.Creature, DynamicVars.Heal.BaseValue, false);
 

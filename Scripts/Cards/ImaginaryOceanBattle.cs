@@ -29,7 +29,7 @@ public class ImaginaryOceanBattle() : FgoCardModel(1, CardType.Skill,
         EnergyCost.UpgradeBy(-1);
     }
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await FgoResCmd.ModifyNp(this);
         await PowerCmd.Apply<ImaginarySpacePower>(choiceContext, Owner.Creature, 1m, Owner.Creature, this);

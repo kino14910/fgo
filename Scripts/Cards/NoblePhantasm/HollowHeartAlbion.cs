@@ -28,7 +28,7 @@ public class HollowHeartAlbion() : NobleCardModel(2, CardType.Attack, TargetType
         DynamicVars["Star"].UpgradeValueBy(4);
     }
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await CreatureCmd.Damage(choiceContext, CombatState!.HittableEnemies,
             DynamicVars.Damage.BaseValue,

@@ -26,14 +26,11 @@ public class ChaosLabyrinthos() : NobleCardModel(1, CardType.Skill, TargetType.S
         DynamicVars[nameof(ChaosLabyrinthosPower)].UpgradeValueBy(3);
     }
 
-    protected override async Task OnPlay(
-        PlayerChoiceContext choiceContext,
-        CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        foreach (var enemy in CombatState!.HittableEnemies)
-            await PowerCmd.Apply<ChaosLabyrinthosPower>(choiceContext, enemy,
-                -DynamicVars[nameof(ChaosLabyrinthosPower)].BaseValue,
-                Owner.Creature,
-                this);
+        await PowerCmd.Apply<ChaosLabyrinthosPower>(choiceContext, CombatState!.HittableEnemies,
+            DynamicVars[nameof(ChaosLabyrinthosPower)].BaseValue,
+            Owner.Creature,
+            this);
     }
 }

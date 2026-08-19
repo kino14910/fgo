@@ -20,7 +20,7 @@ public class BorrowingFrom() : FgoCardModel(2, CardType.Skill,
         EnergyCost.UpgradeBy(-1);
     }
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await FgoResCmd.ModifyNp(this.FgoRes().Np, Owner);
     }

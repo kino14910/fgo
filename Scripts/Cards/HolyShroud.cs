@@ -55,9 +55,7 @@ public class HolyShroud() : FgoCardModel(0, CardType.Skill,
         }
     }
 
-    protected override async Task OnPlay(
-        PlayerChoiceContext choiceContext,
-        CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         var amount = DynamicVars.EvaluateValueOrDefault(
             nameof(ReducePercentDamagePower));

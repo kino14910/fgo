@@ -5,11 +5,14 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Models.CardPools;
 using STS2RitsuLib.Cards.DynamicVars;
+using STS2RitsuLib.Interop.AutoRegistration;
 
 namespace Fgo.Scripts.Cards.Colorless;
 
-public class CurseDisaster() : FgoColorlessCardModel(-2, CardType.Status,
+[RegisterCard(typeof(StatusCardPool))]
+public class CurseDisaster() : FgoBaseCardModel(-2, CardType.Status,
     CardRarity.Status, TargetType.None)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
@@ -32,8 +35,7 @@ public class CurseDisaster() : FgoColorlessCardModel(-2, CardType.Status,
     {
         await PowerCmd.Apply<CursePower>(choiceContext, Owner.Creature, DynamicVars[nameof(CursePower)].BaseValue,
             Owner.Creature, this);
-        foreach (var enemy in CombatState!.HittableEnemies)
-            await PowerCmd.Apply<CursePower>(choiceContext, enemy, DynamicVars[nameof(CursePower)].BaseValue,
+            await PowerCmd.Apply<CursePower>(choiceContext, CombatState!.HittableEnemies, DynamicVars[nameof(CursePower)].BaseValue,
                 Owner.Creature, this);
     }
 }

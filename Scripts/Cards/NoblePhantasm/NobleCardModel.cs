@@ -53,8 +53,8 @@ public abstract class NobleCardModel(
         // BannerTexturePath: "" // 横幅（不同类型）
     );
 
-    public override async Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+    protected override CardLocation GetResultLocationForCardPlay()
     {
-        await CardPileCmd.RemoveFromCombat(cardPlay.Card);
+        return new CardLocation(Owner, PileType.None, CardPilePosition.Bottom);
     }
 }

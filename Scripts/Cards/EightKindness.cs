@@ -34,9 +34,7 @@ public class EightKindness() : FgoCardModel(2, CardType.Power,
         AddKeyword(CardKeyword.Retain);
     }
 
-    protected override async Task OnPlay(
-        PlayerChoiceContext choiceContext,
-        CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         var self = Owner.Creature;
         var amount = DynamicVars.Strength.BaseValue;

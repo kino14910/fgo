@@ -37,9 +37,7 @@ public class DreamUponTheStars() : FgoCardModel(1, CardType.Skill,
         DynamicVars[nameof(NpDamagePower)].UpgradeValueBy(10);
     }
 
-    protected override async Task OnPlay(
-        PlayerChoiceContext choiceContext,
-        CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await PowerCmd.Apply<NpDamagePower>(choiceContext, Owner.Creature,
             DynamicVars[nameof(NpDamagePower)].BaseValue, Owner.Creature, this);

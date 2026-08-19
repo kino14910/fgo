@@ -8,16 +8,19 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Models.CardPools;
 using MegaCrit.Sts2.Core.Nodes.CommonUi;
 using MegaCrit.Sts2.Core.ValueProps;
 using STS2RitsuLib.Cards.DynamicVars;
+using STS2RitsuLib.Interop.AutoRegistration;
 
 namespace Fgo.Scripts.Cards.DerivativeMash;
 
 /// <summary>
 ///     测定时间的紫弹之薪: LordChaldeas(构筑希望的人理之盾)发动后获得
 /// </summary>
-public class TimewornBulletKindling() : FgoColorlessCardModel(1, CardType.Attack,
+[RegisterCard(typeof(TokenCardPool))]
+public class TimewornBulletKindling() : FgoBaseCardModel(1, CardType.Attack,
     CardRarity.Token, TargetType.Self)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
@@ -40,7 +43,7 @@ public class TimewornBulletKindling() : FgoColorlessCardModel(1, CardType.Attack
         DynamicVars["Np"].UpgradeValueBy(20);
     }
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await PowerCmd.Apply<NpDamagePower>(choiceContext, Owner.Creature,
             DynamicVars[nameof(NpDamagePower)].BaseValue, Owner.Creature, this);
@@ -48,7 +51,7 @@ public class TimewornBulletKindling() : FgoColorlessCardModel(1, CardType.Attack
         if (stars > 0)
         {
             await FgoResCmd.ResetStars();
-            await FgoResCmd.ModifyNp(stars * 4, play.Player);
+            await FgoResCmd.ModifyNp(stars * 4, cardPlay.Player);
         }
 
         await FgoResCmd.ModifyNp(this);

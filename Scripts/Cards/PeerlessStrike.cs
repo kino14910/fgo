@@ -37,18 +37,18 @@ public class PeerlessStrike() : FgoCardModel(0, CardType.Attack,
         DynamicVars.Damage.UpgradeValueBy(8);
     }
 
-    protected override async Task OnPlay(
-        PlayerChoiceContext choiceContext,
-        CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
+        ArgumentNullException.ThrowIfNull(cardPlay.Target, nameof(cardPlay.Target));
+
         await PowerCmd.Apply<StrengthPower>(choiceContext, Owner.Creature, DynamicVars.Strength.BaseValue,
             Owner.Creature, this);
         await PowerCmd.Apply<CriticalDamagePower>(choiceContext, Owner.Creature,
             DynamicVars[nameof(CriticalDamagePower)].BaseValue,
             Owner.Creature, this);
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-            .FromCard(this, play)
-            .Targeting(play.Target!)
+            .FromCard(this, cardPlay)
+            .Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_heavy_blunt")
             .Execute(choiceContext);
         // 升级前立即死亡，升级后回合结束时死亡

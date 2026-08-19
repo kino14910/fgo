@@ -6,7 +6,9 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.Models.CardPools;
 using STS2RitsuLib.Cards.DynamicVars;
+using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Scaffolding.Content;
 
 namespace Fgo.Scripts.Cards.DerivativeMash;
@@ -14,7 +16,8 @@ namespace Fgo.Scripts.Cards.DerivativeMash;
 /// <summary>
 ///     荣光坚毅的雪花之壁: WallOfSnowflakes(现为脆弱的雪花之壁)升级获得
 /// </summary>
-public class VeneratedWallOfSnowflakes() : FgoColorlessCardModel(1, CardType.Skill,
+[RegisterCard(typeof(TokenCardPool))]
+public class VeneratedWallOfSnowflakes() : FgoBaseCardModel(1, CardType.Skill,
     CardRarity.Token, TargetType.Self)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
@@ -52,9 +55,9 @@ public class VeneratedWallOfSnowflakes() : FgoColorlessCardModel(1, CardType.Ski
         DynamicVars[nameof(ReducePercentDamagePower)].UpgradeValueBy(10);
     }
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, play);
+        await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, cardPlay);
         await PowerCmd.Apply<ReducePercentDamagePower>(choiceContext, Owner.Creature,
             DynamicVars[nameof(ReducePercentDamagePower)].BaseValue, Owner.Creature, this);
     }

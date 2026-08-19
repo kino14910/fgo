@@ -30,7 +30,7 @@ public class KnightOfTheLake() : FgoCardModel(1, CardType.Skill,
         DynamicVars[nameof(CriticalDamagePower)].UpgradeValueBy(20);
     }
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         if (!Owner.Creature.HasPower<CriticalDamagePower>())
             await PowerCmd.Apply<CriticalDamagePower>(choiceContext, Owner.Creature,

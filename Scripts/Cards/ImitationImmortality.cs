@@ -38,7 +38,7 @@ public class ImitationImmortality() : FgoCardModel(2, CardType.Power,
         DynamicVars[nameof(ReducePercentDamagePower)].UpgradeValueBy(5);
     }
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await PowerCmd.Apply<GutsPower>(choiceContext, Owner.Creature,
             DynamicVars[nameof(GutsPower)].BaseValue, Owner.Creature, this);

@@ -33,7 +33,7 @@ public class RoadOfFallingFlowers() : FgoCardModel(0, CardType.Skill, CardRarity
         DynamicVars["HealPercent"].UpgradeValueBy(20); // 30 -> 50
     }
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await FgoResCmd.ModifyStars(this);
         await FgoResCmd.ModifyNp(this);

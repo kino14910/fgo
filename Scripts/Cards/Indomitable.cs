@@ -28,9 +28,7 @@ public class Indomitable() : FgoCardModel(1, CardType.Power,
         DynamicVars[nameof(NonStackableGutsPower)].UpgradeValueBy(10);
     }
 
-    protected override async Task OnPlay(
-        PlayerChoiceContext choiceContext,
-        CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await PowerCmd.Apply<NonStackableGutsPower>(choiceContext, Owner.Creature,
             DynamicVars[nameof(NonStackableGutsPower)].BaseValue, Owner.Creature, this);

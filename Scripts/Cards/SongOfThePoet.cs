@@ -28,11 +28,12 @@ public class SongOfThePoet() : FgoCardModel(1, CardType.Attack,
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
+        ArgumentNullException.ThrowIfNull(cardPlay.Target, nameof(cardPlay.Target));
         await using var context = await AttackCommand.CreateContextAsync(CombatState!, choiceContext, cardPlay);
 
         var results = (await CreatureCmd.Damage(
             choiceContext,
-            cardPlay.Target!,
+            cardPlay.Target,
             DynamicVars.Damage.BaseValue,
             ValueProp.Move,
             this,

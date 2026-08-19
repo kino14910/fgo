@@ -26,7 +26,7 @@ public class AnimalDialogue() : FgoCardModel(1, CardType.Skill,
     protected override bool ShouldGlowGoldInternal =>
         this.FgoRes().Np >= DynamicVars["Threshold"].IntValue;
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         var np = this.FgoRes().Np;
         var threshold = DynamicVars["Threshold"].IntValue;

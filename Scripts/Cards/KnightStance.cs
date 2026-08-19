@@ -31,9 +31,9 @@ public class KnightStance() : FgoCardModel(2, CardType.Skill,
         DynamicVars[nameof(ReducePercentDamagePower)].UpgradeValueBy(20);
     }
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, play);
+        await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, cardPlay);
         await PowerCmd.Apply<ReducePercentDamagePower>(choiceContext, Owner.Creature,
             DynamicVars[nameof(ReducePercentDamagePower)].BaseValue, Owner.Creature, this);
         await PowerCmd.Apply<NpRatePower>(choiceContext, Owner.Creature, 1m, Owner.Creature, this);

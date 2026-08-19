@@ -28,9 +28,7 @@ public class ManaBurstGems() : FgoCardModel(1, CardType.Skill,
         DynamicVars[nameof(ManaBurstGemsPower)].UpgradeValueBy(2);
     }
 
-    protected override async Task OnPlay(
-        PlayerChoiceContext choiceContext,
-        CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await PowerCmd.Apply<ManaBurstGemsPower>(choiceContext, Owner.Creature,
             DynamicVars[nameof(ManaBurstGemsPower)].BaseValue,

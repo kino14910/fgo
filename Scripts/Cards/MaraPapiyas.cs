@@ -19,9 +19,7 @@ public class MaraPapiyas() : FgoCardModel(0, CardType.Skill,
         DynamicVars.Heal.UpgradeValueBy(6);
     }
 
-    protected override async Task OnPlay(
-        PlayerChoiceContext choiceContext,
-        CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await CreatureCmd.LoseMaxHp(choiceContext, Owner.Creature, 2m, true);
         await CreatureCmd.Heal(Owner.Creature, DynamicVars.Heal.BaseValue, false);

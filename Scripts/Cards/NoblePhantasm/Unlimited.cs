@@ -25,7 +25,7 @@ public class Unlimited() : NobleCardModel(1, CardType.Power, TargetType.Self)
         DynamicVars["AttacksPerTurn"].UpgradeValueBy(1);
     }
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await PowerCmd.Apply<UnlimitedPower>(choiceContext, Owner.Creature, DynamicVars["AttacksPerTurn"].BaseValue,
             Owner.Creature, this);

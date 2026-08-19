@@ -31,21 +31,18 @@ public class GodsExecution() : FgoCardModel(3, CardType.Attack,
         DynamicVars.Damage.UpgradeValueBy(7);
     }
 
-    protected override async Task OnPlay(
-        PlayerChoiceContext choiceContext,
-        CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-            .FromCard(this, play)
+            .FromCard(this, cardPlay)
             .TargetingAllOpponents(CombatState!)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
 
-        foreach (var enemy in CombatState!.HittableEnemies)
-            await PowerCmd.Apply<GodsExecutionPower>(choiceContext, enemy,
-                -DynamicVars[nameof(GodsExecutionPower)].BaseValue,
-                Owner.Creature,
-                this);
+        await PowerCmd.Apply<GodsExecutionPower>(choiceContext, CombatState!.HittableEnemies,
+            DynamicVars[nameof(GodsExecutionPower)].BaseValue,
+            Owner.Creature,
+            this);
     }
 
     public override Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -54,6 +51,7 @@ public class GodsExecution() : FgoCardModel(3, CardType.Attack,
         {
             SetToFreeThisTurn();
         }
+
         return Task.CompletedTask;
     }
 }

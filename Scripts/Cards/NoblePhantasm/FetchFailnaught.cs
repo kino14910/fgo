@@ -35,15 +35,15 @@ public class FetchFailnaught() : NobleCardModel(1, CardType.Attack, TargetType.A
         DynamicVars["CurseMultiplier"].UpgradeValueBy(1);
     }
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        var target = play.Target;
+        var target = cardPlay.Target;
         if (target == null) return;
 
         var finalDamage = DynamicVars.EvaluateValueOrDefault("FetchFailnaughtDamage");
 
         await DamageCmd.Attack(finalDamage)
-            .FromCard(this, play)
+            .FromCard(this, cardPlay)
             .Targeting(target)
             .WithHitFx("vfx/vfx_attack_blunt")
             .Execute(choiceContext);

@@ -29,16 +29,12 @@ public class PrimevalRune() : FgoCardModel(1, CardType.Skill,
         DynamicVars["VulnerablePower"].UpgradeValueBy(1);
     }
 
-    protected override async Task OnPlay(
-        PlayerChoiceContext choiceContext,
-        CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        foreach (var enemy in CombatState!.HittableEnemies)
-        {
-            await PowerCmd.Apply<WeakPower>(choiceContext, enemy, DynamicVars[nameof(WeakPower)].BaseValue,
-                Owner.Creature, this);
-            await PowerCmd.Apply<VulnerablePower>(choiceContext, enemy,
-                DynamicVars[nameof(VulnerablePower)].BaseValue, Owner.Creature, this);
-        }
+        await PowerCmd.Apply<WeakPower>(choiceContext, CombatState!.HittableEnemies,
+            DynamicVars[nameof(WeakPower)].BaseValue,
+            Owner.Creature, this);
+        await PowerCmd.Apply<VulnerablePower>(choiceContext, CombatState!.HittableEnemies,
+            DynamicVars[nameof(VulnerablePower)].BaseValue, Owner.Creature, this);
     }
 }

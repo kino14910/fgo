@@ -31,9 +31,7 @@ public class Sevendrive() : NobleCardModel(1, CardType.Attack, TargetType.Self)
         DynamicVars.Damage.UpgradeValueBy(4m);
     }
 
-    protected override async Task OnPlay(
-        PlayerChoiceContext choiceContext,
-        CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         // 获得2临时力量（回合结束自动失去）
         await PowerCmd.Apply<SevendrivePower>(choiceContext, Owner.Creature,
@@ -41,7 +39,7 @@ public class Sevendrive() : NobleCardModel(1, CardType.Attack, TargetType.Self)
             Owner.Creature, this);
 
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-            .FromCard(this, play)
+            .FromCard(this, cardPlay)
             .TargetingAllOpponents(CombatState!)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);

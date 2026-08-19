@@ -29,7 +29,7 @@ public class BridalSpinWheel() : NobleCardModel(1, CardType.Skill, TargetType.Se
         DynamicVars["Star"].UpgradeValueBy(5);
     }
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await PowerCmd.Apply<PlatingPower>(choiceContext, Owner.Creature,
             DynamicVars[nameof(PlatingPower)].BaseValue, Owner.Creature, this);

@@ -26,7 +26,7 @@ public class AntiBeastMagecraft() : FgoCardModel(1, CardType.Power,
         DynamicVars[nameof(AntiBeastMagecraftPower)].UpgradeValueBy(1);
     }
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await PowerCmd.Apply<AntiBeastMagecraftPower>(choiceContext, Owner.Creature,
             DynamicVars[nameof(AntiBeastMagecraftPower)].BaseValue, Owner.Creature, this);

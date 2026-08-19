@@ -32,25 +32,23 @@ public class WildRule() : FgoCardModel(1, CardType.Attack,
         DynamicVars.Damage.UpgradeValueBy(4);
     }
 
-    protected override async Task OnPlay(
-        PlayerChoiceContext choiceContext,
-        CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        if (play.Target is null) return;
+        ArgumentNullException.ThrowIfNull(cardPlay.Target, "cardPlay.Target");
         
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-            .FromCard(this, play)
-            .Targeting(play.Target)
+            .FromCard(this, cardPlay)
+            .Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_bite")
             .Execute(choiceContext);
 
         await CreatureCmd.Heal(Owner.Creature, 3m);
 
-        if (play.Target.GetPowerAmount<StrengthPower>() > 0)
+        if (cardPlay.Target.GetPowerAmount<StrengthPower>() > 0)
         {
-            await PowerCmd.Apply<StrengthPower>(choiceContext, play.Target,
+            await PowerCmd.Apply<StrengthPower>(choiceContext, cardPlay.Target,
                 -DynamicVars[nameof(StrengthPower)].BaseValue, Owner.Creature, this);
-            await PowerCmd.Apply<VulnerablePower>(choiceContext, play.Target,
+            await PowerCmd.Apply<VulnerablePower>(choiceContext, cardPlay.Target,
                 DynamicVars[nameof(VulnerablePower)].BaseValue, Owner.Creature, this);
         }
     }

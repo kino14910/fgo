@@ -19,7 +19,7 @@ public class LuckySpinningPower : FgoPowerModel
         DamageResult result, ValueProp props, Creature target, CardModel? cardSource)
     {
         if (dealer != Owner) return;
-        if (!props.HasFlag(ValueProp.Move)) return;
+        if (!props.IsCardOrMonsterMove()) return;
         Flash();
         await FgoResCmd.ModifyStars(Amount, Owner.Player);
     }

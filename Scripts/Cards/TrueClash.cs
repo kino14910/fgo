@@ -28,18 +28,18 @@ public class TrueClash() : FgoCardModel(1, CardType.Attack,
         DynamicVars.Block.UpgradeValueBy(3);
     }
 
-    protected override async Task OnPlay(
-        PlayerChoiceContext choiceContext,
-        CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        if (play.Target is not null && !play.Target.Monster!.IntendsToAttack)
+        ArgumentNullException.ThrowIfNull(cardPlay.Target, nameof(cardPlay.Target));
+
+        if (!cardPlay.Target.Monster!.IntendsToAttack)
             return;
 
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-            .FromCard(this, play)
-            .Targeting(play.Target!)
+            .FromCard(this, cardPlay)
+            .Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
-        await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, play);
+        await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, cardPlay);
     }
 }

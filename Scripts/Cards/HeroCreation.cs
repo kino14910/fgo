@@ -30,9 +30,7 @@ public class HeroCreation() : FgoCardModel(0, CardType.Skill,
         DynamicVars[nameof(TempCritDamagePower)].UpgradeValueBy(50);
     }
 
-    protected override async Task OnPlay(
-        PlayerChoiceContext choiceContext,
-        CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await PowerCmd.Apply<StrengthPower>(choiceContext, Owner.Creature, DynamicVars[nameof(StrengthPower)].BaseValue,
             Owner.Creature, this);

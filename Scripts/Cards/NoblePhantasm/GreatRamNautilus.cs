@@ -27,18 +27,18 @@ public class GreatRamNautilus() : NobleCardModel(1, CardType.Attack, TargetType.
         DynamicVars.Damage.UpgradeValueBy(12m);
     }
 
-    protected override async Task OnPlay(
-        PlayerChoiceContext choiceContext,
-        CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
+        ArgumentNullException.ThrowIfNull(cardPlay.Target, nameof(cardPlay.Target));
+
         var hasWaterside = Owner.Creature.HasPower<WatersidePower>();
         var hasImaginarySpace = Owner.Creature.HasPower<ImaginarySpacePower>();
         var baseDmg = (int)DynamicVars.Damage.BaseValue;
         var totalDamage = hasWaterside || hasImaginarySpace ? (int)(baseDmg * 1.5m) : baseDmg;
 
         await DamageCmd.Attack(totalDamage)
-            .FromCard(this, play)
-            .Targeting(play.Target!)
+            .FromCard(this, cardPlay)
+            .Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_attack_blunt")
             .Execute(choiceContext);
 

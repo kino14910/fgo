@@ -37,12 +37,12 @@ public class VoidSpaceFineArts() : FgoCardModel(1, CardType.Power,
         DynamicVars["Np"].UpgradeValueBy(5);
     }
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await PowerCmd.Apply<GutsPower>(choiceContext, Owner.Creature, DynamicVars[nameof(GutsPower)].BaseValue, Owner.Creature,
             this);
         for (var i = 0; i < 3; i++) await PowerCmd.Apply<CursePower>(choiceContext, Owner.Creature, 1m, Owner.Creature, this);
 
-        await FgoResCmd.ModifyNp(DynamicVars.EvaluateValueOrDefault("Np"), play.Player);
+        await FgoResCmd.ModifyNp(DynamicVars.EvaluateValueOrDefault("Np"), cardPlay.Player);
     }
 }

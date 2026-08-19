@@ -32,7 +32,7 @@ public class LordChaldeas() : NobleCardModel(1, CardType.Power, TargetType.Self)
         DynamicVars[nameof(PlatingPower)].UpgradeValueBy(5);
     }
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await PowerCmd.Apply<ReducePercentDamagePower>(choiceContext, Owner.Creature,
             DynamicVars[nameof(ReducePercentDamagePower)].BaseValue, Owner.Creature, this);
@@ -46,11 +46,14 @@ public class LordChaldeas() : NobleCardModel(1, CardType.Power, TargetType.Self)
             power.NobleCard = ModelDb.Card<HollowHeartAlbion>();
 
         // 自身变为印证希望的人理之剑
-        await CardCmd.Transform(this, ModelDb.Card<RayProofKyrielight>().ToMutable(), CardPreviewStyle.None);
+        await CardCmd.Transform(this, ModelDb.Card<RayProofKyrielight>().ToMutable());
 
         // 时为朦胧的白垩之壁变为测定时间的紫弹之薪
         var chalk = Owner.PlayerCombatState!.AllCards.FirstOrDefault(card => card is ObscurantWallOfChalk);
-        if (chalk != null)
-            await CardCmd.Transform(chalk, ModelDb.Card<TimewornBulletKindling>().ToMutable(), CardPreviewStyle.None);
+        if (chalk is not null && CombatState is not null)
+        {
+            await CardCmd.Transform(CombatState.CreateCard(chalk, Owner),
+                ModelDb.Card<TimewornBulletKindling>().ToMutable());
+        }
     }
 }

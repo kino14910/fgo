@@ -30,10 +30,10 @@ public class LastSunXibalba() : NobleCardModel(3, CardType.Attack, TargetType.Se
         DynamicVars.Damage.UpgradeValueBy(2);
     }
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-            .FromCard(this, play)
+            .FromCard(this, cardPlay)
             .TargetingAllOpponents(CombatState!)
             .WithHitCount(5)
             .WithHitFx("vfx/vfx_fire_burning")

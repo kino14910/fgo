@@ -25,14 +25,13 @@ public class CalamityOfTheNorth() : FgoCardModel(2, CardType.Skill,
         DynamicVars[nameof(CursePower)].UpgradeValueBy(3);
     }
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        foreach (var enemy in CombatState!.HittableEnemies)
-        {
-            await PowerCmd.Apply<PoisonPower>(choiceContext, enemy, DynamicVars[nameof(PoisonPower)].BaseValue,
-                Owner.Creature, this);
-            await PowerCmd.Apply<CursePower>(choiceContext, enemy, DynamicVars[nameof(CursePower)].BaseValue,
-                Owner.Creature, this);
-        }
+        await PowerCmd.Apply<PoisonPower>(choiceContext, CombatState!.HittableEnemies,
+            DynamicVars[nameof(PoisonPower)].BaseValue,
+            Owner.Creature, this);
+        await PowerCmd.Apply<CursePower>(choiceContext, CombatState!.HittableEnemies,
+            DynamicVars[nameof(CursePower)].BaseValue,
+            Owner.Creature, this);
     }
 }

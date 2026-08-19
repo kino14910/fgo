@@ -4,11 +4,14 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.Models.CardPools;
 using STS2RitsuLib.Cards.DynamicVars;
+using STS2RitsuLib.Interop.AutoRegistration;
 
 namespace Fgo.Scripts.Cards.Colorless;
 
-public class InfiniteSuffering() : FgoColorlessCardModel(2, CardType.Attack,
+[RegisterCard(typeof(TokenCardPool))]
+public class InfiniteSuffering() : FgoBaseCardModel(2, CardType.Attack,
     CardRarity.Token, TargetType.AllEnemies)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
@@ -27,10 +30,10 @@ public class InfiniteSuffering() : FgoColorlessCardModel(2, CardType.Attack,
         DynamicVars.Damage.UpgradeValueBy(4);
     }
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-            .FromCard(this, play)
+            .FromCard(this, cardPlay)
             .TargetingAllOpponents(CombatState!)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);

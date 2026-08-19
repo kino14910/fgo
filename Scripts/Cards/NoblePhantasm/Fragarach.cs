@@ -26,7 +26,7 @@ public class Fragarach() : NobleCardModel(1, CardType.Power, TargetType.Self)
         DynamicVars.Damage.UpgradeValueBy(5);
     }
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await PowerCmd.Apply<FragarachPower>(choiceContext, Owner.Creature, DynamicVars.Damage.BaseValue,
             Owner.Creature, this);

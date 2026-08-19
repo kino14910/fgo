@@ -26,7 +26,7 @@ public class ProofAndRebuttal() : FgoCardModel(0, CardType.Skill,
         DynamicVars.Cards.UpgradeValueBy(1);
     }
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await CardPileCmd.Draw(choiceContext, 1m, Owner);
         var handCount = Owner.PlayerCombatState!.Hand.Cards.Count;

@@ -28,9 +28,7 @@ public class SquireOfProphecy() : FgoCardModel(1, CardType.Skill,
         DynamicVars["Turns"].UpgradeValueBy(1);
     }
 
-    protected override async Task OnPlay(
-        PlayerChoiceContext choiceContext,
-        CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await PowerCmd.Apply<SquireOfProphecyPower>(choiceContext, Owner.Creature, DynamicVars["Turns"].BaseValue,
             Owner.Creature, this);

@@ -27,7 +27,7 @@ public class TheOneWhoSawItAll() : FgoCardModel(0, CardType.Skill,
         DynamicVars["DamageBoost"].UpgradeValueBy(2);
     }
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         var attack = PileType.Draw.GetPile(Owner).Cards.Where(card => card.Type == CardType.Attack)
             .TakeRandom(1, Owner.RunState.Rng.CombatCardSelection).FirstOrDefault();
