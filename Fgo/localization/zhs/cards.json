@@ -275,7 +275,7 @@
   "FGO_CARD_GARDEN_OF_AVALON.title": "永世隔绝的理想乡",
   "FGO_CARD_GARDEN_OF_AVALON.description": "获得{RegenPower:diff()}点[gold]再生[/gold]。\n在你的回合开始时，获得{NpPerTurnPower:diff()}%[gold]宝具值[/gold]和{StarsPerTurnPower:diff()}颗暴击星。",
   "FGO_CARD_ELEMENTARY_MY_DEAR.title": "这是常识",
-  "FGO_CARD_ELEMENTARY_MY_DEAR.description": "在你的回合开始时，有[gold]格挡[/gold]的敌人失去等于其[gold]格挡[/gold]的生命并且给予其{VulnerablePower:diff()}层[gold]易伤[/gold]。",
+  "FGO_CARD_ELEMENTARY_MY_DEAR.description": "在你的回合开始时，有[gold]格挡[/gold]的敌人失去等于其[gold]格挡[/gold]的生命并且给予其{ElementaryPower:diff()}层[gold]易伤[/gold]。",
   "FGO_CARD_GREAT_RAM_NAUTILUS.title": "鹦鹉螺的大冲角",
   "FGO_CARD_GREAT_RAM_NAUTILUS.description": "造成{Damage:diff()}点伤害。\n[gold]水边[/gold] : 伤害提高50%。\n[gold]水边[/gold]: 获得{energyPrefix:energyIcons(1)}。",
   "FGO_CARD_LIE_LIKE_VORTIGERN.title": "与彼方同坠的梦之瞳眸",

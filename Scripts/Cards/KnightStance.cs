@@ -8,7 +8,7 @@ using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
 
-public class KnightStance() : FgoCardModel(2, CardType.Skill,
+public class KnightStance() : FgoCardModel(1, CardType.Skill,
     CardRarity.Common, TargetType.Self)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
@@ -19,7 +19,7 @@ public class KnightStance() : FgoCardModel(2, CardType.Skill,
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        ModCardVars.Block(11),
+        ModCardVars.Block(8),
         ModCardVars.Power<ReducePercentDamagePower>(20)
     ];
 

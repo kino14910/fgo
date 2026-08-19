@@ -19,13 +19,12 @@ public class ElementaryMyDear() : NobleCardModel(1, CardType.Power, TargetType.S
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        ModCardVars.Power<VulnerablePower>(1),
-        ModCardVars.Power<ElementaryPower>(0)
+        ModCardVars.Power<ElementaryPower>(1)
     ];
 
     protected override void OnUpgrade()
     {
-        DynamicVars[nameof(VulnerablePower)].UpgradeValueBy(1m);
+        DynamicVars["ElementaryPower"].UpgradeValueBy(1);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

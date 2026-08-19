@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://d3xylhynr18cn"
-path="res://.godot/imported/AtkPower.png-efee6ec3b58b684f0f5b7f60271f99ab.ctex"
+path="res://.godot/imported/AtkUpPower.png-9bbc0714ef818b60978fd70e45b9d91e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Fgo/images/powers/big/AtkPower.png"
-dest_files=["res://.godot/imported/AtkPower.png-efee6ec3b58b684f0f5b7f60271f99ab.ctex"]
+source_file="res://Fgo/images/powers/big/AtkUpPower.png"
+dest_files=["res://.godot/imported/AtkUpPower.png-9bbc0714ef818b60978fd70e45b9d91e.ctex"]
 
 [params]
 

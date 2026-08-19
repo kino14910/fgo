@@ -10,8 +10,7 @@ namespace Fgo.Scripts.Singletons;
 
 /// <summary>
 ///     先古之民（Ancient）房间的玛修衍生物卡进化服务。
-///     注册为 Run 级单例，接收 AfterRoomEntered（局内钩子），与遗物是否被获得无关，
-///     因此玩家未获得圣晶石/召唤券时进入 Ancient 房间也能触发卡牌进化。
+///     注册为 Run 级单例，接收 AfterRoomEntered（局内钩子）。
 /// </summary>
 [RegisterSingleton]
 public class FgoAncientUpgradeService() : HookedSingletonModel(HookType.Run)
@@ -21,13 +20,16 @@ public class FgoAncientUpgradeService() : HookedSingletonModel(HookType.Run)
     /// </summary>
     public override async Task AfterRoomEntered(AbstractRoom room)
     {
-        if (room is EventRoom { CanonicalEvent: AncientEventModel and not Neow })
+        if (room is EventRoom { CanonicalEvent: AncientEventModel })
         {
             var player = CurrentRunState?.Players.FirstOrDefault(p => p.Character is FgoCharacter);
-            if (player != null)
-                await FgoCardActions.TryUpgradeDerivativeMash(player);
-        }
+            if (player == null) return;
 
-        await Task.CompletedTask;
+            // 刚进入游戏（第一层）时也会先进入先古之民房间，此时牌组/卡堆尚未就绪，
+            // 且玩家尚未经历任何战斗，不应触发进化；从 TotalFloor >= 2 开始才升级。
+            if (player.RunState.TotalFloor <= 1) return;
+
+            await FgoCardActions.TryUpgradeDerivativeMash(player);
+        }
     }
 }
