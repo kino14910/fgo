@@ -7,7 +7,7 @@ using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards.NoblePhantasm;
 
-public class LostLonginus() : NobleCardModel(2, CardType.Attack, TargetType.Self)
+public class LostLonginus() : NobleCardModel(1, CardType.Attack, TargetType.AllEnemies)
 {
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Retain, FgoKeywords.IgnoreInvincible];
 
@@ -24,7 +24,7 @@ public class LostLonginus() : NobleCardModel(2, CardType.Attack, TargetType.Self
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await IgnoreInvincibleAction(CombatState!.HittableEnemies);
-        
+
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
             .FromCard(this, cardPlay)
             .TargetingAllOpponents(CombatState)

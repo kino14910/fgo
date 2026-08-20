@@ -21,6 +21,8 @@ public class CharismaOfConflict() : FgoCardModel(1, CardType.Attack,
         ModCardVars.Damage(8)
     ];
 
+    protected override bool ShouldGlowGoldInternal => Owner.Creature.HasPower<GutsPower>();
+
     protected override void OnUpgrade()
     {
         DynamicVars.Damage.UpgradeValueBy(3);

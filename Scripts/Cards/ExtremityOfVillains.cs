@@ -41,7 +41,7 @@ public class ExtremityOfVillains() : FgoCardModel(1, CardType.Attack,
             .Execute(choiceContext);
         if (this.FgoRes().CritActive)
         {
-            await PlayerCmd.GainEnergy(1m, Owner);
+            await PlayerCmd.GainEnergy(1, Owner);
             await CardPileCmd.Draw(choiceContext, DynamicVars.Cards.BaseValue, Owner);
         }
     }

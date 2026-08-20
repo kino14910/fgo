@@ -3,7 +3,6 @@ using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
-using MegaCrit.Sts2.Core.Logging;
 using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
@@ -43,7 +42,7 @@ public class MagicBulletCharging() : FgoCardModel(0, CardType.Skill,
             var target = attack.TargetType == TargetType.AnyEnemy
                 ? attack.CombatState?.HittableEnemies.FirstOrDefault()
                 : null;
-            await CardCmd.AutoPlay(choiceContext, attack, target, AutoPlayType.Default, true, false);
+            await CardCmd.AutoPlay(choiceContext, attack, target, AutoPlayType.Default, true);
         }
     }
 }

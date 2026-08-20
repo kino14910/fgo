@@ -29,9 +29,6 @@ public class SuitenNikko() : NobleCardModel(1, CardType.Skill, TargetType.Self)
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await FgoResCmd.ModifyNp(this);
-        foreach (var card in PileType.Hand.GetPile(Owner).Cards)
-        {
-            card.EnergyCost.AddThisCombat(-1, true);
-        }
+        foreach (var card in PileType.Hand.GetPile(Owner).Cards) card.EnergyCost.AddThisCombat(-1, true);
     }
 }

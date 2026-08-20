@@ -7,7 +7,6 @@ using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Relics;
-using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Nodes;
 using MegaCrit.Sts2.Core.Rooms;
@@ -43,14 +42,8 @@ public class SummonTicket : FgoRelic, IModRightClickableRelic
     public async Task OnRightClick(ModRightClickExecutionContext context)
     {
         if (_counter < CostPerChoice) return;
-
         var player = context.Player;
-        var prefs = new CardSelectorPrefs(
-            new LocString("gameplay_ui", "FGO_GAMEPLAY_UI_SUMMON_TICKET.text"),
-            1)
-        {
-            RequireManualConfirmation = true
-        };
+        var prefs = new CardSelectorPrefs(SelectionScreenPrompt, 1);
 
         var existing = CardPile.Get(FgoEnums.NobleDeck, player)?.Cards
             .Select(c => c.GetType())

@@ -18,7 +18,7 @@ public class IraLupus() : NobleCardModel(1, CardType.Attack, TargetType.AnyEnemy
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DamageVar(24m, ValueProp.Unblockable | ValueProp.Unpowered | ValueProp.Move),
+        ModCardVars.Damage(24m, ValueProp.Unblockable | ValueProp.Unpowered | ValueProp.Move),
         ModCardVars.Power<VulnerablePower>(2)
     ];
 

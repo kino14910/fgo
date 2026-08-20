@@ -37,9 +37,9 @@ public class SwifterThanSound() : FgoCardModel(1, CardType.Attack,
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
 
-        await PowerCmd.Apply<SwifterThanSoundPower>(choiceContext, 
+        await PowerCmd.Apply<SwifterThanSoundPower>(choiceContext,
             Owner.Creature, DurationTurns, Owner.Creature, this);
-        await PowerCmd.Apply<SwifterThanSoundCardPower>(choiceContext, 
+        await PowerCmd.Apply<SwifterThanSoundCardPower>(choiceContext,
             Owner.Creature, DurationTurns, Owner.Creature, this);
     }
 }

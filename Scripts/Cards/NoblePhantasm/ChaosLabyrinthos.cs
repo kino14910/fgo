@@ -9,7 +9,7 @@ using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards.NoblePhantasm;
 
-public class ChaosLabyrinthos() : NobleCardModel(1, CardType.Skill, TargetType.Self)
+public class ChaosLabyrinthos() : NobleCardModel(1, CardType.Skill, TargetType.AllEnemies)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [

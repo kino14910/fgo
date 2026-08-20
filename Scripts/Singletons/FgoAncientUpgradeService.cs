@@ -1,7 +1,6 @@
 using Fgo.Scripts.Character;
 using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.Models;
-using MegaCrit.Sts2.Core.Models.Events;
 using MegaCrit.Sts2.Core.Rooms;
 using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Models;

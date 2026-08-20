@@ -53,8 +53,11 @@ public class PeerlessStrike() : FgoCardModel(0, CardType.Attack,
             .Execute(choiceContext);
         // 升级前立即死亡，升级后回合结束时死亡
         if (IsUpgraded)
-            await PowerCmd.Apply<DoomPower>(choiceContext, Owner.Creature, 9999m, Owner.Creature, this);
+            await PowerCmd.Apply<PeerlessStrikePower>(choiceContext, Owner.Creature, 9999m, Owner.Creature, this);
         else
-            await CreatureCmd.Kill(Owner.Creature);
+            await DamageCmd.Attack(9999)
+                .Targeting(Owner.Creature)
+                .WithHitFx("vfx/vfx_attack_lightning")
+                .Execute(choiceContext);
     }
 }

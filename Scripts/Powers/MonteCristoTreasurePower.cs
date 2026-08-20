@@ -25,8 +25,6 @@ public class MonteCristoTreasurePower : FgoPowerModel
     {
         if (dealer != Owner || target == Owner) return;
         if (!props.IsCardOrMonsterMove()) return;
-        // 判断"本次攻击是否实际暴击"：不能用 CanCrit（剩余暴击星可能已被本张卡消耗，
-        // 会出现"已经暴击但星不足10"而漏判）。CritTriggered 表示本次攻击实际应用了暴击倍率。
         if (!this.FgoRes().CritTriggered) return;
         Flash();
         await CreatureCmd.GainBlock(Owner, result.TotalDamage, ValueProp.Unpowered, null);

@@ -31,10 +31,9 @@ public class AtTheWell() : FgoCardModel(0, CardType.Skill,
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        var self = Owner.Creature;
-        var debuffs = self.Powers.Where(p => p.Type == PowerType.Debuff).ToList();
+        var debuffs = Owner.Creature.Powers.Where(p => p.Type == PowerType.Debuff).ToList();
         foreach (var debuff in debuffs) await PowerCmd.Remove(debuff);
-        await PowerCmd.Apply<AtTheWellPower>(choiceContext, self, DynamicVars[nameof(GutsPower)].BaseValue,
+        await PowerCmd.Apply<AtTheWellPower>(choiceContext, Owner.Creature, DynamicVars[nameof(GutsPower)].BaseValue,
             Owner.Creature,
             this);
     }

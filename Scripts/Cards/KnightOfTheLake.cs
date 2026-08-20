@@ -25,6 +25,8 @@ public class KnightOfTheLake() : FgoCardModel(1, CardType.Skill,
         ModCardVars.Int("Stars", 10)
     ];
 
+    protected override bool ShouldGlowGoldInternal => !Owner.Creature.HasPower<CriticalDamagePower>();
+
     protected override void OnUpgrade()
     {
         DynamicVars[nameof(CriticalDamagePower)].UpgradeValueBy(20);

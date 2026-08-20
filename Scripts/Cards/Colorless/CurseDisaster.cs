@@ -35,7 +35,8 @@ public class CurseDisaster() : FgoBaseCardModel(-2, CardType.Status,
     {
         await PowerCmd.Apply<CursePower>(choiceContext, Owner.Creature, DynamicVars[nameof(CursePower)].BaseValue,
             Owner.Creature, this);
-            await PowerCmd.Apply<CursePower>(choiceContext, CombatState!.HittableEnemies, DynamicVars[nameof(CursePower)].BaseValue,
-                Owner.Creature, this);
+        await PowerCmd.Apply<CursePower>(choiceContext, CombatState!.HittableEnemies,
+            DynamicVars[nameof(CursePower)].BaseValue,
+            Owner.Creature, this);
     }
 }

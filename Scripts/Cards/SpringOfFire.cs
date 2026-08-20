@@ -14,7 +14,7 @@ public class SpringOfFire() : FgoCardModel(3, CardType.Power,
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
-        HoverTipFactory.FromPower<NonStackableGutsPower>(),
+        HoverTipFactory.FromPower<SpringOfFireGutsPower>(),
         HoverTipFactory.FromPower<SpringOfFirePower>(),
         HoverTipFactory.FromPower<NpDamagePower>(),
         FgoHoverTipHelper.CreateNpHoverTip()
@@ -29,9 +29,13 @@ public class SpringOfFire() : FgoCardModel(3, CardType.Power,
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await PowerCmd.Apply<NonStackableGutsPower>(choiceContext, Owner.Creature, DynamicVars.Heal.BaseValue,
+        // "纵使三度迎来落日": 之后 3 次免死，每次回复 Heal 点生命。
+        var guts = await PowerCmd.Apply<SpringOfFireGutsPower>(choiceContext, Owner.Creature,
+            DynamicVars.Heal.BaseValue,
             Owner.Creature, this);
-        await PowerCmd.Apply<SpringOfFirePower>(choiceContext, Owner.Creature, DynamicVars.Heal.BaseValue,
+        if (guts != null) guts.Times = 3;
+        await PowerCmd.Apply<SpringOfFirePower>(choiceContext, Owner.Creature,
+            DynamicVars[nameof(SpringOfFirePower)].BaseValue,
             Owner.Creature, this);
     }
 }

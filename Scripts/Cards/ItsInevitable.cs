@@ -25,7 +25,7 @@ public class ItsInevitable() : FgoCardModel(1, CardType.Attack,
     protected override void OnUpgrade()
     {
         DynamicVars.Damage.UpgradeValueBy(1);
-        DynamicVars["BurningPower"].UpgradeValueBy(1);
+        DynamicVars[nameof(BurningPower)].UpgradeValueBy(1);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -36,7 +36,7 @@ public class ItsInevitable() : FgoCardModel(1, CardType.Attack,
             .WithHitFx("vfx/vfx_fire_burst")
             .SpawningHitVfxOnEachCreature()
             .Execute(choiceContext);
-        await PowerCmd.Apply<BurningPower>(choiceContext, Owner.Creature, DynamicVars["BurningPower"].BaseValue,
+        await PowerCmd.Apply<BurningPower>(choiceContext, Owner.Creature, DynamicVars[nameof(BurningPower)].BaseValue,
             Owner.Creature, this);
     }
 }

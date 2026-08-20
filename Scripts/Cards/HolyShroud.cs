@@ -19,22 +19,14 @@ public class HolyShroud() : FgoCardModel(0, CardType.Skill,
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        ModCardVars.Power<ReducePercentDamagePower>(20),
+        ModCardVars.Power<ReducePercentDamagePower>(20)
     ];
-
-    protected override void OnUpgrade()
-    {
-        DynamicVars["ReducePercentDamagePower"].UpgradeValueBy(10);
-    }
 
     protected override bool ShouldGlowGoldInternal
     {
         get
         {
-            if (CombatState is null)
-                return false;
-
-            var incomingDamage = CombatState.Enemies
+            var incomingDamage = CombatState?.Enemies
                 .Where(e => e.IsAlive)
                 .Sum(enemy =>
                 {
@@ -55,19 +47,21 @@ public class HolyShroud() : FgoCardModel(0, CardType.Skill,
         }
     }
 
+    protected override bool ShouldGlowRedInternal => !ShouldGlowGoldInternal;
+
+    protected override void OnUpgrade()
+    {
+        DynamicVars[nameof(ReducePercentDamagePower)].UpgradeValueBy(10);
+    }
+
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        var amount = DynamicVars.EvaluateValueOrDefault(
-            nameof(ReducePercentDamagePower));
-
-        if (amount <= 0)
-            return;
-
-        await PowerCmd.Apply<ReducePercentDamagePower>(
-            choiceContext,
-            Owner.Creature,
-            amount,
-            Owner.Creature,
-            this);
+        if (ShouldGlowGoldInternal)
+            await PowerCmd.Apply<ReducePercentDamagePower>(
+                choiceContext,
+                Owner.Creature,
+                DynamicVars[nameof(ReducePercentDamagePower)].BaseValue,
+                Owner.Creature,
+                this);
     }
 }

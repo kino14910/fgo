@@ -27,12 +27,12 @@ public class Insanity() : FgoCardModel(1, CardType.Power,
 
     protected override void OnUpgrade()
     {
-        DynamicVars["InsanityPower"].UpgradeValueBy(10);
+        DynamicVars[nameof(InsanityPower)].UpgradeValueBy(10);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await PowerCmd.Apply<InsanityPower>(choiceContext, Owner.Creature, DynamicVars["InsanityPower"].IntValue,
+        await PowerCmd.Apply<InsanityPower>(choiceContext, Owner.Creature, DynamicVars[nameof(InsanityPower)].IntValue,
             Owner.Creature, this);
     }
 }

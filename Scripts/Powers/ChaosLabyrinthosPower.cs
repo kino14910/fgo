@@ -12,10 +12,9 @@ public class ChaosLabyrinthosPower : TemporaryStrengthPower, IModPowerAssetOverr
 
     protected override bool IsPositive => false;
 
-    public PowerAssetProfile AssetProfile => new($"res://Fgo/images/powers/AtkDownPower.png",
-        $"res://Fgo/images/powers/AtkDownPower.png");
+    public PowerAssetProfile AssetProfile => new("res://Fgo/images/powers/AtkDownPower.png",
+        "res://Fgo/images/powers/AtkDownPower.png");
 
     public virtual string? CustomIconPath => AssetProfile.IconPath;
     public virtual string? CustomBigIconPath => AssetProfile.BigIconPath;
-
 }

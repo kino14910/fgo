@@ -4,7 +4,6 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
-using MegaCrit.Sts2.Core.Models.Powers;
 using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards.NoblePhantasm;
@@ -19,8 +18,7 @@ public class BlackdogGalatine() : NobleCardModel(1, CardType.Attack, TargetType.
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         ModCardVars.Damage(16),
-        ModCardVars.Power<MaxHpPower>(6),
-        ModCardVars.Int("Energy", 2)
+        ModCardVars.Power<MaxHpPower>(6)
     ];
 
     protected override void OnUpgrade()
@@ -39,6 +37,6 @@ public class BlackdogGalatine() : NobleCardModel(1, CardType.Attack, TargetType.
         // 获得再生
         await PowerCmd.Apply<MaxHpPower>(choiceContext, Owner.Creature, DynamicVars[nameof(MaxHpPower)].BaseValue,
             Owner.Creature, this);
-        await PlayerCmd.GainEnergy(DynamicVars["Energy"].IntValue, Owner);
+        await PlayerCmd.GainEnergy(2, Owner);
     }
 }

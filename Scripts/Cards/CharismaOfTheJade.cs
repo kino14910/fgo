@@ -1,3 +1,4 @@
+using Fgo.Scripts.Singletons;
 using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -22,6 +23,8 @@ public class CharismaOfTheJade() : FgoCardModel(2, CardType.Attack,
         ModCardVars.Int("Hits", 3)
     ];
 
+    protected override bool ShouldGlowGoldInternal => this.FgoRes().CanSpecialCrit;
+
     protected override void OnUpgrade()
     {
         DynamicVars["Hits"].UpgradeValueBy(1);
@@ -37,6 +40,6 @@ public class CharismaOfTheJade() : FgoCardModel(2, CardType.Attack,
             .WithHitCount(DynamicVars["Hits"].IntValue)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
-        // 暴击由 CriticalDamagePower 处理: Stars>=20 时消耗20星造成300%伤害，否则按基础暴击（Stars>=10消耗10星200%）
+        // 暴击由 FgoPlayerResources 处理: Stars>=20 时消耗20星造成300%伤害，否则按基础暴击（Stars>=10消耗10星200%）
     }
 }

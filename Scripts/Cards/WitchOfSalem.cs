@@ -48,11 +48,14 @@ public class WitchOfSalem() : FgoCardModel(3, CardType.Skill,
         await PowerCmd.Apply<WeakPower>(choiceContext, CombatState.HittableEnemies,
             DynamicVars[nameof(WeakPower)].BaseValue,
             Owner.Creature, this);
-        var terror = await PowerCmd.Apply<TerrorPower>(choiceContext, CombatState.HittableEnemies,
+        var powers = await PowerCmd.Apply<TerrorPower>(choiceContext, CombatState.HittableEnemies,
             DynamicVars[nameof(TerrorPower)].IntValue,
             Owner.Creature, this);
 
-        terror.FirstOrDefault()!.TerrorChance = DynamicVars["TerrorChance"].BaseValue;
+        foreach (var terror in powers)
+        {
+            terror.TerrorChance = DynamicVars["TerrorChance"].BaseValue;
+        }
 
         await PowerCmd.Apply<VsTerrorDamagePower>(choiceContext, Owner.Creature,
             DynamicVars[nameof(VsTerrorDamagePower)].BaseValue, Owner.Creature, this);

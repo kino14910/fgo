@@ -4,7 +4,6 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Rooms;
 using STS2RitsuLib.Cards.DynamicVars;
-using STS2RitsuLib.Scaffolding.Content;
 
 namespace Fgo.Scripts.Powers;
 
@@ -29,12 +28,13 @@ public class MaxHpPower : FgoPowerModel
         _lastAmount = 0;
         _eventsSubscribed = false;
     }
+
     public override Task AfterApplied(Creature? applier, CardModel? cardSource)
     {
         var delta = Amount - _lastAmount; // 相对于上次的增量
         if (delta != 0)
         {
-            decimal hpChange = delta * DynamicVars["HpPerStack"].BaseValue;
+            var hpChange = delta * DynamicVars["HpPerStack"].BaseValue;
             _appliedHpBoost += hpChange;
             _lastAmount = Amount;
             Owner.SetMaxHpInternal(Owner.MaxHp + hpChange);

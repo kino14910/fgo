@@ -1,4 +1,3 @@
-using System.Linq;
 using Fgo.Scripts.Cards.DerivativeMash;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
@@ -89,7 +88,8 @@ public static class FgoCardActions
     ///     在非战斗牌堆（如 NobleDeck）中把 source 替换为 targetCanonical 的可变实例。
     ///     手动移除源卡 + 创建目标卡 + 加入牌堆，绕开 CardCmd.Transform 对战斗状态的依赖。
     /// </summary>
-    private static async Task ReplaceInNonCombatPile(Player player, CardPile pile, CardModel source, CardModel targetCanonical)
+    private static async Task ReplaceInNonCombatPile(Player player, CardPile pile, CardModel source,
+        CardModel targetCanonical)
     {
         var replacement = player.RunState.CreateCard(targetCanonical, player);
         source.RemoveFromCurrentPile();

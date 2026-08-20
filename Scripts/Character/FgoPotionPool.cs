@@ -13,5 +13,5 @@ public class FgoPotionPool : TypeListPotionPoolModel
 
     public override string EnergyColorName => "fgo";
 
-    public override Color LabOutlineColor => new ("c47e09");
+    public override Color LabOutlineColor => new("c47e09");
 }

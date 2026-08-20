@@ -21,7 +21,8 @@ public class ImaginaryOceanBattle() : FgoCardModel(1, CardType.Skill,
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         ModCardVars.Computed("Np", static ctx =>
-            ctx.BaseValue + (ctx.RunState?.TotalFloor ?? 0), 5)
+                ctx.BaseValue + (ctx.RunState?.TotalFloor ?? 0),
+            5)
     ];
 
     protected override void OnUpgrade()

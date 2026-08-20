@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Powers;
@@ -22,7 +21,7 @@ public class ImaginarySpacePower : FgoPowerModel
     {
         if (player.Creature != Owner) return;
         Flash();
-        await PlayerCmd.GainEnergy(1m, player);
+        await PlayerCmd.GainEnergy(DynamicVars.Energy.BaseValue, player);
         if (Owner.HasPower<WatersidePower>()) await CardPileCmd.Draw(choiceContext, 1m, player);
     }
 }

@@ -9,9 +9,9 @@ namespace Fgo.Scripts.Powers;
 public class SevendrivePower : TemporaryStrengthPower, IModPowerAssetOverrides
 {
     public override AbstractModel OriginModel => ModelDb.Card<Sevendrive>();
-    
-    public PowerAssetProfile AssetProfile => new($"res://Fgo/images/powers/AtkUpPower.png",
-        $"res://Fgo/images/powers/AtkUpPower.png");
+
+    public PowerAssetProfile AssetProfile => new("res://Fgo/images/powers/AtkUpPower.png",
+        "res://Fgo/images/powers/AtkUpPower.png");
 
     public virtual string? CustomIconPath => AssetProfile.IconPath;
     public virtual string? CustomBigIconPath => AssetProfile.BigIconPath;

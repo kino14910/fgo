@@ -10,6 +10,7 @@
   "FGO_RELIC_SAINT_QUARTZ.flavor": "用于召唤英灵的稀世圣晶石。",
   "FGO_RELIC_SUMMON_TICKET.title": "召唤券",
   "FGO_RELIC_SUMMON_TICKET.description": "每进入一个房间，计数+1。计数 ≥ 3 时，[gold]右键[/gold]此遗物从所有宝具卡中选择一张加入，并消耗 3 计数。",
+  "FGO_RELIC_SUMMON_TICKET.selectionScreenPrompt": "选择一张宝具卡加入你的宝具卡堆",
   "FGO_RELIC_SUMMON_TICKET.flavor": "承载着希望与祈愿的召唤凭证。",
   "FGO_RELIC_SURPRISE_CHOCOLATE.title": "惊喜巧克力",
   "FGO_RELIC_SURPRISE_CHOCOLATE.description": "战斗开始时，获得1次随机正面状态。",

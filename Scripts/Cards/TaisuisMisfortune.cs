@@ -23,6 +23,11 @@ public class TaisuisMisfortune() : FgoCardModel(0, CardType.Skill,
         ModCardVars.Energy(2)
     ];
 
+    protected override void OnUpgrade()
+    {
+        DynamicVars.Energy.UpgradeValueBy(1);
+    }
+
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await PowerCmd.Apply<TaisuisPower>(choiceContext, CombatState!.HittableEnemies, DynamicVars.Energy.BaseValue,

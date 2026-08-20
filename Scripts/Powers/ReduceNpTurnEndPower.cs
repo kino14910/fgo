@@ -1,5 +1,6 @@
 using Fgo.Scripts.Singletons;
 using MegaCrit.Sts2.Core.Combat;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -15,5 +16,6 @@ public class ReduceNpTurnEndPower : FgoPowerModel
         IEnumerable<Creature> participants)
     {
         await this.FgoRes().ModifyNp(-Amount);
+        await PowerCmd.Remove(this);
     }
 }

@@ -1,7 +1,6 @@
 using Fgo.Scripts.Cards.NoblePhantasm;
 using Fgo.Scripts.Keywords;
 using Fgo.Scripts.Powers;
-using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Powers;
@@ -40,7 +39,7 @@ public class RayProofKyrielight() : NobleCardModel(1, CardType.Attack, TargetTyp
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await IgnoreInvincibleAction(CombatState!.HittableEnemies);
-        
+
         await PowerCmd.Apply<VulnerablePower>(choiceContext, CombatState!.HittableEnemies,
             DynamicVars[nameof(VulnerablePower)].BaseValue, Owner.Creature, this);
 
@@ -49,7 +48,7 @@ public class RayProofKyrielight() : NobleCardModel(1, CardType.Attack, TargetTyp
             .TargetingAllOpponents(CombatState)
             .WithHitFx("vfx/vfx_heavy_blunt")
             .Execute(choiceContext);
-        
+
         foreach (var enemy in CombatState.HittableEnemies)
         {
             if (!enemy.IsPrimaryEnemy)

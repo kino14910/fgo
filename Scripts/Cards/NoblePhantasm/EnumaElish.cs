@@ -6,7 +6,7 @@ using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards.NoblePhantasm;
 
-public class EnumaElish() : NobleCardModel(2, CardType.Attack, TargetType.Self)
+public class EnumaElish() : NobleCardModel(2, CardType.Attack, TargetType.AllEnemies)
 {
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [

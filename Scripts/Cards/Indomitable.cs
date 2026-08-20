@@ -13,25 +13,25 @@ public class Indomitable() : FgoCardModel(1, CardType.Power,
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
-        HoverTipFactory.FromPower<NonStackableGutsPower>(),
+        HoverTipFactory.FromPower<IndomitableGutsPower>(),
         HoverTipFactory.FromPower<IndomitablePower>()
     ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        ModCardVars.Power<NonStackableGutsPower>(5),
+        ModCardVars.Power<IndomitableGutsPower>(5),
         ModCardVars.Power<IndomitablePower>(2)
     ];
 
     protected override void OnUpgrade()
     {
-        DynamicVars[nameof(NonStackableGutsPower)].UpgradeValueBy(10);
+        DynamicVars[nameof(IndomitableGutsPower)].UpgradeValueBy(10);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await PowerCmd.Apply<NonStackableGutsPower>(choiceContext, Owner.Creature,
-            DynamicVars[nameof(NonStackableGutsPower)].BaseValue, Owner.Creature, this);
+        await PowerCmd.Apply<IndomitableGutsPower>(choiceContext, Owner.Creature,
+            DynamicVars[nameof(IndomitableGutsPower)].BaseValue, Owner.Creature, this);
         await PowerCmd.Apply<IndomitablePower>(choiceContext, Owner.Creature,
             DynamicVars[nameof(IndomitablePower)].BaseValue, Owner.Creature, this);
     }

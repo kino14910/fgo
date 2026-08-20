@@ -6,7 +6,6 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
-using MegaCrit.Sts2.Core.Nodes.CommonUi;
 using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards.DerivativeMash;
@@ -51,9 +50,7 @@ public class LordChaldeas() : NobleCardModel(1, CardType.Power, TargetType.Self)
         // 时为朦胧的白垩之壁变为测定时间的紫弹之薪
         var chalk = Owner.PlayerCombatState!.AllCards.FirstOrDefault(card => card is ObscurantWallOfChalk);
         if (chalk is not null && CombatState is not null)
-        {
             await CardCmd.Transform(CombatState.CreateCard(chalk, Owner),
                 ModelDb.Card<TimewornBulletKindling>().ToMutable());
-        }
     }
 }

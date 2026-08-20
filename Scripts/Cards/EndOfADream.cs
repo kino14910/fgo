@@ -27,7 +27,7 @@ public class EndOfADream() : FgoCardModel(1, CardType.Power,
     {
         if (IsUpgraded)
             await PowerCmd.Apply<SleepPower>(choiceContext, Owner.Creature, 1m, Owner.Creature, this);
-        else 
+        else
             await PowerCmd.Apply<PermanentSleepPower>(choiceContext, Owner.Creature, 1m, Owner.Creature, this);
     }
 }

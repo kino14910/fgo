@@ -1,13 +1,9 @@
-using System.Threading.Tasks;
 using Fgo.Scripts.Keywords;
 using Godot;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
-using MegaCrit.Sts2.Core.GameActions.Multiplayer;
-using MegaCrit.Sts2.Core.Models.CardPools;
 using MegaCrit.Sts2.Core.Models.Powers;
-using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Scaffolding.Content;
 
 namespace Fgo.Scripts.Cards;
@@ -52,7 +48,7 @@ public abstract class FgoBaseCardModel(
             target.LoseBlockInternal(target.Block);
             amount++;
         }
-        
+
         if (target.HasPower<HardenedShellPower>())
         {
             await PowerCmd.Remove<HardenedShellPower>(target);
@@ -64,18 +60,15 @@ public abstract class FgoBaseCardModel(
             await PowerCmd.Remove<HardToKillPower>(target);
             amount++;
         }
+
         return amount;
     }
-    
+
     protected async Task<int> IgnoreInvincibleAction(IEnumerable<Creature>? targets)
     {
-        
         if (targets == null) return 0;
         var amount = 0;
-        foreach (var target in targets)
-        {
-            amount += await IgnoreInvincibleAction(target);
-        }
+        foreach (var target in targets) amount += await IgnoreInvincibleAction(target);
 
         return amount;
     }

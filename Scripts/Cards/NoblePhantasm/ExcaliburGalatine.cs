@@ -9,7 +9,7 @@ using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards.NoblePhantasm;
 
-public class ExcaliburGalatine() : NobleCardModel(2, CardType.Attack, TargetType.Self)
+public class ExcaliburGalatine() : NobleCardModel(2, CardType.Attack, TargetType.AllEnemies)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [

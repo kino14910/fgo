@@ -56,8 +56,8 @@ public class FgoHoverTipHelper
 
         return new HoverTip(title, desc);
     }
-    
-    
+
+
     private static HoverTip BuildForeignerHoverTip()
     {
         var title = new LocString("static_hover_tips", "FGO_STATIC_HOVER_TIPS_FOREIGNER.title");

@@ -23,7 +23,7 @@ public class GodsExecution() : FgoCardModel(3, CardType.Attack,
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         ModCardVars.Damage(21),
-        ModCardVars.Power<GodsExecutionPower>(2),
+        ModCardVars.Power<GodsExecutionPower>(2)
     ];
 
     protected override void OnUpgrade()
@@ -47,10 +47,7 @@ public class GodsExecution() : FgoCardModel(3, CardType.Attack,
 
     public override Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        if (cardPlay.Card is NobleCardModel)
-        {
-            SetToFreeThisTurn();
-        }
+        if (cardPlay.Card is NobleCardModel) SetToFreeThisTurn();
 
         return Task.CompletedTask;
     }

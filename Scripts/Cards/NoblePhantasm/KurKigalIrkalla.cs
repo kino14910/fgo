@@ -10,7 +10,7 @@ using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards.NoblePhantasm;
 
-public class KurKigalIrkalla() : NobleCardModel(1, CardType.Attack, TargetType.Self)
+public class KurKigalIrkalla() : NobleCardModel(1, CardType.Attack, TargetType.AllEnemies)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [

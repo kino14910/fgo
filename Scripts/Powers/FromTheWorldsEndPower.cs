@@ -23,7 +23,7 @@ public class FromTheWorldsEndPower : FgoPowerModel
     {
         if (!participants.Contains(Owner)) return;
         if (side != CombatSide.Player) return;
-        
+
         var combatState = Owner.CombatState;
         if (combatState != null)
         {

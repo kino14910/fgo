@@ -19,7 +19,7 @@ public class InfiniteSuffering() : FgoBaseCardModel(2, CardType.Attack,
         HoverTipFactory.FromCard<TheAbsoluteSword>(),
         HoverTipFactory.FromPower<CriticalDamagePower>()
     ];
-    
+
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         ModCardVars.Damage(16)
@@ -39,6 +39,8 @@ public class InfiniteSuffering() : FgoBaseCardModel(2, CardType.Attack,
             .Execute(choiceContext);
 
         await PowerCmd.Apply<InfiniteSufferingPower>(
+            choiceContext, Owner.Creature, 1, Owner.Creature, this);
+        await PowerCmd.Apply<InfiniteSufferingCardPower>(
             choiceContext, Owner.Creature, 1, Owner.Creature, this);
     }
 }

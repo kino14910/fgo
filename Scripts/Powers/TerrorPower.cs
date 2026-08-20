@@ -3,7 +3,8 @@ using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
-using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using STS2RitsuLib.Cards.DynamicVars;
 using STS2RitsuLib.Combat.Ui.ExtraCornerAmountLabels;
 using STS2RitsuLib.Scaffolding.Content;
 
@@ -27,20 +28,32 @@ public class TerrorPower : FgoPowerModel, IPowerExtraIconAmountLabelSpecsProvide
     /// <summary>
     ///     眩晕概率（0-100）。叠加时取较大值。
     /// </summary>
-    public decimal TerrorChance { get; set; }
+    protected override IEnumerable<DynamicVar> CanonicalVars => [
+        ModCardVars.Int("TerrorChance", 0)
+    ];
+
+    public decimal TerrorChance
+    {
+        get => DynamicVars["TerrorChance"].BaseValue;
+        set
+        {
+            DynamicVars["TerrorChance"].BaseValue = value;
+            InvokeDisplayAmountChanged();
+        }
+    }
 
     public IReadOnlyList<ExtraIconAmountLabelSpec> GetPowerExtraIconAmountLabelSpecs()
     {
         return
         [
-            // 左上角: 层数
-            ExtraIconAmountLabelSpec.Plain(ExtraIconAmountLabelCorner.TopRight, Amount.ToString()),
             // 右上角: 眩晕概率 %
-            ExtraIconAmountLabelSpec.Plain(ExtraIconAmountLabelCorner.BottomRight, $"{TerrorChance}%")
+            ExtraIconAmountLabelSpec.Plain(ExtraIconAmountLabelCorner.TopRight, $"{TerrorChance}%"),
+            // 左上角: 层数
+            ExtraIconAmountLabelSpec.Plain(ExtraIconAmountLabelCorner.BottomRight, Amount.ToString())
         ];
     }
 
-    public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side, 
+    public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side,
         IEnumerable<Creature> participants)
     {
         if (!participants.Contains(Owner)) return;

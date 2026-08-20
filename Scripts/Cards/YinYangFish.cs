@@ -33,7 +33,7 @@ public class YinYangFish() : FgoCardModel(1, CardType.Skill,
     {
         if (IsUpgraded)
             await FgoResCmd.ModifyNp(30, cardPlay.Player);
-        await CreatureCmd.Heal(Owner.Creature, DynamicVars.Heal.BaseValue, false);
+        await CreatureCmd.Heal(Owner.Creature, DynamicVars.Heal.BaseValue);
         await FgoResCmd.ModifyNp(-10, cardPlay.Player);
     }
 }

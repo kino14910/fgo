@@ -9,7 +9,13 @@ namespace Fgo.Scripts.Cards;
 
 public class EvilGodOfTheFlowers() : FgoCardModel(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
     protected override HashSet<CardTag> CanonicalTags => [FgoTags.Foreigner];
+
+    protected override void OnUpgrade()
+    {
+        RemoveKeyword(CardKeyword.Exhaust);
+    }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {

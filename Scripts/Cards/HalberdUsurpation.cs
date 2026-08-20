@@ -1,3 +1,4 @@
+using Fgo.Scripts.Powers;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -13,7 +14,8 @@ public class HalberdUsurpation() : FgoCardModel(2, CardType.Attack,
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         ModCardVars.ComputedDamage("Usurpation", 15,
-            (card, target) => card.DynamicVars["Usurpation"].BaseValue + (target?.GetPower<StrengthPower>()?.Amount ?? 0))
+            (card, target) =>
+                card.DynamicVars["Usurpation"].BaseValue + (target?.GetPower<StrengthPower>()?.Amount ?? 0))
     ];
 
     protected override void OnUpgrade()
@@ -33,6 +35,7 @@ public class HalberdUsurpation() : FgoCardModel(2, CardType.Attack,
 
         var enemyStrength = cardPlay.Target.GetPowerAmount<StrengthPower>();
         if (enemyStrength > 0)
-            await PowerCmd.Apply<StrengthPower>(choiceContext, cardPlay.Target, -enemyStrength * 2, Owner.Creature, this);
+            await PowerCmd.Apply<HalberdUsurpationPower>(choiceContext, cardPlay.Target, -enemyStrength * 2,
+                Owner.Creature, this);
     }
 }

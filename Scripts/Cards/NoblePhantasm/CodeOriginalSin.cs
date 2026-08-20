@@ -11,7 +11,7 @@ using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards.NoblePhantasm;
 
-public class CodeOriginalSin() : NobleCardModel(1, CardType.Attack, TargetType.Self)
+public class CodeOriginalSin() : NobleCardModel(2, CardType.Attack, TargetType.AnyEnemy)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
@@ -33,10 +33,14 @@ public class CodeOriginalSin() : NobleCardModel(1, CardType.Attack, TargetType.S
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await CreatureCmd.Damage(choiceContext, CombatState!.HittableEnemies,
-            DynamicVars.Damage.BaseValue, ValueProp.Unblockable | ValueProp.Unpowered | ValueProp.Move,
+        ArgumentNullException.ThrowIfNull(cardPlay.Target, nameof(cardPlay.Target));
+
+        await CreatureCmd.Damage(choiceContext,
+            cardPlay.Target,
+            DynamicVars.Damage.BaseValue,
+            ValueProp.Unblockable | ValueProp.Unpowered | ValueProp.Move,
             Owner.Creature);
-        await PowerCmd.Apply<DoomPower>(choiceContext, CombatState!.HittableEnemies, DynamicVars.Doom.BaseValue,
+        await PowerCmd.Apply<DoomPower>(choiceContext, cardPlay.Target, DynamicVars.Doom.BaseValue,
             Owner.Creature, this);
         await FgoResCmd.ModifyNp(this);
     }

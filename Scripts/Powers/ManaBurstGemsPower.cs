@@ -24,7 +24,7 @@ public class ManaBurstGemsPower : FgoPowerModel
     {
         if (!participants.Contains(Owner)) return;
         if (side != CombatSide.Player) return;
-        
+
         Flash();
         await PowerCmd.Apply<StrengthPower>(
             new BlockingPlayerChoiceContext(), Owner, Amount, Owner, choiceContext.LastInvolvedModel as CardModel);

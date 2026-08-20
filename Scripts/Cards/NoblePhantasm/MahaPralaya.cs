@@ -7,32 +7,30 @@ using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards.NoblePhantasm;
 
-public class MahaPralaya() : NobleCardModel(1, CardType.Attack, TargetType.Self)
+public class MahaPralaya() : NobleCardModel(1, CardType.Attack, TargetType.AllEnemies)
 {
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        ModCardVars.Damage(8)
-    ];
-
-    protected override void OnUpgrade()
-    {
-        DynamicVars.Damage.UpgradeValueBy(3m);
-    }
-
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
-    {
-        var debuffTypes = CombatState!.HittableEnemies
+        ModCardVars.Int("DamagePerStatus", 8),
+        ModCardVars.ComputedDamage("MahaPralayaDamage",
+            static ctx => ctx.GetCardBaseValueOrDefault("DamagePerStatus") * (ctx.CombatState?.HittableEnemies
             .SelectMany(enemy => enemy.Powers)
             .Where(power => power.Type == PowerType.Debuff)
             .Select(power => power.Id)
             .Distinct()
-            .Count();
+            .Count() ?? 0))
+    ];
 
-        var hitCount = Math.Max(1, debuffTypes);
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
+    protected override void OnUpgrade()
+    {
+        DynamicVars["DamagePerStatus"].UpgradeValueBy(3);
+    }
+
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+    {
+        await DamageCmd.Attack(DynamicVars.EvaluateValueOrDefault("MahaPralayaDamage"))
             .FromCard(this, cardPlay)
             .TargetingAllOpponents(CombatState!)
-            .WithHitCount(hitCount)
             .WithHitFx("vfx/vfx_attack_blunt")
             .Execute(choiceContext);
     }

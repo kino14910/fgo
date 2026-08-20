@@ -16,29 +16,28 @@ namespace Fgo.Scripts.UI;
 
 public sealed partial class FgoNpBar : Node
 {
-    private Control? _npBarRoot;
-    private Control? _hpBarContainer;
-    private MegaLabel? _hpLabel;
+    private static readonly PackedScene? NpBarScene =
+        GD.Load<PackedScene>("res://Fgo/scenes/fgo_np_bar.tscn");
 
     private NinePatchRect? _bar0;
     private NinePatchRect? _bar1;
     private NinePatchRect? _bar2;
 
     private TextureButton? _button;
-    private Label? _label;
-
-    private Player? _player;
-    private FgoPlayerResources? _subscribed;
-
-    private int _lastNp = -1;
     private bool _hoverTipShown;
+    private Control? _hpBarContainer;
+    private MegaLabel? _hpLabel;
+    private Label? _label;
 
     private Vector2 _lastHpBarPosition;
     private Vector2 _lastHpBarSize;
     private Vector2 _lastHpLabelPosition;
 
-    private static readonly PackedScene? NpBarScene =
-        GD.Load<PackedScene>("res://Fgo/scenes/fgo_np_bar.tscn");
+    private int _lastNp = -1;
+    private Control? _npBarRoot;
+
+    private Player? _player;
+    private FgoPlayerResources? _subscribed;
 
     public static void Initialize()
     {
@@ -122,18 +121,14 @@ public sealed partial class FgoNpBar : Node
         if (_npBarRoot == null ||
             _hpBarContainer == null ||
             _hpLabel == null)
-        {
             return;
-        }
 
         SyncWithHealthBar();
         UpdateHoverTip();
 
         if (!CombatManager.Instance.IsInProgress &&
             !CombatManager.Instance.IsStarting)
-        {
             return;
-        }
 
         var resources = ModelDb.Singleton<FgoPlayerResources>();
 
@@ -167,9 +162,7 @@ public sealed partial class FgoNpBar : Node
         if (_npBarRoot == null ||
             _hpBarContainer == null ||
             _hpLabel == null)
-        {
             return;
-        }
 
         var hpBarPosition = _hpBarContainer.GlobalPosition;
         var hpBarSize = _hpBarContainer.Size;
@@ -200,9 +193,7 @@ public sealed partial class FgoNpBar : Node
             _bar0 == null ||
             _bar1 == null ||
             _bar2 == null)
-        {
             return;
-        }
 
         var foregroundContainer =
             _npBarRoot.GetNodeOrNull<Control>("NpForegroundContainer");
@@ -319,7 +310,7 @@ public sealed partial class FgoNpBar : Node
     {
         if (_button == null)
             return;
-        
+
         NHoverTipSet.Remove(_button);
     }
 
@@ -366,7 +357,7 @@ public sealed partial class FgoNpBar : Node
     private T? FindParentOfType<T>()
         where T : Node
     {
-        Node? current = GetParent();
+        var current = GetParent();
 
         while (current != null)
         {

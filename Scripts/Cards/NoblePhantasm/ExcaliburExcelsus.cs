@@ -1,6 +1,5 @@
 using Fgo.Scripts.Commands;
 using Fgo.Scripts.Keywords;
-using Fgo.Scripts.Powers;
 using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -13,7 +12,7 @@ using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards.NoblePhantasm;
 
-public class ExcaliburExcelsus() : NobleCardModel(3, CardType.Attack, TargetType.Self)
+public class ExcaliburExcelsus() : NobleCardModel(3, CardType.Attack, TargetType.AllEnemies)
 {
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Retain, FgoKeywords.IgnoreInvincible];
 

@@ -1,6 +1,7 @@
 using Fgo.Scripts.Commands;
 using Fgo.Scripts.Powers;
 using Fgo.Scripts.Utils;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
@@ -37,5 +38,7 @@ public class MorningLark() : FgoCardModel(0, CardType.Skill,
     {
         await FgoResCmd.ModifyNp(this);
         await FgoResCmd.ModifyStars(DynamicVars["Star"].BaseValue, Owner);
+        await PowerCmd.Apply<ReduceNpTurnEndPower>(choiceContext, Owner.Creature,
+            20, Owner.Creature, this);
     }
 }

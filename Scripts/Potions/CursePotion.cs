@@ -16,7 +16,7 @@ public class CursePotion : FgoPotionModel
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
-        HoverTipFactory.FromPower<CursePower>(),
+        HoverTipFactory.FromPower<CursePower>()
     ];
 
     protected override async Task OnUse(PlayerChoiceContext choiceContext, Creature? target)

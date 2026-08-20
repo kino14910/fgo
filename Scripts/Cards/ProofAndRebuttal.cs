@@ -2,7 +2,6 @@ using MegaCrit.Sts2.Core.CardSelection;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
-using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using STS2RitsuLib.Cards.DynamicVars;
 
@@ -28,17 +27,13 @@ public class ProofAndRebuttal() : FgoCardModel(0, CardType.Skill,
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await CardPileCmd.Draw(choiceContext, 1m, Owner);
-        var handCount = Owner.PlayerCombatState!.Hand.Cards.Count;
+        await CardPileCmd.Draw(choiceContext, DynamicVars.Cards.BaseValue, Owner);
+        var handCount = PileType.Hand.GetPile(Owner).Cards.Count;
         if (handCount == 0) return;
 
-        var prefs = new CardSelectorPrefs(new LocString("gameplay_ui", "TOP_DECK_CARDS"), 0, handCount)
-        {
-            Cancelable = true,
-            RequireManualConfirmation = true
-        };
-        var selected = (await CardSelectCmd.FromHand(choiceContext, Owner, prefs, _ => true, this)).ToList();
-        foreach (var card in selected)
-            await CardPileCmd.Add(card, PileType.Draw, CardPilePosition.Top, this, true);
+        var prefs = new CardSelectorPrefs(SelectionScreenPrompt, 0, handCount);
+        var selected = (await CardSelectCmd.FromHand(choiceContext, Owner, prefs, null, this)).ToArray();
+
+        if (selected.Length > 0) await CardPileCmd.Add(selected, PileType.Draw, CardPilePosition.Top);
     }
 }

@@ -1,9 +1,11 @@
 using Fgo.Scripts.Cards;
 using Fgo.Scripts.Cards.NoblePhantasm;
+using Fgo.Scripts.Character;
 using Fgo.Scripts.Commands;
 using Fgo.Scripts.Powers;
 using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.Combat;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Context;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
@@ -68,6 +70,7 @@ public class FgoPlayerResources() : HookedSingletonModel(HookType.Combat)
     }
 
     public bool CanCrit => Stars >= BasicCritStars;
+    public bool CanSpecialCrit => Stars >= SpecialCritStars;
     public bool CanUseNp => Np >= 100;
     public bool CanUseCommandSpell => CommandSpell > 0;
     public int OverCharge { get; private set; }
@@ -108,7 +111,7 @@ public class FgoPlayerResources() : HookedSingletonModel(HookType.Combat)
         if (amount > 0)
             await FgoStarGainVfx.Spawn(player, amount);
     }
-    
+
     public Task ResetStars()
     {
         Stars = 0;
@@ -214,12 +217,8 @@ public class FgoPlayerResources() : HookedSingletonModel(HookType.Combat)
 
         if (cardPlay == null)
         {
-            if (!CanCrit)
-                return 1m;
-            if (cardSource is CharismaOfTheJade)
-                return 3m;
-            if (cardSource is { Type: CardType.Attack } and not NobleCardModel)
-                return 2m;
+            if (cardSource is CharismaOfTheJade) return CanSpecialCrit ? 3m : 1m;
+            if (cardSource is { Type: CardType.Attack } and not NobleCardModel) return CanCrit ? 2m : 1m;
             return 1m;
         }
 
@@ -252,7 +251,7 @@ public class FgoPlayerResources() : HookedSingletonModel(HookType.Combat)
 
         await ModifyStars(1, dealer.Player);
     }
-    
+
     public override async Task AfterDamageReceived(PlayerChoiceContext choiceContext, Creature target,
         DamageResult result, ValueProp props,
         Creature? dealer, CardModel? cardSource)
@@ -262,6 +261,38 @@ public class FgoPlayerResources() : HookedSingletonModel(HookType.Combat)
             && result.TotalDamage > 0
             && props.IsPoweredAttack())
             await FgoResCmd.ModifyNp(result.TotalDamage, dealer.Player);
+    }
+
+    /// <summary>
+    ///     灵基复原: FGO 玩家即将死亡且剩余令咒 >= 3 时阻止死亡。
+    ///     毅力优先、灵基复原兜底——优先 NonStackableGutsPower，其次普通 GutsPower；
+    ///     只要玩家存在任一可用毅力，灵基复原就不触发，避免抢在毅力之前消耗令咒。
+    /// </summary>
+    public override bool ShouldDie(Creature creature)
+    {
+        if (!(creature is { IsPlayer: true, Player.Character: FgoCharacter }
+              && CommandSpell >= 3))
+            return true;
+
+        // 毅力可用性: 优先 NonStackableGutsPower（需剩余次数 > 0），其次普通 GutsPower（存在即可用）。
+        var hasUsableGuts =
+            creature.Powers.OfType<NonStackableGutsPower>().Any(g => g.DynamicVars["times"].BaseValue > 0)
+            || creature.Powers.OfType<GutsPower>().Any(g => g is not NonStackableGutsPower);
+
+        return hasUsableGuts;
+    }
+
+    public override async Task AfterPreventingDeath(Creature creature)
+    {
+        if (creature.IsPlayer
+            && creature.Player is { Character: FgoCharacter }
+            && CommandSpell >= 3)
+        {
+            CommandSpell -= 3;
+            await CreatureCmd.Heal(creature, creature.MaxHp - creature.CurrentHp);
+            if (Np < 300)
+                await ModifyNp(300 - Np, creature.Player);
+        }
     }
 
     public override Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side,

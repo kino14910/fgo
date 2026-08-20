@@ -25,8 +25,8 @@ public class PrimevalRune() : FgoCardModel(1, CardType.Skill,
 
     protected override void OnUpgrade()
     {
-        DynamicVars["WeakPower"].UpgradeValueBy(1);
-        DynamicVars["VulnerablePower"].UpgradeValueBy(1);
+        DynamicVars[nameof(WeakPower)].UpgradeValueBy(1);
+        DynamicVars[nameof(VulnerablePower)].UpgradeValueBy(1);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

@@ -6,9 +6,9 @@ using STS2RitsuLib.Scaffolding.Content.Patches;
 
 namespace Fgo.Scripts.Powers;
 
-public class GodsExecutionPower : TemporaryStrengthPower, IModPowerAssetOverrides
+public class HalberdUsurpationPower : TemporaryStrengthPower, IModPowerAssetOverrides
 {
-    public override AbstractModel OriginModel => ModelDb.Card<GodsExecution>();
+    public override AbstractModel OriginModel => ModelDb.Card<HalberdUsurpation>();
 
     protected override bool IsPositive => false;
 

@@ -6,25 +6,21 @@ using MegaCrit.Sts2.Core.Nodes.CommonUi;
 
 namespace Fgo.Scripts.Cards;
 
-public class DragonCore() : FgoCardModel(2, CardType.Skill,
+public class DragonCore() : FgoCardModel(1, CardType.Skill,
     CardRarity.Rare, TargetType.Self)
 {
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
-
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        var player = Owner.Creature.Player;
-        if (player == null) return;
-        var hands = player.PlayerCombatState!.Hand.Cards
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
+
+        var nonAttackCards = PileType.Hand.GetPile(Owner).Cards
             .Where(card => card.Type != CardType.Attack)
             .ToList();
-        var exhaustCount = hands.Count;
+        var exhaustCount = nonAttackCards.Count;
+        if (exhaustCount <= 0) return;
 
-        foreach (var card in hands)
-            await CardCmd.Exhaust(choiceContext, card, true);
-
-        var source = hands.FirstOrDefault() ?? player.Deck.Cards.FirstOrDefault();
-        if (source == null) return;
+        foreach (var card in nonAttackCards)
+            await CardCmd.Exhaust(choiceContext, card);
 
         var pool = Owner.Character.CardPool
             .GetUnlockedCards(Owner.UnlockState, Owner.RunState.CardMultiplayerConstraint)

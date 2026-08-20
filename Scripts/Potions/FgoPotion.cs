@@ -1,5 +1,4 @@
 using Fgo.Scripts.Character;
-using MegaCrit.Sts2.Core.Models.PotionPools;
 using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Scaffolding.Content;
 

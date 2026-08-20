@@ -64,5 +64,6 @@
   "FGO_GAMEPLAY_UI_FTUE.text_0": "Characters have Noble Phantasm Gauge! \n Noble Phantasm Gauge can be gained by taking damage (including blocked damage), or by consuming energy. For each point of energy spent on non-Noble Phantasm cards, you gain %d%% Noble Phantasm Gauge.",
   "FGO_GAMEPLAY_UI_FTUE.text_1": "When the Noble Phantasm Gauge reaches 100, click the button to use the Noble Phantasm, and the gauge will be emptied. \n When the gauge reaches 200 or 300, or when you play a Noble Phantasm card, you gain Noble Phantasm Charge Up, up to a maximum of 4 stacks. The Noble Phantasm will be enhanced based on the number of stacks.",
   "FGO_GAMEPLAY_UI_FTUE.text_2": "When you deal damage, you gain Critical Stars. After reaching 10 stars, playing an attack card will consume 10 stars to double the damage.",
-  "FGO_GAMEPLAY_UI_FTUE.text_3": "If you're in trouble during battle, you can click to use Command Spells to help. Command Spells can only be used 3 times. If you die without using all 3, you will consume all 3 Command Spells to revive and gain 300% Noble Phantasm Gauge."
+  "FGO_GAMEPLAY_UI_FTUE.text_3": "If you're in trouble during battle, you can click to use Command Spells to help. Command Spells can only be used 3 times. If you die without using all 3, you will consume all 3 Command Spells to revive and gain 300% Noble Phantasm Gauge.",
+  "FGO_GAMEPLAY_UI_POOL_NOBLE": "Noble Phantasm"
 }

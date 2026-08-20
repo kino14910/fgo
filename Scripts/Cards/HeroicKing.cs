@@ -26,11 +26,9 @@ public class HeroicKing() : FgoCardModel(
         ModCardVars.Damage(5),
 
         ModCardVars.Computed(
-            "Hits",
-            2,
-            (card, _) => card.DynamicVars["Hits"].BaseValue + card.Owner.Creature
-                .GetPower<HeroicKingPower>()?
-                .Amount ?? 0m)
+            "Hits", static ctx =>
+                ctx.BaseValue + (ctx.Player?.Creature.GetPower<HeroicKingPower>()?.Amount ?? 0m),
+            2)
     ];
 
     protected override void OnUpgrade()
@@ -52,11 +50,6 @@ public class HeroicKing() : FgoCardModel(
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
 
-        await PowerCmd.Apply<HeroicKingPower>(
-            choiceContext,
-            Owner.Creature,
-            1m,
-            Owner.Creature,
-            this);
+        await PowerCmd.Apply<HeroicKingPower>(choiceContext, Owner.Creature, 1m, Owner.Creature, this);
     }
 }

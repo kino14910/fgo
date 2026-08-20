@@ -24,7 +24,7 @@ public static class FgoResCmd
     {
         await ModifyNp(card.DynamicVars.EvaluateValueOrDefault("Np"), card.Owner);
     }
-    
+
     public static async Task ResetNp()
     {
         await ModelDb.Singleton<FgoPlayerResources>().Reset();

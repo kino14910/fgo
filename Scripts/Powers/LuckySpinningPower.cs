@@ -29,7 +29,7 @@ public class LuckySpinningPower : FgoPowerModel
     {
         if (!participants.Contains(Owner)) return;
         if (side != CombatSide.Player) return;
-        
+
         await PowerCmd.Remove(this);
     }
 }

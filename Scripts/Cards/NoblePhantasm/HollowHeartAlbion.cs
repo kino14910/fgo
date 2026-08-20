@@ -10,7 +10,7 @@ using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards.NoblePhantasm;
 
-public class HollowHeartAlbion() : NobleCardModel(2, CardType.Attack, TargetType.Self)
+public class HollowHeartAlbion() : NobleCardModel(2, CardType.Attack, TargetType.AllEnemies)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
@@ -19,7 +19,7 @@ public class HollowHeartAlbion() : NobleCardModel(2, CardType.Attack, TargetType
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DamageVar(27m, ValueProp.Unblockable | ValueProp.Unpowered | ValueProp.Move),
+        ModCardVars.Damage(27m, ValueProp.Unblockable | ValueProp.Unpowered | ValueProp.Move),
         ModCardVars.Int("Star", 10)
     ];
 
@@ -30,9 +30,11 @@ public class HollowHeartAlbion() : NobleCardModel(2, CardType.Attack, TargetType
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await CreatureCmd.Damage(choiceContext, CombatState!.HittableEnemies,
+        await CreatureCmd.Damage(choiceContext,
+            CombatState!.HittableEnemies,
             DynamicVars.Damage.BaseValue,
-            ValueProp.Unblockable | ValueProp.Unpowered | ValueProp.Move, Owner.Creature);
+            ValueProp.Unblockable | ValueProp.Unpowered | ValueProp.Move,
+            Owner.Creature);
         await FgoResCmd.ModifyStars(DynamicVars["Star"].BaseValue, Owner);
     }
 }

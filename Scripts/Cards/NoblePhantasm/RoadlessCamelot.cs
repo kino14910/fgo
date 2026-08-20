@@ -8,7 +8,7 @@ using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards.NoblePhantasm;
 
-public class RoadlessCamelot() : NobleCardModel(3, CardType.Attack, TargetType.Self)
+public class RoadlessCamelot() : NobleCardModel(1, CardType.Attack, TargetType.AllEnemies)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
@@ -31,7 +31,7 @@ public class RoadlessCamelot() : NobleCardModel(3, CardType.Attack, TargetType.S
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
             .FromCard(this, cardPlay)
             .TargetingAllOpponents(CombatState!)
-            .WithHitCount(3)
+            .WithHitCount(1)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
 

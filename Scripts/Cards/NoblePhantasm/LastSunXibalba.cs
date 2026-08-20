@@ -12,7 +12,7 @@ using STS2RitsuLib.Interop.AutoRegistration;
 namespace Fgo.Scripts.Cards.NoblePhantasm;
 
 [RegisterCard(typeof(DeprecatedCardPool))]
-public class LastSunXibalba() : NobleCardModel(3, CardType.Attack, TargetType.Self)
+public class LastSunXibalba() : NobleCardModel(3, CardType.Attack, TargetType.AllEnemies)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [

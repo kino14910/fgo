@@ -3,6 +3,7 @@ using System.Reflection;
 using Fgo.Scripts.Utils;
 using Godot;
 using HarmonyLib;
+using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Nodes.Cards;
 using MegaCrit.Sts2.Core.Nodes.Screens.CardLibrary;
@@ -24,8 +25,10 @@ public class NobleCardPool : TypeListCardPoolModel
 {
     private static readonly Material? _poolFrameMaterial =
         MaterialUtils.CreateUnmodulatedHsvShaderMaterial();
-
-    public override string Title => "noble";
+    public override string Title =>
+        LocString.GetIfExists("gameplay_ui", "FGO_GAMEPLAY_UI_POOL_NOBLE")?.GetFormattedText()
+        ?? "Noble Phantasm";
+    // public override string Title => "noble";
     public override string EnergyColorName => "noble";
     public override string? TextEnergyIconPath => "res://Fgo/images/ui/energy_fgo.png";
     public override string? BigEnergyIconPath => "res://Fgo/images/ui/energy_noble_big.png";

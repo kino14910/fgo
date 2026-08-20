@@ -35,7 +35,8 @@ public class PursuerOfLove() : FgoCardModel(1, CardType.Skill,
 
         await PowerCmd.Apply<StrengthPower>(choiceContext, cardPlay.Target,
             DynamicVars[nameof(StrengthPower)].BaseValue, Owner.Creature, this);
-        await PowerCmd.Apply<PursuePower>(choiceContext, cardPlay.Target, DynamicVars["Pursue"].BaseValue, Owner.Creature,
+        await PowerCmd.Apply<PursuePower>(choiceContext, cardPlay.Target, DynamicVars["Pursue"].BaseValue,
+            Owner.Creature,
             this);
     }
 }

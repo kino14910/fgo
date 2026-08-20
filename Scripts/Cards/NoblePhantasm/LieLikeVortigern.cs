@@ -8,7 +8,7 @@ using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards.NoblePhantasm;
 
-public class LieLikeVortigern() : NobleCardModel(3, CardType.Attack, TargetType.Self)
+public class LieLikeVortigern() : NobleCardModel(3, CardType.Attack, TargetType.AllEnemies)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [

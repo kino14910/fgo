@@ -20,21 +20,26 @@ public class AnimalDialogue() : FgoCardModel(1, CardType.Skill,
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        ModCardVars.Int("Threshold", 20)
+        ModCardVars.Int("Threshold", 20),
+        ModCardVars.ComputedEnergy("Energy", ctx =>
+        {
+            var threshold = ctx.GetCardIntOrDefault("Threshold", 20);
+            if (threshold <= 0) return 0m;
+            return this.FgoRes().Np / threshold;
+        })
     ];
 
     protected override bool ShouldGlowGoldInternal =>
         this.FgoRes().Np >= DynamicVars["Threshold"].IntValue;
 
+    protected override void OnUpgrade()
+    {
+        DynamicVars["Threshold"].UpgradeValueBy(-5);
+    }
+
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        var np = this.FgoRes().Np;
-        var threshold = DynamicVars["Threshold"].IntValue;
-        if (np >= threshold)
-        {
-            var energyGain = np / threshold;
-            await PlayerCmd.GainEnergy(energyGain, Owner);
-            await FgoResCmd.ResetNp();
-        }
+        await PlayerCmd.GainEnergy(DynamicVars.EvaluateValueOrDefault("Energy"), Owner);
+        await FgoResCmd.ResetNp();
     }
 }

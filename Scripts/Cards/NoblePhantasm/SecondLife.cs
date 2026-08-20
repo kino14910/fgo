@@ -13,8 +13,6 @@ namespace Fgo.Scripts.Cards.NoblePhantasm;
 
 public class SecondLife() : NobleCardModel(1, CardType.Skill, TargetType.Self)
 {
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Retain, CardKeyword.Exhaust];
-    
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
         FgoHoverTipHelper.CreateNpHoverTip()

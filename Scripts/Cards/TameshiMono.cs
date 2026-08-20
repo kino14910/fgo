@@ -33,10 +33,7 @@ public class TameshiMono() : FgoCardModel(1, CardType.Skill,
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         var prefs = new CardSelectorPrefs(CardSelectorPrefs.ExhaustSelectionPrompt,
-            0, DynamicVars["ExhaustCount"].IntValue)
-        {
-            RequireManualConfirmation = true
-        };
+            0, DynamicVars["ExhaustCount"].IntValue);
         var cards = (await CardSelectCmd.FromSimpleGrid(
             choiceContext,
             PileType.Discard.GetPile(Owner).Cards,

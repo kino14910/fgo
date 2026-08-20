@@ -1,9 +1,6 @@
 using Fgo.Scripts.Character;
-using Fgo.Scripts.Commands;
-using MegaCrit.Sts2.Core.Commands;
+using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.Entities.Cards;
-using MegaCrit.Sts2.Core.Entities.Players;
-using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
 using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Scaffolding.Content;
@@ -23,7 +20,7 @@ public abstract class NobleCardModel(
     ///     便捷构造器: 不指定稀有度（默认 Rare）和 shouldShowInCardLibrary（默认 true）。
     /// </summary>
     public NobleCardModel(int energyCost, CardType type, TargetType targetType)
-        : this(energyCost, type, CardRarity.Token, targetType)
+        : this(energyCost, type, FgoEnums.NoblePhantasm, targetType)
     {
     }
 

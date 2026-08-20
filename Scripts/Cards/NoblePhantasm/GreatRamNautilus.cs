@@ -8,7 +8,7 @@ using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards.NoblePhantasm;
 
-public class GreatRamNautilus() : NobleCardModel(1, CardType.Attack, TargetType.AnyEnemy)
+public class GreatRamNautilus() : NobleCardModel(2, CardType.Attack, TargetType.AnyEnemy)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
@@ -18,8 +18,7 @@ public class GreatRamNautilus() : NobleCardModel(1, CardType.Attack, TargetType.
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        ModCardVars.Damage(40),
-        ModCardVars.Int("Energy", 1)
+        ModCardVars.Damage(40)
     ];
 
     protected override void OnUpgrade()
@@ -42,6 +41,6 @@ public class GreatRamNautilus() : NobleCardModel(1, CardType.Attack, TargetType.
             .WithHitFx("vfx/vfx_attack_blunt")
             .Execute(choiceContext);
 
-        if (hasWaterside) await PlayerCmd.GainEnergy(DynamicVars["Energy"].IntValue, Owner);
+        if (hasWaterside) await PlayerCmd.GainEnergy(1, Owner);
     }
 }
