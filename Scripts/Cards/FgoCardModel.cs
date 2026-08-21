@@ -13,5 +13,5 @@ public abstract class FgoCardModel(
     bool shouldShowInCardLibrary = true)
     : FgoBaseCardModel(energyCost, type, rarity, targetType, shouldShowInCardLibrary)
 {
-    // NP 增加逻辑已移至 FgoPlayerResources.BeforeCardPlayed 全局钩子，
+    // NP 增加逻辑已移至 FgoBattleHooks.BeforeCardPlayed 全局钩子，
 }

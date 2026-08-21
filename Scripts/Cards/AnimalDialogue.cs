@@ -40,6 +40,6 @@ public class AnimalDialogue() : FgoCardModel(1, CardType.Skill,
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await PlayerCmd.GainEnergy(DynamicVars.EvaluateValueOrDefault("Energy"), Owner);
-        await FgoResCmd.ResetNp();
+        await FgoResCmd.ResetNp(Owner);
     }
 }

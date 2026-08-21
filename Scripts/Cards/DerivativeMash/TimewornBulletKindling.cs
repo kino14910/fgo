@@ -47,10 +47,10 @@ public class TimewornBulletKindling() : FgoBaseCardModel(1, CardType.Attack,
     {
         await PowerCmd.Apply<NpDamagePower>(choiceContext, Owner.Creature,
             DynamicVars[nameof(NpDamagePower)].BaseValue, Owner.Creature, this);
-        var stars = ModelDb.Singleton<FgoPlayerResources>().Stars;
+        var stars = FgoBattleHooks.Get(Owner).Stars;
         if (stars > 0)
         {
-            await FgoResCmd.ResetStars();
+            await FgoResCmd.ResetStars(Owner);
             await FgoResCmd.ModifyNp(stars * 4, cardPlay.Player);
         }
 

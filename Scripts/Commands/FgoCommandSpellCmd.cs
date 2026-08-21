@@ -14,8 +14,8 @@ public static class FgoCommandSpellCmd
 
     public static async Task<bool> TryUseCommandSpell(PlayerChoiceContext choiceContext, Player player)
     {
-        var resources = ModelDb.Singleton<FgoPlayerResources>();
-        if (!resources.CanUseCommandSpell) return false;
+        var playerState = FgoBattleHooks.Get(player);
+        if (!playerState.CanUseCommandSpell) return false;
 
         var combatState = player.Creature.CombatState;
         if (combatState == null) return false;
@@ -28,7 +28,7 @@ public static class FgoCommandSpellCmd
         var selected = await CardSelectCmd.FromChooseACardScreen(choiceContext, cards, player);
         if (selected == null) return false;
 
-        await resources.UseCommandSpell();
+        await playerState.UseCommandSpell();
         // 注意: 不在此处立即同步到 RunSavedData。
         // 令咒的保存语义: 使用后仅更新内存值，在战斗结束时（AfterCombatVictory）才同步到 RunSavedData。
         // 这样退出战斗中再继续会恢复到战前值，而打赢后下一场战斗保留战后值。
@@ -39,7 +39,7 @@ public static class FgoCommandSpellCmd
                 await CreatureCmd.Heal(player.Creature, HealAmount);
                 break;
             case ReleaseNoblePhantasm:
-                await resources.ModifyNp(NpAmount, player);
+                await playerState.ModifyNp(NpAmount, player);
                 break;
         }
 

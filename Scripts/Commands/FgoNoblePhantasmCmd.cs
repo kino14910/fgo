@@ -17,14 +17,14 @@ public static class FgoNoblePhantasmCmd
 {
     public static async Task<bool> TryChooseNoblePhantasm(PlayerChoiceContext choiceContext, Player player)
     {
-        var resources = ModelDb.Singleton<FgoPlayerResources>();
-        if (!resources.CanUseNp)
+        var playerState = FgoBattleHooks.Get(player);
+        if (!playerState.CanUseNp)
             return false;
 
         if (player.Creature.HasPower<SealNpPower>())
             return false;
 
-        var overCharge = resources.OverCharge;
+        var overCharge = playerState.OverCharge;
 
         // 候选来自 NobleDeck pile（由 SaintQuartz 遗物管理初始卡 + 右键加入的卡）。
         var noblePile = CardPile.Get(FgoEnums.NobleDeck, player);
@@ -65,8 +65,8 @@ public static class FgoNoblePhantasmCmd
         for (var i = 0; i < overCharge && playCopy.IsUpgradable; i++)
             CardCmd.Upgrade(playCopy, CardPreviewStyle.None);
 
-        await FgoCardActions.AddToPile(playCopy, PileType.Hand);
-        await resources.SpendNpForNoblePhantasm();
+        await CardPileCmd.AddGeneratedCardToCombat(playCopy, PileType.Hand, player);
+        await playerState.SpendNpForNoblePhantasm();
         return true;
     }
 }

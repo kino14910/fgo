@@ -1,12 +1,13 @@
+using Fgo.Scripts.Character;
 using Fgo.Scripts.Commands;
 using Fgo.Scripts.Singletons;
 using Godot;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Context;
+using MegaCrit.Sts2.Core.Entities.Multiplayer;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization;
-using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Nodes.Combat;
 using MegaCrit.Sts2.Core.Nodes.HoverTips;
 using STS2RitsuLib.Scaffolding.Godot.NodeAttachments;
@@ -143,15 +144,26 @@ public sealed partial class FgoGlobalHud : Control
 
     public static void Update()
     {
-        var resources =
-            ModelDb.Singleton<FgoPlayerResources>();
-
         var huds = FindAll().ToList();
-        foreach (var hud in huds) hud.Refresh(resources);
+        foreach (var hud in huds) hud.Refresh();
     }
 
-    private void Refresh(FgoPlayerResources resources)
+    private void Refresh()
     {
+        var state = CombatManager.Instance.DebugOnlyGetState();
+        var player = LocalContext.GetMe(state);
+
+        // 仅在本地玩家是 FGO 角色时显示令咒 / 暴击星。
+        // 多人模式下不能回退到 Players.FirstOrDefault()，那会拿到错误的（主机）玩家。
+        if (player is null || player.Character is not FgoCharacter)
+        {
+            Visible = false;
+            return;
+        }
+
+        Visible = true;
+
+        var resources = FgoBattleHooks.Get(player);
         _starLabel.Text = resources.Stars.ToString();
         _commandSpellButton.TextureNormal = GD.Load<Texture2D>(
             $"res://Fgo/images/ui/CommandSpell/CommandSpell{Math.Clamp(resources.CommandSpell, 0, 3)}.png");
@@ -176,11 +188,14 @@ public sealed partial class FgoGlobalHud : Control
     private static async void OnCommandSpellButtonPressed()
     {
         var state = CombatManager.Instance.DebugOnlyGetState();
-        var player = LocalContext.GetMe(state) ?? state?.Players.FirstOrDefault();
-        if (player == null) return;
+        var player = LocalContext.GetMe(state);
+        if (player is null || player.Character is not FgoCharacter) return;
 
-        var choiceContext = new BlockingPlayerChoiceContext();
-        await FgoCommandSpellCmd.TryUseCommandSpell(choiceContext, player);
+        // UI 按钮触发的选牌: 用 HookPlayerChoiceContext 把选择作为一个新 GameAction 排入
+        // 本玩家队列，多人下其他玩家的队列不会被阻塞（官方文档: 战斗场景应优先 Hook 而非 Blocking）。
+        var choiceContext = new HookPlayerChoiceContext(player, player.NetId, GameActionType.Combat);
+        await choiceContext.AssignTaskAndWaitForPauseOrCompletion(
+            FgoCommandSpellCmd.TryUseCommandSpell(choiceContext, player));
     }
 
     private void OnCommandSpellMouseEntered()

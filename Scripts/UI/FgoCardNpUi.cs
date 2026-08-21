@@ -89,7 +89,7 @@
 //             return;
 //         }
 //
-//         var resources = ModelDb.Singleton<FgoPlayerResources>();
+//         var resources = ModelDb.Singleton<FgoBattleHooks>();
 //         if (resources == null)
 //         {
 //             Visible = false;

@@ -28,12 +28,12 @@ public class ObscurantWallOfChalk() : FgoCardModel(3, CardType.Skill, CardRarity
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        ModCardVars.Int("Np", 30)
+        ModCardVars.Int("Np", 10)
     ];
 
     protected override void OnUpgrade()
     {
-        DynamicVars["Np"].UpgradeValueBy(20);
+        DynamicVars["Np"].UpgradeValueBy(10);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

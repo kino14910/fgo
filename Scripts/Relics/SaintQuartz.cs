@@ -7,37 +7,36 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Relics;
 using MegaCrit.Sts2.Core.Models;
-using MegaCrit.Sts2.Core.Nodes;
 using MegaCrit.Sts2.Core.Rooms;
-using STS2RitsuLib.CardPiles.Nodes;
 using STS2RitsuLib.Interactions.RightClick;
 using STS2RitsuLib.Interop.AutoRegistration;
 
 namespace Fgo.Scripts.Relics;
 
 /// <summary>
-///     圣晶石: FGO 角色的初始遗物，管理宝具卡堆（NobleDeck）。
+///     圣晶石: FGO 角色的初始遗物，仅负责圣晶石计数与右键消耗计数换取宝具卡。
 ///     - 每进入一个房间（每层）+1 计数。
 ///     - 计数 ≥ 3 时，可右键此遗物随机获得一张尚未在 NobleDeck 的宝具卡，并消耗 3 计数。
 ///     - 被 [gold]点金石[/gold] 祝福后升级为[gold]召唤券[/gold]（SummonTicket），可手动选择要加入的宝具卡。
-///     - NobleDeck 为 RunPersistent 牌堆: 在获得遗物时（run 开始）初始化初始宝具卡，
-///     跨战斗保留、随存档保存。退出战斗不会清空。
+///     - 计数存于按玩家的 FgoRunState（见 FgoRelic.QuartzCounter）: 升级替换遗物实例后计数保留。
+///     - NobleDeck 牌堆的生命周期（播种初始宝具卡、按钮绑定）已与此遗物解耦，
+///     改由 run 生命周期在 Entry 中统一处理（见 FgoCardActions.EnsureNobleDeckSeeded）。
 /// </summary>
 [RegisterCharacterStarterRelic(typeof(FgoCharacter))]
 public class SaintQuartz : FgoRelic, IModRightClickableRelic
 {
     private const int CostPerChoice = 3;
-    private int _counter;
+
     public override RelicRarity Rarity => RelicRarity.Starter;
     public override bool ShowCounter => true;
-    public override int DisplayAmount => _counter;
+    public override int DisplayAmount => QuartzCounter;
 
     /// <summary>
     ///     本地快速过滤: 只有计数 ≥ 3 时才接收右键。
     /// </summary>
     public bool CanHandleRightClickLocal(ModRightClickContext context)
     {
-        return _counter >= CostPerChoice;
+        return QuartzCounter >= CostPerChoice;
     }
 
     /// <summary>
@@ -45,7 +44,7 @@ public class SaintQuartz : FgoRelic, IModRightClickableRelic
     /// </summary>
     public bool CanExecuteRightClick(ModRightClickExecutionContext context)
     {
-        return _counter >= CostPerChoice;
+        return QuartzCounter >= CostPerChoice;
     }
 
     /// <summary>
@@ -53,7 +52,7 @@ public class SaintQuartz : FgoRelic, IModRightClickableRelic
     /// </summary>
     public async Task OnRightClick(ModRightClickExecutionContext context)
     {
-        if (_counter < CostPerChoice) return;
+        if (QuartzCounter < CostPerChoice) return;
 
         var player = context.Player;
 
@@ -92,12 +91,12 @@ public class SaintQuartz : FgoRelic, IModRightClickableRelic
         var noblePile = CardPile.Get(FgoEnums.NobleDeck, player);
         if (noblePile != null)
         {
-            // 用 CardPileCmd.Add 加卡以获得 CardPileAddResult，再触发卡牌进入牌堆的预览特效。
+            // 用 CardPileCmd.Add 加卡以获得 CardPileAddResult，再触发卡牌飞入 NobleDeck 顶部栏牌组的特效。
             var result = await CardPileCmd.Add(selected, noblePile);
-            _counter -= CostPerChoice;
+            QuartzCounter -= CostPerChoice;
             InvokeDisplayAmountChanged();
             Flash();
-            CardCmd.PreviewCardPileAdd(result, 2.2f);
+            FgoCardActions.PreviewNoblePileAdd(result);
         }
     }
 
@@ -107,58 +106,8 @@ public class SaintQuartz : FgoRelic, IModRightClickableRelic
     /// </summary>
     public override Task AfterRoomEntered(AbstractRoom room)
     {
-        _counter++;
+        QuartzCounter++;
         InvokeDisplayAmountChanged();
         return Task.CompletedTask;
-    }
-
-    /// <summary>
-    ///     获得遗物时初始化 NobleDeck。NobleDeck 为 RunPersistent 牌堆，
-    ///     在新 run 开始时（starter relic 获得）加入 BeautifulJourney、Camelot 各一张。
-    ///     若已有卡（存档恢复后），不重复添加。
-    /// </summary>
-    public override async Task AfterObtained()
-    {
-        var player = Owner;
-
-        var noblePile = CardPile.Get(FgoEnums.NobleDeck, player);
-        if (noblePile == null) return;
-
-        // 存档恢复后 pile 已有卡，不重复添加。
-        if (noblePile.Cards.Count > 0)
-        {
-            RebindNobleDeckButton(player);
-            return;
-        }
-
-        // 非战斗环境用 RunState.CreateCard(canonicalTemplate, owner) 创建 mutable 实例。
-        var journey = player.RunState.CreateCard(ModelDb.Card<BeautifulJourney>(), player);
-        var camelot = player.RunState.CreateCard(ModelDb.Card<Camelot>(), player);
-        noblePile.AddInternal(journey);
-        noblePile.AddInternal(camelot);
-
-        RebindNobleDeckButton(player);
-        await Task.CompletedTask;
-    }
-
-    /// <summary>
-    ///     战斗开始时重新绑定 NobleDeck 按钮。
-    ///     RunPersistent 牌堆本身跨战斗保留，但顶栏按钮需要在战斗开始时重新绑定
-    ///     到当前 PlayerCombatState 上下文，以正确响应点击和刷新计数。
-    /// </summary>
-    public override Task BeforeCombatStart()
-    {
-        RebindNobleDeckButton(Owner);
-        return Task.CompletedTask;
-    }
-
-    /// <summary>
-    ///     在顶栏中找到 NobleDeck 按钮并重新初始化，使其绑定到当前 player。
-    /// </summary>
-    private static void RebindNobleDeckButton(Player player)
-    {
-        var globalUi = NRun.Instance?.GlobalUi;
-        var button = globalUi?.FindChild("ModCardPileButton_FGO_CARDPILE_NOBLE", true, false) as NModCardPileButton;
-        button?.Initialize(player);
     }
 }

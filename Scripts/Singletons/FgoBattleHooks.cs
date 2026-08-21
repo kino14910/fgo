@@ -1,0 +1,143 @@
+using Fgo.Scripts.Cards;
+using Fgo.Scripts.Character;
+using Fgo.Scripts.Commands;
+using MegaCrit.Sts2.Core.Combat;
+using MegaCrit.Sts2.Core.Context;
+using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.Entities.Players;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Rooms;
+using MegaCrit.Sts2.Core.ValueProps;
+using STS2RitsuLib.Interop.AutoRegistration;
+using STS2RitsuLib.Models;
+using STS2RitsuLib.Utils;
+
+namespace Fgo.Scripts.Singletons;
+
+/// <summary>
+///     FGO 战斗钩子中枢（全 run 单例）：
+///     - 接收官方 combat hooks，按事件的 player 参数路由到对应玩家的 <see cref="FgoPlayerState" />；
+///     - 通过静态 <see cref="Get" /> 提供按玩家索引的状态存储（AttachedState 弱引用表）。
+///     状态不能作为本单例的字段（多人模式 N 个玩家共用一个实例会串台），
+///     必须按 Player 分实例存储；单例本身只承担钩子接收与路由。
+/// </summary>
+[RegisterSingleton]
+public sealed class FgoBattleHooks() : HookedSingletonModel(HookType.Combat)
+{
+    private static readonly AttachedState<Player, FgoPlayerState> States = new(() => new());
+
+    /// <summary>
+    ///     获取指定玩家的战斗资源状态（不存在则创建）。
+    /// </summary>
+    public static FgoPlayerState Get(Player player)
+    {
+        ArgumentNullException.ThrowIfNull(player);
+        return States.GetOrCreate(player);
+    }
+
+    public override async Task BeforeCardPlayed(CardPlay cardPlay)
+    {
+        if (cardPlay.Card?.Owner is not { Character: FgoCharacter } player)
+            return;
+        await Get(player).OnBeforeCardPlayed(cardPlay);
+    }
+
+    public override async Task BeforeCombatStart()
+    {
+        var combat = CurrentCombatState;
+        if (combat == null) return;
+        foreach (var player in combat.Players)
+            if (player.Character is FgoCharacter)
+                await Get(player).Reset();
+    }
+
+    public override decimal ModifyDamageMultiplicative(Creature? target, decimal amount, ValueProp props,
+        Creature? dealer, CardModel? cardSource, CardPlay? cardPlay)
+    {
+        if (dealer?.Player is not { Character: FgoCharacter } player)
+            return 1m;
+        return Get(player).ModifyDamageMultiplicative(target, amount, props, dealer, cardSource,
+            cardPlay);
+    }
+
+    public override Task AfterCardPlayedLate(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+    {
+        if (cardPlay.Card?.Owner is { Character: FgoCharacter } player)
+            Get(player).ResetCrit();
+        return Task.CompletedTask;
+    }
+
+    public override Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
+    {
+        if (player.Character is not FgoCharacter)
+            return Task.CompletedTask;
+        Get(player).OnAfterPlayerTurnStart();
+        return Task.CompletedTask;
+    }
+
+    public override async Task AfterDamageGiven(
+        PlayerChoiceContext choiceContext, Creature? dealer, DamageResult result,
+        ValueProp props, Creature target, CardModel? cardSource)
+    {
+        if (dealer?.Player is not { Character: FgoCharacter } player
+            || cardSource is not FgoCardModel { Type: CardType.Attack }
+            || result.TotalDamage <= 0) return;
+
+        await Get(player).ModifyStars(1, player);
+    }
+
+    public override async Task AfterDamageReceived(PlayerChoiceContext choiceContext, Creature target,
+        DamageResult result, ValueProp props,
+        Creature? dealer, CardModel? cardSource)
+    {
+        if (target is { IsPlayer: true, Player.Character: FgoCharacter }
+            && dealer is { IsMonster: true }
+            && result.TotalDamage > 0
+            && props.IsPoweredAttack())
+            await FgoResCmd.ModifyNp(result.TotalDamage, target.Player);
+    }
+
+    public override bool ShouldDie(Creature creature)
+    {
+        if (creature.Player is not { Character: FgoCharacter } player)
+            return true;
+        return Get(player).ShouldDie(creature);
+    }
+
+    public override async Task AfterPreventingDeath(Creature creature)
+    {
+        if (creature.Player is not { Character: FgoCharacter } player)
+            return;
+        await Get(player).AfterPreventingDeath(creature);
+    }
+
+    public override Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side,
+        IEnumerable<Creature> participants)
+    {
+        if (side != CombatSide.Player)
+            return Task.CompletedTask;
+
+        foreach (var creature in participants)
+            if (creature.Player is { Character: FgoCharacter } player)
+                Get(player).OnAfterSideTurnEnd(side);
+
+        return Task.CompletedTask;
+    }
+
+    public override async Task AfterCombatVictory(CombatRoom room)
+    {
+        var state = CombatManager.Instance.DebugOnlyGetState();
+        if (state == null) return;
+
+        foreach (var player in state.Players.Where(p => p.Character is FgoCharacter))
+        {
+            var playerState = Get(player);
+            await playerState.SaveCommandSpellToRunState(player);
+
+            if (room.RoomType == RoomType.Boss && playerState.MashUpgradeLevel < 2)
+                playerState.MashUpgradeLevel++;
+        }
+    }
+}

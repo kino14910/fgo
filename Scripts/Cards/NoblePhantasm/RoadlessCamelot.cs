@@ -8,7 +8,7 @@ using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards.NoblePhantasm;
 
-public class RoadlessCamelot() : NobleCardModel(1, CardType.Attack, TargetType.AllEnemies)
+public class RoadlessCamelot() : NobleCardModel(2, CardType.Attack, TargetType.AllEnemies)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [

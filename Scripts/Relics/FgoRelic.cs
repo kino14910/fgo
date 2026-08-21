@@ -1,4 +1,4 @@
-﻿using Fgo.Scripts.Character;
+using Fgo.Scripts.Character;
 using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Scaffolding.Content;
 
@@ -8,6 +8,22 @@ namespace Fgo.Scripts.Relics;
 // [RegisterCharacterStarterRelic(typeof(FgoCharacter))] // 注册起始遗物
 public abstract class FgoRelic : ModRelicTemplate
 {
+    /// <summary>
+    ///     圣晶石/召唤券共享计数: 存于按玩家的 FgoRunState 而非遗物实例。
+    ///     点金石精炼（SaintQuartz → SummonTicket）通过 RelicCmd.Replace 替换遗物实例，
+    ///     挂在实例上的状态（SavedAttachedState）会丢失，按玩家数据则不受影响，计数得以保留。
+    ///     Owner 为 null 时（卡牌图鉴/遗物收藏预览的 canonical 单例）返回 0。
+    /// </summary>
+    protected int QuartzCounter
+    {
+        get => Owner != null ? Entry.RunState.Get(Owner).QuartzCount : 0;
+        set
+        {
+            if (Owner != null)
+                Entry.RunState.Modify(Owner, data => data.QuartzCount = value);
+        }
+    }
+
     public override RelicAssetProfile AssetProfile => new(
         // 小图标（原版85x85）
         $"res://Fgo/images/relics/{GetType().Name}.png",

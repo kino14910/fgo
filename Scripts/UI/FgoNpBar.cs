@@ -1,9 +1,11 @@
+using Fgo.Scripts.Character;
 using Fgo.Scripts.Commands;
 using Fgo.Scripts.Singletons;
 using Fgo.Scripts.Utils;
 using Godot;
 using MegaCrit.Sts2.addons.mega_text;
 using MegaCrit.Sts2.Core.Combat;
+using MegaCrit.Sts2.Core.Entities.Multiplayer;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
@@ -37,7 +39,7 @@ public sealed partial class FgoNpBar : Node
     private Control? _npBarRoot;
 
     private Player? _player;
-    private FgoPlayerResources? _subscribed;
+    private FgoPlayerState? _subscribed;
 
     public static void Initialize()
     {
@@ -69,6 +71,15 @@ public sealed partial class FgoNpBar : Node
             return;
         }
 
+        var player = creatureNode.Entity.Player;
+        if (player?.Character is not FgoCharacter)
+        {
+            SetProcess(false);
+            return;
+        }
+
+        _player = player;
+
         var healthBar = stateDisplay.GetNodeOrNull<NHealthBar>("%HealthBar");
 
         if (healthBar?.HpBarContainer == null)
@@ -91,8 +102,6 @@ public sealed partial class FgoNpBar : Node
 
         _npBarRoot = npBar;
 
-        _player = FindParentOfType<NCreature>()?.Entity.Player;
-
         _bar0 = _npBarRoot.FindChild("Bar0", true, false) as NinePatchRect;
         _bar1 = _npBarRoot.FindChild("Bar1", true, false) as NinePatchRect;
         _bar2 = _npBarRoot.FindChild("Bar2", true, false) as NinePatchRect;
@@ -112,8 +121,8 @@ public sealed partial class FgoNpBar : Node
         InitializeBarLayout();
         SyncWithHealthBar();
 
-        var resources = ModelDb.Singleton<FgoPlayerResources>();
-        TrySubscribe(resources);
+        if (_player != null)
+            TrySubscribe(FgoBattleHooks.Get(_player));
     }
 
     public override void _Process(double delta)
@@ -130,7 +139,10 @@ public sealed partial class FgoNpBar : Node
             !CombatManager.Instance.IsStarting)
             return;
 
-        var resources = ModelDb.Singleton<FgoPlayerResources>();
+        if (_player == null)
+            return;
+
+        var resources = FgoBattleHooks.Get(_player);
 
         if (_subscribed != resources)
             TrySubscribe(resources);
@@ -211,7 +223,7 @@ public sealed partial class FgoNpBar : Node
         UpdateBar(_bar2, 0f, width);
     }
 
-    private void TrySubscribe(FgoPlayerResources resources)
+    private void TrySubscribe(FgoPlayerState resources)
     {
         if (_subscribed != null)
             _subscribed.NpChanged -= OnNpChanged;
@@ -346,12 +358,11 @@ public sealed partial class FgoNpBar : Node
         if (_player == null)
             return;
 
-        var choiceContext = new BlockingPlayerChoiceContext();
-
-        await FgoNoblePhantasmCmd.TryChooseNoblePhantasm(
-            choiceContext,
-            _player
-        );
+        // UI 按钮触发的选牌: 用 HookPlayerChoiceContext 把选择作为一个新 GameAction 排入
+        // 本玩家队列，多人下其他玩家的队列不会被阻塞（官方文档: 战斗场景应优先 Hook 而非 Blocking）。
+        var choiceContext = new HookPlayerChoiceContext(_player, _player.NetId, GameActionType.Combat);
+        await choiceContext.AssignTaskAndWaitForPauseOrCompletion(
+            FgoNoblePhantasmCmd.TryChooseNoblePhantasm(choiceContext, _player));
     }
 
     private T? FindParentOfType<T>()

@@ -12,7 +12,7 @@ namespace Fgo.Scripts.Cards.DerivativeMash;
 /// <summary>
 ///     已然遥远的理想之城: Camelot(拟似展开／人理之础)升级获得
 /// </summary>
-public class LordCamelot() : NobleCardModel(1, CardType.Power, TargetType.Self)
+public class LordCamelot() : NobleCardModel(0, CardType.Power, TargetType.Self)
 {
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [

@@ -6,7 +6,6 @@ using Fgo.Scripts.Powers;
 using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
-using MegaCrit.Sts2.Core.Context;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Players;
@@ -14,13 +13,15 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Rooms;
 using MegaCrit.Sts2.Core.ValueProps;
-using STS2RitsuLib.Interop.AutoRegistration;
-using STS2RitsuLib.Models;
 
 namespace Fgo.Scripts.Singletons;
 
-[RegisterSingleton]
-public class FgoPlayerResources() : HookedSingletonModel(HookType.Combat)
+/// <summary>
+///     单个 FGO 玩家的战斗资源状态（NP、暴击星、令咒、OverCharge、暴击上下文）。
+///     每个玩家独立一份，取代原先的全局单例字段，避免多人模式下串台。
+///     通过 <see cref="FgoBattleHooks.Get(MegaCrit.Sts2.Core.Entities.Players.Player)" /> 按 Player 索引。
+/// </summary>
+public sealed class FgoPlayerState
 {
     private const int MaxCommandSpell = 3;
     private const int MaxOverCharge = 4;
@@ -66,7 +67,7 @@ public class FgoPlayerResources() : HookedSingletonModel(HookType.Combat)
     public int MashUpgradeLevel
     {
         get => _mashUpgradeLevel;
-        private set => _mashUpgradeLevel = Math.Max(0, value);
+        set => _mashUpgradeLevel = Math.Max(0, value);
     }
 
     public bool CanCrit => Stars >= BasicCritStars;
@@ -85,8 +86,7 @@ public class FgoPlayerResources() : HookedSingletonModel(HookType.Combat)
         if (Np == 99 && old < 99) Np = 100;
         await SyncOverCharge(old, Np);
 
-        // 在角色头顶显示 "+xxNP" 浮动文本（金色 D4AF37）。
-        // 只在实际增加 NP 且有玩家上下文时显示。
+        // 在角色头顶显示 "+xxNP" 浮动文本（金色 D4AF37）。只在增加 NP 且有玩家上下文时显示。
         if (amount > 0)
             await FgoNpGainVfx.Spawn(player, amount);
     }
@@ -119,8 +119,7 @@ public class FgoPlayerResources() : HookedSingletonModel(HookType.Combat)
     }
 
     /// <summary>
-    ///     尝试消耗[gold]暴击星[/gold]。返回实际消耗的数量（0=未触发）。
-    ///     special=true 时按 SpecialCritStars(20) 消耗，否则按 BasicCritStars(10)。
+    ///     尝试消耗暴击星。返回实际消耗的数量（0=未触发）。
     /// </summary>
     public async Task<int> TryConsumeCritStars(bool special)
     {
@@ -171,7 +170,7 @@ public class FgoPlayerResources() : HookedSingletonModel(HookType.Combat)
         return Task.CompletedTask;
     }
 
-    public override async Task BeforeCardPlayed(CardPlay cardPlay)
+    public async Task OnBeforeCardPlayed(CardPlay cardPlay)
     {
         _crit.Reset();
 
@@ -203,14 +202,8 @@ public class FgoPlayerResources() : HookedSingletonModel(HookType.Combat)
         }
     }
 
-    public override async Task BeforeCombatStart()
-    {
-        await Reset();
-    }
-
-    public override decimal ModifyDamageMultiplicative(Creature? target, decimal amount, ValueProp props,
-        Creature? dealer,
-        CardModel? cardSource, CardPlay? cardPlay)
+    public decimal ModifyDamageMultiplicative(Creature? target, decimal amount, ValueProp props,
+        Creature? dealer, CardModel? cardSource, CardPlay? cardPlay)
     {
         if (dealer?.Player == null || !props.IsPoweredAttack())
             return 1m;
@@ -229,46 +222,17 @@ public class FgoPlayerResources() : HookedSingletonModel(HookType.Combat)
         return _crit.DamageMultiplier;
     }
 
-    public override Task AfterCardPlayedLate(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+    public void ResetCrit()
     {
         _crit.Reset();
-        return Task.CompletedTask;
     }
 
-    public override Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
+    public void OnAfterPlayerTurnStart()
     {
         if (_npButtonPressed && CanUseNp) _npButtonPressed = false;
-        return Task.CompletedTask;
     }
 
-    public override async Task AfterDamageGiven(
-        PlayerChoiceContext choiceContext, Creature? dealer, DamageResult result,
-        ValueProp props, Creature target, CardModel? cardSource)
-    {
-        if (cardSource is not FgoCardModel { Type: CardType.Attack }
-            || dealer?.Player == null
-            || result.TotalDamage <= 0) return;
-
-        await ModifyStars(1, dealer.Player);
-    }
-
-    public override async Task AfterDamageReceived(PlayerChoiceContext choiceContext, Creature target,
-        DamageResult result, ValueProp props,
-        Creature? dealer, CardModel? cardSource)
-    {
-        if (target is { IsPlayer: true }
-            && dealer is { IsMonster: true }
-            && result.TotalDamage > 0
-            && props.IsPoweredAttack())
-            await FgoResCmd.ModifyNp(result.TotalDamage, dealer.Player);
-    }
-
-    /// <summary>
-    ///     灵基复原: FGO 玩家即将死亡且剩余令咒 >= 3 时阻止死亡。
-    ///     毅力优先、灵基复原兜底——优先 NonStackableGutsPower，其次普通 GutsPower；
-    ///     只要玩家存在任一可用毅力，灵基复原就不触发，避免抢在毅力之前消耗令咒。
-    /// </summary>
-    public override bool ShouldDie(Creature creature)
+    public bool ShouldDie(Creature creature)
     {
         if (!(creature is { IsPlayer: true, Player.Character: FgoCharacter }
               && CommandSpell >= 3))
@@ -282,39 +246,21 @@ public class FgoPlayerResources() : HookedSingletonModel(HookType.Combat)
         return hasUsableGuts;
     }
 
-    public override async Task AfterPreventingDeath(Creature creature)
+    public async Task AfterPreventingDeath(Creature creature)
     {
-        if (creature.IsPlayer
-            && creature.Player is { Character: FgoCharacter }
-            && CommandSpell >= 3)
-        {
-            CommandSpell -= 3;
-            await CreatureCmd.Heal(creature, creature.MaxHp - creature.CurrentHp);
-            if (Np < 300)
-                await ModifyNp(300 - Np, creature.Player);
-        }
+        if (CommandSpell < 3)
+            return;
+
+        CommandSpell -= 3;
+        await CreatureCmd.Heal(creature, creature.MaxHp - creature.CurrentHp);
+        if (Np < 300)
+            await ModifyNp(300 - Np, creature.Player);
     }
 
-    public override Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side,
-        IEnumerable<Creature> participants)
+    public void OnAfterSideTurnEnd(CombatSide side)
     {
         if (side == CombatSide.Player)
             OverCharge = 0;
-        return Task.CompletedTask;
-    }
-
-    public override async Task AfterCombatVictory(CombatRoom room)
-    {
-        var state = CombatManager.Instance.DebugOnlyGetState();
-        var player = LocalContext.GetMe(state) ?? state?.Players.FirstOrDefault(c => c.IsActiveForHooks);
-
-        if (player != null)
-            await SaveCommandSpellToRunState(player);
-
-        if (room.RoomType != RoomType.Boss || player == null) return;
-        if (MashUpgradeLevel >= 2) return;
-
-        MashUpgradeLevel++;
     }
 
     private static int OverChargeLevelFor(int np)

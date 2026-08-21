@@ -9,7 +9,6 @@ using HarmonyLib;
 using MegaCrit.Sts2.Core.AutoSlay;
 using MegaCrit.Sts2.Core.Logging;
 using MegaCrit.Sts2.Core.Modding;
-using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Nodes;
 using MegaCrit.Sts2.Core.Nodes.Screens.CharacterSelect;
 using MegaCrit.Sts2.Core.Runs;
@@ -113,25 +112,36 @@ public class Entry
     private static void OnRunStarted(RunStartedEvent evt)
     {
         LoadCommandSpellForFgoPlayers(evt.RunState);
+        InitializeNobleDecks(evt.RunState);
     }
 
     private static void OnRunLoaded(RunLoadedEvent evt)
     {
         LoadCommandSpellForFgoPlayers(evt.RunState);
+        InitializeNobleDecks(evt.RunState);
     }
 
     /// <summary>
-    ///     为所有 FGO 角色玩家从 RunSavedData 加载令咒数量到 FgoPlayerResources。
-    ///     单局游戏中 FgoPlayerResources 是单例，所以只需找到第一个 FGO 玩家即可。
+    ///     为所有 FGO 角色玩家从 RunSavedData 加载令咒数量到各自独立的 FgoPlayerState。
     /// </summary>
     private static void LoadCommandSpellForFgoPlayers(RunState runState)
     {
-        var fgoPlayer = runState.Players.FirstOrDefault(p => p.Character is FgoCharacter);
-        if (fgoPlayer == null) return;
+        foreach (var player in runState.Players.Where(p => p.Character is FgoCharacter))
+            FgoBattleHooks.Get(player).LoadCommandSpellFromRunState(player);
 
-        var resources = ModelDb.Singleton<FgoPlayerResources>();
-        resources.LoadCommandSpellFromRunState(fgoPlayer);
-        Logger.Info("[Fgo] Loaded command spell count from RunSavedData for FGO player");
+        Logger.Info("[Fgo] Loaded command spell count from RunSavedData for FGO players");
+    }
+
+    /// <summary>
+    ///     为所有 FGO 角色玩家播种 NobleDeck 初始宝具卡（幂等）。
+    ///     NobleDeck 是 RunPersistent 牌堆，由 RitsuLib 按 Player 索引并随存档序列化；
+    ///     多人同时选择 FGO 角色时，也必须各自正确播种。因此播种与遗物（SaintQuartz/SummonTicket）
+    ///     解耦，改由 run 生命周期统一处理，避免依赖遗物 AfterObtained 的时序导致客机票堆为空。
+    /// </summary>
+    private static void InitializeNobleDecks(RunState runState)
+    {
+        foreach (var player in runState.Players.Where(p => p.Character is FgoCharacter))
+            FgoCardActions.EnsureNobleDeckSeeded(player);
     }
 
     private static void OnGameReady(GameReadyEvent evt)
@@ -182,6 +192,13 @@ public sealed class FgoRunState
     ///     令咒数量（0-3）。默认 3。
     /// </summary>
     public int CommandSpellCount { get; set; } = 3;
+
+    /// <summary>
+    ///     圣晶石/召唤券共享计数（每层 +1，≥3 可右键获取宝具卡）。
+    ///     存于按玩家数据而非遗物实例: 点金石精炼（SaintQuartz → SummonTicket）会替换遗物实例，
+    ///     挂在实例上的状态会丢失，而按玩家数据不受影响。
+    /// </summary>
+    public int QuartzCount { get; set; }
 }
 
 [HarmonyPatch(typeof(NGame), nameof(NGame.IsReleaseGame))]

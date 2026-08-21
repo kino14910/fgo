@@ -14,7 +14,8 @@ public static class FgoResCmd
 
     public static async Task ModifyNp(int amount, Player? player)
     {
-        await ModelDb.Singleton<FgoPlayerResources>().ModifyNp(amount, player);
+        if (player == null) return;
+        await FgoBattleHooks.Get(player).ModifyNp(amount, player);
     }
 
     /// <summary>
@@ -25,10 +26,9 @@ public static class FgoResCmd
         await ModifyNp(card.DynamicVars.EvaluateValueOrDefault("Np"), card.Owner);
     }
 
-    public static async Task ResetNp()
+    public static async Task ResetNp(Player player)
     {
-        await ModelDb.Singleton<FgoPlayerResources>().Reset();
-        await Task.CompletedTask;
+        await FgoBattleHooks.Get(player).Reset();
     }
 
     public static async Task ModifyStars(decimal amount, Player? player)
@@ -38,7 +38,8 @@ public static class FgoResCmd
 
     public static async Task ModifyStars(int amount, Player? player)
     {
-        await ModelDb.Singleton<FgoPlayerResources>().ModifyStars(amount, player);
+        if (player == null) return;
+        await FgoBattleHooks.Get(player).ModifyStars(amount, player);
     }
 
     /// <summary>
@@ -49,8 +50,8 @@ public static class FgoResCmd
         await ModifyStars(card.DynamicVars.EvaluateValueOrDefault("Stars"), card.Owner);
     }
 
-    public static async Task ResetStars()
+    public static async Task ResetStars(Player player)
     {
-        await ModelDb.Singleton<FgoPlayerResources>().ResetStars();
+        await FgoBattleHooks.Get(player).ResetStars();
     }
 }

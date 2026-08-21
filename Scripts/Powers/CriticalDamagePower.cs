@@ -19,7 +19,7 @@ public class CriticalDamagePower : FgoPowerModel
     {
         if (Owner != dealer
             || !props.IsPoweredAttack()
-            || !ModelDb.Singleton<FgoPlayerResources>().CritActive)
+            || !this.FgoRes().CritActive)
             return 0m;
         return amount * Amount / 100m;
     }

@@ -40,6 +40,6 @@ public class CharismaOfTheJade() : FgoCardModel(2, CardType.Attack,
             .WithHitCount(DynamicVars["Hits"].IntValue)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
-        // 暴击由 FgoPlayerResources 处理: Stars>=20 时消耗20星造成300%伤害，否则按基础暴击（Stars>=10消耗10星200%）
+        // 暴击由 FgoBattleHooks 处理: Stars>=20 时消耗20星造成300%伤害，否则按基础暴击（Stars>=10消耗10星200%）
     }
 }
