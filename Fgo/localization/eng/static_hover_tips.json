@@ -1,4 +1,4 @@
-﻿{
+{
   "FGO_STATIC_HOVER_TIPS_NP.title": "NP",
   "FGO_STATIC_HOVER_TIPS_NP.description": "1. When you play a non-Noble card, gain {NpRate}%[gold]NP[/gold]per energy spent.\n2. Gain[gold]NP[/gold]equal to attack damage taken.\n3. At 100%+, you can use your Noble Phantasm.",
   "FGO_STATIC_HOVER_TIPS_STAR.title": "Critical Stars",
@@ -18,5 +18,7 @@
   "FGO_CARDPILE_NOBLE.empty": "Noble Deck is empty",
   "FGO_CARDPILE_NOBLE.title": "Noble Deck",
   "FGO_STATIC_HOVER_TIPS_FOREIGNER.title": "领域外生命",
-  "FGO_STATIC_HOVER_TIPS_FOREIGNER.description": ""
+  "FGO_STATIC_HOVER_TIPS_FOREIGNER.description": "",
+  "FGO_STATIC_HOVER_TIPS_COOLDOWN.title": "Cooldown",
+  "FGO_STATIC_HOVER_TIPS_COOLDOWN.description": "While Cooldown is greater than 0, this card cannot be played. Playing any card reduces Cooldown by 1. Becomes playable once Cooldown reaches 0, then re-enters Cooldown after being played."
 }

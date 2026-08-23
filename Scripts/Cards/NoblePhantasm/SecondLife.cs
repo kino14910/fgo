@@ -39,7 +39,7 @@ public class SecondLife() : NobleCardModel(1, CardType.Skill, TargetType.Self)
         var copy = CombatState!.CreateCard(card, Owner);
         if (copy.IsUpgradable && IsUpgraded)
             CardCmd.Upgrade(copy, CardPreviewStyle.None);
-        await FgoCardActions.AddToPile(copy, PileType.Hand);
+        await FgoCardActions.AddToHand(copy);
 
         foreach (var enemy in CombatState!.HittableEnemies)
             if (enemy.HasPower<MinionPower>())

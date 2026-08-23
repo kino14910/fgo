@@ -20,5 +20,7 @@
   "FGO_CARDPILE_NOBLE.empty": "宝具卡堆为空",
   "FGO_CARDPILE_NOBLE.title": "宝具卡堆",
   "FGO_STATIC_HOVER_TIPS_FOREIGNER.title": "领域外生命",
-  "FGO_STATIC_HOVER_TIPS_FOREIGNER.description": ""
+  "FGO_STATIC_HOVER_TIPS_FOREIGNER.description": "",
+  "FGO_STATIC_HOVER_TIPS_COOLDOWN.title": "冷却",
+  "FGO_STATIC_HOVER_TIPS_COOLDOWN.description": "每打出一张牌，[gold]冷却[/gold]减少[blue]1[/blue]。[gold]冷却[/gold]降到[blue]0[/blue]后才能打出，打出后本卡重新进入[gold]冷却[/gold]。"
 }

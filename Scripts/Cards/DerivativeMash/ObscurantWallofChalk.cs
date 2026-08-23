@@ -16,8 +16,10 @@ namespace Fgo.Scripts.Cards.DerivativeMash;
 ///     时为朦胧的白垩之壁:初始卡
 /// </summary>
 [RegisterCharacterStarterCard(typeof(FgoCharacter))]
-public class ObscurantWallOfChalk() : FgoCardModel(3, CardType.Skill, CardRarity.Basic, TargetType.Self)
+public class ObscurantWallOfChalk() : FgoCooldownCardModel(1, CardType.Skill, CardRarity.Basic, TargetType.Self)
 {
+    public override int CooldownMax => 7;
+
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
         HoverTipFactory.FromPower<BufferPower>(),
@@ -26,7 +28,7 @@ public class ObscurantWallOfChalk() : FgoCardModel(3, CardType.Skill, CardRarity
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Eternal];
 
-    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    protected override IEnumerable<DynamicVar> CoreCanonicalVars =>
     [
         ModCardVars.Int("Np", 10)
     ];

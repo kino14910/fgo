@@ -55,13 +55,33 @@ public sealed class FgoBattleHooks() : HookedSingletonModel(HookType.Combat)
         await Get(player).OnBeforeAttack(command);
     }
 
+    /// <summary>
+    ///     枚举指定玩家分布在各牌堆中的所有冷却卡片实例，用于统一重置/遍历。
+    /// </summary>
+    private static IEnumerable<FgoCooldownCardModel> CooldownCards(Player player)
+    {
+        foreach (var pile in Enum.GetValues<PileType>())
+        {
+            if (pile == PileType.None) continue;
+            foreach (var card in pile.GetPile(player).Cards.OfType<FgoCooldownCardModel>())
+                yield return card;
+        }
+    }
+
     public override async Task BeforeCombatStart()
     {
         var combat = CurrentCombatState;
         if (combat == null) return;
         foreach (var player in combat.Players)
-            if (player.Character is FgoCharacter)
-                await Get(player).Reset();
+        {
+            if (player.Character is not FgoCharacter)
+                continue;
+            await Get(player).Reset();
+
+            // 新战斗开始时，所有冷却卡冷却清零（开局可直接打出，打出后才进入冷却）。
+            foreach (var cd in CooldownCards(player))
+                cd.ReadyCooldown();
+        }
     }
 
     public override decimal ModifyDamageMultiplicative(Creature? target, decimal amount, ValueProp props,
@@ -90,6 +110,16 @@ public sealed class FgoBattleHooks() : HookedSingletonModel(HookType.Combat)
         }
 
         Get(player).ResetCrit();
+
+        // 冷却机制：
+        // 1) 打出一张冷却卡 → 其冷却重置为 CooldownMax（重新进入冷却）；
+        // 2) 打出任意一张牌 → 玩家手牌中其余冷却卡冷却 -1（到时为 0 即可打出）。
+        var playedCooldown = cardPlay.Card as FgoCooldownCardModel;
+        playedCooldown?.ResetCooldown();
+
+        foreach (var cd in PileType.Hand.GetPile(player).Cards.OfType<FgoCooldownCardModel>())
+            if (cd != playedCooldown && cd.CurrentCooldown > 0)
+                cd.DecrementCooldown();
     }
 
     public override Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)

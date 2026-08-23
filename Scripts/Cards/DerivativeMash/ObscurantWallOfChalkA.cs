@@ -20,8 +20,10 @@ namespace Fgo.Scripts.Cards.DerivativeMash;
 ///     时为朦胧的白垩之壁A: ObscurantWallOfChalk(时为朦胧的白垩之壁)升级获得
 /// </summary>
 [RegisterCard(typeof(TokenCardPool))]
-public class ObscurantWallOfChalkA() : FgoBaseCardModel(3, CardType.Skill, CardRarity.Token, TargetType.Self)
+public class ObscurantWallOfChalkA() : FgoCooldownCardModel(1, CardType.Skill, CardRarity.Token, TargetType.Self)
 {
+    public override int CooldownMax => 8;
+
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
         HoverTipFactory.FromPower<AntiPurgeDefensePower>(),
@@ -45,7 +47,7 @@ public class ObscurantWallOfChalkA() : FgoBaseCardModel(3, CardType.Skill, CardR
         }
     );
 
-    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    protected override IEnumerable<DynamicVar> CoreCanonicalVars =>
     [
         ModCardVars.Int("Np", 20)
     ];

@@ -13,12 +13,12 @@ public class MahaPralaya() : NobleCardModel(1, CardType.Attack, TargetType.AllEn
     [
         ModCardVars.Int("DamagePerStatus", 8),
         ModCardVars.ComputedDamage("MahaPralayaDamage",
-            static ctx => ctx.GetCardBaseValueOrDefault("DamagePerStatus") * (ctx.CombatState?.HittableEnemies
-            .SelectMany(enemy => enemy.Powers)
-            .Where(power => power.Type == PowerType.Debuff)
-            .Select(power => power.Id)
-            .Distinct()
-            .Count() ?? 1), 8)
+            static ctx => ctx.GetCardBaseValueOrDefault("DamagePerStatus") * ((ctx.CombatState?.HittableEnemies
+                .SelectMany(enemy => enemy.Powers)
+                .Where(power => power.Type == PowerType.Debuff)
+                .Select(power => power.Id)
+                .Distinct()
+                .Count() ?? 0) + 1), 8)
     ];
 
     protected override void OnUpgrade()

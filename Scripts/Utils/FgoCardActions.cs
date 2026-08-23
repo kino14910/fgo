@@ -45,6 +45,11 @@ public static class FgoCardActions
         CardCmd.PreviewCardPileAdd(await CardPileCmd.AddGeneratedCardToCombat(card, pile, card.Owner, position), time);
     }
 
+    public static async Task AddToHand(CardModel card)
+    {
+        await AddToPile(card, PileType.Hand, CardPilePosition.Bottom, 0);
+    }
+
     /// <summary>
     ///     复刻 CardCmd.PreviewCardPileAdd（PreviewInternal）的完整预览流程：卡牌先在屏幕中心
     ///     缩放出现并停留 time 秒，再从屏幕中心飞入 NobleDeck 顶部栏牌组。
