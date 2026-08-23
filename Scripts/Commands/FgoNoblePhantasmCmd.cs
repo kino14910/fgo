@@ -24,7 +24,8 @@ public static class FgoNoblePhantasmCmd
         if (player.Creature.HasPower<SealNpPower>())
             return false;
 
-        var overCharge = playerState.OverCharge;
+        // 宝具升级次数 = 当前 OverchargePower 的层数（最多 MaxOverCharge 层）。
+        var overCharge = player.Creature.GetPower<OverchargePower>()?.Amount ?? 0;
 
         // 候选来自 NobleDeck pile（由 SaintQuartz 遗物管理初始卡 + 右键加入的卡）。
         var noblePile = CardPile.Get(FgoEnums.NobleDeck, player);

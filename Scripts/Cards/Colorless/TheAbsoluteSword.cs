@@ -18,6 +18,8 @@ public class TheAbsoluteSword() : FgoBaseCardModel(3, CardType.Attack,
     [
         ModCardVars.Damage(32)
     ];
+    
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
     protected override void OnUpgrade()
     {

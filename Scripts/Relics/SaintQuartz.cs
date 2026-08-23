@@ -94,7 +94,7 @@ public class SaintQuartz : FgoRelic, IModRightClickableRelic
             // 用 CardPileCmd.Add 加卡以获得 CardPileAddResult，再触发卡牌飞入 NobleDeck 顶部栏牌组的特效。
             var result = await CardPileCmd.Add(selected, noblePile);
             QuartzCounter -= CostPerChoice;
-            InvokeDisplayAmountChanged();
+            UpdateAvailableVisual(CostPerChoice);
             Flash();
             FgoCardActions.PreviewNoblePileAdd(result);
         }
@@ -107,7 +107,7 @@ public class SaintQuartz : FgoRelic, IModRightClickableRelic
     public override Task AfterRoomEntered(AbstractRoom room)
     {
         QuartzCounter++;
-        InvokeDisplayAmountChanged();
+        UpdateAvailableVisual(CostPerChoice);
         return Task.CompletedTask;
     }
 }

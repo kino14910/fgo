@@ -8,8 +8,8 @@
   "FGO_POWER_GUTS_POWER.description": "当你要被杀死时，免死并回复生命。",
   "FGO_POWER_GUTS_POWER.smartDescription": "当你要被杀死时，免死并回复[blue]{Amount}[/blue]点生命。",
   "FGO_POWER_UNLIMITED_POWER.title": "无限剑制",
-  "FGO_POWER_UNLIMITED_POWER.description": "在你的回合开始时，将[gold]攻击牌[/gold]加入你的[gold]手牌[/gold]。这些牌打出后消耗，在本回合可以免费打出。",
-  "FGO_POWER_UNLIMITED_POWER.smartDescription": "在你的回合开始时，将[blue]{Amount}[/blue]张随机[gold]攻击牌[/gold]加入你的[gold]手牌[/gold]。这些牌打出后消耗，在本回合可以免费打出。",
+  "FGO_POWER_UNLIMITED_POWER.description": "在你的回合开始时，将[gold]攻击牌[/gold]加入你的[gold]手牌[/gold]。添加的牌会获得[gold]消耗[/gold]。",
+  "FGO_POWER_UNLIMITED_POWER.smartDescription": "在你的回合开始时，将[blue]{Amount}[/blue]张随机[gold]攻击牌[/gold]加入你的[gold]手牌[/gold]。添加的牌会获得[gold]消耗[/gold]。",
   "FGO_POWER_NEXT_LOSE_HP_POWER.title": "下回合失去生命",
   "FGO_POWER_NEXT_LOSE_HP_POWER.description": "下回合失去生命。",
   "FGO_POWER_NEXT_LOSE_HP_POWER.smartDescription": "下回合失去[blue]{Amount}[/blue]点生命。",
@@ -199,7 +199,7 @@
   "FGO_POWER_MORNING_LARK_POWER.title": "晨之云雀",
   "FGO_POWER_MORNING_LARK_POWER.description": "在你的回合结束时，失去 20%[gold]宝具值[/gold]。",
   "FGO_POWER_MORNING_LARK_POWER.smartDescription": "在你的回合结束时，失去 20%[gold]宝具值[/gold]。",
-  "FGO_POWER_MAX_HP_POWER.title": "最大生命值",
+  "FGO_POWER_MAX_HP_POWER.title": "额外最大生命值",
   "FGO_POWER_MAX_HP_POWER.description": "在本场战斗，你的最大生命值增加。在战斗结束时失去所有临时增加的最大生命。",
   "FGO_POWER_MAX_HP_POWER.smartDescription": "在本场战斗，你的最大生命值增加[blue]{Amount}[/blue]点。在战斗结束时失去所有临时增加的最大生命。",
   "FGO_POWER_FACELESS_MOON_POWER.title": "无貌之月",
@@ -323,5 +323,11 @@
   "FGO_POWER_SWIFTER_THAN_SOUND_CARD_POWER.smartDescription": "在你的回合开始时，获得[gold]无间[gold]",
   "FGO_POWER_INFINITE_SUFFERING_CARD_POWER.title": "获得绝刀",
   "FGO_POWER_INFINITE_SUFFERING_CARD_POWER.description": "在你的回合开始时，获得[gold]绝刀[/gold]。",
-  "FGO_POWER_INFINITE_SUFFERING_CARD_POWER.smartDescription": "在你的回合开始时，获得[gold]绝刀[/gold]。"
+  "FGO_POWER_INFINITE_SUFFERING_CARD_POWER.smartDescription": "在你的回合开始时，获得[gold]绝刀[/gold]。",
+  "FGO_POWER_HUGE_SCALE_POWER.title": "巨型规模",
+  "FGO_POWER_HUGE_SCALE_POWER.description": "在你的回合开始时，获得[gold]额外最大生命值[/gold]，并将一张[gold]幼儿退化[/gold]加入[gold]手牌[/gold]。",
+  "FGO_POWER_HUGE_SCALE_POWER.smartDescription": "在你的回合开始时，获得[blue]{Amount}[/blue]点[gold]额外最大生命值[/gold]，并将一张[gold]幼儿退化[/gold]加入[gold]手牌[/gold]。",
+  "FGO_POWER_OVER_CHARGE_POWER.title": "宝具连发",
+  "FGO_POWER_OVER_CHARGE_POWER.description": "打出宝具牌后获得[gold]宝具连发[/gold]，最多4层。选择宝具时按当前层数提升宝具率。",
+  "FGO_POWER_OVER_CHARGE_POWER.smartDescription": "打出宝具牌后获得[blue]{Amount}[/blue]层[gold]宝具连发[/gold]（最多4层）。选择宝具时按当前层数提升宝具率。"
 }

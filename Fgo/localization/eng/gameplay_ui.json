@@ -27,7 +27,7 @@
   "FGO_GAMEPLAY_UI_NP_TEXT.text_0": "NP",
   "FGO_GAMEPLAY_UI_NP_TEXT.text_1": "1) Whenever you play a non-Noble Phantasm cards, For each point of energy spent on it, you gain %d%% Noble Phantasm Gauge. \n 2) Whenever you are attacked, gain NP equal to half damaged.",
   "FGO_GAMEPLAY_UI_NP_TEXT.text_2": "Choose a Noble Phantasm into your hand.",
-  "FGO_GAMEPLAY_UI_NP_TEXT.text_3": "Unlimited Blade Works: at the start of each turn, choose a copy of Attack from your deck into your hand.",
+  "FGO_GAMEPLAY_UI_NP_TEXT.text_3": "Unlimited Blade Works: at the start of each turn, add random Attack into your hand. Added cards gain Exhaust.",
   "FGO_GAMEPLAY_UI_SAINT_QUARTZ.text": "Choose a Noble card to add to your Noble Deck.",
   "FGO_GAMEPLAY_UI_SUMMON_TICKET.text": "Choose a Noble card to add to your Noble Deck.",
   "FGO_GAMEPLAY_UI_BLESSED_SCION_ACTION.text_0": "Copy",

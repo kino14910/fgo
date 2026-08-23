@@ -40,9 +40,9 @@ public static class FgoCardActions
         return card;
     }
 
-    public static async Task AddToPile(CardModel card, PileType pile, CardPilePosition position = CardPilePosition.Top)
+    public static async Task AddToPile(CardModel card, PileType pile, CardPilePosition position = CardPilePosition.Top, float time = 1.2f)
     {
-        CardCmd.PreviewCardPileAdd(await CardPileCmd.AddGeneratedCardToCombat(card, pile, card.Owner, position), 2.2f);
+        CardCmd.PreviewCardPileAdd(await CardPileCmd.AddGeneratedCardToCombat(card, pile, card.Owner, position), time);
     }
 
     /// <summary>
@@ -214,11 +214,27 @@ public static class FgoCardActions
     ///     手动移除源卡 + 创建目标卡 + 加入牌堆（低层 API，不做 removability 检查）：
     ///     既绕开 CardCmd.Transform 对战斗状态的依赖，也允许替换带 Eternal 关键字的卡
     ///     （进化链起点的防移除保护不应阻止自身进化）。
+    ///     新卡会继承源卡的升级次数与附魔，保证进化后不丢失已获得的强化。
     /// </summary>
     private static async Task ReplaceInNonCombatPile(Player player, CardPile pile, CardModel source,
         CardModel targetCanonical)
     {
         var replacement = player.RunState.CreateCard(targetCanonical, player);
+
+        // 继承源卡的升级次数：逐级触发 Upgrade 让 OnUpgrade 对数值的修改生效。
+        // 此时 replacement 尚未加入牌堆（Pile 为 null），CardCmd.Upgrade 不会写入地图升级历史。
+        for (int i = 0; i < source.CurrentUpgradeLevel; i++)
+            CardCmd.Upgrade(replacement, CardPreviewStyle.None);
+
+        // 继承源卡的附魔：克隆独立实例后再赋予新卡，避免跨卡移动附魔触发
+        // "Enchantments cannot be moved from one card to another"。
+        if (source.Enchantment is { } enchantment)
+        {
+            var clone = (EnchantmentModel)enchantment.ClonePreservingMutability();
+            replacement.EnchantInternal(clone, clone.Amount);
+            replacement.Enchantment?.ModifyCard();
+        }
+
         source.RemoveFromCurrentPile();
         pile.AddInternal(replacement);
         await Task.CompletedTask;

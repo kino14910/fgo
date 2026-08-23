@@ -20,12 +20,11 @@ public class MyFairSoldierPower : FgoPowerModel
 
     public override async Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        if (cardPlay.Card.Type == CardType.Power) await PowerCmd.Remove(this);
-    }
-
-    public override async Task AfterRemoved(Creature owner)
-    {
-        await PowerCmd.Apply<StrengthPower>(new BlockingPlayerChoiceContext(), Owner, -Amount, Owner, null);
-        await PowerCmd.Apply<DexterityPower>(new BlockingPlayerChoiceContext(), Owner, -Amount, Owner, null);
+        if (cardPlay.Card.Type == CardType.Power)
+        {
+            await PowerCmd.Apply<StrengthPower>(new BlockingPlayerChoiceContext(), Owner, -Amount, Owner, null);
+            await PowerCmd.Apply<DexterityPower>(new BlockingPlayerChoiceContext(), Owner, -Amount, Owner, null);
+            await PowerCmd.Remove(this);
+        }
     }
 }

@@ -1,3 +1,4 @@
+using System.Linq;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -5,6 +6,7 @@ using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.Factories;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Models;
 using STS2RitsuLib.Scaffolding.Content;
 
 namespace Fgo.Scripts.Powers;
@@ -23,14 +25,21 @@ public class UnlimitedPower : FgoPowerModel
         ICombatState combatState)
     {
         if (player != Owner.Player) return;
+
+        var candidates = player.Character.CardPool.GetUnlockedCards(player.UnlockState,
+                player.RunState.CardMultiplayerConstraint)
+            .Where(c => c.Type == CardType.Attack)
+            .ToList();
+        if (candidates.Count == 0) return;
+
+        var cards = new CardModel[Amount];
+        var rng = player.RunState.Rng.CombatCardGeneration;
         for (var i = 0; i < Amount; i++)
-        {
-            var cardModel = CardFactory.GetDistinctForCombat(player,
-                from c in player.Character.CardPool.GetUnlockedCards(player.UnlockState,
-                    player.RunState.CardMultiplayerConstraint)
-                where c.Type == CardType.Attack
-                select c, 1, player.RunState.Rng.CombatCardGeneration).FirstOrDefault();
-            if (cardModel != null) await CardPileCmd.AddGeneratedCardToCombat(cardModel, PileType.Hand, Owner.Player);
-        }
+            CardCmd.ApplyKeyword(
+                cards[i] = CardFactory.GetDistinctForCombat(player, candidates, 1, rng).First(),
+                CardKeyword.Exhaust);
+
+        Flash();
+        await CardPileCmd.AddGeneratedCardsToCombat(cards, PileType.Hand, Owner.Player);
     }
 }

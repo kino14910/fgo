@@ -11,8 +11,8 @@ using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
 
-public class ExtraterrestrialOctopus() : FgoCardModel(0, CardType.Attack,
-    CardRarity.Uncommon, TargetType.AnyEnemy)
+public class ExtraterrestrialOctopus() : FgoCardModel(2, CardType.Attack,
+    CardRarity.Rare, TargetType.AnyEnemy)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
@@ -40,8 +40,10 @@ public class ExtraterrestrialOctopus() : FgoCardModel(0, CardType.Attack,
     {
         ArgumentNullException.ThrowIfNull(cardPlay.Target, nameof(cardPlay.Target));
 
-        await CreatureCmd.Damage(choiceContext, cardPlay.Target,
-            DynamicVars.EvaluateValueOrDefault("StarsDamage"),
-            ValueProp.Unpowered | ValueProp.Move, Owner.Creature);
+        await DamageCmd.Attack(DynamicVars.EvaluateValueOrDefault("StarsDamage"))
+            .FromCard(this, cardPlay)
+            .Targeting(cardPlay.Target)
+            .WithHitFx("vfx/vfx_attack_slash")
+            .Execute(choiceContext);
     }
 }

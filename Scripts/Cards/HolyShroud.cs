@@ -10,7 +10,7 @@ using STS2RitsuLib.Cards.DynamicVars;
 namespace Fgo.Scripts.Cards;
 
 public class HolyShroud() : FgoCardModel(0, CardType.Skill,
-    CardRarity.Uncommon, TargetType.Self)
+    CardRarity.Common, TargetType.Self)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
@@ -43,7 +43,7 @@ public class HolyShroud() : FgoCardModel(0, CardType.Skill,
                                 enemy));
                 });
 
-            return incomingDamage >= 20;
+            return incomingDamage >= 10;
         }
     }
 

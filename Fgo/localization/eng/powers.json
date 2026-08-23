@@ -14,8 +14,8 @@
   "FGO_POWER_GUTS_POWER.description": "When you would die, heal HP instead.",
   "FGO_POWER_GUTS_POWER.smartDescription": "When you would die, heal {Amount} HP instead.",
   "FGO_POWER_UNLIMITED_POWER.title": "Unlimited Blade Works",
-  "FGO_POWER_UNLIMITED_POWER.description": "At the start of each turn, add random Attack into your hand. It costs 0 this turn.",
-  "FGO_POWER_UNLIMITED_POWER.smartDescription": "At the start of each turn, add {Amount} random Attack into your hand. It costs 0 this turn.",
+  "FGO_POWER_UNLIMITED_POWER.description": "At the start of each turn, add random Attack into your hand. Added cards gain [gold]Exhaust[/gold].",
+  "FGO_POWER_UNLIMITED_POWER.smartDescription": "At the start of each turn, add {Amount} random Attack into your hand. Added cards gain [gold]Exhaust[/gold].",
   "FGO_POWER_NEXT_LOSE_HP_POWER.title": "Next Turn Lose HP",
   "FGO_POWER_NEXT_LOSE_HP_POWER.description": "Next turn, lose HP.",
   "FGO_POWER_NEXT_LOSE_HP_POWER.smartDescription": "Next turn, lose {Amount} HP.",
@@ -329,5 +329,11 @@
   "FGO_POWER_INFINITE_SUFFERING_POWER.description": "At the start of your next turn, gain Critical Damage.",
   "FGO_POWER_INFINITE_SUFFERING_POWER.smartDescription": "At the start of your next turn, gain 30% Critical Damage.",
   "FGO_POWER_HEALING_BOOST_POWER.title": "Healing Boost",
-  "FGO_POWER_HEALING_BOOST_POWER.description": "Healing received is increased by {Amount}%."
+  "FGO_POWER_HEALING_BOOST_POWER.description": "Healing received is increased by {Amount}%.",
+  "FGO_POWER_HUGE_SCALE_POWER.title": "Huge Scale",
+  "FGO_POWER_HUGE_SCALE_POWER.description": "At the start of your turn, gain [gold]Max HP[/gold] and add an [gold]Infantile Regression[/gold] to your [gold]hand[/gold].",
+  "FGO_POWER_HUGE_SCALE_POWER.smartDescription": "At the start of your turn, gain [blue]{Amount}[/blue] [gold]Max HP[/gold] and add an [gold]Infantile Regression[/gold] to your [gold]hand[/gold].",
+  "FGO_POWER_OVER_CHARGE_POWER.title": "Overcharge",
+  "FGO_POWER_OVER_CHARGE_POWER.description": "After playing a Noble Phantasm, gain [gold]Overcharge[/gold], up to 4. Each stack upgrades your selected Noble Phantasm.",
+  "FGO_POWER_OVER_CHARGE_POWER.smartDescription": "After playing a Noble Phantasm, gain [blue]{Amount}[/blue] [gold]Overcharge[/gold] (max 4). Each stack upgrades your selected Noble Phantasm."
 }

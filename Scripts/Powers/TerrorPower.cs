@@ -64,7 +64,7 @@ public class TerrorPower : FgoPowerModel, IPowerExtraIconAmountLabelSpecsProvide
         var applier = Applier;
         if (applier is { Player: not null } && TerrorChance > 0m)
         {
-            var rng = applier.Player.RunState.Rng.CombatTargets;
+            var rng = applier.Player.RunState.Rng.Niche;
             var roll = rng.NextFloat() * 100f;
             if (roll < (float)TerrorChance)
             {
@@ -73,7 +73,6 @@ public class TerrorPower : FgoPowerModel, IPowerExtraIconAmountLabelSpecsProvide
             }
         }
 
-        // 每回合减一层
         await PowerCmd.Decrement(this);
     }
 }

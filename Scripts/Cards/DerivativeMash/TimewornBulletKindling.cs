@@ -50,8 +50,8 @@ public class TimewornBulletKindling() : FgoBaseCardModel(1, CardType.Attack,
         var stars = FgoBattleHooks.Get(Owner).Stars;
         if (stars > 0)
         {
-            await FgoResCmd.ResetStars(Owner);
-            await FgoResCmd.ModifyNp(stars * 4, cardPlay.Player);
+            await FgoResCmd.ModifyStars(-50, Owner);
+            await FgoResCmd.ModifyNp(Math.Min(50, stars) * 4, cardPlay.Player);
         }
 
         await FgoResCmd.ModifyNp(this);

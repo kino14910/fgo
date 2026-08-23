@@ -8,6 +8,7 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.Models.CardPools;
 using MegaCrit.Sts2.Core.Models.Powers;
 using STS2RitsuLib.Cards.DynamicVars;
 using STS2RitsuLib.Interop.AutoRegistration;
@@ -18,7 +19,8 @@ namespace Fgo.Scripts.Cards.DerivativeMash;
 /// <summary>
 ///     时为朦胧的白垩之壁A: ObscurantWallOfChalk(时为朦胧的白垩之壁)升级获得
 /// </summary>
-public class ObscurantWallOfChalkA() : FgoCardModel(3, CardType.Skill, CardRarity.Basic, TargetType.Self)
+[RegisterCard(typeof(TokenCardPool))]
+public class ObscurantWallOfChalkA() : FgoBaseCardModel(3, CardType.Skill, CardRarity.Token, TargetType.Self)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [

@@ -18,7 +18,7 @@ public class MahaPralaya() : NobleCardModel(1, CardType.Attack, TargetType.AllEn
             .Where(power => power.Type == PowerType.Debuff)
             .Select(power => power.Id)
             .Distinct()
-            .Count() ?? 0))
+            .Count() ?? 1), 8)
     ];
 
     protected override void OnUpgrade()

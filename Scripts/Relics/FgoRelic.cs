@@ -1,4 +1,5 @@
 using Fgo.Scripts.Character;
+using MegaCrit.Sts2.Core.Entities.Relics;
 using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Scaffolding.Content;
 
@@ -22,6 +23,17 @@ public abstract class FgoRelic : ModRelicTemplate
             if (Owner != null)
                 Entry.RunState.Modify(Owner, data => data.QuartzCount = value);
         }
+    }
+
+    /// <summary>
+    ///     当计数达到可进行一次宝具抽取的阈值时，把遗物状态置为 Active（图标高亮发光），
+    ///     提醒玩家可以右键圣晶石/召唤券进行宝具抽取；计数不足时恢复 Normal。
+    ///     参照原版 PollinousCore 用 RelicStatus.Active 反映"可激活"状态的做法。
+    /// </summary>
+    protected void UpdateAvailableVisual(int threshold)
+    {
+        Status = QuartzCounter >= threshold ? RelicStatus.Active : RelicStatus.Normal;
+        InvokeDisplayAmountChanged();
     }
 
     public override RelicAssetProfile AssetProfile => new(

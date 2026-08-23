@@ -1,7 +1,11 @@
 using Fgo.Scripts.Cards;
+using Fgo.Scripts.Cards.NoblePhantasm;
 using Fgo.Scripts.Character;
 using Fgo.Scripts.Commands;
+using Fgo.Scripts.Powers;
 using MegaCrit.Sts2.Core.Combat;
+using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Commands.Builders;
 using MegaCrit.Sts2.Core.Context;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
@@ -44,6 +48,13 @@ public sealed class FgoBattleHooks() : HookedSingletonModel(HookType.Combat)
         await Get(player).OnBeforeCardPlayed(cardPlay);
     }
 
+    public override async Task BeforeAttack(AttackCommand command)
+    {
+        if (command.Attacker?.Player is not { Character: FgoCharacter } player)
+            return;
+        await Get(player).OnBeforeAttack(command);
+    }
+
     public override async Task BeforeCombatStart()
     {
         var combat = CurrentCombatState;
@@ -62,11 +73,23 @@ public sealed class FgoBattleHooks() : HookedSingletonModel(HookType.Combat)
             cardPlay);
     }
 
-    public override Task AfterCardPlayedLate(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+    public override async Task AfterCardPlayedLate(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        if (cardPlay.Card?.Owner is { Character: FgoCharacter } player)
-            Get(player).ResetCrit();
-        return Task.CompletedTask;
+        if (cardPlay.Card?.Owner is not { Character: FgoCharacter } player)
+            return;
+
+        // 打出任意宝具牌后，为该玩家获得 OverchargePower 层数（最多 MaxOverCharge 层）。
+        if (cardPlay.Card is NobleCardModel)
+        {
+            var existing = player.Creature.GetPower<OverchargePower>();
+            var current = existing?.Amount ?? 0;
+            var delta = Math.Min(OverchargePower.MaxOverCharge, current + 1) - current;
+            if (delta > 0)
+                await PowerCmd.Apply<OverchargePower>(
+                    choiceContext, player.Creature, delta, player.Creature, null);
+        }
+
+        Get(player).ResetCrit();
     }
 
     public override Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
@@ -111,19 +134,6 @@ public sealed class FgoBattleHooks() : HookedSingletonModel(HookType.Combat)
         if (creature.Player is not { Character: FgoCharacter } player)
             return;
         await Get(player).AfterPreventingDeath(creature);
-    }
-
-    public override Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side,
-        IEnumerable<Creature> participants)
-    {
-        if (side != CombatSide.Player)
-            return Task.CompletedTask;
-
-        foreach (var creature in participants)
-            if (creature.Player is { Character: FgoCharacter } player)
-                Get(player).OnAfterSideTurnEnd(side);
-
-        return Task.CompletedTask;
     }
 
     public override async Task AfterCombatVictory(CombatRoom room)

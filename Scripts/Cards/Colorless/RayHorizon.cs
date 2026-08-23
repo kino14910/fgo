@@ -24,6 +24,8 @@ public class RayHorizon() : FgoBaseCardModel(0, CardType.Skill,
         FgoHoverTipHelper.CreateNpHoverTip()
     ];
 
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
+
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         ModCardVars.Int("Np", 50)

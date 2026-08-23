@@ -19,7 +19,7 @@ public class InfiniteSufferingCardPower : FgoPowerModel
     {
         if (player != Owner.Player) return;
         CardCmd.PreviewCardPileAdd(await CardPileCmd.AddGeneratedCardToCombat(
-            combatState.CreateCard(ModelDb.Card<InfiniteSuffering>(), player), PileType.Draw, Owner.Player,
+            combatState.CreateCard(ModelDb.Card<TheAbsoluteSword>(), player), PileType.Draw, Owner.Player,
             CardPilePosition.Random));
     }
 }

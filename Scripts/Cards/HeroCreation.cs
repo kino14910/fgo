@@ -14,25 +14,25 @@ public class HeroCreation() : FgoCardModel(0, CardType.Skill,
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
-        HoverTipFactory.FromPower<StrengthPower>(),
+        HoverTipFactory.FromPower<HeroCreationPower>(),
         HoverTipFactory.FromPower<TempCritDamagePower>()
     ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        ModCardVars.Power<StrengthPower>(2),
+        ModCardVars.Power<HeroCreationPower>(2),
         ModCardVars.Power<TempCritDamagePower>(50)
     ];
 
     protected override void OnUpgrade()
     {
-        DynamicVars[nameof(StrengthPower)].UpgradeValueBy(2);
+        DynamicVars[nameof(HeroCreationPower)].UpgradeValueBy(2);
         DynamicVars[nameof(TempCritDamagePower)].UpgradeValueBy(50);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await PowerCmd.Apply<StrengthPower>(choiceContext, Owner.Creature, DynamicVars[nameof(StrengthPower)].BaseValue,
+        await PowerCmd.Apply<HeroCreationPower>(choiceContext, Owner.Creature, DynamicVars[nameof(HeroCreationPower)].BaseValue,
             Owner.Creature, this);
         await PowerCmd.Apply<TempCritDamagePower>(choiceContext, Owner.Creature,
             DynamicVars[nameof(TempCritDamagePower)].BaseValue, Owner.Creature, this);

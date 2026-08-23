@@ -17,17 +17,17 @@ public class Unlimited() : NobleCardModel(1, CardType.Power, TargetType.Self)
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        ModCardVars.Int("AttacksPerTurn", 1)
+        ModCardVars.Cards(1)
     ];
 
     protected override void OnUpgrade()
     {
-        DynamicVars["AttacksPerTurn"].UpgradeValueBy(1);
+        DynamicVars.Cards.UpgradeValueBy(1);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await PowerCmd.Apply<UnlimitedPower>(choiceContext, Owner.Creature, DynamicVars["AttacksPerTurn"].BaseValue,
+        await PowerCmd.Apply<UnlimitedPower>(choiceContext, Owner.Creature, DynamicVars.Cards.BaseValue,
             Owner.Creature, this);
     }
 }

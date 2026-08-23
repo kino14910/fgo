@@ -81,7 +81,7 @@ public class SummonTicket : FgoRelic, IModRightClickableRelic
         {
             var result = await CardPileCmd.Add(selected, noblePile);
             QuartzCounter -= CostPerChoice;
-            InvokeDisplayAmountChanged();
+            UpdateAvailableVisual(CostPerChoice);
             Flash();
             FgoCardActions.PreviewNoblePileAdd(result);
         }
@@ -90,7 +90,7 @@ public class SummonTicket : FgoRelic, IModRightClickableRelic
     public override Task AfterRoomEntered(AbstractRoom room)
     {
         QuartzCounter++;
-        InvokeDisplayAmountChanged();
+        UpdateAvailableVisual(CostPerChoice);
         return Task.CompletedTask;
     }
 }

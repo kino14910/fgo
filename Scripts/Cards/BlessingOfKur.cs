@@ -15,7 +15,8 @@ public class BlessingOfKur() : FgoCardModel(1, CardType.Power,
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
         HoverTipFactory.FromCard<KurKigalIrkalla>(),
-        HoverTipFactory.FromPower<BlessingOfKurPower>()
+        HoverTipFactory.FromPower<BlessingOfKurPower>(),
+        HoverTipFactory.FromPower<MaxHpPower>()
     ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>

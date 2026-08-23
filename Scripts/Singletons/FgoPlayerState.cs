@@ -6,6 +6,7 @@ using Fgo.Scripts.Powers;
 using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Commands.Builders;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Players;
@@ -24,7 +25,6 @@ namespace Fgo.Scripts.Singletons;
 public sealed class FgoPlayerState
 {
     private const int MaxCommandSpell = 3;
-    private const int MaxOverCharge = 4;
     private const int BasicCritStars = 10;
     private const int SpecialCritStars = 20;
 
@@ -74,8 +74,6 @@ public sealed class FgoPlayerState
     public bool CanSpecialCrit => Stars >= SpecialCritStars;
     public bool CanUseNp => Np >= 100;
     public bool CanUseCommandSpell => CommandSpell > 0;
-    public int OverCharge { get; private set; }
-    public int OverChargeLevel => OverCharge;
 
     public event Action<int>? NpChanged;
 
@@ -84,18 +82,42 @@ public sealed class FgoPlayerState
         var old = Np;
         Np += amount;
         if (Np == 99 && old < 99) Np = 100;
-        await SyncOverCharge(old, Np);
+
+        // OverCharge 随 NP 值联动：首次达到 200 / 300 各获得 1 层 OverChargePower；
+        // 反之跌破对应阈值时扣除对应层数（与宝具打出获得的层数共用同一上限 4）。
+        await SyncOverchargeFromNp(player, old);
 
         // 在角色头顶显示 "+xxNP" 浮动文本（金色 D4AF37）。只在增加 NP 且有玩家上下文时显示。
         if (amount > 0)
             await FgoNpGainVfx.Spawn(player, amount);
     }
 
-    public Task GainOverCharge(int amount)
+    private async Task SyncOverchargeFromNp(Player? player, int old)
     {
-        if (amount <= 0) return Task.CompletedTask;
-        OverCharge = Math.Clamp(OverCharge + amount, 0, MaxOverCharge);
-        return Task.CompletedTask;
+        if (player == null) return;
+
+        var current = Np;
+
+        // 向上跨过阈值：各 +1。
+        var gained = 0;
+        if (current >= 200 && old < 200) gained++;
+        if (current >= 300 && old < 300) gained++;
+
+        // 向下跌破阈值：各 -1（即 NP 减少到 300 以下 / 200 以下时收回去掉层数）。
+        var lost = 0;
+        if (old >= 300 && current < 300) lost++;
+        if (old >= 200 && current < 200) lost++;
+
+        var net = gained - lost;
+        if (net == 0) return;
+
+        var creature = player.Creature;
+        var existing = creature.GetPower<OverchargePower>();
+        var baseCount = existing?.Amount ?? 0;
+        var delta = Math.Clamp(baseCount + net, 0, OverchargePower.MaxOverCharge) - baseCount;
+        if (delta != 0)
+            await PowerCmd.Apply<OverchargePower>(
+                new BlockingPlayerChoiceContext(), creature, delta, creature, null);
     }
 
     public Task SpendNpForNoblePhantasm()
@@ -159,7 +181,6 @@ public sealed class FgoPlayerState
     {
         Np = 0;
         _stars = 0;
-        OverCharge = 0;
         _npButtonPressed = false;
         return Task.CompletedTask;
     }
@@ -182,22 +203,31 @@ public sealed class FgoPlayerState
             var multiplier = card.Owner.Creature.HasPower<NpRatePower>() ? 2 : 1;
             await ModifyNp(card.EnergyCost.Canonical * FgoReflectedSettings.BaseNpPerCost * multiplier,
                 card.Owner);
+        }
+    }
 
-            if (card is CharismaOfTheJade)
+    public async Task OnBeforeAttack(AttackCommand command)
+    {
+        _crit.Reset();
+
+        var card = command.CardPlay?.Card ?? command.ModelSource as CardModel;
+        if (card is not FgoCardModel fgo)
+            return;
+
+        if (fgo is CharismaOfTheJade)
+        {
+            if (await TryConsumeCritStars(true) > 0)
             {
-                if (await TryConsumeCritStars(true) > 0)
-                {
-                    _crit.Active = true;
-                    _crit.DamageMultiplier = 3m;
-                }
+                _crit.Active = true;
+                _crit.DamageMultiplier = 3m;
             }
-            else if (card is { Type: CardType.Attack } and not NobleCardModel)
+        }
+        else if (card is { Type: CardType.Attack } and not NobleCardModel)
+        {
+            if (await TryConsumeCritStars(false) > 0)
             {
-                if (await TryConsumeCritStars(false) > 0)
-                {
-                    _crit.Active = true;
-                    _crit.DamageMultiplier = 2m;
-                }
+                _crit.Active = true;
+                _crit.DamageMultiplier = 2m;
             }
         }
     }
@@ -255,31 +285,6 @@ public sealed class FgoPlayerState
         await CreatureCmd.Heal(creature, creature.MaxHp - creature.CurrentHp);
         if (Np < 300)
             await ModifyNp(300 - Np, creature.Player);
-    }
-
-    public void OnAfterSideTurnEnd(CombatSide side)
-    {
-        if (side == CombatSide.Player)
-            OverCharge = 0;
-    }
-
-    private static int OverChargeLevelFor(int np)
-    {
-        return np >= 300 ? 2 : np >= 200 ? 1 : 0;
-    }
-
-    private async Task SyncOverCharge(int oldNp, int newNp)
-    {
-        var delta = OverChargeLevelFor(newNp) - OverChargeLevelFor(oldNp);
-        switch (delta)
-        {
-            case > 0:
-                await GainOverCharge(delta);
-                break;
-            case < 0:
-                OverCharge = Math.Max(0, OverCharge + delta);
-                break;
-        }
     }
 
     private sealed class CritContext
