@@ -43,7 +43,7 @@ public class InfiniteSuffering() : FgoBaseCardModel(2, CardType.Attack,
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
 
-        var card = CombatState!.CreateCard(ModelDb.Card<InfiniteSuffering>(), Owner);
+        var card = CombatState!.CreateCard(ModelDb.Card<TheAbsoluteSword>(), Owner);
         if (IsUpgraded) CardCmd.Upgrade(card, CardPreviewStyle.None);
         await FgoCardActions.AddToPile(card, PileType.Draw);
     }
