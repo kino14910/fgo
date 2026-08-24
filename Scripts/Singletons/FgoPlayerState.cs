@@ -252,6 +252,23 @@ public sealed class FgoPlayerState
         return _crit.DamageMultiplier;
     }
 
+    /// <summary>
+    ///     仅用于给卡牌预览的 damage 变量提供一致判断：预览时 (<paramref name="isPreview" /> == true)
+    ///     按"是否拥有足够暴击星"判断该攻击是否将触发暴击；否则按本次攻击实际触发的 CritActive 判断。
+    ///     这样暴击威力（加法加伤 power）的预览显示与翻倍（倍率加伤）保持一致。
+    /// </summary>
+    public bool WillCritOnPlay(CardModel? cardSource, bool isPreview)
+    {
+        if (isPreview)
+        {
+            if (cardSource is CharismaOfTheJade) return CanSpecialCrit;
+            if (cardSource is { Type: CardType.Attack } and not NobleCardModel) return CanCrit;
+            return false;
+        }
+
+        return _crit.Active;
+    }
+
     public void ResetCrit()
     {
         _crit.Reset();

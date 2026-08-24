@@ -61,7 +61,7 @@
   "FGO_CARD_GODS_EXECUTION.title": "God's Execution",
   "FGO_CARD_GODS_EXECUTION.description": "Deal {Damage:diff()} damage to ALL enemies.\nALL enemies lose {GodsExecutionPower:diff()} Temporary Strength.\nIf you have played a Noble Phantasm card this turn, this card costs 0.",
   "FGO_CARD_CROWNED_WITH_LIFE.title": "Crowned With Life",
-  "FGO_CARD_CROWNED_WITH_LIFE.description": "Unplayable.\nWhen drawn, gain {CursePower:diff()} [gold]Evil Curse[/gold] and {Star:diff()} [gold]Critical Stars[/gold].",
+  "FGO_CARD_CROWNED_WITH_LIFE.description": "When drawn, gain {CursePower:diff()} [gold]Evil Curse[/gold] and {Star:diff()} [gold]Critical Stars[/gold].",
   "FGO_CARD_DRAGON_CORE.title": "Dragon Core",
   "FGO_CARD_DRAGON_CORE.description": "Exhaust all non-Attack cards in your hand.\nAdd an equal number of random {IfUpgraded:show:upgraded |}Attack cards to your hand.\nThey cost 0 this turn.",
   "FGO_CARD_AT_THE_WELL.title": "At The Well",

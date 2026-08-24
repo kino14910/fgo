@@ -20,7 +20,7 @@ public class CrownedWithLife() : FgoCardModel(-2, CardType.Skill,
         FgoHoverTipHelper.CreateStarHoverTip()
     ];
 
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Ethereal];
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Ethereal, CardKeyword.Unplayable];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
