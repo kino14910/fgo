@@ -24,13 +24,14 @@ public class AnimalDialogue() : FgoCardModel(1, CardType.Skill,
         ModCardVars.ComputedEnergy("Energy", ctx =>
         {
             var threshold = ctx.GetCardIntOrDefault("Threshold", 20);
-            if (threshold <= 0) return 0m;
-            return this.FgoRes().Np / threshold;
+            if (!ctx.HasPlayer || threshold <= 0) return 0m;
+            return FgoBattleHooks.Get(ctx.Player).Np / threshold;
         })
     ];
 
     protected override bool ShouldGlowGoldInternal =>
-        this.FgoRes().Np >= DynamicVars["Threshold"].IntValue;
+        IsMutable && Owner is not null &&
+        FgoBattleHooks.Get(Owner).Np >= DynamicVars["Threshold"].IntValue;
 
     protected override void OnUpgrade()
     {

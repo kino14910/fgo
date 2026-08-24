@@ -25,7 +25,7 @@ public class WorldsEndFlowerGardenPower : FgoPowerModel
     {
         if (dealer != Owner) return;
         if (!props.IsCardOrMonsterMove()) return;
-        if (this.FgoRes().Stars < 10) return;
+        if (Owner?.Player is not { } player || FgoBattleHooks.Get(player).Stars < 10) return;
         Flash();
         await FgoResCmd.ModifyNp(Amount, Owner.Player);
     }

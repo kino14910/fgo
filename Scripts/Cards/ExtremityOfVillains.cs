@@ -39,7 +39,7 @@ public class ExtremityOfVillains() : FgoCardModel(1, CardType.Attack,
             .Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_heavy_blunt")
             .Execute(choiceContext);
-        if (this.FgoRes().CritActive)
+        if (FgoBattleHooks.Get(Owner).CritActive)
         {
             await PlayerCmd.GainEnergy(1, Owner);
             await CardPileCmd.Draw(choiceContext, DynamicVars.Cards.BaseValue, Owner);

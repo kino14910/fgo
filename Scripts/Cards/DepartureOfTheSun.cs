@@ -26,7 +26,7 @@ public class DepartureOfTheSun() : FgoCardModel(0, CardType.Skill,
     [
         ModCardVars.Int("CriticalDamagePerStar", 20),
         ModCardVars.ComputedPowerAmountGiven<CriticalDamagePower>(
-            ctx => this.FgoRes().Stars / 10 * ctx.EvaluateCardVarOrDefault("CriticalDamagePerStar"))
+            ctx => FgoBattleHooks.Get(ctx.Player).Stars / 10 * ctx.EvaluateCardVarOrDefault("CriticalDamagePerStar"))
     ];
 
     protected override void OnUpgrade()

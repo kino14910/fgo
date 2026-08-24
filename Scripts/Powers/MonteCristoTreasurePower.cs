@@ -25,7 +25,7 @@ public class MonteCristoTreasurePower : FgoPowerModel
     {
         if (dealer != Owner || target == Owner) return;
         if (!props.IsCardOrMonsterMove()) return;
-        if (!this.FgoRes().CritTriggered) return;
+        if (Owner?.Player is not { } player || !FgoBattleHooks.Get(player).CritTriggered) return;
         Flash();
         await CreatureCmd.GainBlock(Owner, result.TotalDamage, ValueProp.Unpowered, null);
     }

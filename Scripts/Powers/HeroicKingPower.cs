@@ -23,7 +23,7 @@ public class HeroicKingPower : FgoPowerModel
         ValueProp props, Creature target, CardModel? cardSource)
     {
         if (Owner != target || Owner != dealer) return;
-        if (!this.FgoRes().CritTriggered) return;
+        if (Owner?.Player is not { } player || !FgoBattleHooks.Get(player).CritTriggered) return;
         if (Amount <= 0) return;
 
         Flash();

@@ -23,7 +23,8 @@ public class CharismaOfTheJade() : FgoCardModel(2, CardType.Attack,
         ModCardVars.Int("Hits", 3)
     ];
 
-    protected override bool ShouldGlowGoldInternal => this.FgoRes().CanSpecialCrit;
+    protected override bool ShouldGlowGoldInternal =>
+        IsMutable && Owner is not null && FgoBattleHooks.Get(Owner).CanSpecialCrit;
 
     protected override void OnUpgrade()
     {

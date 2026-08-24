@@ -22,6 +22,6 @@ public class BorrowingFrom() : FgoCardModel(2, CardType.Skill,
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await FgoResCmd.ModifyNp(this.FgoRes().Np, Owner);
+        await FgoResCmd.ModifyNp(FgoBattleHooks.Get(Owner).Np, Owner);
     }
 }

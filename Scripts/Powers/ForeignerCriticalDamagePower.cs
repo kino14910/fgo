@@ -20,7 +20,8 @@ public class ForeignerCriticalDamagePower : FgoPowerModel
     {
         if (Owner != dealer
             || !props.IsPoweredAttack()
-            || !this.FgoRes().CritActive
+            || Owner?.Player is not { } player
+            || !FgoBattleHooks.Get(player).CritActive
             || (cardSource?.Tags.Any(c => c == FgoTags.Foreigner) ?? false))
             return 0m;
         return amount * Amount / 100m;
