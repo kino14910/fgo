@@ -61,7 +61,7 @@ public class FgoCharacter : ModCharacterTemplate<FgoCardPool, FgoRelicPool, FgoP
             // 卡牌拖尾场景。
             // TrailPath: "res://Fgo/scenes/vfx/card_trail_ironclad.tscn"
             // ),
-            // Audio: new CharacterAudioAssetSet(
+            Audio: new CharacterAudioAssetSet(
             // 攻击音效
             // AttackSfx: null,
             // 施法音效
@@ -69,10 +69,10 @@ public class FgoCharacter : ModCharacterTemplate<FgoCardPool, FgoRelicPool, FgoP
             // 死亡音效
             // DeathSfx: null,
             // 角色选择音效
-            // CharacterSelectSfx: null,
+            CharacterSelectSfx: FgoReflectedSettings.EnablePadoru ? "res://Fgo/audio/sound/padoru.mp3" : "res://Fgo/audio/sound/master_choose.mp3"
             // 过渡音效
             // CharacterTransitionSfx: "event:/sfx/ui/wipe_ironclad"
-            // ),
+            ),
             // Multiplayer: new CharacterMultiplayerAssetSet(
             // 多人模式-手指。
             // ArmPointingTexturePath: null,

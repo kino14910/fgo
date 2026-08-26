@@ -20,7 +20,7 @@ public abstract class NobleCardModel(
     ///     便捷构造器: 不指定稀有度（默认 Rare）和 shouldShowInCardLibrary（默认 true）。
     /// </summary>
     public NobleCardModel(int energyCost, CardType type, TargetType targetType)
-        : this(energyCost, type, FgoEnums.NoblePhantasm, targetType)
+        : this(FgoReflectedSettings.EnableNoCostNoblePhantasm ? 0 : energyCost, type, FgoEnums.NoblePhantasm, targetType)
     {
     }
 
