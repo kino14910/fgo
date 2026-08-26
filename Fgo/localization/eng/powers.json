@@ -214,7 +214,7 @@
   "FGO_POWER_MORNING_LARK_POWER.title": "Morning Lark",
   "FGO_POWER_MORNING_LARK_POWER.description": "Lose 20 np next turn.",
   "FGO_POWER_MORNING_LARK_POWER.smartDescription": "Lose 20 np next turn.",
-  "FGO_POWER_MAX_HP_POWER.title": "Max HP",
+  "FGO_POWER_MAX_HP_POWER.title": "Extra Max HP",
   "FGO_POWER_MAX_HP_POWER.description": "Raise your Max HP this combat. At the end of combat, lose all raise.",
   "FGO_POWER_MAX_HP_POWER.smartDescription": "Raise your Max HP by {Amount} this combat. At the end of combat, lose all raise.",
   "FGO_POWER_FACELESS_MOON_POWER.title": "Equilibrium",

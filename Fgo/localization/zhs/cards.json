@@ -38,8 +38,6 @@
   "FGO_CARD_WISDOM_OF_THE_PEOPLE.description": "恢复{Heal:diff()}点生命。\n移除你身上的一个负面状态。{IfUpgraded:show:\n获得{Np:diff()}%[gold]宝具值[/gold]|}",
   "FGO_CARD_POISONOUS_DAGGER.title": "毒之刃",
   "FGO_CARD_POISONOUS_DAGGER.description": "造成{Damage:diff()}点伤害。\n给予{PoisonPower:diff()}层[gold]中毒[/gold]。",
-  "FGO_CARD_JOURNEY_GUIDANCE.title": "旅途的引导",
-  "FGO_CARD_JOURNEY_GUIDANCE.description": "造成{Damage:diff()}点伤害。\n[gold]水边[/gold]: 获得{energyPrefix:energyIcons(2)}。\n将一张[gold]花之邪神[/gold]加入你的[gold]手牌[/gold]。",
   "FGO_CARD_EVIL_GOD_OF_THE_FLOWERS.title": "花之邪神",
   "FGO_CARD_EVIL_GOD_OF_THE_FLOWERS.description": "从3张随机[purple]〔领域外生命〕[/purple]牌中选择1张加入你的[gold]手牌[/gold]。这张牌在本回合可以免费打出。",
   "FGO_CARD_MONTE_CRISTO_TREASURE.title": "基督山的秘宝",
