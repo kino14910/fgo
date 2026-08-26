@@ -3,6 +3,7 @@ using Fgo.Scripts.Cards.NoblePhantasm;
 using Fgo.Scripts.Character;
 using Fgo.Scripts.Commands;
 using Fgo.Scripts.Powers;
+using Fgo.Scripts.UI;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Commands.Builders;
@@ -70,6 +71,9 @@ public sealed class FgoBattleHooks() : HookedSingletonModel(HookType.Combat)
 
     public override async Task BeforeCombatStart()
     {
+        // 上一场战斗结束时 HUD 关闭了 _Process，新战斗开始前兜底唤醒实例。
+        FgoGlobalHud.WakeInstances();
+
         var combat = CurrentCombatState;
         if (combat == null) return;
         foreach (var player in combat.Players)

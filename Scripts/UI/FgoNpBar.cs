@@ -5,6 +5,7 @@ using Fgo.Scripts.Utils;
 using Godot;
 using MegaCrit.Sts2.addons.mega_text;
 using MegaCrit.Sts2.Core.Combat;
+using MegaCrit.Sts2.Core.Context;
 using MegaCrit.Sts2.Core.Entities.Multiplayer;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -245,7 +246,9 @@ public sealed partial class FgoNpBar : Node
 
         if (_button != null)
         {
-            var canUse = np >= 100;
+            // 多人下仅本机玩家可点击：远端玩家的 creature 也会在本机渲染，
+            // 其按钮必须隐藏，否则点击后 hook action 因 owner 非本机而永不入队，造成卡死。
+            var canUse = np >= 100 && LocalContext.IsMe(_player);
             _button.Visible = canUse;
             _button.Disabled = !canUse;
         }
@@ -358,9 +361,17 @@ public sealed partial class FgoNpBar : Node
         if (_player == null)
             return;
 
+        // 双保险：仅本机玩家可发起宝具选牌。多人下点击非本机玩家的按钮
+        // 会导致 HookPlayerChoiceContext 卡死在 hook action 入队等待。
+        if (!LocalContext.IsMe(_player))
+            return;
+
         // UI 按钮触发的选牌: 用 HookPlayerChoiceContext 把选择作为一个新 GameAction 排入
         // 本玩家队列，多人下其他玩家的队列不会被阻塞（官方文档: 战斗场景应优先 Hook 而非 Blocking）。
-        var choiceContext = new HookPlayerChoiceContext(_player, _player.NetId, GameActionType.Combat);
+        // 第二个参数必须传 LocalContext.NetId（官方写法），而非 _player.NetId：
+        // 它是"本地玩家 Id"，SignalPlayerChoiceBegun 靠它决定是否为本机入队 hook action。
+        var choiceContext = new HookPlayerChoiceContext(
+            _player, LocalContext.NetId!.Value, GameActionType.Combat);
         await choiceContext.AssignTaskAndWaitForPauseOrCompletion(
             FgoNoblePhantasmCmd.TryChooseNoblePhantasm(choiceContext, _player));
     }

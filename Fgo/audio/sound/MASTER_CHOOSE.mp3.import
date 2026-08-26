@@ -3,12 +3,12 @@
 importer="mp3"
 type="AudioStreamMP3"
 uid="uid://6oqpli8n2lco"
-path="res://.godot/imported/MASTER_CHOOSE.mp3-56beb7a45cadbd675abe988a7f183bb6.mp3str"
+path="res://.godot/imported/master_choose.mp3-039f54224d368a95e5d20d0a42652444.mp3str"
 
 [deps]
 
-source_file="res://Fgo/audio/sound/MASTER_CHOOSE.mp3"
-dest_files=["res://.godot/imported/MASTER_CHOOSE.mp3-56beb7a45cadbd675abe988a7f183bb6.mp3str"]
+source_file="res://Fgo/audio/sound/master_choose.mp3"
+dest_files=["res://.godot/imported/master_choose.mp3-039f54224d368a95e5d20d0a42652444.mp3str"]
 
 [params]
 

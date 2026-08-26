@@ -3,12 +3,12 @@
 importer="mp3"
 type="AudioStreamMP3"
 uid="uid://bvujoxdckhgu5"
-path="res://.godot/imported/MASTER_INVICTUS_SPIRITUS.mp3-cf111773f32bb5c9487a5e2773c59968.mp3str"
+path="res://.godot/imported/master_invictus_spiritus.mp3-1d26616e6fccee1492bee5fd352505e4.mp3str"
 
 [deps]
 
-source_file="res://Fgo/audio/sound/MASTER_INVICTUS_SPIRITUS.mp3"
-dest_files=["res://.godot/imported/MASTER_INVICTUS_SPIRITUS.mp3-cf111773f32bb5c9487a5e2773c59968.mp3str"]
+source_file="res://Fgo/audio/sound/master_invictus_spiritus.mp3"
+dest_files=["res://.godot/imported/master_invictus_spiritus.mp3-1d26616e6fccee1492bee5fd352505e4.mp3str"]
 
 [params]
 

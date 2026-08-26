@@ -15,7 +15,8 @@ public static class FgoCombatUi
         EnergyCounterPivotFix.Initialize();
     }
 
-    public static void Update()
+    /// <returns>当前是否处于战斗可显示状态，供调用方决定是否关闭 _Process 轮询。</returns>
+    public static bool Update()
     {
         var inCombat =
             !CombatManager.Instance.IsPaused &&
@@ -25,9 +26,10 @@ public static class FgoCombatUi
         FgoGlobalHud.SetHudVisible(inCombat);
 
         if (!inCombat)
-            return;
+            return false;
 
         FgoGlobalHud.Update();
+        return true;
     }
 }
 

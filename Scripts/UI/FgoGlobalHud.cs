@@ -18,21 +18,64 @@ namespace Fgo.Scripts.UI;
 
 public sealed partial class FgoGlobalHud : Control
 {
-    private static readonly HoverTip CommandSpellHoverTip = new(
-        new LocString("static_hover_tips", "FGO_STATIC_HOVER_TIPS_COMMAND_SPELL.title"),
-        new LocString("static_hover_tips", "FGO_STATIC_HOVER_TIPS_COMMAND_SPELL.description"));
+    /// <summary>
+    ///     HoverTip 构造时会立即解析本地化文本，而 mod 本地化表在 Init 之后才加载。
+    ///     FgoGlobalHud 的静态构造在 Entry.Init → FgoCombatUi.Initialize 时触发，
+    ///     若在 cctor 里创建 HoverTip 会抛 TypeInitializationException 导致整个 mod 加载失败。
+    ///     因此延迟到首次鼠标悬停（战斗中）时才构造，那时本地化已就绪。
+    /// </summary>
+    private static HoverTip? _commandSpellHoverTip;
 
-    private static readonly HoverTip StarHoverTip = new(
-        new LocString("static_hover_tips", "FGO_STATIC_HOVER_TIPS_STAR.title"),
-        new LocString("static_hover_tips", "FGO_STATIC_HOVER_TIPS_STAR.description"));
+    private static HoverTip? _starHoverTip;
+
+    private static HoverTip CommandSpellHoverTip =>
+        _commandSpellHoverTip ??= new HoverTip(
+            new LocString("static_hover_tips", "FGO_STATIC_HOVER_TIPS_COMMAND_SPELL.title"),
+            new LocString("static_hover_tips", "FGO_STATIC_HOVER_TIPS_COMMAND_SPELL.description"));
+
+    private static HoverTip StarHoverTip =>
+        _starHoverTip ??= new HoverTip(
+            new LocString("static_hover_tips", "FGO_STATIC_HOVER_TIPS_STAR.title"),
+            new LocString("static_hover_tips", "FGO_STATIC_HOVER_TIPS_STAR.description"));
+
+    private static readonly Color DisabledModulate = new(1, 1, 1, 0.35f);
+
+    /// <summary>
+    ///     活动实例注册表。原先 FindAll() 每帧从树根递归遍历整个场景树
+    ///     （战斗中数千节点，每帧两次），改为创建/销毁时注册、注销，
+    ///     消除逐帧全树遍历带来的帧率开销。
+    /// </summary>
+    private static readonly List<FgoGlobalHud> Instances = [];
+
+    /// <summary>
+    ///     令咒贴图(0-3)在 Initialize 时一次性预加载。
+    ///     原先每次数值变化才 GD.Load（更早版本每帧 GD.Load），
+    ///     磁盘/资源缓存查找开销会拖累帧率；现在 Refresh 只换引用。
+    /// </summary>
+    private static readonly Texture2D?[] CommandSpellTextures = new Texture2D[4];
 
     private static bool _lastVisible;
     private TextureButton _commandSpellButton = null!;
     private HBoxContainer _starBox = null!;
     private Label _starLabel = null!;
 
+    // 脏检查缓存: 仅值变化时才触碰控件，避免每帧无条件 GD.Load/赋值导致的重绘。
+    private int _lastStars = -1;
+    private int _lastCommandSpell = -1;
+    private bool _lastCanUse;
+
+    /// <summary>
+    ///     是否已观察到战斗激活。开局 CombatManager.IsStarting 尚未置位时
+    ///     不能直接关 _Process，否则会永久错过战斗开始。
+    /// </summary>
+    private bool _combatSeenActivated;
+
     public static void Initialize()
     {
+        for (var i = 0; i < CommandSpellTextures.Length; i++)
+            CommandSpellTextures[i] = GD.Load<Texture2D>(
+                $"res://Fgo/images/ui/CommandSpell/CommandSpell{i}.png");
+
         ModNodeAttachmentRegistry
             .For(Entry.ModId)
             .RegisterReadyChild<NCombatUi, FgoGlobalHud>(
@@ -127,25 +170,53 @@ public sealed partial class FgoGlobalHud : Control
         hbox.AddChild(_starLabel);
 
         Visible = false;
+
+        Instances.Add(this);
     }
 
     public override void _Process(double delta)
     {
-        FgoCombatUi.Update();
+        var inCombat = FgoCombatUi.Update();
+
+        if (inCombat)
+        {
+            _combatSeenActivated = true;
+            return;
+        }
+
+        // 战斗尚未激活（开局 IsStarting 未置位）或仅处于暂停时保持轮询，
+        // 否则会错过恢复时机导致 HUD 永久隐藏。
+        if (!_combatSeenActivated || CombatManager.Instance.IsPaused)
+            return;
+
+        // 战斗已结束: 本节点即将随战斗场景销毁，关掉轮询避免空跑。
+        // 下局战斗会重建实例（_Process 默认开启），BeforeCombatStart 兜底唤醒。
+        SetProcess(false);
     }
 
     public static void SetHudVisible(bool visible)
     {
         if (visible == _lastVisible) return;
-        var huds = FindAll().ToList();
         _lastVisible = visible;
-        foreach (var hud in huds) hud.Visible = visible;
+        foreach (var hud in Instances) hud.Visible = visible;
     }
 
     public static void Update()
     {
-        var huds = FindAll().ToList();
-        foreach (var hud in huds) hud.Refresh();
+        foreach (var hud in Instances) hud.Refresh();
+    }
+
+    /// <summary>
+    ///     新战斗开始时的兜底唤醒: 上一场战斗结束关掉的 _Process 重新开启，
+    ///     并重置「已进入战斗」标记，防止复用实例时把开局误判为战斗结束。
+    /// </summary>
+    public static void WakeInstances()
+    {
+        foreach (var hud in Instances)
+        {
+            hud._combatSeenActivated = false;
+            hud.SetProcess(true);
+        }
     }
 
     private void Refresh()
@@ -157,24 +228,44 @@ public sealed partial class FgoGlobalHud : Control
         // 多人模式下不能回退到 Players.FirstOrDefault()，那会拿到错误的（主机）玩家。
         if (player is null || player.Character is not FgoCharacter)
         {
-            Visible = false;
+            if (Visible) Visible = false;
+            // 本地玩家不是 FGO 角色（角色不会在战斗中改变）: 本场战斗内
+            // HUD 持续隐藏，无需继续轮询；下局战斗由 BeforeCombatStart 兜底唤醒。
+            SetProcess(false);
             return;
         }
 
-        Visible = true;
+        if (!Visible) Visible = true;
 
         var resources = FgoBattleHooks.Get(player);
-        _starLabel.Text = resources.Stars.ToString();
-        _commandSpellButton.TextureNormal = GD.Load<Texture2D>(
-            $"res://Fgo/images/ui/CommandSpell/CommandSpell{Math.Clamp(resources.CommandSpell, 0, 3)}.png");
+
+        // 脏检查: 每帧只读数值，仅变化时更新控件，避免无条件 GD.Load / Text 赋值。
+        if (resources.Stars != _lastStars)
+        {
+            _lastStars = resources.Stars;
+            _starLabel.Text = _lastStars.ToString();
+        }
+
+        var commandSpell = Math.Clamp(resources.CommandSpell, 0, 3);
+        if (commandSpell != _lastCommandSpell)
+        {
+            _lastCommandSpell = commandSpell;
+            _commandSpellButton.TextureNormal = CommandSpellTextures[commandSpell];
+        }
 
         var canUse = resources.CanUseCommandSpell;
-        _commandSpellButton.Modulate = canUse ? Colors.White : new Color(1, 1, 1, 0.35f);
-        _commandSpellButton.Disabled = !canUse;
+        if (canUse != _lastCanUse)
+        {
+            _lastCanUse = canUse;
+            _commandSpellButton.Modulate = canUse ? Colors.White : DisabledModulate;
+            _commandSpellButton.Disabled = !canUse;
+        }
     }
 
     public override void _ExitTree()
     {
+        Instances.Remove(this);
+
         _commandSpellButton.Pressed -= OnCommandSpellButtonPressed;
         _commandSpellButton.MouseEntered -= OnCommandSpellMouseEntered;
         _commandSpellButton.MouseExited -= OnCommandSpellMouseExited;
@@ -216,23 +307,5 @@ public sealed partial class FgoGlobalHud : Control
     private void OnStarMouseExited()
     {
         NHoverTipSet.Remove(_starBox);
-    }
-
-    private static IEnumerable<FgoGlobalHud> FindAll()
-    {
-        var tree = (SceneTree)Engine.GetMainLoop();
-
-        foreach (var hud in Find(tree.Root))
-            yield return hud;
-    }
-
-    private static IEnumerable<FgoGlobalHud> Find(Node node)
-    {
-        if (node is FgoGlobalHud hud)
-            yield return hud;
-
-        foreach (var child in node.GetChildren())
-        foreach (var h in Find(child))
-            yield return h;
     }
 }

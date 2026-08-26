@@ -3,12 +3,12 @@
 importer="wav"
 type="AudioStreamWAV"
 uid="uid://cyu88ltqffv8f"
-path="res://.godot/imported/MASTER_CURSE.wav-7c4d17046fc51aad7894145de16fdcae.sample"
+path="res://.godot/imported/master_curse.wav-ad66ccbdd7a8003a204fbf36b1dc8b37.sample"
 
 [deps]
 
-source_file="res://Fgo/audio/sound/MASTER_CURSE.wav"
-dest_files=["res://.godot/imported/MASTER_CURSE.wav-7c4d17046fc51aad7894145de16fdcae.sample"]
+source_file="res://Fgo/audio/sound/master_curse.wav"
+dest_files=["res://.godot/imported/master_curse.wav-ad66ccbdd7a8003a204fbf36b1dc8b37.sample"]
 
 [params]
 
