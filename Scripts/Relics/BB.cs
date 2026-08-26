@@ -13,7 +13,7 @@ public class BB : FgoRelic
     {
         Flash();
         var self = Owner.Creature;
-        var roll = Random.Shared.Next(2);
+        var roll = Owner.RunState.Rng.Niche.NextInt(2);
 
         if (roll == 0)
         {
@@ -22,13 +22,19 @@ public class BB : FgoRelic
         }
         else
         {
-            var debuffRoll = Random.Shared.Next(3);
-            if (debuffRoll == 0)
-                await PowerCmd.Apply<VulnerablePower>(new BlockingPlayerChoiceContext(), self, 1m, self, null);
-            else if (debuffRoll == 1)
-                await PowerCmd.Apply<WeakPower>(new BlockingPlayerChoiceContext(), self, 1m, self, null);
-            else
-                await PowerCmd.Apply<FrailPower>(new BlockingPlayerChoiceContext(), self, 1m, self, null);
+            var debuffRoll = Owner.RunState.Rng.Niche.NextInt(3);
+            switch (debuffRoll)
+            {
+                case 0:
+                    await PowerCmd.Apply<VulnerablePower>(new BlockingPlayerChoiceContext(), self, 1m, self, null);
+                    break;
+                case 1:
+                    await PowerCmd.Apply<WeakPower>(new BlockingPlayerChoiceContext(), self, 1m, self, null);
+                    break;
+                default:
+                    await PowerCmd.Apply<FrailPower>(new BlockingPlayerChoiceContext(), self, 1m, self, null);
+                    break;
+            }
         }
     }
 }

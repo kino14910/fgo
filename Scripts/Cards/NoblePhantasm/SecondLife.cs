@@ -33,19 +33,17 @@ public class SecondLife() : NobleCardModel(1, CardType.Skill, TargetType.Self)
         var exhaustCards = Owner.PlayerCombatState!.ExhaustPile.Cards.ToList();
         if (exhaustCards.Count == 0) return;
 
-        var card = exhaustCards[Random.Shared.Next(exhaustCards.Count)];
-        // 用 CombatState.CreateCard 非泛型重载: 内部完成 ToMutable + 设 Owner + 注册 CombatState + AfterCreated。
-        // 直接 ToMutable() 出来的副本无 Owner、未注册 CombatState，传入 AddToPile 会抛 InvalidOperationException。
-        var copy = CombatState!.CreateCard(card, Owner);
+        var card = Owner.RunState.Rng.CombatCardSelection.NextItem(exhaustCards);
+        if (card is null) return;
+        var copy = card.CreateClone();
         if (copy.IsUpgradable && IsUpgraded)
             CardCmd.Upgrade(copy, CardPreviewStyle.None);
         await FgoCardActions.AddToHand(copy);
 
-        foreach (var enemy in CombatState!.HittableEnemies)
-            if (enemy.HasPower<MinionPower>())
-            {
-                await CreatureCmd.Kill(enemy);
-                await FgoResCmd.ModifyNp(DynamicVars["Np"].BaseValue, cardPlay.Player);
-            }
+        foreach (var enemy in CombatState!.HittableEnemies.Where(enemy => enemy.HasPower<MinionPower>()).ToList())
+        {
+            await CreatureCmd.Kill(enemy);
+            await FgoResCmd.ModifyNp(DynamicVars["Np"].BaseValue, cardPlay.Player);
+        }
     }
 }

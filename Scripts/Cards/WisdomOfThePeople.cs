@@ -33,7 +33,7 @@ public class WisdomOfThePeople() : FgoCardModel(3, CardType.Skill,
         var debuffs = Owner.Creature.Powers.Where(p => p.Type == PowerType.Debuff).ToList();
         if (debuffs.Count > 0)
         {
-            var random = debuffs[Random.Shared.Next(debuffs.Count)];
+            var random = debuffs[Owner.RunState.Rng.Niche.NextInt(debuffs.Count)];
             await PowerCmd.Remove(random);
         }
 
