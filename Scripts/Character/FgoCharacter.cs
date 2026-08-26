@@ -62,16 +62,18 @@ public class FgoCharacter : ModCharacterTemplate<FgoCardPool, FgoRelicPool, FgoP
             // TrailPath: "res://Fgo/scenes/vfx/card_trail_ironclad.tscn"
             // ),
             Audio: new CharacterAudioAssetSet(
-            // 攻击音效
-            // AttackSfx: null,
-            // 施法音效
-            // CastSfx: null,
-            // 死亡音效
-            // DeathSfx: null,
-            // 角色选择音效
-            CharacterSelectSfx: FgoReflectedSettings.EnablePadoru ? "res://Fgo/audio/sound/padoru.mp3" : "res://Fgo/audio/sound/master_choose.mp3"
-            // 过渡音效
-            // CharacterTransitionSfx: "event:/sfx/ui/wipe_ironclad"
+                // 攻击音效
+                // AttackSfx: null,
+                // 施法音效
+                // CastSfx: null,
+                // 死亡音效
+                // DeathSfx: null,
+                // 角色选择音效
+                FgoReflectedSettings.EnablePadoru
+                    ? "res://Fgo/audio/sound/padoru.mp3"
+                    : "res://Fgo/audio/sound/master_choose.mp3"
+                // 过渡音效
+                // CharacterTransitionSfx: "event:/sfx/ui/wipe_ironclad"
             ),
             // Multiplayer: new CharacterMultiplayerAssetSet(
             // 多人模式-手指。

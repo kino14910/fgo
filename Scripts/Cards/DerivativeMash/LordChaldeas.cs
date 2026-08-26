@@ -32,7 +32,7 @@ public class LordChaldeas() : NobleCardModel(1, CardType.Power, TargetType.Self)
         FgoHoverTipHelper.CreateNpHoverTip(),
         FgoHoverTipHelper.CreateStarHoverTip()
     ];
-    
+
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         ModCardVars.Power<PlatingPower>(6),
@@ -41,7 +41,7 @@ public class LordChaldeas() : NobleCardModel(1, CardType.Power, TargetType.Self)
         ModCardVars.Power<StrengthPower>(3),
         ModCardVars.Power<ArtifactPower>(1)
     ];
-    
+
     public override bool GainsBlock => false;
 
     protected override void OnUpgrade()
@@ -68,7 +68,7 @@ public class LordChaldeas() : NobleCardModel(1, CardType.Power, TargetType.Self)
             .Where(c => c.Player?.Character is FgoCharacter);
         await PowerCmd.Apply<NpDamagePower>(choiceContext, fgoAllies,
             DynamicVars[nameof(NpDamagePower)].BaseValue, Owner.Creature, this);
-        
+
         // NpCard 只作用于打出者自己。
         var power = await PowerCmd.Apply<NpCardPower>(choiceContext, Owner.Creature, 1, Owner.Creature, this);
         if (power != null)

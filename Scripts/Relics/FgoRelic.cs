@@ -25,6 +25,15 @@ public abstract class FgoRelic : ModRelicTemplate
         }
     }
 
+    public override RelicAssetProfile AssetProfile => new(
+        // 小图标（原版85x85）
+        $"res://Fgo/images/relics/{GetType().Name}.png",
+        // 轮廓图标（原版85x85）
+        $"res://Fgo/images/relics/{GetType().Name}.png",
+        // 大图标（原版256x256）
+        $"res://Fgo/images/relics/{GetType().Name}.png"
+    );
+
     /// <summary>
     ///     当计数达到可进行一次宝具抽取的阈值时，把遗物状态置为 Active（图标高亮发光），
     ///     提醒玩家可以右键圣晶石/召唤券进行宝具抽取；计数不足时恢复 Normal。
@@ -35,13 +44,4 @@ public abstract class FgoRelic : ModRelicTemplate
         Status = QuartzCounter >= threshold ? RelicStatus.Active : RelicStatus.Normal;
         InvokeDisplayAmountChanged();
     }
-
-    public override RelicAssetProfile AssetProfile => new(
-        // 小图标（原版85x85）
-        $"res://Fgo/images/relics/{GetType().Name}.png",
-        // 轮廓图标（原版85x85）
-        $"res://Fgo/images/relics/{GetType().Name}.png",
-        // 大图标（原版256x256）
-        $"res://Fgo/images/relics/{GetType().Name}.png"
-    );
 }

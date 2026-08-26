@@ -28,9 +28,9 @@ public class RoadOfFallingFlowers() : FgoCardModel(0, CardType.Skill, CardRarity
 
     protected override void OnUpgrade()
     {
-        DynamicVars["Stars"].UpgradeValueBy(5); // 5 -> 10
-        DynamicVars["Np"].UpgradeValueBy(10); // 10 -> 20
-        DynamicVars["HealPercent"].UpgradeValueBy(20); // 30 -> 50
+        DynamicVars["Stars"].UpgradeValueBy(5);
+        DynamicVars["Np"].UpgradeValueBy(10);
+        DynamicVars["HealPercent"].UpgradeValueBy(20);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

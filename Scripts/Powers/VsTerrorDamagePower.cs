@@ -7,10 +7,6 @@ using STS2RitsuLib.Scaffolding.Content;
 
 namespace Fgo.Scripts.Powers;
 
-/// <summary>
-///     对恐怖状态敌人增伤 Power。
-///     攻击有 TerrorPower 的目标时，伤害提升 Amount%。
-/// </summary>
 public class VsTerrorDamagePower : FgoPowerModel
 {
     public override PowerType Type => PowerType.Buff;

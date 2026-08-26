@@ -21,7 +21,7 @@ public abstract class FgoCooldownCardModel(
     bool shouldShowInCardLibrary = true)
     : FgoCardModel(energyCost, type, rarity, targetType, shouldShowInCardLibrary)
 {
-    /// <summary>基础冷却值（X）。打出后冷却重置回此值。</summary>
+    /// <summary>基础冷却值。打出后冷却重置回此值。</summary>
     public abstract int CooldownMax { get; }
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
@@ -40,8 +40,10 @@ public abstract class FgoCooldownCardModel(
 
     /// <summary>当前冷却是否为 0（即可打出）。</summary>
     public bool IsReady => CurrentCooldown <= 0;
-    
+
     protected override bool ShouldGlowGoldInternal => IsReady;
+
+    protected override bool IsPlayable => base.IsPlayable && IsReady;
 
     /// <summary>将当前冷却重置为 <see cref="CooldownMax" />（打出后重新进入冷却）。</summary>
     public void ResetCooldown()
@@ -55,7 +57,6 @@ public abstract class FgoCooldownCardModel(
         SetCooldown(0);
     }
 
-    /// <summary>当前冷却 -1（不低于 0）。</summary>
     public void DecrementCooldown()
     {
         if (CurrentCooldown > 0)
@@ -66,7 +67,4 @@ public abstract class FgoCooldownCardModel(
     {
         DynamicVars["Cooldown"].BaseValue = Math.Max(0, value);
     }
-
-    /// <summary>冷却大于 0 时本卡不可打出。</summary>
-    protected override bool IsPlayable => base.IsPlayable && IsReady;
 }

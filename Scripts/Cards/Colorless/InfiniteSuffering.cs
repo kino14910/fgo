@@ -22,7 +22,7 @@ public class InfiniteSuffering() : FgoBaseCardModel(2, CardType.Attack,
         HoverTipFactory.FromCard<TheAbsoluteSword>(),
         HoverTipFactory.FromPower<CriticalDamagePower>()
     ];
-    
+
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>

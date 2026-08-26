@@ -12,7 +12,8 @@ namespace Fgo.Scripts.Cards;
 public class HalberdUsurpation() : FgoCardModel(2, CardType.Attack,
     CardRarity.Uncommon, TargetType.AnyEnemy)
 {
-    protected override IEnumerable<IHoverTip> AdditionalHoverTips => [
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
+    [
         HoverTipFactory.FromPower<StrengthPower>()
     ];
 

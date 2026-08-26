@@ -8,11 +8,6 @@ using STS2RitsuLib.Scaffolding.Content;
 
 namespace Fgo.Scripts.Powers;
 
-/// <summary>
-///     在接下来的数个回合开始时获得暴击星。
-///     Amount 表示持续回合数，每回合固定获得 8 颗暴击星。
-///     右上角标显示每回合暴击星数，右下角标显示剩余回合数 (Amount)。
-/// </summary>
 public class SwifterThanSoundPower : FgoPowerModel, IPowerExtraIconAmountLabelSpecsProvider
 {
     private const int StarsPerTurn = 8;

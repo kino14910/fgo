@@ -1,5 +1,4 @@
 ﻿using MegaCrit.Sts2.Core.Commands;
-using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -24,10 +23,11 @@ public class GoddessMetamorphosisBeastPower : FgoPowerModel
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
         HoverTipFactory.FromPower<PoisonPower>(),
-        HoverTipFactory.FromPower<CursePower>(),
+        HoverTipFactory.FromPower<CursePower>()
     ];
 
-    public override async Task AfterDamageGiven(PlayerChoiceContext choiceContext, Creature? dealer, DamageResult result, ValueProp props, Creature target, CardModel? cardSource)
+    public override async Task AfterDamageGiven(PlayerChoiceContext choiceContext, Creature? dealer,
+        DamageResult result, ValueProp props, Creature target, CardModel? cardSource)
     {
         if (dealer == Owner && props.IsPoweredAttack() && result.UnblockedDamage > 0)
         {

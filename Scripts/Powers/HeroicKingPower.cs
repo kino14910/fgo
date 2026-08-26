@@ -15,9 +15,6 @@ public class HeroicKingPower : FgoPowerModel
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Counter;
 
-    /// <summary>
-    ///     暴击联动: 每次暴击触发时，为玩家赋予 1 层王威。
-    /// </summary>
     public override async Task AfterDamageGiven(
         PlayerChoiceContext choiceContext, Creature? dealer, DamageResult result,
         ValueProp props, Creature target, CardModel? cardSource)

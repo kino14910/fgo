@@ -29,9 +29,9 @@ public static class FgoCommandSpellCmd
         if (selected == null) return false;
 
         await playerState.UseCommandSpell();
-        // 注意: 不在此处立即同步到 RunSavedData。
-        // 令咒的保存语义: 使用后仅更新内存值，在战斗结束时（AfterCombatVictory）才同步到 RunSavedData。
-        // 这样退出战斗中再继续会恢复到战前值，而打赢后下一场战斗保留战后值。
+        // 不在此处立即同步到 RunSavedData。
+        // 使用后仅更新内存值，在战斗结束时（AfterCombatVictory）才同步到 RunSavedData。
+        // 这样退出战斗中再继续会恢复到战前值，而打赢后下一场战斗保留战后值（SL后不消耗令咒数）。
 
         switch (selected)
         {

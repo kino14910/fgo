@@ -1,10 +1,8 @@
 using Fgo.Scripts.Cards;
 using Fgo.Scripts.Cards.NoblePhantasm;
 using Fgo.Scripts.Character;
-using Fgo.Scripts.Commands;
 using Fgo.Scripts.Powers;
 using Fgo.Scripts.Utils;
-using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Commands.Builders;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -12,7 +10,6 @@ using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
-using MegaCrit.Sts2.Core.Rooms;
 using MegaCrit.Sts2.Core.ValueProps;
 
 namespace Fgo.Scripts.Singletons;

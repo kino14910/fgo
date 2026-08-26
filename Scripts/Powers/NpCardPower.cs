@@ -12,8 +12,7 @@ public class NpCardPower : FgoPowerModel
     public override PowerStackType StackType => PowerStackType.Counter;
 
     /// <summary>
-    ///     此 power 添加到宝具选择列表的宝具卡（canonical singleton 实例）。
-    ///     调用方通过 <c>ModelDb.Card&lt;T&gt;()</c> 泛型方法赋值，无需反射。
+    ///     调用方通过 <c>ModelDb.Card&lt;T&gt;()</c> 泛型方法赋值。
     ///     设置时同步更新 <see cref="StringVar" /> 的显示文本，
     ///     使 smartDescription 中的 {NobleCardName} 占位符能正确显示卡牌名称。
     /// </summary>

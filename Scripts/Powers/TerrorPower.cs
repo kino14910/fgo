@@ -10,11 +10,6 @@ using STS2RitsuLib.Scaffolding.Content;
 
 namespace Fgo.Scripts.Powers;
 
-/// <summary>
-///     恐怖 Power。
-///     amount 为层数（每回合减 1），TerrorChance 为眩晕概率（0-100）。
-///     每回合结束时按概率让怪物眩晕，然后层数 -1。
-/// </summary>
 public class TerrorPower : FgoPowerModel, IPowerExtraIconAmountLabelSpecsProvider
 {
     public override PowerType Type => PowerType.Debuff;
@@ -28,7 +23,8 @@ public class TerrorPower : FgoPowerModel, IPowerExtraIconAmountLabelSpecsProvide
     /// <summary>
     ///     眩晕概率（0-100）。叠加时取较大值。
     /// </summary>
-    protected override IEnumerable<DynamicVar> CanonicalVars => [
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
         ModCardVars.Int("TerrorChance", 0)
     ];
 
@@ -60,12 +56,10 @@ public class TerrorPower : FgoPowerModel, IPowerExtraIconAmountLabelSpecsProvide
         if (side != CombatSide.Player) return;
         if (Amount <= 0) return;
 
-        // 概率判定眩晕（RNG 来自施加者，敌人本身没有 Player）
         var applier = Applier;
         if (applier is { Player: not null } && TerrorChance > 0m)
         {
-            var rng = applier.Player.RunState.Rng.Niche;
-            var roll = rng.NextFloat() * 100f;
+            var roll = applier.Player.RunState.Rng.Niche.NextFloat() * 100f;
             if (roll < (float)TerrorChance)
             {
                 Flash();

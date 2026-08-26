@@ -5,7 +5,6 @@ using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.CardSelection;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
-using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Relics;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Rooms;
@@ -18,7 +17,7 @@ namespace Fgo.Scripts.Relics;
 ///     召唤券: 圣晶石被 [gold]点金石[/gold] 祝福后的升级版。
 ///     保留了每层 +1 计数的被动，但右键弹出候选网格后可手动选择加入哪张宝具卡。
 ///     计数与圣晶石共享同一个按玩家的 FgoRunState 槽位（见 FgoRelic.QuartzCounter），
-///     精炼替换遗物实例后计数原样保留。
+///     替换圣晶石后计数原样保留。
 /// </summary>
 [RegisterRelic(typeof(FgoRelicPool))]
 public class SummonTicket : FgoRelic, IModRightClickableRelic

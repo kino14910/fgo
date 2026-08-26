@@ -17,7 +17,7 @@ public class ReduceNpTurnEndPower : FgoPowerModel
         "res://Fgo/images/powers/AfterDurationDebuffPower.png",
         "res://Fgo/images/powers/big/AfterDurationPower.png"
     );
-    
+
     public override async Task BeforeSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side,
         IEnumerable<Creature> participants)
     {

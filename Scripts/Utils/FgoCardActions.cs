@@ -1,7 +1,6 @@
 using Fgo.Scripts.Cards.DerivativeMash;
 using Fgo.Scripts.Cards.NoblePhantasm;
 using Godot;
-using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Context;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -12,13 +11,39 @@ using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Nodes;
 using MegaCrit.Sts2.Core.Nodes.Cards;
 using MegaCrit.Sts2.Core.Nodes.CommonUi;
-using MegaCrit.Sts2.Core.Nodes.Rooms;
 using MegaCrit.Sts2.Core.Nodes.Vfx;
 
 namespace Fgo.Scripts.Utils;
 
 public static class FgoCardActions
 {
+    // ---- 第一次进化 ----
+    // Camelot → LordCamelot
+    // WallOfSnowflakes → VeneratedWallOfSnowflakes
+    private static readonly CardUpgradeStage FirstEvolution = new()
+    {
+        Upgrades =
+        [
+            new CardUpgrade(NobleDeckPile, typeof(Camelot), () => ModelDb.Card<LordCamelot>()),
+            new CardUpgrade(MainDeck, typeof(WallOfSnowflakes), () => ModelDb.Card<VeneratedWallOfSnowflakes>())
+        ]
+    };
+
+    // ---- 第二次进化 ----
+    // LordCamelot → LordChaldeas
+    // VeneratedWallOfSnowflakes → VeneratedShieldOfSnowflakes
+    // ObscurantWallOfChalk → ObscurantWallOfChalkA（白垩之壁属于本阶段的同步升级内容）
+    private static readonly CardUpgradeStage SecondEvolution = new()
+    {
+        Upgrades =
+        [
+            new CardUpgrade(NobleDeckPile, typeof(LordCamelot), () => ModelDb.Card<LordChaldeas>()),
+            new CardUpgrade(MainDeck, typeof(VeneratedWallOfSnowflakes),
+                () => ModelDb.Card<VeneratedShieldOfSnowflakes>()),
+            new CardUpgrade(MainDeck, typeof(ObscurantWallOfChalk), () => ModelDb.Card<ObscurantWallOfChalkA>())
+        ]
+    };
+
     public static CardModel CreateGeneratedCopy(CardModel card, Player owner, bool free = false, bool exhaust = false)
     {
         var copy = card.CreateDupe(owner);
@@ -30,9 +55,6 @@ public static class FgoCardActions
     public static CardModel CreateCard<T>(Player owner, bool upgraded = false, bool free = false, bool exhaust = false)
         where T : CardModel
     {
-        // 战斗中加卡必须用 CombatState.CreateCard<T>: 它完成 ToMutable + 设置 Owner + 注册到 CombatState + AfterCreated。
-        // 直接用 ModelDb.Card<T>().ToMutable() 会得到无 Owner、未注册到 CombatState 的副本，
-        // 传入 CardPileCmd.Add 会抛 InvalidOperationException("...has no owner!")。
         var card = owner.Creature.CombatState!.CreateCard<T>(owner);
         if (upgraded && card.IsUpgradable) CardCmd.Upgrade(card, CardPreviewStyle.None);
         if (free) card.SetToFreeThisCombat();
@@ -40,7 +62,8 @@ public static class FgoCardActions
         return card;
     }
 
-    public static async Task AddToPile(CardModel card, PileType pile, CardPilePosition position = CardPilePosition.Top, float time = 1.2f)
+    public static async Task AddToPile(CardModel card, PileType pile, CardPilePosition position = CardPilePosition.Top,
+        float time = 1.2f)
     {
         CardCmd.PreviewCardPileAdd(await CardPileCmd.AddGeneratedCardToCombat(card, pile, card.Owner, position), time);
     }
@@ -66,7 +89,7 @@ public static class FgoCardActions
 
         var card = result.cardAdded;
         var trailContainer = NRun.Instance?.GlobalUi?.TopBar?.TrailContainer as Control;
-        var previewContainer = NRun.Instance?.GlobalUi?.CardPreviewContainer as Control;
+        var previewContainer = NRun.Instance?.GlobalUi?.CardPreviewContainer;
         if (trailContainer == null || previewContainer == null)
         {
             CardCmd.PreviewCardPileAdd(result, time);
@@ -86,15 +109,11 @@ public static class FgoCardActions
         tween.TweenCallback(Callable.From(() =>
         {
             // 停留 time 秒后飞入顶部栏牌组，VFX 父节点固定用 TrailContainer。
-            if (NCardFlyVfx.Create(node, card.Pile.Type, isAddingToPile: true, card.Owner.Character.TrailPath) is
+            if (NCardFlyVfx.Create(node, card.Pile.Type, true, card.Owner.Character.TrailPath) is
                 { } fly)
-            {
                 trailContainer.AddChildSafely(fly);
-            }
             else
-            {
                 node.QueueFreeSafely();
-            }
         })).SetDelay(time);
     }
 
@@ -134,59 +153,18 @@ public static class FgoCardActions
         }
 
         // 第二次进化
-        if (HasUpgradeSource(player, SecondEvolution))
-        {
-            await ApplyUpgradeStage(player, SecondEvolution);
-        }
+        if (HasUpgradeSource(player, SecondEvolution)) await ApplyUpgradeStage(player, SecondEvolution);
     }
 
-    /// <summary>
-    ///     一次卡牌进化替换：在 PileSelector 指定的牌堆中查找 Source 卡，替换为 Target 工厂返回的 canonical 卡。
-    /// </summary>
-    private sealed record CardUpgrade(
-        Func<Player, CardPile?> PileSelector,
-        Type Source,
-        Func<CardModel> Target);
-
-    /// <summary>
-    ///     一个进化阶段：进入一次 Ancient 房间推进的整体阶段。
-    ///     阶段内所有源卡存在的条目都会执行（多条链共存时同步升级），源卡缺失的条目直接跳过。
-    /// </summary>
-    private sealed class CardUpgradeStage
+    private static CardPile? NobleDeckPile(Player player)
     {
-        public required CardUpgrade[] Upgrades { get; init; }
+        return CardPile.Get(FgoEnums.NobleDeck, player);
     }
 
-    // ---- 第一次进化 ----
-    // Camelot → LordCamelot
-    // WallOfSnowflakes → VeneratedWallOfSnowflakes
-    private static readonly CardUpgradeStage FirstEvolution = new()
+    private static CardPile MainDeck(Player player)
     {
-        Upgrades =
-        [
-            new CardUpgrade(NobleDeckPile, typeof(Camelot), () => ModelDb.Card<LordCamelot>()),
-            new CardUpgrade(MainDeck, typeof(WallOfSnowflakes), () => ModelDb.Card<VeneratedWallOfSnowflakes>())
-        ]
-    };
-
-    // ---- 第二次进化 ----
-    // LordCamelot → LordChaldeas
-    // VeneratedWallOfSnowflakes → VeneratedShieldOfSnowflakes
-    // ObscurantWallOfChalk → ObscurantWallOfChalkA（白垩之壁属于本阶段的同步升级内容）
-    private static readonly CardUpgradeStage SecondEvolution = new()
-    {
-        Upgrades =
-        [
-            new CardUpgrade(NobleDeckPile, typeof(LordCamelot), () => ModelDb.Card<LordChaldeas>()),
-            new CardUpgrade(MainDeck, typeof(VeneratedWallOfSnowflakes),
-                () => ModelDb.Card<VeneratedShieldOfSnowflakes>()),
-            new CardUpgrade(MainDeck, typeof(ObscurantWallOfChalk), () => ModelDb.Card<ObscurantWallOfChalkA>())
-        ]
-    };
-
-    private static CardPile? NobleDeckPile(Player player) => CardPile.Get(FgoEnums.NobleDeck, player);
-
-    private static CardPile MainDeck(Player player) => player.Deck;
+        return player.Deck;
+    }
 
     /// <summary>
     ///     判断该阶段是否存在任一源卡，用于决定本次进入房间推进哪个阶段。
@@ -228,7 +206,7 @@ public static class FgoCardActions
 
         // 继承源卡的升级次数：逐级触发 Upgrade 让 OnUpgrade 对数值的修改生效。
         // 此时 replacement 尚未加入牌堆（Pile 为 null），CardCmd.Upgrade 不会写入地图升级历史。
-        for (int i = 0; i < source.CurrentUpgradeLevel; i++)
+        for (var i = 0; i < source.CurrentUpgradeLevel; i++)
             CardCmd.Upgrade(replacement, CardPreviewStyle.None);
 
         // 继承源卡的附魔：克隆独立实例后再赋予新卡，避免跨卡移动附魔触发
@@ -257,5 +235,22 @@ public static class FgoCardActions
 
         foreach (var damageVar in card.DynamicVars.Values.OfType<DamageVar>())
             damageVar.BaseValue += amount;
+    }
+
+    /// <summary>
+    ///     一次卡牌进化替换：在 PileSelector 指定的牌堆中查找 Source 卡，替换为 Target 工厂返回的 canonical 卡。
+    /// </summary>
+    private sealed record CardUpgrade(
+        Func<Player, CardPile?> PileSelector,
+        Type Source,
+        Func<CardModel> Target);
+
+    /// <summary>
+    ///     一个进化阶段：进入一次 Ancient 房间推进的整体阶段。
+    ///     阶段内所有源卡存在的条目都会执行（多条链共存时同步升级），源卡缺失的条目直接跳过。
+    /// </summary>
+    private sealed class CardUpgradeStage
+    {
+        public required CardUpgrade[] Upgrades { get; init; }
     }
 }

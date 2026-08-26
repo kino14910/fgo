@@ -4,7 +4,6 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
-using MegaCrit.Sts2.Core.Models.Powers;
 using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
@@ -32,7 +31,8 @@ public class HeroCreation() : FgoCardModel(0, CardType.Skill,
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await PowerCmd.Apply<HeroCreationPower>(choiceContext, Owner.Creature, DynamicVars[nameof(HeroCreationPower)].BaseValue,
+        await PowerCmd.Apply<HeroCreationPower>(choiceContext, Owner.Creature,
+            DynamicVars[nameof(HeroCreationPower)].BaseValue,
             Owner.Creature, this);
         await PowerCmd.Apply<TempCritDamagePower>(choiceContext, Owner.Creature,
             DynamicVars[nameof(TempCritDamagePower)].BaseValue, Owner.Creature, this);

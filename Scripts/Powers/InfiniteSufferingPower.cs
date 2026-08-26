@@ -7,11 +7,6 @@ using STS2RitsuLib.Scaffolding.Content;
 
 namespace Fgo.Scripts.Powers;
 
-/// <summary>
-///     在下个回合开始时获得暴击威力。
-///     Amount 表示持续回合数（固定为1），触发后移除自身。
-///     右上角标显示暴击威力百分比，右下角标显示剩余回合数 (Amount)。
-/// </summary>
 public class InfiniteSufferingPower : FgoPowerModel, IPowerExtraIconAmountLabelSpecsProvider
 {
     private const int CritDamagePercent = 30;

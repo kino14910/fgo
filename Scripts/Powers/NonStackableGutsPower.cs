@@ -11,19 +11,10 @@ using STS2RitsuLib.Scaffolding.Content;
 
 namespace Fgo.Scripts.Powers;
 
-/// <summary>
-///     不叠加的毅力基类: 每次施加独立存在（各占一个图标），死亡时消耗一次次数并按回血量恢复。
-///     每个来源（卡牌）对应一个具体子类，仿照 TemporaryStrengthPower 的写法：
-///     不同来源是不同 Power 类型，天然互不合并；同来源重复施加也各自独立（InstanceType.Instanced）。
-///     剩余次数 Times 归零后不再阻止死亡。
-/// </summary>
 public abstract class NonStackableGutsPower : GutsPower, IPowerExtraIconAmountLabelSpecsProvider
 {
     public override PowerStackType StackType => PowerStackType.Counter;
 
-    /// <summary>
-    ///     每次施加都新建独立实例，重复打出同来源卡也各自计次数。
-    /// </summary>
     public override PowerInstanceType InstanceType => PowerInstanceType.Instanced;
 
     public override PowerAssetProfile AssetProfile => new(
@@ -31,9 +22,6 @@ public abstract class NonStackableGutsPower : GutsPower, IPowerExtraIconAmountLa
         "res://Fgo/images/powers/big/GutsPower.png"
     );
 
-    /// <summary>
-    ///     施加此毅力的来源模型（如打出它的卡牌），用于标题与悬浮提示。
-    /// </summary>
     public abstract AbstractModel OriginModel { get; }
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
@@ -51,9 +39,6 @@ public abstract class NonStackableGutsPower : GutsPower, IPowerExtraIconAmountLa
         }
     }
 
-    /// <summary>
-    ///     标题显示来源卡牌名（与 TemporaryStrengthPower 一致）。
-    /// </summary>
     public override LocString Title
     {
         get
@@ -87,7 +72,7 @@ public abstract class NonStackableGutsPower : GutsPower, IPowerExtraIconAmountLa
                 ExtraIconAmountLabelCorner.BottomRight,
                 $"[green]{Amount.ToString()}[/green]"),
             // 右上角: 剩余次数
-             ExtraIconAmountLabelSpec.Plain(
+            ExtraIconAmountLabelSpec.Plain(
                 ExtraIconAmountLabelCorner.TopRight,
                 $"×{Times}")
         ];

@@ -7,7 +7,7 @@ using STS2RitsuLib.Scaffolding.Content;
 namespace Fgo.Scripts.Cards.Colorless.OptionCards;
 
 [RegisterCard(typeof(TokenCardPool))]
-public class ReleaseNoblePhantasm() : FgoBaseCardModel(-2, CardType.Power, 
+public class ReleaseNoblePhantasm() : FgoBaseCardModel(-2, CardType.Power,
     CardRarity.Token, TargetType.None)
 {
     public override CardAssetProfile AssetProfile => new(

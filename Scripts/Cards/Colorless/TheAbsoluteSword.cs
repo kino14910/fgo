@@ -18,7 +18,7 @@ public class TheAbsoluteSword() : FgoBaseCardModel(3, CardType.Attack,
     [
         ModCardVars.Damage(32)
     ];
-    
+
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
     protected override void OnUpgrade()
@@ -39,7 +39,6 @@ public class TheAbsoluteSword() : FgoBaseCardModel(3, CardType.Attack,
             .SelectMany(hit => hit)
             .Sum(r => r.TotalDamage);
 
-        // 总伤害 >= 阈值，再次造成等量伤害（翻倍）
         if (totalDamage >= DamageThreshold)
             await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
                 .FromCard(this, cardPlay)

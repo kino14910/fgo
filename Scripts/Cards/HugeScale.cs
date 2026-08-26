@@ -1,3 +1,4 @@
+using Fgo.Scripts.Cards.Colorless;
 using Fgo.Scripts.Powers;
 using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.Commands;

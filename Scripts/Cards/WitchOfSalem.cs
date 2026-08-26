@@ -52,10 +52,7 @@ public class WitchOfSalem() : FgoCardModel(3, CardType.Skill,
             DynamicVars[nameof(TerrorPower)].IntValue,
             Owner.Creature, this);
 
-        foreach (var terror in powers)
-        {
-            terror.TerrorChance = DynamicVars["TerrorChance"].BaseValue;
-        }
+        foreach (var terror in powers) terror.TerrorChance = DynamicVars["TerrorChance"].BaseValue;
 
         await PowerCmd.Apply<VsTerrorDamagePower>(choiceContext, Owner.Creature,
             DynamicVars[nameof(VsTerrorDamagePower)].BaseValue, Owner.Creature, this);

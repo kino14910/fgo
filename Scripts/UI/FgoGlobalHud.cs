@@ -28,16 +28,6 @@ public sealed partial class FgoGlobalHud : Control
 
     private static HoverTip? _starHoverTip;
 
-    private static HoverTip CommandSpellHoverTip =>
-        _commandSpellHoverTip ??= new HoverTip(
-            new LocString("static_hover_tips", "FGO_STATIC_HOVER_TIPS_COMMAND_SPELL.title"),
-            new LocString("static_hover_tips", "FGO_STATIC_HOVER_TIPS_COMMAND_SPELL.description"));
-
-    private static HoverTip StarHoverTip =>
-        _starHoverTip ??= new HoverTip(
-            new LocString("static_hover_tips", "FGO_STATIC_HOVER_TIPS_STAR.title"),
-            new LocString("static_hover_tips", "FGO_STATIC_HOVER_TIPS_STAR.description"));
-
     private static readonly Color DisabledModulate = new(1, 1, 1, 0.35f);
 
     /// <summary>
@@ -55,20 +45,31 @@ public sealed partial class FgoGlobalHud : Control
     private static readonly Texture2D?[] CommandSpellTextures = new Texture2D[4];
 
     private static bool _lastVisible;
-    private TextureButton _commandSpellButton = null!;
-    private HBoxContainer _starBox = null!;
-    private Label _starLabel = null!;
-
-    // 脏检查缓存: 仅值变化时才触碰控件，避免每帧无条件 GD.Load/赋值导致的重绘。
-    private int _lastStars = -1;
-    private int _lastCommandSpell = -1;
-    private bool _lastCanUse;
 
     /// <summary>
     ///     是否已观察到战斗激活。开局 CombatManager.IsStarting 尚未置位时
     ///     不能直接关 _Process，否则会永久错过战斗开始。
     /// </summary>
     private bool _combatSeenActivated;
+
+    private TextureButton _commandSpellButton = null!;
+    private bool _lastCanUse;
+    private int _lastCommandSpell = -1;
+
+    // 脏检查缓存: 仅值变化时才触碰控件，避免每帧无条件 GD.Load/赋值导致的重绘。
+    private int _lastStars = -1;
+    private HBoxContainer _starBox = null!;
+    private Label _starLabel = null!;
+
+    private static HoverTip CommandSpellHoverTip =>
+        _commandSpellHoverTip ??= new HoverTip(
+            new LocString("static_hover_tips", "FGO_STATIC_HOVER_TIPS_COMMAND_SPELL.title"),
+            new LocString("static_hover_tips", "FGO_STATIC_HOVER_TIPS_COMMAND_SPELL.description"));
+
+    private static HoverTip StarHoverTip =>
+        _starHoverTip ??= new HoverTip(
+            new LocString("static_hover_tips", "FGO_STATIC_HOVER_TIPS_STAR.title"),
+            new LocString("static_hover_tips", "FGO_STATIC_HOVER_TIPS_STAR.description"));
 
     public static void Initialize()
     {

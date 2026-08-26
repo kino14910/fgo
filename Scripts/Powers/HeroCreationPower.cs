@@ -1,5 +1,4 @@
 using Fgo.Scripts.Cards;
-using Fgo.Scripts.Cards.NoblePhantasm;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
 using STS2RitsuLib.Scaffolding.Content;

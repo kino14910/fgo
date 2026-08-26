@@ -18,9 +18,6 @@ public static class FgoResCmd
         await FgoBattleHooks.Get(player).ModifyNp(amount, player);
     }
 
-    /// <summary>
-    ///     Adds NP to the card's owner using the card's NP variable.
-    /// </summary>
     public static async Task ModifyNp(CardModel card)
     {
         await ModifyNp(card.DynamicVars.EvaluateValueOrDefault("Np"), card.Owner);
@@ -42,9 +39,6 @@ public static class FgoResCmd
         await FgoBattleHooks.Get(player).ModifyStars(amount, player);
     }
 
-    /// <summary>
-    ///     Adds Stars to the card's owner using the card's Star variable.
-    /// </summary>
     public static async Task ModifyStars(CardModel card)
     {
         await ModifyStars(card.DynamicVars.EvaluateValueOrDefault("Stars"), card.Owner);

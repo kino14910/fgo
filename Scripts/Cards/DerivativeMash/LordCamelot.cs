@@ -21,7 +21,7 @@ public class LordCamelot() : NobleCardModel(0, CardType.Power, TargetType.Self)
         HoverTipFactory.FromPower<PlatingPower>(),
         HoverTipFactory.FromPower<ReducePercentDamagePower>()
     ];
-    
+
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         ModCardVars.Power<PlatingPower>(1),

@@ -25,8 +25,8 @@ public class DepartureOfTheSun() : FgoCardModel(0, CardType.Skill,
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         ModCardVars.Int("CriticalDamagePerStar", 20),
-        ModCardVars.ComputedPowerAmountGiven<CriticalDamagePower>(
-            ctx => FgoBattleHooks.Get(ctx.Player).Stars / 10 * ctx.EvaluateCardVarOrDefault("CriticalDamagePerStar"))
+        ModCardVars.ComputedPowerAmountGiven<CriticalDamagePower>(ctx =>
+            FgoBattleHooks.Get(ctx.Player).Stars / 10 * ctx.EvaluateCardVarOrDefault("CriticalDamagePerStar"))
     ];
 
     protected override void OnUpgrade()

@@ -7,7 +7,6 @@ using Fgo.Scripts.UI;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Commands.Builders;
-using MegaCrit.Sts2.Core.Context;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Players;
@@ -31,7 +30,7 @@ namespace Fgo.Scripts.Singletons;
 [RegisterSingleton]
 public sealed class FgoBattleHooks() : HookedSingletonModel(HookType.Combat)
 {
-    private static readonly AttachedState<Player, FgoPlayerState> States = new(() => new());
+    private static readonly AttachedState<Player, FgoPlayerState> States = new(() => new FgoPlayerState());
 
     /// <summary>
     ///     获取指定玩家的战斗资源状态（不存在则创建）。

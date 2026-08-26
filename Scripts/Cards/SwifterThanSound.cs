@@ -23,7 +23,7 @@ public class SwifterThanSound() : FgoCardModel(1, CardType.Attack,
         HoverTipFactory.FromCard<TheAbsoluteSword>(),
         FgoHoverTipHelper.CreateStarHoverTip()
     ];
-    
+
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [ModCardVars.Damage(8)];
@@ -43,7 +43,7 @@ public class SwifterThanSound() : FgoCardModel(1, CardType.Attack,
 
         await PowerCmd.Apply<SwifterThanSoundPower>(choiceContext,
             Owner.Creature, DurationTurns, Owner.Creature, this);
-        
+
         var card = CombatState!.CreateCard(ModelDb.Card<InfiniteSuffering>(), Owner);
         if (IsUpgraded) CardCmd.Upgrade(card, CardPreviewStyle.None);
         await FgoCardActions.AddToPile(card, PileType.Draw);

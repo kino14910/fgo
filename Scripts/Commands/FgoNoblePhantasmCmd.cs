@@ -24,7 +24,7 @@ public static class FgoNoblePhantasmCmd
         if (player.Creature.HasPower<SealNpPower>())
             return false;
 
-        // 宝具升级次数 = 当前 OverchargePower 的层数（最多 MaxOverCharge 层）。
+        // 宝具升级次数（最多 MaxOverCharge 层）
         var overCharge = player.Creature.GetPower<OverchargePower>()?.Amount ?? 0;
 
         // 候选来自 NobleDeck pile（由 SaintQuartz 遗物管理初始卡 + 右键加入的卡）。
@@ -36,7 +36,6 @@ public static class FgoNoblePhantasmCmd
 
         // NpCardPower: 角色拥有此 power 时，将对应的特定宝具卡加入候选列表。
         // NobleCard 存储的是 canonical singleton，可直接用作候选。
-        // 选择宝具牌后 NpCardPower 会被移除，之后无法再选择这些卡。
         var npCardPower = player.Creature.GetPower<NpCardPower>();
         if (npCardPower?.NobleCard is { } nobleCard
             && cards.All(c => c.Id != nobleCard.Id))
@@ -48,16 +47,11 @@ public static class FgoNoblePhantasmCmd
         var selected = (await CardSelectCmd.FromSimpleGrid(choiceContext, cards, player, prefs)).FirstOrDefault();
         if (selected == null) return false;
 
-        // 选择宝具牌后，移除 NpCardPower（无论选了哪张牌）。
-        // 移除后，下次选择宝具牌时不再有 NpCardPower 添加的特定卡。
         if (npCardPower != null)
             await PowerCmd.Remove(npCardPower);
 
         // NobleDeck 是 RunPersistent 牌堆，卡需跨战斗保留，因此不打出去原卡。
-        // 改为从 canonical singleton 创建副本，按 OverCharge 升级后加入手牌。
-        // 玩家手动打出副本；NobleCardModel.OnPlay 末尾会调用 CardPileCmd.RemoveFromCombat，
-        // 让副本从本次战斗消失（不进弃牌堆/消耗堆），原卡仍留在 NobleDeck。
-        // 通过 ModelId 获取 canonical singleton，避免反射。
+        // 而是从 canonical singleton 创建副本，按 OverCharge 升级后加入手牌。
         var canonical = ModelDb.GetByIdOrNull<NobleCardModel>(selected.Id);
         if (canonical == null)
             return false;

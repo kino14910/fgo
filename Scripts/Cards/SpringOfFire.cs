@@ -29,7 +29,6 @@ public class SpringOfFire() : FgoCardModel(3, CardType.Power,
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        // "纵使三度迎来落日": 之后 3 次免死，每次回复 Heal 点生命。
         var guts = await PowerCmd.Apply<SpringOfFireGutsPower>(choiceContext, Owner.Creature,
             DynamicVars.Heal.BaseValue,
             Owner.Creature, this);
