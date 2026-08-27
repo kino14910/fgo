@@ -19,12 +19,13 @@ public class Excalibur() : NobleCardModel(2, CardType.Attack, TargetType.AllEnem
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         ModCardVars.Damage(25),
-        ModCardVars.Int("Np", 30)
+        ModCardVars.Int("Np", 20)
     ];
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(7);
+        DynamicVars.Damage.UpgradeValueBy(3);
+        DynamicVars["Np"].UpgradeValueBy(7.5m);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

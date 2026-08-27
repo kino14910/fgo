@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://30qog2srmpx"
-path="res://.godot/imported/SuitcaseFgo.png-0effb83ca9473496ddbc3ee7bcf34059.ctex"
+uid="uid://bqtfmxwk8oxlg"
+path="res://.godot/imported/LamentingTheSummerHeat.png-6a9eb2868b16bd75e7fb76eeab0312ab.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Fgo/images/relics/big/SuitcaseFgo.png"
-dest_files=["res://.godot/imported/SuitcaseFgo.png-0effb83ca9473496ddbc3ee7bcf34059.ctex"]
+source_file="res://Fgo/images/cards/big/LamentingTheSummerHeat.png"
+dest_files=["res://.godot/imported/LamentingTheSummerHeat.png-6a9eb2868b16bd75e7fb76eeab0312ab.ctex"]
 
 [params]
 

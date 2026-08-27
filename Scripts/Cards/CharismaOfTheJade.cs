@@ -9,7 +9,7 @@ using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
 
-public class CharismaOfTheJade() : FgoCardModel(2, CardType.Attack,
+public class CharismaOfTheJade() : FgoCardModel(3, CardType.Attack,
     CardRarity.Uncommon, TargetType.AnyEnemy)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
@@ -19,7 +19,7 @@ public class CharismaOfTheJade() : FgoCardModel(2, CardType.Attack,
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        ModCardVars.Damage(7),
+        ModCardVars.Damage(9),
         ModCardVars.Int("Hits", 3)
     ];
 

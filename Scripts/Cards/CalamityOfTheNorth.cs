@@ -9,20 +9,18 @@ using STS2RitsuLib.Cards.DynamicVars;
 namespace Fgo.Scripts.Cards;
 
 public class CalamityOfTheNorth() : FgoCardModel(2, CardType.Skill,
-    CardRarity.Uncommon, TargetType.AllEnemies)
+    CardRarity.Common, TargetType.AllEnemies)
 {
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Retain];
-
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        ModCardVars.Power<PoisonPower>(5),
-        ModCardVars.Power<CursePower>(5)
+        ModCardVars.Power<PoisonPower>(4),
+        ModCardVars.Power<CursePower>(4)
     ];
 
     protected override void OnUpgrade()
     {
-        DynamicVars[nameof(PoisonPower)].UpgradeValueBy(3);
-        DynamicVars[nameof(CursePower)].UpgradeValueBy(3);
+        DynamicVars[nameof(PoisonPower)].UpgradeValueBy(2);
+        DynamicVars[nameof(CursePower)].UpgradeValueBy(2);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

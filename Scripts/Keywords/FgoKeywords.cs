@@ -10,6 +10,7 @@ namespace Fgo.Scripts.Keywords;
 /// </summary>
 [RegisterOwnedCardKeyword(
     nameof(IgnoreInvincible),
+    IconPath = "res://Fgo/images/powers/big/IgnoreInvinciblePower.png",
     CardDescriptionPlacement = ModKeywordCardDescriptionPlacement.BeforeCardDescription)]
 public sealed class FgoKeywords
 {

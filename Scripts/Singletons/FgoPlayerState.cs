@@ -1,7 +1,9 @@
 using Fgo.Scripts.Cards;
+using Fgo.Scripts.Cards.Colorless.EventCards;
 using Fgo.Scripts.Cards.NoblePhantasm;
 using Fgo.Scripts.Character;
 using Fgo.Scripts.Powers;
+using Fgo.Scripts.Relics;
 using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Commands.Builders;
@@ -32,6 +34,15 @@ public sealed class FgoPlayerState
     private int _np;
     private bool _npButtonPressed;
     private int _stars;
+
+    /// <summary>
+    ///     当前好感度（II 事件遗物体系）。战斗内累积，战斗开始时重置
+    ///     为默认值（无星剑的墓志铭为 0，持有则为 1）。
+    /// </summary>
+    public int Affection { get; private set; }
+
+    /// <summary>本回合已打出的手牌张数（用于判定「本回合第一张打出的卡」）。</summary>
+    public int CardsPlayedThisTurn { get; private set; }
 
     public bool CritTriggered => _crit.Triggered;
     public bool CritActive => _crit.Active;
@@ -71,6 +82,8 @@ public sealed class FgoPlayerState
     public bool CanSpecialCrit => Stars >= SpecialCritStars;
     public bool CanUseNp => Np >= 100;
     public bool CanUseCommandSpell => CommandSpell > 0;
+
+    public event Action? AffectionChanged;
 
     public event Action<int>? NpChanged;
 
@@ -129,6 +142,35 @@ public sealed class FgoPlayerState
 
         if (amount > 0)
             await FgoStarGainVfx.Spawn(player, amount);
+    }
+
+    /// <summary>
+    ///     好感度增加（下限 0，不设上限）。变化时通知 II 遗物刷新计数显示。
+    ///     返回实际增加的数量。
+    /// </summary>
+    public int ModifyAffection(int amount, Player? player = null)
+    {
+        var old = Affection;
+        Affection = Math.Max(0, Affection + amount);
+        if (Affection == old) return 0;
+        AffectionChanged?.Invoke();
+        // 刷新 II 遗物的计数显示
+        if (player != null)
+            player.GetRelic<II>()?.RefreshDisplay();
+        return Affection - old;
+    }
+
+    /// <summary>
+    ///     战斗开始时重置好感度与回合计数：
+    ///     默认好感 0（战斗开始时「清空」）；若持有星剑的墓志铭，默认好感变为 1。
+    /// </summary>
+    public void ResetAffectionForCombat(Player player)
+    {
+        var defaultValue = player.GetRelic<AstralSwordEpitaph>() != null ? 1 : 0;
+        CardsPlayedThisTurn = 0;
+        if (Affection == defaultValue) return;
+        Affection = defaultValue;
+        AffectionChanged?.Invoke();
     }
 
     public Task ResetStars()
@@ -195,11 +237,25 @@ public sealed class FgoPlayerState
         if (cardPlay.Card is not { } card)
             return;
 
+        // 每打出一张卡自增，用于「本回合第一张打出的卡」判定（回合开始清零）。
+        CardsPlayedThisTurn++;
+
         if (card is FgoCardModel)
         {
             var multiplier = card.Owner.Creature.HasPower<NpRatePower>() ? 2 : 1;
             await ModifyNp(card.EnergyCost.GetResolved() * FgoReflectedSettings.BaseNpPerCost * multiplier,
                 card.Owner);
+        }
+
+        // II 遗物: 打出女神的砂糖卡时获得 3 好感度；
+        // 本回合第一张打出的卡 +2；〔水边〕场地（持有 WatersidePower）时 +10。
+        if (card is GoddessSugar && card.Owner is { } owner
+                                 && owner.GetRelic<II>() != null)
+        {
+            var gain = 3;
+            if (CardsPlayedThisTurn == 1) gain += 2;
+            if (owner.Creature.HasPower<WatersidePower>()) gain += 10;
+            ModifyAffection(gain, owner);
         }
     }
 
@@ -273,6 +329,8 @@ public sealed class FgoPlayerState
 
     public void OnAfterPlayerTurnStart()
     {
+        // 新回合开始重置回合内打出计数。
+        CardsPlayedThisTurn = 0;
         if (_npButtonPressed && CanUseNp) _npButtonPressed = false;
     }
 

@@ -9,7 +9,7 @@ using STS2RitsuLib.Interop.AutoRegistration;
 namespace Fgo.Scripts.Cards;
 
 [RegisterCharacterStarterCard(typeof(FgoCharacter), 3)]
-public class StrikeFgo() : FgoCardModel(1, CardType.Attack, CardRarity.Basic, TargetType.AnyEnemy)
+public class Strike() : FgoCardModel(1, CardType.Attack, CardRarity.Basic, TargetType.AnyEnemy)
 {
     protected override HashSet<CardTag> CanonicalTags => [CardTag.Strike];
     protected override IEnumerable<DynamicVar> CanonicalVars => [ModCardVars.Damage(6)];

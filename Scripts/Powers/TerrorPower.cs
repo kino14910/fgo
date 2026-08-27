@@ -1,8 +1,8 @@
-using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
-using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using STS2RitsuLib.Cards.DynamicVars;
 using STS2RitsuLib.Combat.Ui.ExtraCornerAmountLabels;
@@ -14,11 +14,17 @@ public class TerrorPower : FgoPowerModel, IPowerExtraIconAmountLabelSpecsProvide
 {
     public override PowerType Type => PowerType.Debuff;
     public override PowerStackType StackType => PowerStackType.Counter;
+    public override PowerInstanceType InstanceType => PowerInstanceType.Instanced;
 
     public override PowerAssetProfile AssetProfile => new(
         "res://Fgo/images/powers/EveryTurnDebuffPower.png",
         "res://Fgo/images/powers/big/EveryTurnDebuffPower.png"
     );
+
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
+    [
+        HoverTipFactory.Static(StaticHoverTip.Stun)
+    ];
 
     /// <summary>
     ///     眩晕概率（0-100）。叠加时取较大值。
@@ -49,24 +55,26 @@ public class TerrorPower : FgoPowerModel, IPowerExtraIconAmountLabelSpecsProvide
         ];
     }
 
-    public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side,
-        IEnumerable<Creature> participants)
+    public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
     {
-        if (!participants.Contains(Owner)) return;
-        if (side != CombatSide.Player) return;
-        if (Amount <= 0) return;
+        // 在玩家回合开始时判定，玩家可以在出牌前直接看到敌人意图被眩晕覆盖，
+        // 确认本次眩晕命中其紧接的下一回合意图，避免命中已执行过的意图而"无事发生"。
+        if (Owner is not { IsDead: false } || Owner.Monster == null || Owner.IsStunned) return;
+        if (TerrorChance <= 0m) return;
 
         var applier = Applier;
-        if (applier is { Player: not null } && TerrorChance > 0m)
+        if (applier is not { Player: not null }) return;
+
+        // 概率眩晕: 以 TerrorChance（0-100）为概率进行单次掷骰。
+        // 使用施法玩家的运行 RNG（怪物自身 Owner.Player 为 null，不可用）。
+        var roll = applier.Player.RunState.Rng.Niche.NextFloat() * 100f;
+        if (roll < (float)TerrorChance)
         {
-            var roll = applier.Player.RunState.Rng.Niche.NextFloat() * 100f;
-            if (roll < (float)TerrorChance)
-            {
-                Flash();
-                await CreatureCmd.Stun(Owner);
-            }
+            Flash();
+            await CreatureCmd.Stun(Owner);
         }
 
+        // 无论是否眩晕成功，每回合消耗一层持续回合数。
         await PowerCmd.Decrement(this);
     }
 }

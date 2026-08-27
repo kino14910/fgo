@@ -3,13 +3,13 @@ using MegaCrit.Sts2.Core.Entities.Relics;
 
 namespace Fgo.Scripts.Relics;
 
-public class SuitcaseFgo : FgoRelic
+public class Suitcase : FgoRelic
 {
     public override RelicRarity Rarity => RelicRarity.Rare;
 
-    public override async Task BeforeCombatStart()
+    public override async Task BeforeCombatStartLate()
     {
         Flash();
-        await FgoResCmd.ModifyNp(100, Owner);
+        await FgoResCmd.ModifyNp(20, Owner);
     }
 }

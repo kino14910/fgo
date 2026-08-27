@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://kcka8q3vvl0l"
-path="res://.godot/imported/yummy_cookie_fgo.png-29b3f4e4a7d898af7b80b00e8745fedb.ctex"
+uid="uid://bucuvja3dkmk"
+path="res://.godot/imported/GoddessSugar.png-f4b5edf11d4344be811da5682cb09f12.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Fgo/images/relics/yummy_cookie_fgo.png"
-dest_files=["res://.godot/imported/yummy_cookie_fgo.png-29b3f4e4a7d898af7b80b00e8745fedb.ctex"]
+source_file="res://Fgo/images/cards/big/GoddessSugar.png"
+dest_files=["res://.godot/imported/GoddessSugar.png-f4b5edf11d4344be811da5682cb09f12.ctex"]
 
 [params]
 

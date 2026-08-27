@@ -1,3 +1,4 @@
+using Fgo.Scripts.Character;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using STS2RitsuLib;
 using STS2RitsuLib.CardPiles;
@@ -20,7 +21,9 @@ public static class FgoEnums
                 Scope = ModCardPileScope.RunPersistent,
                 // 顶栏 deck 按钮旁显示，类似玩家的牌堆图标。
                 Style = ModCardPileUiStyle.TopBarDeck,
-                IconPath = $"res://{modId}/images/ui/noble_deck_button.png"
+                IconPath = $"res://{modId}/images/ui/noble_deck_button.png",
+                VisibleWhen = ctx =>
+                    ctx.Player is null || ctx.Player.Character is FgoCharacter
             }).PileType;
         NoblePhantasm = RitsuLibFramework.RegisterDynamicEnumValue<CardRarity>(modId, "NoblePhantasm");
     }

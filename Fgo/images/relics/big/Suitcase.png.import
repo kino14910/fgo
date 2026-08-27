@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://boggi87vr7m7f"
-path="res://.godot/imported/SuitcaseFgo.png-8d591110c2482d6874a74fd423737f49.ctex"
+uid="uid://30qog2srmpx"
+path="res://.godot/imported/Suitcase.png-033bcb1a8c980cec543be54e0e9b384b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Fgo/images/relics/SuitcaseFgo.png"
-dest_files=["res://.godot/imported/SuitcaseFgo.png-8d591110c2482d6874a74fd423737f49.ctex"]
+source_file="res://Fgo/images/relics/big/Suitcase.png"
+dest_files=["res://.godot/imported/Suitcase.png-033bcb1a8c980cec543be54e0e9b384b.ctex"]
 
 [params]
 

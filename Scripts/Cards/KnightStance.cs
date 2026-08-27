@@ -19,7 +19,7 @@ public class KnightStance() : FgoCardModel(1, CardType.Skill,
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        ModCardVars.Block(8),
+        ModCardVars.Block(6),
         ModCardVars.Power<ReducePercentDamagePower>(20)
     ];
 

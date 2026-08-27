@@ -12,6 +12,6 @@ public class SealNpPower : FgoPowerModel
 
     public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
     {
-        await PowerCmd.TickDownDuration(this);
+        await PowerCmd.Decrement(this);
     }
 }

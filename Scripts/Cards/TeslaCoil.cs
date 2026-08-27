@@ -20,7 +20,7 @@ public class TeslaCoil() : FgoCardModel(1, CardType.Attack,
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        ModCardVars.Damage(8),
+        ModCardVars.Damage(9),
         ModCardVars.Power<NpRatePower>(3)
     ];
 

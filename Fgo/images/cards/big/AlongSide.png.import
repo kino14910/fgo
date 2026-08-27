@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bth1y313328x7"
-path="res://.godot/imported/StrikeFgo.png-4c0c996372a125d183166e8807964bb0.ctex"
+uid="uid://474uxgtrirgx"
+path="res://.godot/imported/AlongSide.png-33ccacda4c5a15d4fdb4b9a04a6e9ea2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Fgo/images/cards/big/StrikeFgo.png"
-dest_files=["res://.godot/imported/StrikeFgo.png-4c0c996372a125d183166e8807964bb0.ctex"]
+source_file="res://Fgo/images/cards/big/AlongSide.png"
+dest_files=["res://.godot/imported/AlongSide.png-33ccacda4c5a15d4fdb4b9a04a6e9ea2.ctex"]
 
 [params]
 

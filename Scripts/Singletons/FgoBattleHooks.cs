@@ -80,6 +80,8 @@ public sealed class FgoBattleHooks() : HookedSingletonModel(HookType.Combat)
             if (player.Character is not FgoCharacter)
                 continue;
             await Get(player).Reset();
+            // 好感度每场战斗重置: 默认 0（持有星剑的墓志铭时默认 1）。
+            Get(player).ResetAffectionForCombat(player);
 
             // 新战斗开始时，所有冷却卡冷却清零（开局可直接打出，打出后才进入冷却）。
             foreach (var cd in CooldownCards(player))

@@ -1,13 +1,15 @@
 using Fgo.Scripts.Cards.NoblePhantasm;
 using Fgo.Scripts.Keywords;
-using Fgo.Scripts.Powers;
+using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models.Powers;
+using MegaCrit.Sts2.Core.Rooms;
 using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards.DerivativeMash;
@@ -49,16 +51,14 @@ public class RayProofKyrielight() : NobleCardModel(1, CardType.Attack, TargetTyp
             .WithHitFx("vfx/vfx_heavy_blunt")
             .Execute(choiceContext);
 
-        foreach (var enemy in CombatState.HittableEnemies)
+        IEnumerable<Creature> targets = CombatState.HittableEnemies;
+        if (CombatState.Encounter?.RoomType == RoomType.Boss)
+            targets = targets.Where(c => c.IsSecondaryEnemy);
+        foreach (var enemy in targets)
         {
-            if (!enemy.IsPrimaryEnemy)
-            {
-                var buffs = enemy.Powers.Where(power => power.Type == PowerType.Buff).ToList();
-                foreach (var buff in buffs)
-                    await PowerCmd.Remove(buff);
-            }
-
-            await PowerCmd.Apply<IgnoreInvinciblePower>(choiceContext, enemy, 1m, Owner.Creature, this);
+            var buffs = enemy.Powers.Where(power => power.Type == PowerType.Buff).ToList();
+            foreach (var buff in buffs)
+                await PowerCmd.Remove(buff);
         }
     }
 }

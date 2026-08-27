@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c5uf1hbd6ifnl"
-path="res://.godot/imported/yummy_cookie_fgo.png-3b732feac021211d5892b4d91ff2fc8a.ctex"
+uid="uid://bth1y313328x7"
+path="res://.godot/imported/Strike.png-1b71901d6ced4f964e3bb68fc5c34c54.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Fgo/images/relics/big/yummy_cookie_fgo.png"
-dest_files=["res://.godot/imported/yummy_cookie_fgo.png-3b732feac021211d5892b4d91ff2fc8a.ctex"]
+source_file="res://Fgo/images/cards/big/Strike.png"
+dest_files=["res://.godot/imported/Strike.png-1b71901d6ced4f964e3bb68fc5c34c54.ctex"]
 
 [params]
 

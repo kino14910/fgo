@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://stonfw62uv30"
-path="res://.godot/imported/DefendFgo.png-ebe68b9d2770b5eeb61c4dde7db19830.ctex"
+uid="uid://drwfhc61lfh4v"
+path="res://.godot/imported/II.png-06affa0569b1e1945cc8d1a2838ca948.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Fgo/images/cards/big/DefendFgo.png"
-dest_files=["res://.godot/imported/DefendFgo.png-ebe68b9d2770b5eeb61c4dde7db19830.ctex"]
+source_file="res://Fgo/images/relics/big/II.png"
+dest_files=["res://.godot/imported/II.png-06affa0569b1e1945cc8d1a2838ca948.ctex"]
 
 [params]
 

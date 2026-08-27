@@ -10,7 +10,7 @@ public class NpPerTurnPower : FgoPowerModel
 {
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Counter;
-
+    
     public override PowerAssetProfile AssetProfile => new(
         "res://Fgo/images/powers/NpPerTurnPower.png",
         "res://Fgo/images/powers/big/NpPerTurnPower.png"

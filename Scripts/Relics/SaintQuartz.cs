@@ -30,17 +30,11 @@ public class SaintQuartz : FgoRelic, IModRightClickableRelic
     public override bool ShowCounter => true;
     public override int DisplayAmount => QuartzCounter;
 
-    /// <summary>
-    ///     本地快速过滤: 只有计数 ≥ 3 时才接收右键。
-    /// </summary>
     public bool CanHandleRightClickLocal(ModRightClickContext context)
     {
         return QuartzCounter >= CostPerChoice;
     }
 
-    /// <summary>
-    ///     执行期判定: 再次检查计数（防止本地与同步状态差异）。
-    /// </summary>
     public bool CanExecuteRightClick(ModRightClickExecutionContext context)
     {
         return QuartzCounter >= CostPerChoice;
@@ -64,7 +58,8 @@ public class SaintQuartz : FgoRelic, IModRightClickableRelic
             typeof(Camelot),
             typeof(LordCamelot),
             typeof(LordChaldeas),
-            typeof(ObscurantWallOfChalk)
+            typeof(ObscurantWallOfChalk),
+            typeof(RayProofKyrielight)
         };
 
         // 用 RunState.CreateCard 而非 CombatState.CreateCard，使右键在地图上也能使用。
@@ -78,12 +73,10 @@ public class SaintQuartz : FgoRelic, IModRightClickableRelic
 
         if (candidates.Count == 0)
         {
-            // 无可选项: 闪一下表示已确认但无候选，不消耗计数。
             Flash();
             return;
         }
 
-        // 随机选择一张（使用 run RNG，保证种子可复现）。
         var selected = player.RunState.Rng.CombatCardSelection.NextItem(candidates);
         if (selected == null) return;
 
@@ -99,10 +92,6 @@ public class SaintQuartz : FgoRelic, IModRightClickableRelic
         }
     }
 
-    /// <summary>
-    ///     每进入一个房间（每层）+1。AfterRoomEntered 在战斗胜利后/事件触发后等都会调用，
-    ///     对应"每层 +1"的语义。
-    /// </summary>
     public override Task AfterRoomEntered(AbstractRoom room)
     {
         QuartzCounter++;

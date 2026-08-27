@@ -35,7 +35,7 @@
 
         <PackageReference Include="JetBrains.Annotations" Version="2026.2.0"/>
 
-        <PackageReference Include="STS2.RitsuLib" Version="0.5.13" />
+        <PackageReference Include="STS2.RitsuLib" Version="0.5.13"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -57,7 +57,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Fgo\images\potions\" />
+        <Folder Include="Fgo\images\potions\"/>
     </ItemGroup>
 
     <Target Name="Copy Mod" AfterTargets="PostBuildEvent">

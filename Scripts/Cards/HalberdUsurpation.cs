@@ -41,7 +41,7 @@ public class HalberdUsurpation() : FgoCardModel(2, CardType.Attack,
 
         var enemyStrength = cardPlay.Target.GetPowerAmount<StrengthPower>();
         if (enemyStrength > 0)
-            await PowerCmd.Apply<HalberdUsurpationPower>(choiceContext, cardPlay.Target, -enemyStrength * 2,
+            await PowerCmd.Apply<HalberdUsurpationPower>(choiceContext, cardPlay.Target, enemyStrength * 2,
                 Owner.Creature, this);
     }
 }

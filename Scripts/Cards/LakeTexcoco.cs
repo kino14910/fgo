@@ -15,7 +15,7 @@ public class LakeTexcoco() : FgoCardModel(1, CardType.Skill,
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
-        HoverTipFactory.FromPower<NpPerTurnPower>(),
+        HoverTipFactory.FromPower<LakeTexcocoPower>(),
         FgoHoverTipHelper.CreateNpHoverTip()
     ];
 
@@ -24,7 +24,7 @@ public class LakeTexcoco() : FgoCardModel(1, CardType.Skill,
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         ModCardVars.Int("Np", 20),
-        ModCardVars.Power<NpPerTurnPower>(10)
+        ModCardVars.Power<LakeTexcocoPower>(10)
     ];
 
     protected override void OnUpgrade()
@@ -36,7 +36,7 @@ public class LakeTexcoco() : FgoCardModel(1, CardType.Skill,
     {
         await FgoResCmd.ModifyNp(this);
         await PowerCmd.Apply<WatersidePower>(choiceContext, Owner.Creature, 1m, Owner.Creature, this);
-        await PowerCmd.Apply<NpPerTurnPower>(choiceContext, Owner.Creature,
-            DynamicVars[nameof(NpPerTurnPower)].BaseValue, Owner.Creature, this);
+        await PowerCmd.Apply<LakeTexcocoPower>(choiceContext, Owner.Creature,
+            DynamicVars[nameof(LakeTexcocoPower)].BaseValue, Owner.Creature, this);
     }
 }

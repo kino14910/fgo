@@ -10,7 +10,7 @@ using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
 
-public class VoidSpaceFineArts() : FgoCardModel(1, CardType.Power,
+public class VoidSpaceFineArts() : FgoCardModel(1, CardType.Skill,
     CardRarity.Uncommon, TargetType.Self)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
@@ -18,6 +18,8 @@ public class VoidSpaceFineArts() : FgoCardModel(1, CardType.Power,
         HoverTipFactory.FromPower<GutsPower>(),
         HoverTipFactory.FromPower<CursePower>()
     ];
+
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
     protected override HashSet<CardTag> CanonicalTags => [FgoTags.Foreigner];
 

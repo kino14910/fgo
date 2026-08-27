@@ -1,4 +1,5 @@
 using Fgo.Scripts.Character;
+using Godot;
 using MegaCrit.Sts2.Core.Entities.Relics;
 using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Scaffolding.Content;
@@ -25,14 +26,22 @@ public abstract class FgoRelic : ModRelicTemplate
         }
     }
 
-    public override RelicAssetProfile AssetProfile => new(
-        // 小图标（原版85x85）
-        $"res://Fgo/images/relics/{GetType().Name}.png",
-        // 轮廓图标（原版85x85）
-        $"res://Fgo/images/relics/{GetType().Name}.png",
-        // 大图标（原版256x256）
-        $"res://Fgo/images/relics/{GetType().Name}.png"
-    );
+    public override RelicAssetProfile AssetProfile
+    {
+        get
+        {
+            // 有专属图标用专属图标，否则回退到占位 relic.png
+            // （与 FgoPowerModel 的 fallback 策略一致，避免新遗物缺图时显示异常）。
+            var small = $"res://Fgo/images/relics/{GetType().Name}.png";
+            var big = $"res://Fgo/images/relics/big/{GetType().Name}.png";
+            var smallExists = ResourceLoader.Exists(small);
+            return new RelicAssetProfile(
+                smallExists ? small : "res://Fgo/images/relics/relic.png",
+                smallExists ? small : "res://Fgo/images/relics/relic.png",
+                ResourceLoader.Exists(big) ? big : "res://Fgo/images/relics/big/relic.png"
+            );
+        }
+    }
 
     /// <summary>
     ///     当计数达到可进行一次宝具抽取的阈值时，把遗物状态置为 Active（图标高亮发光），
@@ -42,6 +51,22 @@ public abstract class FgoRelic : ModRelicTemplate
     protected void UpdateAvailableVisual(int threshold)
     {
         Status = QuartzCounter >= threshold ? RelicStatus.Active : RelicStatus.Normal;
+        InvokeDisplayAmountChanged();
+    }
+
+    /// <summary>
+    ///     供模块外部（事件消耗圣晶石、战斗内好感度变化）刷新遗物的可激活高亮与计数显示。
+    /// </summary>
+    public void RefreshCounterVisual(int threshold)
+    {
+        UpdateAvailableVisual(threshold);
+    }
+
+    /// <summary>
+    ///     仅刷新遗物计数显示，不改变 Active 高亮状态（用于战斗内好感度计数）。
+    /// </summary>
+    public void RefreshDisplayOnly()
+    {
         InvokeDisplayAmountChanged();
     }
 }
