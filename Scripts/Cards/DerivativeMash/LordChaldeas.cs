@@ -75,9 +75,9 @@ public class LordChaldeas() : NobleCardModel(1, CardType.Power, TargetType.Self)
             power.NobleCard = ModelDb.Card<RayProofKyrielight>();
 
         // 时为朦胧的白垩之壁A 变为 测定时间的紫弹之薪
-        var chalk = Owner.PlayerCombatState!.AllCards.FirstOrDefault(card => card is ObscurantWallOfChalkA);
+        var chalk = Owner.PlayerCombatState!.AllCards
+            .FirstOrDefault(card => card is ObscurantWallOfChalkA);
         if (chalk is not null)
-            await CardCmd.Transform(CombatState.CreateCard(chalk, Owner),
-                ModelDb.Card<TimewornBulletKindling>().ToMutable());
+            await CardCmd.TransformTo<TimewornBulletKindling>(chalk);
     }
 }

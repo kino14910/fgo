@@ -57,6 +57,6 @@ public class TimewornBulletKindling() : FgoBaseCardModel(1, CardType.Attack,
         await FgoResCmd.ModifyNp(this);
         await CreatureCmd.Damage(choiceContext, Owner.Creature, 4m,
             ValueProp.Unblockable | ValueProp.Unpowered, Owner.Creature);
-        await CardCmd.Transform(this, ModelDb.Card<ObscurantWallOfChalk>().ToMutable(), CardPreviewStyle.None);
+        await CardCmd.TransformTo<ObscurantWallOfChalk>(this);
     }
 }

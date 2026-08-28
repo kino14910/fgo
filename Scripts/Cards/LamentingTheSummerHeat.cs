@@ -19,6 +19,7 @@ public class LamentingTheSummerHeat() : FgoCardModel(1, CardType.Skill,
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
+        ModCardVars.HpLoss(1),
         ModCardVars.Power<WeakPower>(2)
     ];
 
@@ -31,8 +32,8 @@ public class LamentingTheSummerHeat() : FgoCardModel(1, CardType.Skill,
     {
         ArgumentNullException.ThrowIfNull(cardPlay.Target, nameof(cardPlay.Target));
 
-        await CreatureCmd.Damage(choiceContext, Owner.Creature, 1m,
-            ValueProp.Unblockable | ValueProp.Unpowered, Owner.Creature);
+        await CreatureCmd.Damage(choiceContext, Owner.Creature, DynamicVars.HpLoss.BaseValue,
+            ValueProp.Unblockable | ValueProp.Unpowered | ValueProp.Move, this, cardPlay);
 
         await PowerCmd.Apply<WeakPower>(choiceContext, cardPlay.Target,
             DynamicVars[nameof(WeakPower)].BaseValue, Owner.Creature, this);
