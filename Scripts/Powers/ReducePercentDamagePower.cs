@@ -32,6 +32,7 @@ public class ReducePercentDamagePower : FgoPowerModel
         CardPlay? cardPlay)
     {
         if (target != Owner) return 1m;
+        if (!props.IsPoweredAttack()) return 1m;
         return (100m - Amount) / 100m;
     }
 }

@@ -356,5 +356,5 @@
   "FGO_CARD_SKEWERED_PLASMA_BLADE.title": "Skewered Plasma Blade",
   "FGO_CARD_SKEWERED_PLASMA_BLADE.description": "Deal {Damage:diff()} damage.\n{StunChance:diff()}% chance to apply Stun.",
   "FGO_CARD_LAMENTING_THE_SUMMER_HEAT.title": "Lamenting the Summer Heat",
-  "FGO_CARD_LAMENTING_THE_SUMMER_HEAT.description": "Lose 1 HP. Apply {WeakPower:diff()} [gold]Weak[/gold]."
+  "FGO_CARD_LAMENTING_THE_SUMMER_HEAT.description": "Lose {HpLoss:diff()} HP. Apply {WeakPower:diff()} [gold]Weak[/gold]."
 }

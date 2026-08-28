@@ -19,6 +19,8 @@
   "FGO_CARDPILE_NOBLE.title": "Noble Deck",
   "FGO_STATIC_HOVER_TIPS_FOREIGNER.title": "领域外生命",
   "FGO_STATIC_HOVER_TIPS_FOREIGNER.description": "",
+  "FGO_STATIC_HOVER_TIPS_KNIGHT_OF_CHALDEA.title": "Knight of Chaldea",
+  "FGO_STATIC_HOVER_TIPS_KNIGHT_OF_CHALDEA.description": "Transform this card into [gold]Ray Proof of Hope Kyrielight[/gold], and transform [gold]Obscurant Wall of Chalk A[/gold] into [gold]Timeworn Bullet Kindling[/gold].",
   "FGO_STATIC_HOVER_TIPS_COOLDOWN.title": "Cooldown",
   "FGO_STATIC_HOVER_TIPS_COOLDOWN.description": "While Cooldown is greater than 0, this card cannot be played. Playing any card reduces Cooldown by 1. Becomes playable once Cooldown reaches 0, then re-enters Cooldown after being played."
 }

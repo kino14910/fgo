@@ -55,9 +55,6 @@ public class PeerlessStrike() : FgoCardModel(0, CardType.Attack,
         if (IsUpgraded)
             await PowerCmd.Apply<PeerlessStrikePower>(choiceContext, Owner.Creature, 9999m, Owner.Creature, this);
         else
-            await DamageCmd.Attack(9999)
-                .Targeting(Owner.Creature)
-                .WithHitFx("vfx/vfx_attack_lightning")
-                .Execute(choiceContext);
+            await CreatureCmd.Kill(Owner.Creature);
     }
 }

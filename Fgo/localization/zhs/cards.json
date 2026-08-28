@@ -340,5 +340,5 @@
   "FGO_CARD_SKEWERED_PLASMA_BLADE.title": "穿刺之雷刃",
   "FGO_CARD_SKEWERED_PLASMA_BLADE.description": "造成{Damage:diff()}点伤害。\n以{StunChance:diff()}%概率给予眩晕。",
   "FGO_CARD_LAMENTING_THE_SUMMER_HEAT.title": "对空虚酷暑的叹息",
-  "FGO_CARD_LAMENTING_THE_SUMMER_HEAT.description": "失去1点生命，给予{WeakPower:diff()}层[gold]虚弱[/gold]。"
+  "FGO_CARD_LAMENTING_THE_SUMMER_HEAT.description": "失去{HpLoss:diff()}点生命，给予{WeakPower:diff()}层[gold]虚弱[/gold]。"
 }

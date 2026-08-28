@@ -1,4 +1,4 @@
-﻿{
+{
   "FGO_STATIC_HOVER_TIPS_NP.title": "宝具值",
   "FGO_STATIC_HOVER_TIPS_NP.description": "达到100%以上可使用宝具。",
   "FGO_STATIC_HOVER_TIPS_NP_BAR.title": "宝具值",
@@ -21,6 +21,8 @@
   "FGO_CARDPILE_NOBLE.title": "宝具卡堆",
   "FGO_STATIC_HOVER_TIPS_FOREIGNER.title": "领域外生命",
   "FGO_STATIC_HOVER_TIPS_FOREIGNER.description": "",
+  "FGO_STATIC_HOVER_TIPS_KNIGHT_OF_CHALDEA.title": "迦勒底的圣骑士",
+  "FGO_STATIC_HOVER_TIPS_KNIGHT_OF_CHALDEA.description": "将这张卡转换为[gold]印证希望的人理之剑[/gold]，将[gold]时为朦胧的白垩之壁A[/gold]转换为[gold]测定时间的紫弹之薪[/gold]。",
   "FGO_STATIC_HOVER_TIPS_COOLDOWN.title": "冷却",
   "FGO_STATIC_HOVER_TIPS_COOLDOWN.description": "每打出一张牌，[gold]冷却[/gold]减少[blue]1[/blue]。[gold]冷却[/gold]降到[blue]0[/blue]后才能打出，打出后本卡重新进入[gold]冷却[/gold]。"
 }

@@ -18,11 +18,8 @@ public class PeerlessStrikePower : FgoPowerModel
 
     public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
     {
-        Flash();
-        await DamageCmd.Attack(9999)
-            .Targeting(player.Creature)
-            .WithHitFx("vfx/vfx_attack_lightning")
-            .Execute(choiceContext);
         await PowerCmd.Remove(this);
+        Flash();
+        await CreatureCmd.Kill(Owner);
     }
 }
