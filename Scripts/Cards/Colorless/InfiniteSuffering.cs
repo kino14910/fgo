@@ -5,7 +5,6 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
-using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.CardPools;
 using MegaCrit.Sts2.Core.Nodes.CommonUi;
 using STS2RitsuLib.Cards.DynamicVars;
@@ -43,7 +42,7 @@ public class InfiniteSuffering() : FgoBaseCardModel(2, CardType.Attack,
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
 
-        var card = CombatState!.CreateCard(ModelDb.Card<TheAbsoluteSword>(), Owner);
+        var card = CombatState!.CreateCard<TheAbsoluteSword>(Owner);
         if (IsUpgraded) CardCmd.Upgrade(card, CardPreviewStyle.None);
         await FgoCardActions.AddToPile(card, PileType.Draw);
     }

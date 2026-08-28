@@ -1,9 +1,7 @@
 using Fgo.Scripts.Cards;
-using Fgo.Scripts.Cards.Colorless.EventCards;
 using Fgo.Scripts.Cards.NoblePhantasm;
 using Fgo.Scripts.Character;
 using Fgo.Scripts.Powers;
-using Fgo.Scripts.Relics;
 using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Commands.Builders;

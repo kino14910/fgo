@@ -9,7 +9,7 @@ using STS2RitsuLib.Cards.DynamicVars;
 namespace Fgo.Scripts.Cards;
 
 public class PrimevalRune() : FgoCardModel(1, CardType.Skill,
-    CardRarity.Rare, TargetType.AnyEnemy)
+    CardRarity.Rare, TargetType.AllEnemies)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [

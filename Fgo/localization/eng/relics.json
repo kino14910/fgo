@@ -80,7 +80,7 @@
   "FGO_RELIC_II.description": "Whenever you play [gold]Goddess Sugar[/gold], gain 3 [gold]Affection[/gold].\nIf it is the first card played this turn, gain +2.\nWhile on [gold]Waterside[/gold], gain +10.\nAffection resets to 0 at the start of combat.",
   "FGO_RELIC_II.flavor": "The second gift she gave you.",
   "FGO_RELIC_ASTRAL_SWORD_EPITAPH.title": "Astral Sword Epitaph",
-  "FGO_RELIC_ASTRAL_SWORD_EPITAPH.description": "The default [gold]Affection[/gold] of [gold]II[/gold] becomes 1 (the start of combat sets it to 1 instead of clearing it).",
+  "FGO_RELIC_ASTRAL_SWORD_EPITAPH.description": "The default [gold]Affection[/gold] of [gold]II[/gold] becomes 10 (the start of combat sets it to 1 instead of clearing it).",
   "FGO_RELIC_ASTRAL_SWORD_EPITAPH.flavor": "A Star Sword buried at the edge of the universe.",
   "FGO_RELIC_FGO_RELIC.description": "Feedback to author if you see this",
   "FGO_RELIC_FGO_RELIC.flavor": "Feedback to author if you see this",

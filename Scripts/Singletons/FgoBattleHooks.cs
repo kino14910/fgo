@@ -21,9 +21,11 @@ using STS2RitsuLib.Utils;
 
 namespace Fgo.Scripts.Singletons;
 
-/// <summary>FGO 战斗钩子中枢（全 run 单例）: 接收官方 combat hooks，按玩家路由到对应
-/// <see cref="FgoPlayerState" />，并以静态 <see cref="Get" /> 提供按玩家的状态存储。
-/// 多人模式下状态须按 Player 分实例存放，单例自身只承担接收与路由。</summary>
+/// <summary>
+///     FGO 战斗钩子中枢（全 run 单例）: 接收官方 combat hooks，按玩家路由到对应
+///     <see cref="FgoPlayerState" />，并以静态 <see cref="Get" /> 提供按玩家的状态存储。
+///     多人模式下状态须按 Player 分实例存放，单例自身只承担接收与路由。
+/// </summary>
 [RegisterSingleton]
 public sealed class FgoBattleHooks() : HookedSingletonModel(HookType.Combat)
 {

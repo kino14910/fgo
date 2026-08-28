@@ -1,9 +1,7 @@
 using Fgo.Scripts.Cards.Colorless.EventCards;
 using Fgo.Scripts.Powers;
 using MegaCrit.Sts2.Core.Entities.Cards;
-using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Relics;
-using MegaCrit.Sts2.Core.Models;
 
 namespace Fgo.Scripts.Relics;
 

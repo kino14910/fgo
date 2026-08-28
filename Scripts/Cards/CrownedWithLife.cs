@@ -35,11 +35,11 @@ public class CrownedWithLife() : FgoCardModel(-2, CardType.Skill,
 
     public override async Task AfterCardDrawn(PlayerChoiceContext choiceContext, CardModel card, bool fromHandDraw)
     {
-        if (card is CrownedWithLife)
-        {
-            await PowerCmd.Apply<CursePower>(choiceContext, Owner.Creature, DynamicVars[nameof(CursePower)].BaseValue,
-                Owner.Creature, this);
-            await FgoResCmd.ModifyStars(DynamicVars["Star"].BaseValue, Owner);
-        }
+        if (card != this)
+            return;
+
+        await PowerCmd.Apply<CursePower>(choiceContext, Owner.Creature, DynamicVars[nameof(CursePower)].BaseValue,
+            Owner.Creature, this);
+        await FgoResCmd.ModifyStars(DynamicVars["Star"].BaseValue, Owner);
     }
 }

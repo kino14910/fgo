@@ -6,7 +6,6 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
-using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Nodes.CommonUi;
 using STS2RitsuLib.Cards.DynamicVars;
 
@@ -44,7 +43,7 @@ public class SwifterThanSound() : FgoCardModel(1, CardType.Attack,
         await PowerCmd.Apply<SwifterThanSoundPower>(choiceContext,
             Owner.Creature, DurationTurns, Owner.Creature, this);
 
-        var card = CombatState!.CreateCard(ModelDb.Card<InfiniteSuffering>(), Owner);
+        var card = CombatState!.CreateCard<InfiniteSuffering>(Owner);
         if (IsUpgraded) CardCmd.Upgrade(card, CardPreviewStyle.None);
         await FgoCardActions.AddToPile(card, PileType.Draw);
     }

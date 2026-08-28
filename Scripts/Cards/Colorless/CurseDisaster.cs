@@ -33,6 +33,9 @@ public class CurseDisaster() : FgoBaseCardModel(-2, CardType.Status,
 
     public override async Task AfterCardDrawn(PlayerChoiceContext choiceContext, CardModel card, bool fromHandDraw)
     {
+        if (card != this)
+            return;
+
         await PowerCmd.Apply<CursePower>(choiceContext, Owner.Creature, DynamicVars[nameof(CursePower)].BaseValue,
             Owner.Creature, this);
         await PowerCmd.Apply<CursePower>(choiceContext, CombatState!.HittableEnemies,

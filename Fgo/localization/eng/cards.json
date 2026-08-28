@@ -348,7 +348,7 @@
   "FGO_CARD_INFANTILE_REGRESSION.title": "Infantile Regression",
   "FGO_CARD_INFANTILE_REGRESSION.description": "Gain {energyPrefix:energyIcons(1)}.\nRemove all [gold]extra Max HP[/gold]; for every 9 removed, gain {Np:diff()}% [gold]NP[/gold].",
   "FGO_CARD_GODDESS_SUGAR.title": "Goddess Sugar",
-  "FGO_CARD_GODDESS_SUGAR.description": "Deal {Damage:diff()} damage.\nGain {CritDamage:diff()}% [gold]Critical Damage[/gold].\nGain {Np:diff()}% [gold]NP[/gold].\nApply {PoisonPower:diff()} [gold]Poison[/gold].",
+  "FGO_CARD_GODDESS_SUGAR.description": "Deal {Damage:diff()} damage.\nGain {CritDamage:diff()}% [gold]Critical Damage[/gold].\nGain {Np:diff()}% [gold]NP[/gold].\nGain {PoisonPower:diff()} [gold]Poison[/gold].",
   "FGO_CARD_EDIN_SHUGURRA_COLLAPSAR.title": "Edin Shugurra Collapsar",
   "FGO_CARD_EDIN_SHUGURRA_COLLAPSAR.description": "Gain {Affection:diff()} [gold]Affection[/gold].\nAt 40+ [gold]Affection[/gold], remove ALL enemies' [gold]Artifact[/gold].\nAt 70+ [gold]Affection[/gold], remove ALL enemies' [gold]Block[/gold].\nAt 100 [gold]Affection[/gold], gain 50 [gold]Critical Stars[/gold].\nDeal {Damage:diff()} damage to ALL enemies, +3 per 10 [gold]Affection[/gold].\nApply 12 [gold]Doom[/gold] to ALL enemies.",
   "FGO_CARD_ALONG_SIDE.title": "Along Side",

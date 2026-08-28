@@ -1,7 +1,7 @@
-using Fgo.Scripts.Cards;
 using Fgo.Scripts.Cards.Colorless.EventCards;
 using Fgo.Scripts.Cards.NoblePhantasm;
 using Fgo.Scripts.Character;
+using Fgo.Scripts.Relics;
 using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -26,14 +26,19 @@ public sealed class FinalUnderworld : ModEventTemplate
     );
 
     /// <summary>仅当所有玩家都为 FGO 角色时生成（奖励依赖 FGO 专属的 NobleDeck 与圣晶石计数）。</summary>
-    public override bool IsAllowed(IRunState runState) =>
-        runState.Players.Count > 0 && runState.Players.All(p => p.Character is FgoCharacter);
+    public override bool IsAllowed(IRunState runState)
+    {
+        return runState.Players.Count > 0 && runState.Players.All(p => p.Character is FgoCharacter);
+    }
 
-    protected override IReadOnlyList<EventOption> GenerateInitialOptions() =>
-    [
-        new EventOption(this, Accept, InitialOptionKey("ACCEPT")),
-        new EventOption(this, Leave, InitialOptionKey("LEAVE"))
-    ];
+    protected override IReadOnlyList<EventOption> GenerateInitialOptions()
+    {
+        return
+        [
+            new EventOption(this, Accept, InitialOptionKey("ACCEPT")),
+            new EventOption(this, Leave, InitialOptionKey("LEAVE"))
+        ];
+    }
 
     /// <summary>接受她的招待: 获得女神的砂糖卡，进入下一页。</summary>
     private async Task Accept()
@@ -86,7 +91,7 @@ public sealed class FinalUnderworld : ModEventTemplate
         // 圣晶石不足 3 层时不提供献祭选项。
         var options = new List<EventOption>
         {
-            new EventOption(this, RefuseGift, ModOptionKey("GIFT", "REFUSE"))
+            new(this, RefuseGift, ModOptionKey("GIFT", "REFUSE"))
         };
         if (Owner != null && Entry.RunState.Get(Owner).QuartzCount >= QuartzCost)
             options.Insert(0, new EventOption(this, OfferQuartz, ModOptionKey("GIFT", "OFFER_QUARTZ")));
@@ -102,8 +107,8 @@ public sealed class FinalUnderworld : ModEventTemplate
 
         Entry.RunState.Modify(Owner, data => data.QuartzCount -= QuartzCost);
 
-        Owner.GetRelic<Fgo.Scripts.Relics.SaintQuartz>()?.RefreshCounterVisual(QuartzCost);
-        Owner.GetRelic<Fgo.Scripts.Relics.SummonTicket>()?.RefreshCounterVisual(QuartzCost);
+        Owner.GetRelic<SaintQuartz>()?.RefreshCounterVisual(QuartzCost);
+        Owner.GetRelic<SummonTicket>()?.RefreshCounterVisual(QuartzCost);
 
         await RelicCmd.Obtain<RelicAstralSwordEpitaph>(Owner);
 

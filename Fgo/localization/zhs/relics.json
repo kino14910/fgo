@@ -63,7 +63,7 @@
   "FGO_RELIC_II.description": "打出[gold]女神的砂糖[/gold]时，获得3点好感度。\n本回合第一张打出的卡: 额外+2。\n〔水边〕场地: 额外+10。\n战斗开始时好感度清空。",
   "FGO_RELIC_II.flavor": "她递来的第二份礼物。",
   "FGO_RELIC_ASTRAL_SWORD_EPITAPH.title": "星剑的墓志铭",
-  "FGO_RELIC_ASTRAL_SWORD_EPITAPH.description": "[gold]II[/gold]的好感度默认值变为 1（战斗开始时不清空，而是变为 1）。",
+  "FGO_RELIC_ASTRAL_SWORD_EPITAPH.description": "[gold]II[/gold]的好感度默认值变为 10（战斗开始时不清空，而是变为 10）。",
   "FGO_RELIC_ASTRAL_SWORD_EPITAPH.flavor": "埋葬于宇宙尽头的星之剑。",
   "SEA_GLASS.FGO_FGO.title": "FGO玻璃"
 }

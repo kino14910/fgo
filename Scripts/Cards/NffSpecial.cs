@@ -33,11 +33,6 @@ public class NffSpecial() : FgoCardModel(0, CardType.Skill,
     {
         await CardPileCmd.Draw(choiceContext, DynamicVars.Cards.BaseValue, Owner);
         for (var i = 0; i < 2; i++)
-        {
-            // 战斗中加卡必须用 CombatState.CreateCard<T>: 它完成 ToMutable + 设置 Owner + 注册到 CombatState。
-            // ModelDb.Card<T>() 是全局规范单例（Owner 为 null），直接传入会抛 InvalidOperationException 并污染单例。
-            var dagger = CombatState!.CreateCard<PoisonousDagger>(Owner);
-            await FgoCardActions.AddToPile(dagger, PileType.Discard);
-        }
+            await FgoCardActions.AddToPile(CombatState!.CreateCard<PoisonousDagger>(Owner), PileType.Discard);
     }
 }
