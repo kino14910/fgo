@@ -95,6 +95,8 @@ public class Entry
         _runStartedSubscription = RitsuLibFramework.SubscribeLifecycle<RunStartedEvent>(OnRunStarted);
         _runLoadedSubscription = RitsuLibFramework.SubscribeLifecycle<RunLoadedEvent>(OnRunLoaded);
 
+        FgoTelemetry.Register();
+
         // 游戏就绪后注册 N 快捷键打开 NobleDeck
         _gameReadySubscription = RitsuLibFramework.SubscribeLifecycle<GameReadyEvent>(OnGameReady);
         try
