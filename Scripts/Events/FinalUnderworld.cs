@@ -25,9 +25,7 @@ public sealed class FinalUnderworld : ModEventTemplate
         "res://Fgo/images/events/FinalUnderworld.png"
     );
 
-    /// <summary>
-    ///     仅当所有玩家都为 FGO 角色时生成（事件奖励依赖 FGO 专属的 NobleDeck 牌堆与圣晶石计数）。
-    /// </summary>
+    /// <summary>仅当所有玩家都为 FGO 角色时生成（奖励依赖 FGO 专属的 NobleDeck 与圣晶石计数）。</summary>
     public override bool IsAllowed(IRunState runState) =>
         runState.Players.Count > 0 && runState.Players.All(p => p.Character is FgoCharacter);
 
@@ -42,7 +40,7 @@ public sealed class FinalUnderworld : ModEventTemplate
     {
         if (Owner == null) return;
 
-        // 将女神的砂糖卡加入主卡组（非战斗牌堆用 RunState.CreateCard 创建实例）。
+        // 非战斗牌堆的卡用 RunState.CreateCard 创建实例，加入主卡组。
         var sugarCard = Owner.RunState.CreateCard(ModelDb.Card<GoddessSugar>(), Owner);
         CardCmd.PreviewCardPileAdd(await CardPileCmd.Add(sugarCard, Owner.Deck));
 
@@ -63,7 +61,7 @@ public sealed class FinalUnderworld : ModEventTemplate
 
         await RelicCmd.Obtain<RelicII>(Owner);
 
-        // 兽冠宝具加入 NobleDeck（RunPersistent），并播放加入预览动画。
+        // 兽冠宝具加入 NobleDeck 并播放预览动画。
         var noblePile = CardPile.Get(FgoEnums.NobleDeck, Owner);
         if (noblePile != null)
         {
@@ -85,7 +83,7 @@ public sealed class FinalUnderworld : ModEventTemplate
 
     private Task Continue()
     {
-        // 动态生成献祭选项: 圣晶石计数不足 3 层时不提供。
+        // 圣晶石不足 3 层时不提供献祭选项。
         var options = new List<EventOption>
         {
             new EventOption(this, RefuseGift, ModOptionKey("GIFT", "REFUSE"))
@@ -104,7 +102,6 @@ public sealed class FinalUnderworld : ModEventTemplate
 
         Entry.RunState.Modify(Owner, data => data.QuartzCount -= QuartzCost);
 
-        // 圣晶石/召唤券的计数显示同步刷新。
         Owner.GetRelic<Fgo.Scripts.Relics.SaintQuartz>()?.RefreshCounterVisual(QuartzCost);
         Owner.GetRelic<Fgo.Scripts.Relics.SummonTicket>()?.RefreshCounterVisual(QuartzCost);
 

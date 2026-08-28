@@ -3,6 +3,7 @@ using Fgo.Scripts.Cards.NoblePhantasm;
 using Fgo.Scripts.Character;
 using Fgo.Scripts.Commands;
 using Fgo.Scripts.Powers;
+using Fgo.Scripts.Relics;
 using Fgo.Scripts.UI;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
@@ -20,13 +21,9 @@ using STS2RitsuLib.Utils;
 
 namespace Fgo.Scripts.Singletons;
 
-/// <summary>
-///     FGO 战斗钩子中枢（全 run 单例）：
-///     - 接收官方 combat hooks，按事件的 player 参数路由到对应玩家的 <see cref="FgoPlayerState" />；
-///     - 通过静态 <see cref="Get" /> 提供按玩家索引的状态存储（AttachedState 弱引用表）。
-///     状态不能作为本单例的字段（多人模式 N 个玩家共用一个实例会串台），
-///     必须按 Player 分实例存储；单例本身只承担钩子接收与路由。
-/// </summary>
+/// <summary>FGO 战斗钩子中枢（全 run 单例）: 接收官方 combat hooks，按玩家路由到对应
+/// <see cref="FgoPlayerState" />，并以静态 <see cref="Get" /> 提供按玩家的状态存储。
+/// 多人模式下状态须按 Player 分实例存放，单例自身只承担接收与路由。</summary>
 [RegisterSingleton]
 public sealed class FgoBattleHooks() : HookedSingletonModel(HookType.Combat)
 {
@@ -46,6 +43,7 @@ public sealed class FgoBattleHooks() : HookedSingletonModel(HookType.Combat)
         if (cardPlay.Card?.Owner is not { Character: FgoCharacter } player)
             return;
         await Get(player).OnBeforeCardPlayed(cardPlay);
+        player.GetRelic<II>()?.OnBeforeCardPlayed(cardPlay);
     }
 
     public override async Task BeforeAttack(AttackCommand command)
@@ -55,9 +53,7 @@ public sealed class FgoBattleHooks() : HookedSingletonModel(HookType.Combat)
         await Get(player).OnBeforeAttack(command);
     }
 
-    /// <summary>
-    ///     枚举指定玩家分布在各牌堆中的所有冷却卡片实例，用于统一重置/遍历。
-    /// </summary>
+    /// <summary>枚举指定玩家分布在各牌堆中的所有冷却卡实例，用于统一重置/遍历。</summary>
     private static IEnumerable<FgoCooldownCardModel> CooldownCards(Player player)
     {
         foreach (var pile in Enum.GetValues<PileType>())
@@ -70,7 +66,6 @@ public sealed class FgoBattleHooks() : HookedSingletonModel(HookType.Combat)
 
     public override async Task BeforeCombatStart()
     {
-        // 上一场战斗结束时 HUD 关闭了 _Process，新战斗开始前兜底唤醒实例。
         FgoGlobalHud.WakeInstances();
 
         var combat = CurrentCombatState;
@@ -80,10 +75,9 @@ public sealed class FgoBattleHooks() : HookedSingletonModel(HookType.Combat)
             if (player.Character is not FgoCharacter)
                 continue;
             await Get(player).Reset();
-            // 好感度每场战斗重置: 默认 0（持有星剑的墓志铭时默认 1）。
-            Get(player).ResetAffectionForCombat(player);
+            // 好感度由 II 遗物重置: 默认 0，持星剑的墓志铭时 10
+            player.GetRelic<II>()?.ResetAffectionForCombat();
 
-            // 新战斗开始时，所有冷却卡冷却清零（开局可直接打出，打出后才进入冷却）。
             foreach (var cd in CooldownCards(player))
                 cd.ReadyCooldown();
         }
@@ -132,6 +126,7 @@ public sealed class FgoBattleHooks() : HookedSingletonModel(HookType.Combat)
         if (player.Character is not FgoCharacter)
             return Task.CompletedTask;
         Get(player).OnAfterPlayerTurnStart();
+        player.GetRelic<II>()?.OnAfterPlayerTurnStart();
         return Task.CompletedTask;
     }
 

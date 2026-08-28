@@ -1,26 +1,66 @@
-using Fgo.Scripts.Singletons;
+using Fgo.Scripts.Cards.Colorless.EventCards;
+using Fgo.Scripts.Powers;
+using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Relics;
 using MegaCrit.Sts2.Core.Models;
 
 namespace Fgo.Scripts.Relics;
 
 /// <summary>
-///     [II]（仅作为好感度系统的载体遗物）: 显示当前[gold]好感度[/gold]。
-///     好感度在战斗中累积（女神的砂糖、兽冠等来源），战斗开始时清空
-///     （持有星剑的墓志铭时默认变为 1，见 <see cref="FgoPlayerState.ResetAffectionForCombat" />）。
+///     [II]: 好感度系统的唯一载体。持有该遗物时打出女神的砂糖才会累积好感度；
+///     战斗开始时清空（持有星剑的墓志铭时默认为 10）。
 /// </summary>
 public class II : FgoRelic
 {
     public override RelicRarity Rarity => RelicRarity.Event;
     public override bool ShowCounter => true;
 
-    public override int DisplayAmount => Owner != null ? FgoBattleHooks.Get(Owner).Affection : 0;
+    public int Affection { get; private set; }
 
-    /// <summary>
-    ///     好感度变化时刷新计数显示（由 FgoPlayerState 调用）。
-    /// </summary>
-    public void RefreshDisplay()
+    public int CardsPlayedThisTurn { get; private set; }
+
+    public override int DisplayAmount => Owner != null ? Affection : 0;
+
+    public int ModifyAffection(int amount)
     {
-        RefreshDisplayOnly();
+        var old = Affection;
+        Affection = Math.Max(0, Affection + amount);
+        if (Affection == old) return 0;
+        InvokeDisplayAmountChanged();
+        return Affection - old;
+    }
+
+    // 基础 +3；本回合第一张卡 +2；〔水边〕场地（WatersidePower）时 +10。
+    public void OnBeforeCardPlayed(CardPlay cardPlay)
+    {
+        if (Owner is not { } owner)
+            return;
+        if (cardPlay.Card is not { } card)
+            return;
+
+        CardsPlayedThisTurn++;
+
+        if (card is GoddessSugar)
+        {
+            var gain = 3;
+            if (CardsPlayedThisTurn == 1) gain += 2;
+            if (owner.Creature.HasPower<WatersidePower>()) gain += 10;
+            ModifyAffection(gain);
+        }
+    }
+
+    public void OnAfterPlayerTurnStart()
+    {
+        CardsPlayedThisTurn = 0;
+    }
+
+    public void ResetAffectionForCombat()
+    {
+        var defaultValue = Owner != null && Owner.GetRelic<AstralSwordEpitaph>() != null ? 10 : 0;
+        CardsPlayedThisTurn = 0;
+        if (Affection == defaultValue) return;
+        Affection = defaultValue;
+        InvokeDisplayAmountChanged();
     }
 }

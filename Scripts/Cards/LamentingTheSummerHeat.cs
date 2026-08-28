@@ -9,9 +9,6 @@ using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
 
-/// <summary>
-///     对空虚酷暑的叹息（Lamenting the Summer Heat）: 失去 1 点生命，给予 2(3) 层虚弱。
-/// </summary>
 public class LamentingTheSummerHeat() : FgoCardModel(1, CardType.Skill,
     CardRarity.Common, TargetType.AnyEnemy)
 {
@@ -34,11 +31,9 @@ public class LamentingTheSummerHeat() : FgoCardModel(1, CardType.Skill,
     {
         ArgumentNullException.ThrowIfNull(cardPlay.Target, nameof(cardPlay.Target));
 
-        // 失去 1 点生命（不可格挡、不受力量加成）。
         await CreatureCmd.Damage(choiceContext, Owner.Creature, 1m,
             ValueProp.Unblockable | ValueProp.Unpowered, Owner.Creature);
 
-        // 给予目标 {WeakPower} 层虚弱。
         await PowerCmd.Apply<WeakPower>(choiceContext, cardPlay.Target,
             DynamicVars[nameof(WeakPower)].BaseValue, Owner.Creature, this);
     }

@@ -62,11 +62,8 @@ public abstract class FgoRelic : ModRelicTemplate
         UpdateAvailableVisual(threshold);
     }
 
-    /// <summary>
-    ///     仅刷新遗物计数显示，不改变 Active 高亮状态（用于战斗内好感度计数）。
-    /// </summary>
-    public void RefreshDisplayOnly()
+    public void InvokeDisplayAmountChanged()
     {
-        InvokeDisplayAmountChanged();
+        base.InvokeDisplayAmountChanged();
     }
 }

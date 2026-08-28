@@ -16,10 +16,9 @@ public static class FgoEnums
         NobleDeck = ModCardPileRegistry.For(modId)
             .RegisterOwned("Noble", new ModCardPileSpec
             {
-                // RunPersistent: 牌堆绑定到 Player 而非 PlayerCombatState，
-                // 跨战斗保留、可在地图查看、随存档保存（由 ModCardPilePersistence 自动序列化）。
+                // RunPersistent: 绑定到 Player 而非 PlayerCombatState，跨战斗保留并随存档保存。
                 Scope = ModCardPileScope.RunPersistent,
-                // 顶栏 deck 按钮旁显示，类似玩家的牌堆图标。
+                // 显示在顶栏 deck 按钮旁。
                 Style = ModCardPileUiStyle.TopBarDeck,
                 IconPath = $"res://{modId}/images/ui/noble_deck_button.png",
                 VisibleWhen = ctx =>

@@ -57,16 +57,14 @@ public class TerrorPower : FgoPowerModel, IPowerExtraIconAmountLabelSpecsProvide
 
     public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
     {
-        // 在玩家回合开始时判定，玩家可以在出牌前直接看到敌人意图被眩晕覆盖，
-        // 确认本次眩晕命中其紧接的下一回合意图，避免命中已执行过的意图而"无事发生"。
+        // 玩家回合开始时判定，命中敌人紧接的下一意图，避免命中已执行意图而无事发生。
         if (Owner is not { IsDead: false } || Owner.Monster == null || Owner.IsStunned) return;
         if (TerrorChance <= 0m) return;
 
         var applier = Applier;
         if (applier is not { Player: not null }) return;
 
-        // 概率眩晕: 以 TerrorChance（0-100）为概率进行单次掷骰。
-        // 使用施法玩家的运行 RNG（怪物自身 Owner.Player 为 null，不可用）。
+        // 以 TerrorChance 为概率单次掷骰；使用施法玩家的 RNG（怪物 Owner.Player 为 null）。
         var roll = applier.Player.RunState.Rng.Niche.NextFloat() * 100f;
         if (roll < (float)TerrorChance)
         {
@@ -74,7 +72,6 @@ public class TerrorPower : FgoPowerModel, IPowerExtraIconAmountLabelSpecsProvide
             await CreatureCmd.Stun(Owner);
         }
 
-        // 无论是否眩晕成功，每回合消耗一层持续回合数。
         await PowerCmd.Decrement(this);
     }
 }
