@@ -3,18 +3,54 @@ using Fgo.Scripts.Powers;
 using Fgo.Scripts.Singletons;
 using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.CardSelection;
+using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.Entities.Multiplayer;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Nodes.CommonUi;
+using MegaCrit.Sts2.Core.Runs;
+using STS2RitsuLib.Networking.ManagedActions;
 
 namespace Fgo.Scripts.Commands;
 
 public static class FgoNoblePhantasmCmd
 {
+    /// <summary>
+    ///     托管网络动作: 把宝具选牌作为正式 GameAction 走官方动作队列（药水 UsePotionAction 模式），
+    ///     在所有 peer 上执行。选牌用 GameActionPlayerChoiceContext pause/resume 动作本身，
+    ///     选择会正确路由给动作所有者。此前直接在 UI 事件里跑选牌导致 host 侧无人执行
+    ///     SignalPlayerChoiceBegun，hook action 永远等不到 SetChoiceContext，队列死锁卡死。
+    ///     必须在 Entry.Init 注册，保证任何 peer 发起前本端已注册（ExecuteAction 按 opcode 查找）。
+    /// </summary>
+    internal static readonly RitsuLibManagedNetActionDescriptor<byte> SyncDescriptor = new(
+        Entry.ModId,
+        "np_button",
+        static _ => [],
+        static _ => 0,
+        ExecuteManaged,
+        GameActionType.CombatPlayPhaseOnly);
+
+    private static async Task ExecuteManaged(RitsuLibManagedNetActionContext<byte> context)
+    {
+        await TryChooseNoblePhantasm(context.PlayerChoiceContext, context.Player);
+    }
+
+    /// <summary>
+    ///     UI 按钮入口: 仅本机玩家调用（调用方需保证 LocalContext.IsMe）。
+    /// </summary>
+    public static bool Request()
+    {
+        if (CombatManager.Instance.IsInProgress &&
+            RunManager.Instance.ActionQueueSynchronizer.CombatState != ActionSynchronizerCombatState.PlayPhase)
+            return false;
+
+        return RitsuLibManagedNetActions.Request<byte>(RunManager.Instance, SyncDescriptor, 0);
+    }
+
     public static async Task<bool> TryChooseNoblePhantasm(PlayerChoiceContext choiceContext, Player player)
     {
         var playerState = FgoBattleHooks.Get(player);

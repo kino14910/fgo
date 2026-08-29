@@ -4,8 +4,6 @@ using Fgo.Scripts.Singletons;
 using Godot;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Context;
-using MegaCrit.Sts2.Core.Entities.Multiplayer;
-using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Nodes.Combat;
@@ -277,17 +275,16 @@ public sealed partial class FgoGlobalHud : Control
         NHoverTipSet.Remove(_starBox);
     }
 
-    private static async void OnCommandSpellButtonPressed()
+    private static void OnCommandSpellButtonPressed()
     {
         var state = CombatManager.Instance.DebugOnlyGetState();
         var player = LocalContext.GetMe(state);
         if (player is null || player.Character is not FgoCharacter) return;
 
-        // UI 按钮触发的选牌: 用 HookPlayerChoiceContext 把选择作为一个新 GameAction 排入
-        // 本玩家队列，多人下其他玩家的队列不会被阻塞（官方文档: 战斗场景应优先 Hook 而非 Blocking）。
-        var choiceContext = new HookPlayerChoiceContext(player, player.NetId, GameActionType.Combat);
-        await choiceContext.AssignTaskAndWaitForPauseOrCompletion(
-            FgoCommandSpellCmd.TryUseCommandSpell(choiceContext, player));
+        // 选牌作为托管网络动作走官方动作队列（药水 UsePotionAction 模式），
+        // 在所有 peer 上执行；此前直接在 UI 事件里跑选牌会让 host 侧
+        // 永远等不到 SetChoiceContext，动作队列死锁、全游戏卡死。
+        FgoCommandSpellCmd.Request();
     }
 
     private void OnCommandSpellMouseEntered()

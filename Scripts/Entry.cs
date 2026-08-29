@@ -1,6 +1,7 @@
 using System.Reflection;
 using Fgo.Scripts.Cards;
 using Fgo.Scripts.Character;
+using Fgo.Scripts.Commands;
 using Fgo.Scripts.Relics;
 using Fgo.Scripts.Singletons;
 using Fgo.Scripts.UI;
@@ -16,6 +17,7 @@ using STS2RitsuLib;
 using STS2RitsuLib.CardPiles.Nodes;
 using STS2RitsuLib.Content;
 using STS2RitsuLib.Interop;
+using STS2RitsuLib.Networking.ManagedActions;
 using STS2RitsuLib.Patching.Core;
 using STS2RitsuLib.RunData;
 using STS2RitsuLib.RuntimeInput;
@@ -53,6 +55,12 @@ public class Entry
         RitsuLibFramework.RegisterModSettingsReflectionProvider<FgoReflectedSettings>();
         FgoEnums.Initialize(ModId);
         FgoCombatUi.Initialize();
+
+        // 注册 UI 按钮（NP 条/令咒）的托管网络动作 descriptor。
+        // 必须在任何 peer 可能发起请求前于所有端注册完成，
+        // 否则 ExecuteAction 按 opcode 找不到注册会抛异常。
+        RitsuLibManagedNetActions.Register(FgoNoblePhantasmCmd.SyncDescriptor);
+        RitsuLibManagedNetActions.Register(FgoCommandSpellCmd.SyncDescriptor);
 
         // 注册局内保存数据（令咒数量）
         using (RitsuLibFramework.BeginModDataRegistration(ModId))
