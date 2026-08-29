@@ -53,21 +53,14 @@ public class SaintQuartz : FgoRelic, IModRightClickableRelic
             .Select(c => c.GetType())
             .ToHashSet() ?? [];
 
-        var excludeTypes = new HashSet<Type>
-        {
-            typeof(Camelot),
-            typeof(LordCamelot),
-            typeof(LordChaldeas),
-            typeof(ObscurantWallOfChalk),
-            typeof(RayProofKyrielight)
-        };
-
+        // 候选 = 未在宝具卡组本局已拥有的 && 不在共享排除列表（见 FgoCardActions.ExcludedFromNobleDrawing）。
         // 用 RunState.CreateCard 而非 CombatState.CreateCard，使右键在地图上也能使用。
         // NobleDeck 是 RunPersistent 牌堆，加入的卡不进入战斗 pile，无需注册到 CombatState。
         var candidates = ModelDb.CardPool<NobleCardPool>()
             .GetUnlockedCards(player.UnlockState, player.RunState.CardMultiplayerConstraint)
             .OfType<NobleCardModel>()
-            .Where(card => !existing.Contains(card.GetType()) && !excludeTypes.Contains(card.GetType()))
+            .Where(card => !existing.Contains(card.GetType()) &&
+                           !FgoCardActions.ExcludedFromNobleDrawing.Contains(card.GetType()))
             .Select(card => player.RunState.CreateCard(card, player))
             .ToList();
 

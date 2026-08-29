@@ -43,6 +43,11 @@ public class LakeTexcocoPower : FgoPowerModel, IPowerExtraIconAmountLabelSpecsPr
 
     protected override string SmartDescriptionLocKey =>
         "FGO_POWER_LAKE_TEXCOCO_POWER.smartDescription";
+    
+    public override PowerAssetProfile AssetProfile => new(
+        "res://Fgo/images/powers/NpPerTurnPower.png",
+        "res://Fgo/images/powers/big/NpPerTurnPower.png"
+    );
 
     public IReadOnlyList<ExtraIconAmountLabelSpec> GetPowerExtraIconAmountLabelSpecs()
     {

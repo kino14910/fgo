@@ -15,10 +15,6 @@ public class ElixirOfRejuvenation : FgoPotionModel
 
     protected override async Task OnUse(PlayerChoiceContext choiceContext, Creature? target)
     {
-        await CreatureCmd.Heal(Owner.Creature, 10m, false);
-        var debuffs = Owner.Creature.Powers
-            .Where(p => p.Type == PowerType.Debuff).ToList();
-        foreach (var debuff in debuffs)
-            await PowerCmd.Remove(debuff);
+        await CreatureCmd.Heal(Owner.Creature, 10m);
     }
 }

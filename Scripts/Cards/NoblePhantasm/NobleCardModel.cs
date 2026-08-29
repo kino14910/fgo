@@ -1,8 +1,12 @@
+using System.ComponentModel;
 using Fgo.Scripts.Character;
 using Fgo.Scripts.Utils;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
 using STS2RitsuLib.Interop.AutoRegistration;
+using STS2RitsuLib.Models.Capabilities;
 using STS2RitsuLib.Scaffolding.Content;
 
 namespace Fgo.Scripts.Cards.NoblePhantasm;
@@ -26,20 +30,7 @@ public abstract class NobleCardModel(
     }
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Retain];
-
-    /// <summary>
-    ///     直接返回 NobleCardPool，绕过基类基于 AllCardIds.Contains 的查找。
-    ///     NobleCardPool 已通过 [RegisterSharedCardPool] 注册到 AllSharedCardPools，
-    ///     所以基类查找理论上也能找到；这里仍然 override 是为了性能和健壮性
-    ///     （避免在 AllCardIds 缓存未填充时抛 InvalidProgramException）。
-    /// </summary>
     public override CardPoolModel Pool => ModelDb.CardPool<NobleCardPool>();
-
-    /// <summary>
-    ///     使用 Ancient 视觉样式（与 rarity 解耦），让 Noble 卡以 ancient 卡面布局渲染。
-    ///     配合 NobleCardHideBannerPatch 在 Reload 后隐藏 %AncientBanner，
-    ///     呈现"无横幅 ancient 样式"。
-    /// </summary>
     public override CardAssetProfile AssetProfile => new(
         $"res://Fgo/images/cards/noble/{GetType().Name}.png",
         VisualStyle: CardVisualStyle.Ancient,
@@ -51,8 +42,8 @@ public abstract class NobleCardModel(
         // BannerTexturePath: "" // 横幅（不同类型）
     );
 
-    protected override CardLocation GetResultLocationForCardPlay()
-    {
-        return new CardLocation(Owner, PileType.None, CardPilePosition.Bottom);
-    }
+    // public PileType? GetResultPileTypeForCardPlay(CardModel card) => PileType.None;
+    //
+    // protected override CardLocation GetResultLocationForCardPlay() =>
+    //     new(Owner, PileType.None, CardPilePosition.Bottom);
 }

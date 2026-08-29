@@ -11,7 +11,10 @@ public class Dumuzid() : FgoBaseCardModel(3, CardType.Curse, CardRarity.Curse, T
 {
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await CardPileCmd.RemoveFromCombat(this);
-        await CardPileCmd.RemoveFromDeck(this);
+        if (DeckVersion != null)
+        {
+            await CardPileCmd.RemoveFromDeck(DeckVersion);
+            DeckVersion = null;
+        }
     }
 }

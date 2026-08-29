@@ -48,18 +48,12 @@ public class SummonTicket : FgoRelic, IModRightClickableRelic
             .Select(c => c.GetType())
             .ToHashSet() ?? [];
 
-        var excludeTypes = new HashSet<Type>
-        {
-            typeof(Camelot),
-            typeof(LordCamelot),
-            typeof(LordChaldeas),
-            typeof(ObscurantWallOfChalk)
-        };
-
+        // 候选 = 未在宝具卡组本局已拥有的 && 不在共享排除列表（见 FgoCardActions.ExcludedFromNobleDrawing）。
         var candidates = ModelDb.CardPool<NobleCardPool>()
             .GetUnlockedCards(player.UnlockState, player.RunState.CardMultiplayerConstraint)
             .OfType<NobleCardModel>()
-            .Where(card => !existing.Contains(card.GetType()) && !excludeTypes.Contains(card.GetType()))
+            .Where(card => !existing.Contains(card.GetType()) &&
+                           !FgoCardActions.ExcludedFromNobleDrawing.Contains(card.GetType()))
             .Select(card => player.RunState.CreateCard(card, player))
             .ToList();
 

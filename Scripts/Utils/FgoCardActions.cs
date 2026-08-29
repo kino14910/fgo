@@ -17,6 +17,21 @@ namespace Fgo.Scripts.Utils;
 
 public static class FgoCardActions
 {
+    /// <summary>
+    ///     圣晶石/召唤券按右键抽宝具时排除的类型：这些宝具由剧情/进化链或特殊途径获取，
+    ///     不应出现在随机候选里。Camelot/LordCamelot/LordChaldeas 为进化链、
+    ///     ObscurantWallOfChalk/RayProofKyrielight 为玛修衍生物、EdinShugurraCollapsar 为特殊宝具。
+    /// </summary>
+    public static IReadOnlySet<Type> ExcludedFromNobleDrawing { get; } = new HashSet<Type>
+    {
+        typeof(Camelot),
+        typeof(LordCamelot),
+        typeof(LordChaldeas),
+        typeof(ObscurantWallOfChalk),
+        typeof(RayProofKyrielight),
+        typeof(EdinShugurraCollapsar)
+    };
+
     // ---- 第一次进化 ----
     // Camelot → LordCamelot
     // WallOfSnowflakes → VeneratedWallOfSnowflakes

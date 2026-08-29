@@ -11,18 +11,16 @@ using STS2RitsuLib.Cards.DynamicVars;
 namespace Fgo.Scripts.Cards;
 
 public class TameshiMono() : FgoCardModel(1, CardType.Skill,
-    CardRarity.Uncommon, TargetType.Self)
+    CardRarity.Common, TargetType.Self)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
         FgoHoverTipHelper.CreateStarHoverTip()
     ];
 
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
-
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        ModCardVars.Int("ExhaustCount", 3)
+        ModCardVars.Int("ExhaustCount", 2)
     ];
 
     protected override void OnUpgrade()
@@ -43,6 +41,6 @@ public class TameshiMono() : FgoCardModel(1, CardType.Skill,
         foreach (var card in cards)
             await CardCmd.Exhaust(choiceContext, card);
 
-        await FgoResCmd.ModifyStars(cards.Count * 4, cardPlay.Player);
+        await FgoResCmd.ModifyStars(cards.Count * 3, cardPlay.Player);
     }
 }
