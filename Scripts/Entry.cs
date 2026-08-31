@@ -2,6 +2,7 @@ using System.Reflection;
 using Fgo.Scripts.Cards;
 using Fgo.Scripts.Character;
 using Fgo.Scripts.Commands;
+using Fgo.Scripts.Patches;
 using Fgo.Scripts.Relics;
 using Fgo.Scripts.Singletons;
 using Fgo.Scripts.UI;
@@ -99,6 +100,16 @@ public class Entry
             DisableMod,
             "Noble card patcher failed; Noble pool UI features will not work.");
 
+        // 选人页设置面板 patch（修改 FgoReflectedSettings 的滑块/开关）。
+        var charSelectPatcher = RitsuLibFramework.CreatePatcher(ModId, "character_select_settings");
+        charSelectPatcher.RegisterPatch<FgoCharacterSelectSettingsReadyPatch>();
+        charSelectPatcher.RegisterPatch<FgoCharacterSelectSettingsSelectPatch>();
+        charSelectPatcher.RegisterPatch<FgoCharacterSelectSettingsClosedPatch>();
+        RitsuLibFramework.ApplyRequiredPatcher(
+            charSelectPatcher,
+            DisableMod,
+            "Character select settings patcher failed; in-run settings panel will not work.");
+
         // 订阅 run 开始/加载事件，从 RunSavedData 恢复令咒数量
         _runStartedSubscription = RitsuLibFramework.SubscribeLifecycle<RunStartedEvent>(OnRunStarted);
         _runLoadedSubscription = RitsuLibFramework.SubscribeLifecycle<RunLoadedEvent>(OnRunLoaded);
@@ -156,6 +167,10 @@ public class Entry
 
     private static void OnGameReady(GameReadyEvent evt)
     {
+        // 主菜单就绪、设置页已预注册后，把已持久化的反射设置回填到静态属性，
+        // 确保 NobleCardModel.CanonicalEnergyCost 等依赖开关值的覆盖在规范卡首次访问费用前读到正确值。
+        FgoReflectedSettings.ReflectBoundValues();
+
         // 注册 N 快捷键打开 NobleDeck
         try
         {

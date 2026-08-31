@@ -20,11 +20,23 @@ public abstract class NobleCardModel(
     bool shouldShowInCardLibrary = true)
     : FgoBaseCardModel(energyCost, type, rarity, targetType, shouldShowInCardLibrary)
 {
+    private readonly int _baseEnergyCost = energyCost;
+
+    /// <summary>
+    ///     免费开关开启时 canonical 费用为 -1。STS2 以负费用表示「无能量费用」：
+    ///     NCard.UpdateEnergyCostVisuals 里 _energyIcon.Visible = cost &gt;= 0，负值即隐藏能量图标。
+    ///     实际支付仍为 0（GetAmountToSpend 内 Math.Max(0, cost)）。
+    ///     注意：-1 只能由 canonical 走 CardEnergyCost「_base &lt; 0 提前返回」路径产出；
+    ///     通过 TryModifyEnergyCostInCombat 钩子返回负值会被 GetWithModifiers 末尾 Math.Max(0,…) 钳回 0。
+    /// </summary>
+    protected override int CanonicalEnergyCost =>
+        FgoReflectedSettings.EnableNoCostNoblePhantasm ? -1 : _baseEnergyCost;
+
     /// <summary>
     ///     便捷构造器: 不指定稀有度（默认 Rare）和 shouldShowInCardLibrary（默认 true）。
     /// </summary>
     public NobleCardModel(int energyCost, CardType type, TargetType targetType)
-        : this(FgoReflectedSettings.EnableNoCostNoblePhantasm ? 0 : energyCost, type, FgoEnums.NoblePhantasm,
+        : this(energyCost, type, FgoEnums.NoblePhantasm,
             targetType)
     {
     }
@@ -44,6 +56,8 @@ public abstract class NobleCardModel(
 
     // public PileType? GetResultPileTypeForCardPlay(CardModel card) => PileType.None;
     //
-    // protected override CardLocation GetResultLocationForCardPlay() =>
-    //     new(Owner, PileType.None, CardPilePosition.Bottom);
+    protected override CardLocation GetResultLocationForCardPlay() =>
+        new(Owner, PileType.None, CardPilePosition.Bottom);
+    
+    
 }
