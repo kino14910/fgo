@@ -37,7 +37,7 @@ public class TheAbsoluteSword() : FgoBaseCardModel(3, CardType.Attack,
 
         var totalDamage = attack.Results
             .SelectMany(hit => hit)
-            .Sum(r => r.TotalDamage);
+            .Sum(r => r.TotalDamage + r.OverkillDamage);
 
         if (totalDamage >= DamageThreshold)
             await DamageCmd.Attack(DynamicVars.Damage.BaseValue)

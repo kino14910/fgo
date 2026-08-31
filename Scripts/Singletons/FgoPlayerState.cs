@@ -201,10 +201,10 @@ public sealed class FgoPlayerState
         _crit.Reset();
 
         var card = command.CardPlay?.Card ?? command.ModelSource as CardModel;
-        if (card is not FgoCardModel fgo)
+        if (card is NobleCardModel)
             return;
 
-        if (fgo is CharismaOfTheJade)
+        if (card is CharismaOfTheJade)
         {
             if (await TryConsumeCritStars(true) > 0)
             {
