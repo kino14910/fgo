@@ -19,11 +19,8 @@ public class GutsPower : FgoPowerModel
 
         // 存在可用的不可叠加毅力时优先由其处理，保证与 FgoPlayerState.ShouldDie 的
         // 判定优先级一致（先 NonStackableGutsPower，再普通 GutsPower）。
-        if (creature.Powers.OfType<NonStackableGutsPower>()
-            .Any(power => power.DynamicVars["times"].BaseValue > 0))
-            return true;
-
-        return false;
+        return creature.Powers.OfType<NonStackableGutsPower>()
+            .Any(power => power.DynamicVars["times"].BaseValue > 0);
     }
 
     public override async Task AfterPreventingDeath(Creature creature)
