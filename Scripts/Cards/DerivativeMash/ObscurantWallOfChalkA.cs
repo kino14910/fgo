@@ -44,7 +44,7 @@ public class ObscurantWallOfChalkA() : FgoCooldownCardModel(1, CardType.Skill, C
         }
     );
 
-    protected override IEnumerable<DynamicVar> CoreCanonicalVars =>
+    protected override IEnumerable<DynamicVar> AdditionalCanonicalVars =>
     [
         ModCardVars.Int("Np", 20)
     ];

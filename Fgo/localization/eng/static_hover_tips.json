@@ -24,5 +24,5 @@
   "FGO_STATIC_HOVER_TIPS_KNIGHT_OF_CHALDEA.title": "Knight of Chaldea",
   "FGO_STATIC_HOVER_TIPS_KNIGHT_OF_CHALDEA.description": "Transform this card into [gold]Ray Proof of Hope Kyrielight[/gold], and transform [gold]Obscurant Wall of Chalk A[/gold] into [gold]Timeworn Bullet Kindling[/gold].",
   "FGO_STATIC_HOVER_TIPS_COOLDOWN.title": "Cooldown",
-  "FGO_STATIC_HOVER_TIPS_COOLDOWN.description": "While [gold]Cooldown[/gold] is greater than [blue]0[/blue], this card cannot be played. Playing any card reduces [gold]Cooldown[/gold] by [blue]1[/blue]. Becomes playable once [gold]Cooldown[/gold] reaches [blue]0[/blue], then re-enters [gold]Cooldown[/gold] after being played."
+  "FGO_STATIC_HOVER_TIPS_COOLDOWN.description": "While Cooldown is greater than [blue]0[/blue], this card cannot be played. Playing any card reduces Cooldown by [blue]1[/blue]. Becomes playable once Cooldown reaches [blue]0[/blue], then re-enters Cooldown after being played."
 }

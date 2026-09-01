@@ -28,7 +28,7 @@ public class ObscurantWallOfChalk() : FgoCooldownCardModel(1, CardType.Skill, Ca
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Eternal];
 
-    protected override IEnumerable<DynamicVar> CoreCanonicalVars =>
+    protected override IEnumerable<DynamicVar> AdditionalCanonicalVars =>
     [
         ModCardVars.Int("Np", 10)
     ];

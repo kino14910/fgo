@@ -24,16 +24,19 @@ public abstract class FgoCooldownCardModel(
     /// <summary>基础冷却值。打出后冷却重置回此值。</summary>
     public abstract int CooldownMax { get; }
 
-    protected override IEnumerable<DynamicVar> CanonicalVars =>
-        CoreCanonicalVars
-            .Append(ModCardVars.Int("CooldownMax", CooldownMax))
-            .Append(ModCardVars.Int("Cooldown", 0)
+    /// <summary>
+    ///     请在 <see cref="AdditionalCanonicalVars" /> 中追加各自的额外变量。
+    /// </summary>
+    protected sealed override IEnumerable<DynamicVar> CanonicalVars =>
+        AdditionalCanonicalVars
+            .Prepend(ModCardVars.Int("CooldownMax", CooldownMax))
+            .Prepend(ModCardVars.Int("Cooldown", CooldownMax)
                 .WithSharedTooltip("FGO_STATIC_HOVER_TIPS_COOLDOWN"));
 
     /// <summary>
-    ///     子类在此补充各自的效果数值（伤害/格挡等）。冷却相关变量会由基类自动叠加。
+    ///     获取此冷却卡牌的额外变量。
     /// </summary>
-    protected virtual IEnumerable<DynamicVar> CoreCanonicalVars => [];
+    protected virtual IEnumerable<DynamicVar> AdditionalCanonicalVars => [];
 
     /// <summary>当前剩余冷却。</summary>
     public int CurrentCooldown => DynamicVars["Cooldown"].IntValue;

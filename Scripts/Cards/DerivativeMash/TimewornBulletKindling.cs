@@ -61,6 +61,8 @@ public class TimewornBulletKindling() : FgoBaseCardModel(1, CardType.Attack,
         await CreatureCmd.Damage(choiceContext, Owner.Creature, 4m,
             ValueProp.Unblockable | ValueProp.Unpowered, Owner.Creature);
         var wall = CombatState!.CreateCard<ObscurantWallOfChalk>(Owner);
+        if (wall is FgoCooldownCardModel wallCd)
+            wallCd.ReadyCooldown();
         NCombatRoom.Instance?.Ui.CardPreviewContainer
             ?.AddChildSafely(NCardTransformVfx.Create(this, wall, null));
         await CardPileCmd.AddGeneratedCardToCombat(wall, PileType.Discard, wall.Owner);
