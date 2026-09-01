@@ -16,15 +16,15 @@ namespace Fgo.Scripts.UI;
 
 public sealed partial class FgoGlobalHud : Control
 {
-    /// <summary>
-    ///     HoverTip 构造时会立即解析本地化文本，而 mod 本地化表在 Init 之后才加载。
-    ///     FgoGlobalHud 的静态构造在 Entry.Init → FgoCombatUi.Initialize 时触发，
-    ///     若在 cctor 里创建 HoverTip 会抛 TypeInitializationException 导致整个 mod 加载失败。
-    ///     因此延迟到首次鼠标悬停（战斗中）时才构造，那时本地化已就绪。
-    /// </summary>
-    private static HoverTip? _commandSpellHoverTip;
+    private static HoverTip CommandSpellHoverTip =>
+        new HoverTip(
+            new LocString("static_hover_tips", "FGO_STATIC_HOVER_TIPS_COMMAND_SPELL.title"),
+            new LocString("static_hover_tips", "FGO_STATIC_HOVER_TIPS_COMMAND_SPELL.description"));
 
-    private static HoverTip? _starHoverTip;
+    private static HoverTip StarHoverTip =>
+        new HoverTip(
+            new LocString("static_hover_tips", "FGO_STATIC_HOVER_TIPS_STAR.title"),
+            new LocString("static_hover_tips", "FGO_STATIC_HOVER_TIPS_STAR.description"));
 
     private static readonly Color DisabledModulate = new(1, 1, 1, 0.35f);
 
@@ -58,16 +58,6 @@ public sealed partial class FgoGlobalHud : Control
     private int _lastStars = -1;
     private HBoxContainer _starBox = null!;
     private Label _starLabel = null!;
-
-    private static HoverTip CommandSpellHoverTip =>
-        _commandSpellHoverTip ??= new HoverTip(
-            new LocString("static_hover_tips", "FGO_STATIC_HOVER_TIPS_COMMAND_SPELL.title"),
-            new LocString("static_hover_tips", "FGO_STATIC_HOVER_TIPS_COMMAND_SPELL.description"));
-
-    private static HoverTip StarHoverTip =>
-        _starHoverTip ??= new HoverTip(
-            new LocString("static_hover_tips", "FGO_STATIC_HOVER_TIPS_STAR.title"),
-            new LocString("static_hover_tips", "FGO_STATIC_HOVER_TIPS_STAR.description"));
 
     public static void Initialize()
     {

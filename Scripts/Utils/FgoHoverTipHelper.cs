@@ -4,37 +4,31 @@ using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Utils;
 
-public class FgoHoverTipHelper
+public static class FgoHoverTipHelper
 {
-    private static readonly HoverTip _npHoverTip = BuildNpHoverTip();
-    private static readonly HoverTip _starHoverTip = BuildStarHoverTip();
-    private static readonly HoverTip _npBarHoverTip = BuildNpBarHoverTip();
-    private static readonly HoverTip _foreignerHoverTip = BuildForeignerHoverTip();
-    private static readonly HoverTip _knightOfChaldeaHoverTip = BuildKnightOfChaldeaHoverTip();
-
     public static HoverTip CreateNpHoverTip()
     {
-        return _npHoverTip;
+        return BuildNpHoverTip();
     }
 
     public static HoverTip CreateStarHoverTip()
     {
-        return _starHoverTip;
+        return BuildStarHoverTip();
     }
 
     public static HoverTip CreateNpBarHoverTip()
     {
-        return _npBarHoverTip;
+        return BuildNpBarHoverTip();
     }
 
     public static HoverTip CreateForeignerBarHoverTip()
     {
-        return _foreignerHoverTip;
+        return BuildForeignerHoverTip();
     }
 
     public static HoverTip CreateKnightOfChaldeaHoverTip()
     {
-        return _knightOfChaldeaHoverTip;
+        return BuildKnightOfChaldeaHoverTip();
     }
 
     private static HoverTip BuildNpHoverTip()
