@@ -21,7 +21,7 @@ public class SpringOfFire() : FgoCardModel(3, CardType.Power,
     ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        ModCardVars.Power<SpringOfFirePower>(1),
+        ModCardVars.Power<SpringOfFirePower>(20),
         ModCardVars.Heal(3)
     ];
 

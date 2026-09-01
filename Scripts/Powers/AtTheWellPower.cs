@@ -9,7 +9,7 @@ namespace Fgo.Scripts.Powers;
 
 public class AtTheWellPower : FgoPowerModel
 {
-    public override PowerType Type => PowerType.Buff;
+    public override PowerType Type => PowerType.Debuff;
     public override PowerStackType StackType => PowerStackType.Counter;
 
     public override PowerAssetProfile AssetProfile => new(

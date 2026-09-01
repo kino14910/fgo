@@ -78,20 +78,8 @@ public abstract class NonStackableGutsPower : GutsPower, IPowerExtraIconAmountLa
         ];
     }
 
-    /// <summary>
-    ///     基类 GutsPower 在 BeforeDeath 中治疗并移除自身，但 BeforeDeath 无法阻止死亡。
-    ///     这里改为通过 ShouldDie + AfterPreventingDeath 实现真正的复活。
-    /// </summary>
-    public override Task BeforeDeath(Creature creature)
-    {
-        return Task.CompletedTask;
-    }
-
-    public override bool ShouldDie(Creature creature)
-    {
-        // 仅当自身所属生物即将死亡、且仍有剩余次数时阻止死亡
-        return creature != Owner || Times <= 0;
-    }
+    public override bool ShouldDie(Creature creature) =>
+        creature != Owner || Times <= 0;
 
     public override async Task AfterPreventingDeath(Creature creature)
     {

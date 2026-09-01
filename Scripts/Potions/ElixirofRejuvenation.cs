@@ -11,7 +11,7 @@ public class ElixirOfRejuvenation : FgoPotionModel
 {
     public override PotionRarity Rarity => PotionRarity.Rare;
     public override PotionUsage Usage => PotionUsage.CombatOnly;
-    public override TargetType TargetType => TargetType.Self;
+    public override TargetType TargetType => TargetType.AnyPlayer;
 
     protected override async Task OnUse(PlayerChoiceContext choiceContext, Creature? target)
     {
