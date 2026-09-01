@@ -293,7 +293,7 @@
   "FGO_CARD_LAST_SUN_XIBALBA.description": "对所有敌人造成{Damage:diff()}点伤害5次。\n获得{Star:diff()}颗[gold]暴击星[/gold]。",
   "FGO_CARD_LAST_SUN_XIBALBA.flavor": "在你有boss遗物“[gold]Archetype ORT[/gold]”时才会出现在[gold]宝具[/gold]选择界面。",
   "FGO_CARD_MAHA_PRALAYA.title": "裁定归灭之回剑",
-  "FGO_CARD_MAHA_PRALAYA.description": "对所有敌人造成{DamagePerStatus:diff()}点伤害。\n根据所有敌人状态种类数量翻倍。{InCombat:（造成{MahaPralayaDamage:diff()}点伤害。）|}",
+  "FGO_CARD_MAHA_PRALAYA.description": "对所有敌人造成{DamagePerStatus:diff()}点伤害。\n敌人每存在一种状态类型，此伤害额外提高1倍。{InCombat:（造成{MahaPralayaDamage:diff()}点伤害。）|}",
   "FGO_CARD_KUR_KIGAL_IRKALLA.title": "灵峰踏抱冥府之鞴",
   "FGO_CARD_KUR_KIGAL_IRKALLA.description": "对所有敌人造成{Damage:diff()}点伤害。所有敌人失去10%[gold]最大生命值[/gold]。",
   "FGO_CARD_KUR_KIGAL_IRKALLA.extended_description_0": "\n获得2点[gold]力量[/gold]。\n获得{MaxHpPower:diff()}层[gold]额外最大生命值[/gold]。",

@@ -22,10 +22,7 @@ public class AtTheWellPower : FgoPowerModel
         Flash();
         await PowerCmd.Apply<GutsPower>(choiceContext, Owner, Amount, Owner, null);
         await FgoResCmd.ModifyNp(80, player);
-        await DamageCmd.Attack(9999)
-            .Targeting(player.Creature)
-            .WithHitFx("vfx/vfx_attack_lightning")
-            .Execute(choiceContext);
+        await CreatureCmd.Kill(Owner);
         await PowerCmd.Remove(this);
     }
 }

@@ -20,7 +20,10 @@ public class SpringOfFire() : FgoCardModel(3, CardType.Power,
         FgoHoverTipHelper.CreateNpHoverTip()
     ];
 
-    protected override IEnumerable<DynamicVar> CanonicalVars => [ModCardVars.Heal(3)];
+    protected override IEnumerable<DynamicVar> CanonicalVars => [
+        ModCardVars.Power<SpringOfFirePower>(1),
+        ModCardVars.Heal(3)
+    ];
 
     protected override void OnUpgrade()
     {
