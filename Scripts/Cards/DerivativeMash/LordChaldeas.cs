@@ -54,7 +54,7 @@ public class LordChaldeas() : NobleCardModel(1, CardType.Power, TargetType.Self)
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         // 除 NP 相关外，其余能力（ReducePercentDamage/Plating/Strength/Artifact）改为全体获得。
-        var allies = CombatState!.GetTeammatesOf(Owner.Creature);
+        var allies = CombatState!.GetTeammatesOf(Owner.Creature).ToList();
         await PowerCmd.Apply<ReducePercentDamagePower>(choiceContext, allies,
             DynamicVars[nameof(ReducePercentDamagePower)].BaseValue, Owner.Creature, this);
         await PowerCmd.Apply<PlatingPower>(choiceContext, allies,
@@ -65,7 +65,7 @@ public class LordChaldeas() : NobleCardModel(1, CardType.Power, TargetType.Self)
             DynamicVars[nameof(StrengthPower)].BaseValue, Owner.Creature, this);
 
         // NpDamagePower：只给同队中属于 FGO 角色的友方。
-        var fgoAllies = CombatState!.GetTeammatesOf(Owner.Creature)
+        var fgoAllies = CombatState!.GetTeammatesOf(Owner.Creature).ToList()
             .Where(c => c.Player?.Character is FgoCharacter);
         await PowerCmd.Apply<NpDamagePower>(choiceContext, fgoAllies,
             DynamicVars[nameof(NpDamagePower)].BaseValue, Owner.Creature, this);

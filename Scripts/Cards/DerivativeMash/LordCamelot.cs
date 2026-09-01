@@ -37,7 +37,7 @@ public class LordCamelot() : NobleCardModel(0, CardType.Power, TargetType.Self)
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         // 全体获得：给玩家方同队所有生物（含自己）施加；StrengthPower 只给除自己以外的队友。
-        var allies = CombatState!.GetTeammatesOf(Owner.Creature);
+        var allies = CombatState!.GetTeammatesOf(Owner.Creature).ToList();
         await PowerCmd.Apply<PlatingPower>(choiceContext, allies,
             DynamicVars[nameof(PlatingPower)].BaseValue, Owner.Creature, this);
         await PowerCmd.Apply<ReducePercentDamagePower>(choiceContext, allies,

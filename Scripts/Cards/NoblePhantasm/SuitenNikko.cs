@@ -34,7 +34,7 @@ public class SuitenNikko() : NobleCardModel(2, CardType.Skill, TargetType.Self)
         IEnumerable<Creature> enumerable = from c in CombatState!.GetTeammatesOf(Owner.Creature)
             where c is { IsAlive: true, IsPlayer: true }
             select c;
-        foreach (var item in enumerable)
+        foreach (var item in enumerable.ToList())
         {
             if (item.Player is null) return;
             await FgoResCmd.ModifyNp(DynamicVars["Np"].BaseValue, item.Player);
