@@ -123,6 +123,16 @@ public sealed partial class FgoGlobalHud : Control
         // Star
         //---------------------------------------
 
+        var starRoot = new VBoxContainer();
+        starRoot.Name = "StarRoot";
+        starRoot.SetAnchorsPreset(LayoutPreset.TopLeft);
+        starRoot.OffsetLeft = 80;
+        starRoot.OffsetRight = 160;
+        starRoot.OffsetTop = 690;
+        starRoot.OffsetBottom = 700;
+        starRoot.Alignment = BoxContainer.AlignmentMode.Center;
+        AddChild(starRoot);
+
         var hbox = new HBoxContainer();
 
         hbox.AddThemeConstantOverride("separation", 8);
@@ -132,7 +142,7 @@ public sealed partial class FgoGlobalHud : Control
         hbox.MouseExited += OnStarMouseExited;
         _starBox = hbox;
 
-        vbox.AddChild(hbox);
+        starRoot.AddChild(hbox);
 
         var starIcon = new Label();
 
@@ -289,7 +299,7 @@ public sealed partial class FgoGlobalHud : Control
 
     private void OnStarMouseEntered()
     {
-        NHoverTipSet.CreateAndShow(_starBox, StarHoverTip, HoverTipAlignment.Left);
+        NHoverTipSet.CreateAndShow(_starBox, StarHoverTip, HoverTipAlignment.Center);
     }
 
     private void OnStarMouseExited()
