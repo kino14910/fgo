@@ -39,7 +39,7 @@ public class SuitenNikko() : NobleCardModel(2, CardType.Skill, TargetType.Self)
             if (item.Player is null) return;
             await FgoResCmd.ModifyNp(DynamicVars["Np"].BaseValue, item.Player);
             await CreatureCmd.Heal(item, DynamicVars.Heal.BaseValue);
-            foreach (var card in PileType.Hand.GetPile(item.Player).Cards) card.EnergyCost.AddThisCombat(-1, true);
+            foreach (var card in PileType.Hand.GetPile(item.Player).Cards) card.EnergyCost.AddThisTurn(-1, true);
         }
     }
 }

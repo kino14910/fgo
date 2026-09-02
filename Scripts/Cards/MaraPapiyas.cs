@@ -11,11 +11,6 @@ namespace Fgo.Scripts.Cards;
 public class MaraPapiyas() : FgoCardModel(0, CardType.Skill,
     CardRarity.Uncommon, TargetType.Self)
 {
-    protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
-    [
-        HoverTipFactory.FromPower<MaxHpPower>()
-    ];
-
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         ModCardVars.Heal(12)

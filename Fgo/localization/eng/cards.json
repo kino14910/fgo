@@ -144,7 +144,7 @@
   "FGO_CARD_EIGHT_KINDNESS.title": "Eight Kindness",
   "FGO_CARD_EIGHT_KINDNESS.description": "Gain {StrengthPower:diff()} [gold]Strength[/gold], [gold]Dexterity[/gold], [gold]Plating[/gold], [gold]Regen[/gold], [gold]Thorns[/gold], [gold]Vigor[/gold], [gold]Intangible[/gold], and [gold]Golden Rule[/gold].",
   "FGO_CARD_MARA_PAPIYAS.title": "Mara Papiyas",
-  "FGO_CARD_MARA_PAPIYAS.description": "Lose 2 [gold]Max HP[/gold].\nHeal {Heal:diff()} HP.",
+  "FGO_CARD_MARA_PAPIYAS.description": "Lose 2 Max HP.\nHeal {Heal:diff()} HP.",
   "FGO_CARD_ABYSS_OF_DEATH.title": "Abyss of Death",
   "FGO_CARD_ABYSS_OF_DEATH.description": "Gain {GutsPower:diff()} [gold]Guts[/gold].\nWhen [gold]Guts[/gold] triggered, deal twice damage next turn.",
   "FGO_CARD_PEERLESS_STRIKE.title": "Peerless Strike",

@@ -24,5 +24,5 @@
   "FGO_STATIC_HOVER_TIPS_KNIGHT_OF_CHALDEA.title": "迦勒底的圣骑士",
   "FGO_STATIC_HOVER_TIPS_KNIGHT_OF_CHALDEA.description": "将这张卡转换为[gold]印证希望的人理之剑[/gold]，将[gold]时为朦胧的白垩之壁A[/gold]转换为[gold]测定时间的紫弹之薪[/gold]。",
   "FGO_STATIC_HOVER_TIPS_COOLDOWN.title": "冷却",
-  "FGO_STATIC_HOVER_TIPS_COOLDOWN.description": "每打出一张牌，冷却减少[blue]1[/blue]。冷却降到[blue]0[/blue]后才能打出，打出后此卡重新进入冷却。"
+  "FGO_STATIC_HOVER_TIPS_COOLDOWN.description": "正在冷却的牌在手牌中时，每打出一张牌，其冷却减少[blue]1[/blue]；冷却降到[blue]0[/blue]后可打出，打出后重新进入冷却。"
 }
