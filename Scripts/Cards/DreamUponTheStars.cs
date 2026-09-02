@@ -30,8 +30,6 @@ public class DreamUponTheStars() : FgoCardModel(1, CardType.Skill,
         ModCardVars.Int("Np", 10)
     ];
 
-    public override bool GainsBlock => true;
-
     protected override void OnUpgrade()
     {
         DynamicVars[nameof(NpDamagePower)].UpgradeValueBy(10);

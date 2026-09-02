@@ -1,12 +1,9 @@
+using Fgo.Scripts.Cards;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
-using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.Extensions;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
-using MegaCrit.Sts2.Core.Localization;
-using MegaCrit.Sts2.Core.Localization.DynamicVars;
-using STS2RitsuLib.Cards.DynamicVars;
 using STS2RitsuLib.Scaffolding.Content;
 
 namespace Fgo.Scripts.Powers;
@@ -25,16 +22,11 @@ public class PhaseGlidingBladePower : FgoPowerModel
         "res://Fgo/images/powers/big/TriggerAfterAttacksPower.png"
     );
 
-    public override LocString Description =>
-        new("powers", "FGO_POWER_PHASE_GLIDING_BLADE_POWER.description");
-
-    protected override string SmartDescriptionLocKey =>
-        "FGO_POWER_PHASE_GLIDING_BLADE_POWER.smartDescription";
-
     public override async Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        if (cardPlay.Card?.Type is not { } playedType) return;
-        if (Owner?.Player is not { } player) return;
+        if (cardPlay.Card is PhaseGlidingBlade) return;
+
+        if (Owner.Player is not { } player) return;
 
         Flash();
 
@@ -43,13 +35,13 @@ public class PhaseGlidingBladePower : FgoPowerModel
         for (var i = 0; i < Amount; i++)
         {
             var card = PileType.Draw.GetPile(player).Cards
-                .Where(c => c.Type != playedType && !c.Keywords.Contains(CardKeyword.Unplayable))
+                .Where(c => c.Type != cardPlay.Card.Type)
                 .ToList()
                 .StableShuffle(player.RunState.Rng.Shuffle)
                 .FirstOrDefault();
             if (card == null) break;
 
-            await CardPileCmd.Add(card, PileType.Hand, CardPilePosition.Top, this, true);
+            await CardPileCmd.Add(card, PileType.Hand, CardPilePosition.Top);
         }
     }
 }

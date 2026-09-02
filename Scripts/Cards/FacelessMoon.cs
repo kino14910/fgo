@@ -5,6 +5,7 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.Models.Powers;
 using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
@@ -35,6 +36,8 @@ public class FacelessMoon() : FgoCardModel(1, CardType.Skill,
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
+        await PowerCmd.Apply<RetainHandPower>(choiceContext, Owner.Creature,
+            1, Owner.Creature, cardPlay.Card);
         await PowerCmd.Apply<FacelessMoonPower>(choiceContext, Owner.Creature,
             DynamicVars[nameof(FacelessMoonPower)].BaseValue, Owner.Creature, cardPlay.Card);
     }

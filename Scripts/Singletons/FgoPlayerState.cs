@@ -15,7 +15,7 @@ using MegaCrit.Sts2.Core.ValueProps;
 namespace Fgo.Scripts.Singletons;
 
 /// <summary>
-///     单个 FGO 玩家的战斗资源状态（NP、暴击星、令咒、OverCharge、暴击上下文）。
+///     单个 FGO 玩家的战斗资源状态（NP、暴击星、令咒、Overcharge、暴击上下文）。
 ///     每个玩家独立一份，取代原先的全局单例字段，避免多人模式下串台。
 ///     通过 <see cref="FgoBattleHooks.Get(MegaCrit.Sts2.Core.Entities.Players.Player)" /> 按 Player 索引。
 /// </summary>
@@ -80,7 +80,7 @@ public sealed class FgoPlayerState
         Np += amount;
         if (Np == 99 && old < 99) Np = 100;
 
-        // OverCharge 随 NP 联动：首次达到 200/300 各 +1 层，跌破对应阈值时扣回（共用上限 4）。
+        // Overcharge 随 NP 联动：首次达到 200/300 各 +1 层，跌破对应阈值时扣回（共用上限 4）。
         await SyncOverchargeFromNp(player, old);
 
         if (amount > 0)
@@ -107,7 +107,7 @@ public sealed class FgoPlayerState
         var creature = player.Creature;
         var existing = creature.GetPower<OverchargePower>();
         var baseCount = existing?.Amount ?? 0;
-        var delta = Math.Clamp(baseCount + net, 0, OverchargePower.MaxOverCharge) - baseCount;
+        var delta = Math.Clamp(baseCount + net, 0, OverchargePower.MaxOvercharge) - baseCount;
         if (delta != 0)
             await PowerCmd.Apply<OverchargePower>(
                 new BlockingPlayerChoiceContext(), creature, delta, creature, null);

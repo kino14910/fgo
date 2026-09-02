@@ -43,7 +43,7 @@ public class HolyShroud() : FgoCardModel(0, CardType.Skill,
                                 enemy));
                 });
 
-            return incomingDamage >= 10;
+            return incomingDamage >= 12;
         }
     }
 

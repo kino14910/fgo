@@ -99,12 +99,12 @@ public sealed class FgoBattleHooks() : HookedSingletonModel(HookType.Combat)
         if (cardPlay.Card?.Owner is not { Character: FgoCharacter } player)
             return;
 
-        // 打出任意宝具牌后，为该玩家获得 OverchargePower 层数（最多 MaxOverCharge 层）。
+        // 打出任意宝具牌后，为该玩家获得 OverchargePower 层数（最多 MaxOvercharge 层）。
         if (cardPlay.Card is NobleCardModel)
         {
             var existing = player.Creature.GetPower<OverchargePower>();
             var current = existing?.Amount ?? 0;
-            var delta = Math.Min(OverchargePower.MaxOverCharge, current + 1) - current;
+            var delta = Math.Min(OverchargePower.MaxOvercharge, current + 1) - current;
             if (delta > 0)
                 await PowerCmd.Apply<OverchargePower>(
                     choiceContext, player.Creature, delta, player.Creature, null);

@@ -4,7 +4,6 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
-using MegaCrit.Sts2.Core.ValueProps;
 using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
@@ -19,17 +18,17 @@ public class PhaseGlidingBlade() : FgoCardModel(1, CardType.Power,
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        ModCardVars.Power<PhaseGlidingBladePower>(1)
+        ModCardVars.Cards(1)
     ];
 
     protected override void OnUpgrade()
     {
-        DynamicVars[nameof(PhaseGlidingBladePower)].UpgradeValueBy(1);
+        DynamicVars.Cards.UpgradeValueBy(1);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await PowerCmd.Apply<PhaseGlidingBladePower>(choiceContext, Owner.Creature,
-            DynamicVars[nameof(PhaseGlidingBladePower)].BaseValue, Owner.Creature, this);
+            DynamicVars.Cards.BaseValue, Owner.Creature, this);
     }
 }

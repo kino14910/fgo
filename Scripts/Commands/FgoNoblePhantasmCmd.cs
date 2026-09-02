@@ -60,7 +60,7 @@ public static class FgoNoblePhantasmCmd
         if (player.Creature.HasPower<SealNpPower>())
             return false;
 
-        // 宝具升级次数（最多 MaxOverCharge 层）
+        // 宝具升级次数（最多 MaxOvercharge 层）
         var overCharge = player.Creature.GetPower<OverchargePower>()?.Amount ?? 0;
 
         // 候选来自 NobleDeck pile（由 SaintQuartz 遗物管理初始卡 + 右键加入的卡）。
@@ -87,7 +87,7 @@ public static class FgoNoblePhantasmCmd
             await PowerCmd.Remove(npCardPower);
 
         // NobleDeck 是 RunPersistent 牌堆，卡需跨战斗保留，因此不打出去原卡。
-        // 而是从 canonical singleton 创建副本，按 OverCharge 升级后加入手牌。
+        // 而是从 canonical singleton 创建副本，按 Overcharge 升级后加入手牌。
         var canonical = ModelDb.GetByIdOrNull<NobleCardModel>(selected.Id);
         if (canonical == null)
             return false;
