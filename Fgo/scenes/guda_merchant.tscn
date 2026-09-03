@@ -1,8 +1,10 @@
 [gd_scene load_steps=2 format=3 uid="uid://cygrf8f7qd6jr"]
 
-[ext_resource type="Texture2D" uid="uid://cytqlhe6w7bkx" path="res://Fgo/images/char/Master0.png" id="1_qst7b"]
+[ext_resource type="Texture2D" uid="uid://bypultevu1rrk" path="res://Fgo/images/char/Master15.png" id="1_qst7b"]
 
 [node name="GudaMerchant" type="Node2D"]
 
 [node name="Icon" type="Sprite2D" parent="."]
+position = Vector2(-41, -242)
+scale = Vector2(2, 2)
 texture = ExtResource("1_qst7b")

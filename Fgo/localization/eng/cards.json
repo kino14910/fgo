@@ -153,7 +153,7 @@
   "FGO_CARD_SPRING_OF_FIRE.title": "Thrice Welcome the Setting Sun",
   "FGO_CARD_SPRING_OF_FIRE.description": "The next 3 times you would die, prevent it and heal {Heal:diff()} HP, gain 20% [gold]NP Damage[/gold], and remove all debuffs.",
   "FGO_CARD_HERO_CREATION.title": "Hero Creation",
-  "FGO_CARD_HERO_CREATION.description": "Gain {HeroCreationPower:diff()} [gold]Temporary Strength[/gold] and {TempCritDamagePower:diff()}% [gold]Temporary Critical Damage[/gold].",
+  "FGO_CARD_HERO_CREATION.description": "Gain {HeroCreationTempStrengthPowerPower:diff()} [gold]Temporary Strength[/gold] and {HeroCreationTempCritDamagePower:diff()}% [gold]Temporary Critical Damage[/gold].",
   "FGO_CARD_COACHING.title": "Coaching",
   "FGO_CARD_COACHING.description": "Gain {energyPrefix:energyIcons(2)}.\nLose {Damage:diff()} HP, gain {MaxHpPower:diff()} [gold]Max HP[/gold].",
   "FGO_CARD_MAIDENS_WILLPOWER.title": "Maidens Willpower",

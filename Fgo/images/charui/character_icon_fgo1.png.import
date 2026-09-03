@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://qf4rmylgyifw"
-path="res://.godot/imported/ElixirOfRejuvenation.png-87f2792166d3fa54f9876d98544894c2.ctex"
+uid="uid://7rgeiq1yf676"
+path="res://.godot/imported/character_icon_fgo1.png-0209e1fbfd80679fe79b50ed6c49957a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Fgo/images/potions/ElixirOfRejuvenation.png"
-dest_files=["res://.godot/imported/ElixirOfRejuvenation.png-87f2792166d3fa54f9876d98544894c2.ctex"]
+source_file="res://Fgo/images/charui/character_icon_fgo1.png"
+dest_files=["res://.godot/imported/character_icon_fgo1.png-0209e1fbfd80679fe79b50ed6c49957a.ctex"]
 
 [params]
 

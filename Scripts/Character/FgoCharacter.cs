@@ -43,7 +43,7 @@ public class FgoCharacter : ModCharacterTemplate<FgoCardPool, FgoRelicPool, FgoP
             new CharacterUiAssetSet(
                 // 对于图片，只要是godot支持的格式都可以，例如png,jpg,svg等等，之后不再说明
                 // 人物头像路径。自适应大小。
-                "res://Fgo/images/charui/character_icon_fgo.png",
+                IconTexturePath: "res://Fgo/images/charui/character_icon_fgo.png",
                 // 游戏左上角头像、角色统计页头像、每日挑战角色头像。这个是场景而不是图片。参考下方附赠资源搭建。
                 IconPath: "res://Fgo/scenes/fgo_icon.tscn",
                 // 人物选择背景。

@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://dafyi8fbg1vof"]
 
-[ext_resource type="Texture2D" uid="uid://dlq48vael6cis" path="res://Fgo/images/char/Master14.png" id="1_5u4bu"]
+[ext_resource type="Texture2D" uid="uid://bi6it373uej4c" path="res://Fgo/images/char/Master12.png" id="1_5u4bu"]
 
 [node name="FgoCharacterRestSite" type="Node2D"]
 
@@ -41,4 +41,6 @@ offset_right = -113.0
 offset_bottom = -95.0
 
 [node name="Sprite" type="Sprite2D" parent="ControlRoot"]
+position = Vector2(2, 30)
+scale = Vector2(2, 2)
 texture = ExtResource("1_5u4bu")
