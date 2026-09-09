@@ -19,7 +19,10 @@ public class SongOfThePoet() : FgoCardModel(1, CardType.Attack,
         FgoHoverTipHelper.CreateNpHoverTip()
     ];
 
-    protected override IEnumerable<DynamicVar> CanonicalVars => [ModCardVars.Damage(6)];
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        ModCardVars.Damage(9)
+    ];
 
     protected override void OnUpgrade()
     {

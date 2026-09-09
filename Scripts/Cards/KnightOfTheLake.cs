@@ -22,7 +22,7 @@ public class KnightOfTheLake() : FgoCardModel(1, CardType.Skill,
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         ModCardVars.Power<CriticalDamagePower>(30),
-        ModCardVars.Int("Stars", 10)
+        ModCardVars.Int("Star", 10)
     ];
 
     protected override bool ShouldGlowGoldInternal => !Owner.Creature.HasPower<CriticalDamagePower>();

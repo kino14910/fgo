@@ -11,7 +11,7 @@ using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
 
-public class CrownedWithLife() : FgoCardModel(-2, CardType.Skill,
+public class CrownedWithLife() : FgoCardModel(-1, CardType.Skill,
     CardRarity.Uncommon, TargetType.Self)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>

@@ -20,12 +20,12 @@ public class Intuition() : FgoCardModel(0, CardType.Skill, CardRarity.Basic, Tar
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        ModCardVars.Int("Stars", 4)
+        ModCardVars.Int("Star", 4)
     ];
 
     protected override void OnUpgrade()
     {
-        DynamicVars["Stars"].UpgradeValueBy(5);
+        DynamicVars["Star"].UpgradeValueBy(5);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

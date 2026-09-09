@@ -9,7 +9,7 @@ using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
 
-public class PursuerOfLove() : FgoCardModel(1, CardType.Skill,
+public class PursuerOfLove() : FgoCardModel(0, CardType.Skill,
     CardRarity.Common, TargetType.AnyEnemy)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
