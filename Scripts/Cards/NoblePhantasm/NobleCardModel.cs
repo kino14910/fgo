@@ -1,12 +1,8 @@
-using System.ComponentModel;
 using Fgo.Scripts.Character;
 using Fgo.Scripts.Utils;
-using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
-using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
 using STS2RitsuLib.Interop.AutoRegistration;
-using STS2RitsuLib.Models.Capabilities;
 using STS2RitsuLib.Scaffolding.Content;
 
 namespace Fgo.Scripts.Cards.NoblePhantasm;
@@ -23,16 +19,6 @@ public abstract class NobleCardModel(
     private readonly int _baseEnergyCost = energyCost;
 
     /// <summary>
-    ///     免费开关开启时 canonical 费用为 -1。STS2 以负费用表示「无能量费用」：
-    ///     NCard.UpdateEnergyCostVisuals 里 _energyIcon.Visible = cost &gt;= 0，负值即隐藏能量图标。
-    ///     实际支付仍为 0（GetAmountToSpend 内 Math.Max(0, cost)）。
-    ///     注意：-1 只能由 canonical 走 CardEnergyCost「_base &lt; 0 提前返回」路径产出；
-    ///     通过 TryModifyEnergyCostInCombat 钩子返回负值会被 GetWithModifiers 末尾 Math.Max(0,…) 钳回 0。
-    /// </summary>
-    protected override int CanonicalEnergyCost =>
-        FgoReflectedSettings.EnableNoCostNoblePhantasm ? -1 : _baseEnergyCost;
-
-    /// <summary>
     ///     便捷构造器: 不指定稀有度（默认 Rare）和 shouldShowInCardLibrary（默认 true）。
     /// </summary>
     public NobleCardModel(int energyCost, CardType type, TargetType targetType)
@@ -41,8 +27,20 @@ public abstract class NobleCardModel(
     {
     }
 
+    /// <summary>
+    ///     联网对局中读取主机同步的运行时值 NetworkNoCostNoblePhantasm（开局前由主机广播，
+    ///     各端一致）；单机回退到本机开关。免费时 canonical 费用为 -1，STS2 以负费用表示「无能量费用」：
+    ///     NCard.UpdateEnergyCostVisuals 里 _energyIcon.Visible = cost &gt;= 0，负值即隐藏能量图标，
+    ///     实际支付为 0（GetAmountToSpend 内 Math.Max(0, cost)）。注意 -1 只能走 canonical
+    ///     的 CardEnergyCost「_base &lt; 0 提前返回」路径产出；TryModifyEnergyCostInCombat 钩子
+    ///     返回负值会被 GetWithModifiers 末尾 Math.Max(0,…) 钳回 0，故不要从钩子下负费。
+    /// </summary>
+    protected override int CanonicalEnergyCost =>
+        FgoConfigSync.NetworkNoCostNoblePhantasm ? -1 : _baseEnergyCost;
+
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Retain];
     public override CardPoolModel Pool => ModelDb.CardPool<NobleCardPool>();
+
     public override CardAssetProfile AssetProfile => new(
         $"res://Fgo/images/cards/noble/{GetType().Name}.png",
         VisualStyle: CardVisualStyle.Ancient,
@@ -56,8 +54,8 @@ public abstract class NobleCardModel(
 
     // public PileType? GetResultPileTypeForCardPlay(CardModel card) => PileType.None;
     //
-    protected override CardLocation GetResultLocationForCardPlay() =>
-        new(Owner, PileType.None, CardPilePosition.Bottom);
-    
-    
+    protected override CardLocation GetResultLocationForCardPlay()
+    {
+        return new CardLocation(Owner, PileType.None, CardPilePosition.Bottom);
+    }
 }

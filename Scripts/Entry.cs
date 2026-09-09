@@ -54,6 +54,7 @@ public class Entry
         RitsuLibFramework.RegisterTouchOfOrobasRefinementMapping<SaintQuartz, SummonTicket>();
         ModTypeDiscoveryHub.RegisterModAssembly(ModId, assembly);
         RitsuLibFramework.RegisterModSettingsReflectionProvider<FgoReflectedSettings>();
+        FgoConfigSync.EnsureRegistered();
         FgoEnums.Initialize(ModId);
         FgoCombatUi.Initialize();
 
@@ -132,6 +133,7 @@ public class Entry
 
     private static void OnRunStarted(RunStartedEvent evt)
     {
+        FgoConfigSync.SyncAtRunStart(RunManager.Instance);
         LoadCommandSpellForFgoPlayers(evt.RunState);
         InitializeNobleDecks(evt.RunState);
     }

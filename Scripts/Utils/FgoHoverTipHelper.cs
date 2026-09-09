@@ -51,7 +51,7 @@ public static class FgoHoverTipHelper
     {
         var title = new LocString("static_hover_tips", "FGO_STATIC_HOVER_TIPS_NP_BAR.title");
         var desc = new LocString("static_hover_tips", "FGO_STATIC_HOVER_TIPS_NP_BAR.description");
-        var npRateVar = ModCardVars.Int("NpRate", FgoReflectedSettings.BaseNpPerCost);
+        var npRateVar = ModCardVars.Int("NpRate", FgoConfigSync.NetworkBaseNpPerCost);
         desc.Add(npRateVar);
 
         return new HoverTip(title, desc);

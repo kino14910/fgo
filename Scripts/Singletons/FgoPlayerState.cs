@@ -191,7 +191,7 @@ public sealed class FgoPlayerState
         if (card is FgoCardModel)
         {
             var multiplier = card.Owner.Creature.HasPower<NpRatePower>() ? 2 : 1;
-            await ModifyNp(card.EnergyCost.GetResolved() * FgoReflectedSettings.BaseNpPerCost * multiplier,
+            await ModifyNp(card.EnergyCost.GetResolved() * FgoConfigSync.NetworkBaseNpPerCost * multiplier,
                 card.Owner);
         }
     }
