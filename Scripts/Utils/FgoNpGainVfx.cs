@@ -78,9 +78,9 @@ public partial class FgoNpGainVfx : Label
     ///     在指定玩家的角色头顶生成 "+xxNP" 浮动文本。
     ///     amount 为实际增加的 NP 值（正数）。
     /// </summary>
-    public static Task Spawn(Player? player, int amount)
+    public static Task Spawn(Player player, int amount)
     {
-        if (amount <= 0 || player == null) return Task.CompletedTask;
+        if (amount <= 0) return Task.CompletedTask;
 
         var creature = player.Creature;
         var nCreature = NCombatRoom.Instance?.GetCreatureNode(creature);

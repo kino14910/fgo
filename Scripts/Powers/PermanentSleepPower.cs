@@ -27,6 +27,7 @@ public class PermanentSleepPower : FgoPowerModel
 
     public override async Task BeforeFlushLate(PlayerChoiceContext choiceContext, Player player)
     {
+        if (player != Owner.Player) return;
         if (Owner.Player?.PlayerCombatState is null) return;
 
         var pile = PileType.Hand.GetPile(Owner.Player);

@@ -20,6 +20,7 @@ public class DazzlingMoonPower : FgoPowerModel
 
     public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
     {
+        if (player.Creature != Owner) return;
         Flash();
         await PowerCmd.Apply<StrengthPower>(choiceContext, Owner, -1m, Owner, null);
         var combatState = Owner.CombatState;

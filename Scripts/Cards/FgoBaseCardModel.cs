@@ -20,9 +20,9 @@ public abstract class FgoBaseCardModel(
     ///     默认 AssetProfile: 根据 CardType 选择卡框；派生类可重写。
     /// </summary>
     public override CardAssetProfile AssetProfile => new(
-        $"res://Fgo/images/cards/big/{GetType().Name}.png",
-        ResourceLoader.Exists($"res://Fgo/images/cards/big/beta/{GetType().Name}.png")
-            ? $"res://Fgo/images/cards/big/beta/{GetType().Name}.png"
+        $"res://Fgo/images/cards/{GetType().Name}.png",
+        ResourceLoader.Exists($"res://Fgo/images/cards/beta/{GetType().Name}.png")
+            ? $"res://Fgo/images/cards/beta/{GetType().Name}.png"
             : null,
         Type switch
         {

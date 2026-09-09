@@ -19,6 +19,7 @@ public class AtTheWellPower : FgoPowerModel
 
     public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
     {
+        if (player.Creature != Owner) return;
         Flash();
         await PowerCmd.Apply<GutsPower>(choiceContext, Owner, Amount, Owner, null);
         await FgoResCmd.ModifyNp(80, player);

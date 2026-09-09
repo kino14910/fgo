@@ -31,6 +31,7 @@ public class SwifterThanSoundPower : FgoPowerModel, IPowerExtraIconAmountLabelSp
 
     public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
     {
+        if (player.Creature != Owner) return;
         Flash();
         await FgoResCmd.ModifyStars(StarsPerTurn, player);
         await PowerCmd.Decrement(this);

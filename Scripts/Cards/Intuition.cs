@@ -30,6 +30,6 @@ public class Intuition() : FgoCardModel(0, CardType.Skill, CardRarity.Basic, Tar
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await FgoResCmd.ModifyStars(this);
+        await FgoResCmd.ModifyStars(DynamicVars["Star"].BaseValue, Owner);
     }
 }

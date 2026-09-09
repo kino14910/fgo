@@ -41,6 +41,6 @@ public class RayHorizon() : FgoBaseCardModel(0, CardType.Skill,
         var npCardPower = await PowerCmd.Apply<NpCardPower>(choiceContext, Owner.Creature, 1m, Owner.Creature, this);
         if (npCardPower != null)
             npCardPower.NobleCard = ModelDb.Card<HollowHeartAlbion>();
-        await FgoResCmd.ModifyNp(this);
+        await FgoResCmd.ModifyNp(DynamicVars["Np"].BaseValue, Owner);
     }
 }

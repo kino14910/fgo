@@ -44,6 +44,6 @@ public class Sevendrive() : NobleCardModel(1, CardType.Attack, TargetType.AllEne
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
 
-        await FgoResCmd.ModifyNp(this);
+        await FgoResCmd.ModifyNp(DynamicVars["Np"].BaseValue, Owner);
     }
 }

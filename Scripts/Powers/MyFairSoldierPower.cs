@@ -11,6 +11,7 @@ namespace Fgo.Scripts.Powers;
 
 public class MyFairSoldierPower : FgoPowerModel
 {
+    private CardModel? _grantingCard;
     public override PowerType Type => PowerType.Debuff;
     public override PowerStackType StackType => PowerStackType.Counter;
 
@@ -18,8 +19,6 @@ public class MyFairSoldierPower : FgoPowerModel
         "res://Fgo/images/powers/AfterDurationDebuffPower.png",
         "res://Fgo/images/powers/big/AfterDurationDebuffPower.png"
     );
-
-    private CardModel? _grantingCard;
 
     public override Task AfterApplied(Creature? applier, CardModel? cardSource)
     {
@@ -29,6 +28,7 @@ public class MyFairSoldierPower : FgoPowerModel
 
     public override async Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
+        if (cardPlay.Player.Creature != Owner) return;
         if (cardPlay.Card == _grantingCard) return;
 
         if (cardPlay.Card.Type == CardType.Power)

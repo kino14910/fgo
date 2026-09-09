@@ -281,9 +281,7 @@ public static class FgoCharacterSelectPatch
         if (parent == null) return null;
 
         foreach (var child in parent.GetChildren())
-            if (child is NCharacterSelectButton btn
-                && btn.Character is FgoCharacter
-                && !btn.IsLocked)
+            if (child is NCharacterSelectButton { Character: FgoCharacter, IsLocked: false } btn)
                 return btn;
 
         return null;

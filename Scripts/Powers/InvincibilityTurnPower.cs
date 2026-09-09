@@ -26,6 +26,7 @@ public class InvincibilityTurnPower : FgoPowerModel
 
     public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
     {
+        if (player.Creature != Owner) return;
         await PowerCmd.Decrement(this);
     }
 }

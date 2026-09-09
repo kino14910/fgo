@@ -22,6 +22,7 @@ public class ReducePercentDamagePower : FgoPowerModel
 
     public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
     {
+        if (player.Creature != Owner) return;
         Flash();
         await PowerCmd.Remove(this);
     }

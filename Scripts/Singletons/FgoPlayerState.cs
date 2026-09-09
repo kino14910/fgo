@@ -74,7 +74,7 @@ public sealed class FgoPlayerState
 
     public event Action<int>? NpChanged;
 
-    public async Task ModifyNp(int amount, Player? player = null)
+    public async Task ModifyNp(int amount, Player player)
     {
         var old = Np;
         Np += amount;
@@ -87,10 +87,8 @@ public sealed class FgoPlayerState
             await FgoNpGainVfx.Spawn(player, amount);
     }
 
-    private async Task SyncOverchargeFromNp(Player? player, int old)
+    private async Task SyncOverchargeFromNp(Player player, int old)
     {
-        if (player == null) return;
-
         var current = Np;
 
         var gained = 0;
@@ -119,7 +117,7 @@ public sealed class FgoPlayerState
         return Task.CompletedTask;
     }
 
-    public async Task ModifyStars(int amount, Player? player = null)
+    public async Task ModifyStars(int amount, Player player)
     {
         Stars += amount;
 
@@ -133,11 +131,11 @@ public sealed class FgoPlayerState
         return Task.CompletedTask;
     }
 
-    public async Task<int> TryConsumeCritStars(bool special)
+    public async Task<int> TryConsumeCritStars(bool special, Player player)
     {
         var required = special ? SpecialCritStars : BasicCritStars;
         if (Stars < required) return 0;
-        await ModifyStars(-required);
+        await ModifyStars(-required, player);
         return required;
     }
 
@@ -206,7 +204,7 @@ public sealed class FgoPlayerState
 
         if (card is CharismaOfTheJade)
         {
-            if (await TryConsumeCritStars(true) > 0)
+            if (await TryConsumeCritStars(true, card.Owner) > 0)
             {
                 _crit.Active = true;
                 _crit.DamageMultiplier = 3m;
@@ -214,7 +212,7 @@ public sealed class FgoPlayerState
         }
         else if (card is { Type: CardType.Attack } and not NobleCardModel)
         {
-            if (await TryConsumeCritStars(false) > 0)
+            if (await TryConsumeCritStars(false, card.Owner) > 0)
             {
                 _crit.Active = true;
                 _crit.DamageMultiplier = 2m;

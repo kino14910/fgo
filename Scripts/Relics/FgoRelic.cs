@@ -18,12 +18,8 @@ public abstract class FgoRelic : ModRelicTemplate
     /// </summary>
     protected int QuartzCounter
     {
-        get => Owner != null ? Entry.RunState.Get(Owner).QuartzCount : 0;
-        set
-        {
-            if (Owner != null)
-                Entry.RunState.Modify(Owner, data => data.QuartzCount = value);
-        }
+        get => Entry.RunState.Get(Owner).QuartzCount;
+        set => Entry.RunState.Modify(Owner, data => data.QuartzCount = value);
     }
 
     public override RelicAssetProfile AssetProfile
@@ -34,10 +30,10 @@ public abstract class FgoRelic : ModRelicTemplate
             // （与 FgoPowerModel 的 fallback 策略一致，避免新遗物缺图时显示异常）。
             var small = $"res://Fgo/images/relics/{GetType().Name}.png";
             var big = $"res://Fgo/images/relics/big/{GetType().Name}.png";
-            var smallExists = ResourceLoader.Exists(small);
+            var outline = $"res://Fgo/images/relics/outline/{GetType().Name}.png";
             return new RelicAssetProfile(
-                smallExists ? small : "res://Fgo/images/relics/relic.png",
-                smallExists ? small : "res://Fgo/images/relics/relic.png",
+                ResourceLoader.Exists(small) ? small : "res://Fgo/images/relics/relic.png",
+                ResourceLoader.Exists(outline) ? outline : "res://Fgo/images/relics/outline/relic.png",
                 ResourceLoader.Exists(big) ? big : "res://Fgo/images/relics/big/relic.png"
             );
         }

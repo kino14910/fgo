@@ -18,6 +18,7 @@ public class PeerlessStrikePower : FgoPowerModel
 
     public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
     {
+        if (player.Creature != Owner) return;
         await PowerCmd.Remove(this);
         Flash();
         await CreatureCmd.Kill(Owner);

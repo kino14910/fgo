@@ -37,6 +37,6 @@ public class CharismaOfHope() : FgoCardModel(1, CardType.Attack,
             .Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_attack_blunt")
             .Execute(choiceContext);
-        await FgoResCmd.ModifyNp(this);
+        await FgoResCmd.ModifyNp(DynamicVars["Np"].BaseValue, Owner);
     }
 }

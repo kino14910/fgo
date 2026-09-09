@@ -35,8 +35,8 @@ public class RoadOfFallingFlowers() : FgoCardModel(0, CardType.Skill, CardRarity
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await FgoResCmd.ModifyStars(this);
-        await FgoResCmd.ModifyNp(this);
+        await FgoResCmd.ModifyStars(DynamicVars["Star"].BaseValue, Owner);
+        await FgoResCmd.ModifyNp(DynamicVars["Np"].BaseValue, Owner);
 
         var power = await PowerCmd.Apply<RoadOfFallingFlowersPower>(
             choiceContext, Owner.Creature, 1, Owner.Creature, this);

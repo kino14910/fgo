@@ -21,8 +21,8 @@ public class ReduceNpTurnEndPower : FgoPowerModel
     public override async Task BeforeSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side,
         IEnumerable<Creature> participants)
     {
-        if (Owner?.Player is not { } player) return;
-        await FgoBattleHooks.Get(player).ModifyNp(-Amount);
+        if (Owner.Player is not { } player) return;
+        await FgoBattleHooks.Get(player).ModifyNp(-Amount, player);
         await PowerCmd.Remove(this);
     }
 }

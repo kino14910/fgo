@@ -30,6 +30,7 @@ public class InfiniteSufferingPower : FgoPowerModel, IPowerExtraIconAmountLabelS
 
     public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
     {
+        if (player.Creature != Owner) return;
         Flash();
         await PowerCmd.Apply<CriticalDamagePower>(choiceContext, Owner, CritDamagePercent, Owner, null);
         await PowerCmd.Remove(this);

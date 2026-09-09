@@ -13,6 +13,7 @@ public class BurningPower : FgoPowerModel
 
     public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
     {
+        if (player.Creature != Owner) return;
         Flash();
         var combatState = Owner.CombatState;
         if (combatState != null)

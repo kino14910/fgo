@@ -42,6 +42,6 @@ public class CodeOriginalSin() : NobleCardModel(2, CardType.Attack, TargetType.A
             Owner.Creature);
         await PowerCmd.Apply<DoomPower>(choiceContext, cardPlay.Target, DynamicVars.Doom.BaseValue,
             Owner.Creature, this);
-        await FgoResCmd.ModifyNp(this);
+        await FgoResCmd.ModifyNp(DynamicVars["Np"].BaseValue, Owner);
     }
 }

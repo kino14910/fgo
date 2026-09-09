@@ -39,7 +39,7 @@ public class DreamUponTheStars() : FgoCardModel(1, CardType.Skill,
     {
         await PowerCmd.Apply<NpDamagePower>(choiceContext, Owner.Creature,
             DynamicVars[nameof(NpDamagePower)].BaseValue, Owner.Creature, this);
-        await FgoResCmd.ModifyNp(this);
+        await FgoResCmd.ModifyNp(DynamicVars["Np"].BaseValue, Owner);
         await PowerCmd.Apply<OverchargePower>(choiceContext, Owner.Creature,
             DynamicVars[nameof(OverchargePower)].BaseValue, Owner.Creature, this);
     }

@@ -31,7 +31,7 @@ public class GraceUnexpectedBirth() : FgoCardModel(0, CardType.Skill,
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await FgoResCmd.ModifyNp(this);
+        await FgoResCmd.ModifyNp(DynamicVars["Np"].BaseValue, Owner);
         await PowerCmd.Apply<SealNpPower>(choiceContext, Owner.Creature,
             DynamicVars[nameof(SealNpPower)].BaseValue, Owner.Creature, this);
     }

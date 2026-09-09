@@ -57,6 +57,6 @@ public class ObscurantWallOfChalkA() : FgoCooldownCardModel(1, CardType.Skill, C
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await PowerCmd.Apply<AntiPurgeDefensePower>(choiceContext, Owner.Creature, 1m, Owner.Creature, this);
-        await FgoResCmd.ModifyNp(this);
+        await FgoResCmd.ModifyNp(DynamicVars["Np"].BaseValue, Owner);
     }
 }

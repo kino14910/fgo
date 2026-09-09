@@ -35,6 +35,6 @@ public class Excalibur() : NobleCardModel(2, CardType.Attack, TargetType.AllEnem
             .TargetingAllOpponents(CombatState!)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
-        await FgoResCmd.ModifyNp(this);
+        await FgoResCmd.ModifyNp(DynamicVars["Np"].BaseValue, Owner);
     }
 }

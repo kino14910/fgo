@@ -1,6 +1,7 @@
 using Fgo.Scripts.Commands;
 using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Relics;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -15,11 +16,10 @@ public class Salem : FgoRelic
 {
     public override RelicRarity Rarity => RelicRarity.Uncommon;
 
-    public override async Task AfterPlayerTurnStart(
-        PlayerChoiceContext choiceContext,
-        Player player)
+    public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
     {
-        var foreignerCount = Owner.Deck.Cards.Count(card => card.Tags.Contains(FgoTags.Foreigner));
+        if (player != Owner) return;
+        var foreignerCount = PileType.Deck.GetPile(Owner).Cards.Count(card => card.Tags.Contains(FgoTags.Foreigner));
         if (foreignerCount > 0)
         {
             Flash();

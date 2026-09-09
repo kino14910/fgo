@@ -12,6 +12,7 @@ public class StarsPerTurnPower : FgoPowerModel
 
     public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
     {
+        if (player.Creature != Owner) return;
         Flash();
         await FgoResCmd.ModifyStars(Amount, player);
     }

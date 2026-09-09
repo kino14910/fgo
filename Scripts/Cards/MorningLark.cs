@@ -36,7 +36,7 @@ public class MorningLark() : FgoCardModel(0, CardType.Skill,
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await FgoResCmd.ModifyNp(this);
+        await FgoResCmd.ModifyNp(DynamicVars["Np"].BaseValue, Owner);
         await FgoResCmd.ModifyStars(DynamicVars["Star"].BaseValue, Owner);
         await PowerCmd.Apply<ReduceNpTurnEndPower>(choiceContext, Owner.Creature,
             20, Owner.Creature, this);

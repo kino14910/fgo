@@ -57,6 +57,7 @@ public class TerrorPower : FgoPowerModel, IPowerExtraIconAmountLabelSpecsProvide
 
     public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
     {
+        if (player.Creature != Owner) return;
         // 玩家回合开始时判定，命中敌人紧接的下一意图，避免命中已执行意图而无事发生。
         if (Owner is not { IsDead: false } || Owner.Monster == null || Owner.IsStunned) return;
         if (TerrorChance <= 0m) return;

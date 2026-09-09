@@ -14,10 +14,12 @@ public class BlessingOfKurPower : FgoPowerModel
 
     public override async Task AfterCardPlayed(PlayerChoiceContext context, CardPlay cardPlay)
     {
+        if (cardPlay.Player.Creature != Owner) return;
+        if (Owner.Player is null) return;
+
         if (cardPlay.Card is KurKigalIrkalla)
         {
             Flash();
-            if (Owner.Player is null) return;
             await CreatureCmd.Heal(Owner.Player.Creature, Amount, false);
             await PowerCmd.Apply<StrengthPower>(context, Owner.Player.Creature, Amount / 3m, Owner.Player.Creature,
                 cardPlay.Card);

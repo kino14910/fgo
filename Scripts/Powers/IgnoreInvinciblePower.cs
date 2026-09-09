@@ -25,6 +25,7 @@ public class IgnoreInvinciblePower : FgoPowerModel
 
     public override async Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
+        if (cardPlay.Player.Creature != Owner) return;
         if (cardPlay.Card.Type == CardType.Attack)
         {
             Flash();

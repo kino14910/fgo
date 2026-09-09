@@ -14,6 +14,7 @@ public class CursePower : FgoPowerModel
 
     public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
     {
+        if (player.Creature != Owner) return;
         Flash();
         await CreatureCmd.Damage(choiceContext, Owner, Amount,
             ValueProp.Unblockable | ValueProp.Unpowered, null, null);

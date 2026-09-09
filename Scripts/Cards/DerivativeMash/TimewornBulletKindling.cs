@@ -8,9 +8,7 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
-using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.CardPools;
-using MegaCrit.Sts2.Core.Nodes.CommonUi;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
 using MegaCrit.Sts2.Core.Nodes.Vfx;
 using MegaCrit.Sts2.Core.ValueProps;
@@ -57,7 +55,7 @@ public class TimewornBulletKindling() : FgoBaseCardModel(1, CardType.Attack,
             await FgoResCmd.ModifyNp(Math.Min(50, stars) * 4, cardPlay.Player);
         }
 
-        await FgoResCmd.ModifyNp(this);
+        await FgoResCmd.ModifyNp(DynamicVars["Np"].BaseValue, Owner);
         await CreatureCmd.Damage(choiceContext, Owner.Creature, 4m,
             ValueProp.Unblockable | ValueProp.Unpowered, Owner.Creature);
         var wall = CombatState!.CreateCard<ObscurantWallOfChalk>(Owner);
@@ -68,6 +66,8 @@ public class TimewornBulletKindling() : FgoBaseCardModel(1, CardType.Attack,
         await CardPileCmd.AddGeneratedCardToCombat(wall, PileType.Discard, wall.Owner);
     }
 
-    protected override CardLocation GetResultLocationForCardPlay() =>
-        new(Owner, PileType.None, CardPilePosition.Bottom);
+    protected override CardLocation GetResultLocationForCardPlay()
+    {
+        return new CardLocation(Owner, PileType.None, CardPilePosition.Bottom);
+    }
 }

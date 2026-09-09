@@ -56,6 +56,6 @@ public class WitchOfSalem() : FgoCardModel(3, CardType.Skill,
 
         await PowerCmd.Apply<VsTerrorDamagePower>(choiceContext, Owner.Creature,
             DynamicVars[nameof(VsTerrorDamagePower)].BaseValue, Owner.Creature, this);
-        await FgoResCmd.ModifyNp(this);
+        await FgoResCmd.ModifyNp(DynamicVars["Np"].BaseValue, Owner);
     }
 }

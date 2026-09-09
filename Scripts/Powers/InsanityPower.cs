@@ -20,6 +20,7 @@ public class InsanityPower : FgoPowerModel
 
     public override async Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
+        if (cardPlay.Player.Creature != Owner) return;
         if (cardPlay.Card.Type != CardType.Attack) return;
         var curse = Owner.GetPower<CursePower>();
         if (curse == null) return;

@@ -33,8 +33,8 @@ public class NobleCardPool : TypeListCardPoolModel
     public override string EnergyColorName => "noble";
     public override string? TextEnergyIconPath => "res://Fgo/images/ui/energy_fgo.png";
     public override string? BigEnergyIconPath => "res://Fgo/images/ui/energy_noble_big.png";
-    public override Color DeckEntryCardColor => new("D4AF37");
-    public override Color EnergyOutlineColor => new("BE6900"); // 金色，与 vanilla 池用 hex 字符串一致
+    public override Color DeckEntryCardColor => Colors.Gold;
+    public override Color EnergyOutlineColor => new("BE6900");
     public override Material? PoolFrameMaterial => _poolFrameMaterial;
     public override bool IsColorless => false;
 }

@@ -51,7 +51,7 @@ public class VeneratedShieldOfSnowflakes() : FgoBaseCardModel(1, CardType.Skill,
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, cardPlay);
-        await FgoResCmd.ModifyNp(this);
+        await FgoResCmd.ModifyNp(DynamicVars["Np"].BaseValue, Owner);
         await PowerCmd.Apply<StrengthPower>(choiceContext, Owner.Creature, 3m, Owner.Creature, this);
         await PowerCmd.Apply<CriticalDamagePower>(choiceContext, Owner.Creature, 30m, Owner.Creature, this);
     }

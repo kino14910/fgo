@@ -50,11 +50,17 @@ public class FifthForcePower : FgoPowerModel, IPowerExtraIconAmountLabelSpecsPro
         return base.ModifyAttackHitCount(attack, hitCount * 2);
     }
 
+    public override Task BeforeAttack(AttackCommand command)
+    {
+        Flash();
+        return base.BeforeAttack(command);
+    }
+
     public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side,
         IEnumerable<Creature> participants)
     {
         if (!participants.Contains(Owner)) return;
-        if (side != CombatSide.Player) return;
+        if (side != Owner.Side) return;
 
         await PowerCmd.Decrement(this);
     }

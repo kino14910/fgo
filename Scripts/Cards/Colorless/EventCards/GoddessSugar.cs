@@ -17,7 +17,7 @@ namespace Fgo.Scripts.Cards.Colorless.EventCards;
 /// </summary>
 [RegisterCard(typeof(TokenCardPool))]
 public class GoddessSugar() : FgoBaseCardModel(1, CardType.Attack,
-    CardRarity.Token, TargetType.AnyEnemy)
+    CardRarity.Event, TargetType.AnyEnemy)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [

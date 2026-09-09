@@ -18,6 +18,7 @@ public class NpPerTurnPower : FgoPowerModel
 
     public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
     {
+        if (player.Creature != Owner) return;
         Flash();
         await FgoResCmd.ModifyNp(Amount, player);
     }

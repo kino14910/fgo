@@ -23,7 +23,7 @@ public class FgoCardPool : TypeListCardPoolModel
     public override string? BigEnergyIconPath => "res://Fgo/images/ui/energy_fgo_big.png";
 
     // 卡池的主题色。
-    public override Color DeckEntryCardColor => new(0.42f, 0.36f, 0.08f);
+    public override Color DeckEntryCardColor => Colors.Goldenrod;
 
     // 能量表盘文字轮廓颜色
     public override Color EnergyOutlineColor => new("23517D");

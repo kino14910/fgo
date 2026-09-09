@@ -25,7 +25,7 @@ public class PhaseGlidingBladePower : FgoPowerModel
     public override async Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         if (cardPlay.Card is PhaseGlidingBlade) return;
-
+        if (cardPlay.Player.Creature != Owner) return;
         if (Owner.Player is not { } player) return;
 
         Flash();

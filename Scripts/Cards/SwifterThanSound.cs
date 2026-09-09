@@ -14,8 +14,6 @@ namespace Fgo.Scripts.Cards;
 public class SwifterThanSound() : FgoCardModel(1, CardType.Attack,
     CardRarity.Rare, TargetType.AllEnemies)
 {
-    private const int DurationTurns = 2;
-
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
         HoverTipFactory.FromCard<InfiniteSuffering>(),
@@ -41,7 +39,7 @@ public class SwifterThanSound() : FgoCardModel(1, CardType.Attack,
             .Execute(choiceContext);
 
         await PowerCmd.Apply<SwifterThanSoundPower>(choiceContext,
-            Owner.Creature, DurationTurns, Owner.Creature, this);
+            Owner.Creature, 2, Owner.Creature, this);
 
         var card = CombatState!.CreateCard<InfiniteSuffering>(Owner);
         if (IsUpgraded) CardCmd.Upgrade(card, CardPreviewStyle.None);

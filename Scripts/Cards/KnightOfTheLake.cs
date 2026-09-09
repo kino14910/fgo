@@ -38,6 +38,6 @@ public class KnightOfTheLake() : FgoCardModel(1, CardType.Skill,
             await PowerCmd.Apply<CriticalDamagePower>(choiceContext, Owner.Creature,
                 DynamicVars[nameof(CriticalDamagePower)].BaseValue, Owner.Creature, this);
         else
-            await FgoResCmd.ModifyStars(this);
+            await FgoResCmd.ModifyStars(DynamicVars["Star"].BaseValue, Owner);
     }
 }
