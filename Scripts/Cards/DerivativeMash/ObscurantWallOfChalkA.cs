@@ -33,8 +33,8 @@ public class ObscurantWallOfChalkA() : FgoCooldownCardModel(1, CardType.Skill, C
     ///     复用初始形态 ObscurantWallOfChalk 的卡图（本项目未提供单独的 ObscurantWallOfChalkA 卡图）。
     /// </summary>
     public override CardAssetProfile AssetProfile => new(
-        "res://Fgo/images/cards/big/ObscurantWallOfChalk.png",
-        "res://Fgo/images/cards/big/beta/ObscurantWallOfChalk.png",
+        "res://Fgo/images/cards/ObscurantWallOfChalk.png",
+        "res://Fgo/images/cards/beta/ObscurantWallOfChalk.png",
         Type switch
         {
             CardType.Attack => "res://Fgo/images/card_frames/card_frame_attack.png",

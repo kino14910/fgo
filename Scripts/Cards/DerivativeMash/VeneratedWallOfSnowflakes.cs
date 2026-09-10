@@ -30,9 +30,9 @@ public class VeneratedWallOfSnowflakes() : FgoBaseCardModel(1, CardType.Skill,
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Eternal];
 
     public override CardAssetProfile AssetProfile => new(
-        "res://Fgo/images/cards/big/ObscurantWallOfChalk.png",
-        ResourceLoader.Exists("res://Fgo/images/cards/big/beta/ObscurantWallOfChalk.png")
-            ? "res://Fgo/images/cards/big/beta/ObscurantWallOfChalk.png"
+        "res://Fgo/images/cards/ObscurantWallOfChalk.png",
+        ResourceLoader.Exists("res://Fgo/images/cards/beta/ObscurantWallOfChalk.png")
+            ? "res://Fgo/images/cards/beta/ObscurantWallOfChalk.png"
             : null,
         Type switch
         {

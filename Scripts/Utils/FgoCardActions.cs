@@ -37,10 +37,10 @@ public static class FgoCardActions
     {
         Upgrades =
         [
-            new CardUpgrade(NobleDeckPile, typeof(LordCamelot), () => ModelDb.Card<LordChaldeas>()),
+            new CardUpgrade(NobleDeckPile, typeof(LordCamelot), ModelDb.Card<LordChaldeas>),
             new CardUpgrade(MainDeck, typeof(VeneratedWallOfSnowflakes),
-                () => ModelDb.Card<VeneratedShieldOfSnowflakes>()),
-            new CardUpgrade(MainDeck, typeof(ObscurantWallOfChalk), () => ModelDb.Card<ObscurantWallOfChalkA>())
+                ModelDb.Card<VeneratedShieldOfSnowflakes>),
+            new CardUpgrade(MainDeck, typeof(ObscurantWallOfChalk), ModelDb.Card<ObscurantWallOfChalkA>)
         ]
     };
 
@@ -141,8 +141,6 @@ public static class FgoCardActions
     /// </summary>
     public static void EnsureNobleDeckSeeded(Player player)
     {
-        if (player == null) return;
-
         var noblePile = CardPile.Get(FgoEnums.NobleDeck, player);
         if (noblePile == null || noblePile.Cards.Count > 0) return;
 
@@ -160,8 +158,6 @@ public static class FgoCardActions
     /// </summary>
     public static async Task TryUpgradeDerivativeMash(Player player)
     {
-        if (player == null) return;
-
         // 第一次进化
         if (HasUpgradeSource(player, FirstEvolution))
         {
