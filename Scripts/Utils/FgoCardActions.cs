@@ -98,7 +98,7 @@ public static class FgoCardActions
     ///     顶部栏 TrailContainer（该容器在地图/战斗中始终存在），终点由 NCardFlyVfx 内部
     ///     pileType.GetTargetPosition 解析，RitsuLib 补丁已把 NobleDeck 路由到顶部栏牌组按钮。
     /// </summary>
-    public static void PreviewNoblePileAdd(CardPileAddResult result, float time = 1.5f)
+    public static void PreviewNoblePileAdd(CardPileAddResult result, float time = 0)
     {
         if (!result.success || result.cardAdded?.Pile == null || !LocalContext.IsMine(result.cardAdded))
             return;

@@ -8,12 +8,4 @@ namespace Fgo.Scripts.Cards.Colorless.OptionCards;
 
 [RegisterCard(typeof(TokenCardPool))]
 public class RepairSpiritOrigin() : FgoBaseCardModel(-2, CardType.Power,
-    CardRarity.Token, TargetType.None)
-{
-    public override CardAssetProfile AssetProfile => new(
-        $"res://Fgo/images/cards/big/{GetType().Name}.png",
-        ResourceLoader.Exists($"res://Fgo/images/cards/big/beta/{GetType().Name}.png")
-            ? $"res://Fgo/images/cards/big/beta/{GetType().Name}.png"
-            : null,
-        "res://Fgo/images/card_frames/card_frame_power.png");
-}
+    CardRarity.Token, TargetType.None);

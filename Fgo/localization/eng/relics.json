@@ -3,7 +3,7 @@
   "FGO_RELIC_SUITCASE.description": "At the start of combat, gain [blue]20%[/blue] [gold]NP[/gold].",
   "FGO_RELIC_SUITCASE.flavor": "",
   "FGO_RELIC_SAINT_QUARTZ.title": "Saint Quartz",
-  "FGO_RELIC_SAINT_QUARTZ.description": "Each room entered increases the counter by [blue]1[/blue]. At counter ≥ [blue]3[/blue],[gold]right-click[/gold]this relic to gain a [gold]random[/gold][gold]Noble[/gold] card, consuming [blue]3[/blue] counter.",
+  "FGO_RELIC_SAINT_QUARTZ.description": "Each room entered increases the counter by [blue]1[/blue]. At counter ≥ [blue]3[/blue], [gold]right-click[/gold] this relic to draw [blue]3[/blue] random [gold]Noble[/gold] cards and pick [blue]1[/blue] of them, consuming [blue]3[/blue] counter.",
   "FGO_RELIC_SAINT_QUARTZ.flavor": "A rare holy crystal used to summon Heroic Spirits.",
   "FGO_RELIC_SUMMON_TICKET.title": "Summon Ticket",
   "FGO_RELIC_SUMMON_TICKET.description": "Each room entered increases the counter by [blue]1[/blue]. At counter ≥ [blue]3[/blue],[gold]right-click[/gold]this relic to choose a [gold]Noble[/gold] card to add, consuming [blue]3[/blue] counter.",

@@ -3,9 +3,18 @@ using Fgo.Scripts.Cards.NoblePhantasm;
 using Fgo.Scripts.Character;
 using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Entities.CardRewardAlternatives;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Relics;
+using MegaCrit.Sts2.Core.Extensions;
+using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Nodes;
+using MegaCrit.Sts2.Core.Nodes.Cards;
+using MegaCrit.Sts2.Core.Nodes.Cards.Holders;
+using MegaCrit.Sts2.Core.Nodes.Vfx;
+using MegaCrit.Sts2.Core.Nodes.Screens.CardSelection;
+using MegaCrit.Sts2.Core.Nodes.Screens.Overlays;
 using MegaCrit.Sts2.Core.Rooms;
 using STS2RitsuLib.Interactions.RightClick;
 using STS2RitsuLib.Interop.AutoRegistration;
@@ -15,8 +24,9 @@ namespace Fgo.Scripts.Relics;
 /// <summary>
 ///     圣晶石: FGO 角色的初始遗物，仅负责圣晶石计数与右键消耗计数换取宝具卡。
 ///     - 每进入一个房间（每层）+1 计数。
-///     - 计数 ≥ 3 时，可右键此遗物随机获得一张尚未在 NobleDeck 的宝具卡，并消耗 3 计数。
-///     - 被 [gold]点金石[/gold] 祝福后升级为[gold]召唤券[/gold]（SummonTicket），可手动选择要加入的宝具卡。
+///     - 计数 ≥ 3 时，可右键此遗物从尚未在 NobleDeck 的宝具卡中随机抽取 3 张作为候选，
+///       弹出与卡牌奖励一致的三选一界面，由玩家手动选择其中 1 张加入 NobleDeck，并消耗 3 计数。
+///     - 被 [gold]点金石[/gold] 祝福后升级为[gold]召唤券[/gold]（SummonTicket），可在全部候选中手动挑选要加入的宝具卡。
 ///     - 计数存于按玩家的 FgoRunState（见 FgoRelic.QuartzCounter）: 升级替换遗物实例后计数保留。
 ///     - NobleDeck 牌堆的生命周期（播种初始宝具卡、按钮绑定）已与此遗物解耦，
 ///     由 run 生命周期在 Entry 中统一处理（见 FgoCardActions.EnsureNobleDeckSeeded）。
@@ -41,7 +51,8 @@ public class SaintQuartz : FgoRelic, IModRightClickableRelic
     }
 
     /// <summary>
-    ///     右键触发: 从 NobleCardPool 中尚未在 NobleDeck 的宝具卡中随机选一张加入 NobleDeck。
+    ///     右键触发: 从 NobleCardPool 中尚未在 NobleDeck 的宝具卡里随机抽取 3 张（候选不足 3 张时按实际数量）
+    ///     作为本次抽取的选项，弹出与卡牌奖励一致的三选一界面，由玩家手动选择 1 张加入 NobleDeck。
     /// </summary>
     public async Task OnRightClick(ModRightClickExecutionContext context)
     {
@@ -70,18 +81,49 @@ public class SaintQuartz : FgoRelic, IModRightClickableRelic
             return;
         }
 
-        var selected = player.RunState.Rng.CombatCardSelection.NextItem(candidates);
-        if (selected == null) return;
+        var options = candidates
+            .TakeRandom(Math.Min(3, candidates.Count), player.RunState.Rng.CombatCardSelection)
+            .Select(c => new CardCreationResult(c))
+            .ToList();
 
+        var screen = NCardRewardSelectionScreen.ShowScreen(options, Array.Empty<CardRewardAlternative>());
+        int? chosen;
+        if (screen != null)
+        {
+            chosen = await screen.OptionSelected();
+            NOverlayStack.Instance?.Remove(screen);
+        }
+        else
+        {
+            chosen = 0;
+        }
+
+        if (chosen is not { } idx) return;
+
+        var selected = options[idx].Card;
         var noblePile = CardPile.Get(FgoEnums.NobleDeck, player);
         if (noblePile != null)
         {
-            // 用 CardPileCmd.Add 加卡以获得 CardPileAddResult，再触发卡牌飞入 NobleDeck 顶部栏牌组的特效。
+            var holder = screen?.GetCardHolder(selected);
             var result = await CardPileCmd.Add(selected, noblePile);
             QuartzCounter -= CostPerChoice;
             UpdateAvailableVisual(CostPerChoice);
             Flash();
-            FgoCardActions.PreviewNoblePileAdd(result);
+
+            if (holder != null && result is { success: true })
+            {
+                var cardNode = holder.CardNode;
+                NRun.Instance.GlobalUi.ReparentCard(cardNode);
+                holder.QueueFreeSafely();
+                NRun.Instance.GlobalUi.TopBar.TrailContainer.AddChildSafely(
+                    NCardFlyVfx.Create(cardNode, result.cardAdded.Pile.Type, true, result.cardAdded.Owner.Character.TrailPath));
+            }
+            else
+            {
+                FgoCardActions.PreviewNoblePileAdd(result);
+            }
+
+            NOverlayStack.Instance?.Remove(screen);
         }
     }
 

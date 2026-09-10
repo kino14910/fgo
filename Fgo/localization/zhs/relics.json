@@ -6,7 +6,7 @@
   "FGO_RELIC_SUITCASE.description": "在战斗开始时获得20%[gold]宝具值[/gold]。",
   "FGO_RELIC_SUITCASE.flavor": "记录了召唤过的所有英灵情报的装置。",
   "FGO_RELIC_SAINT_QUARTZ.title": "圣晶石",
-  "FGO_RELIC_SAINT_QUARTZ.description": "每进入一个房间，计数+1。计数 ≥ 3 时，[gold]右键[/gold]此遗物[gold]随机[/gold]获得一张[gold]宝具卡[/gold]，并消耗3计数。",
+  "FGO_RELIC_SAINT_QUARTZ.description": "每进入一个房间，计数+1。计数 ≥ 3 时，[gold]右键[/gold]此遗物从[gold]宝具卡[/gold]中随机抽取3张供你[gold]三选一[/gold]获得1张，并消耗3计数。",
   "FGO_RELIC_SAINT_QUARTZ.flavor": "用于召唤英灵的稀世圣晶石。",
   "FGO_RELIC_SUMMON_TICKET.title": "呼符",
   "FGO_RELIC_SUMMON_TICKET.description": "每进入一个房间，计数+1。计数 ≥ 3 时，[gold]右键[/gold]此遗物从所有[gold]宝具卡[/gold]中选择一张加入，并消耗 3 计数。",
