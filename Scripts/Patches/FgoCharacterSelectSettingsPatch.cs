@@ -47,9 +47,14 @@ public sealed class FgoCharacterSelectSettingsSelectPatch : IPatchMethod
         NCharacterSelectButton charSelectButton,
         CharacterModel characterModel)
     {
-        bool show = characterModel is FgoCharacter
-            && !charSelectButton.IsRandom
-            && !charSelectButton.IsLocked;
+        var show = characterModel is FgoCharacter
+                   && charSelectButton is { IsRandom: false, IsLocked: false };
+        if (show)
+        {
+            FgoReflectedSettings.ReflectBoundValues();
+            FgoSkinApplier.ApplySkinToSelectPreview(__instance, (int)FgoReflectedSettings.CharacterSkin);
+        }
+
         FgoSettingsPanelRegistry.Get(__instance).Refresh(show);
     }
 }
@@ -79,42 +84,72 @@ internal static class FgoSettingsPanelRegistry
 internal sealed class FgoSettingsPanel
 {
     private const float PanelWidth = 360f;
-    private const float PanelHeight = 250f;
+    private const float PanelHeight = 500f;
     private const float EdgePadding = 24f;
     private const float VerticalCenterRatio = 0.5f;
+    private const float SkinListMaxHeight = 240f;
+    private const int SkinLayerIndex = 128;
 
     private static readonly Color Gold = new("c47e09");
     private static readonly Color PanelBg = new(0.06f, 0.04f, 0.02f, 0.92f);
+    private static readonly Color SkinBorderColor = new(0.8f, 0.8f, 0.8f);
 
+    private readonly NCharacterSelectScreen _screen;
     private readonly PanelContainer _root;
     private readonly HSlider _npSlider;
     private readonly Label _npValueLabel;
     private readonly CheckButton _noCostToggle;
     private readonly CheckButton _padoruToggle;
+    private readonly Button _skinHeader;
+    private readonly ScrollContainer _skinScroll;
+    private readonly TextureRect _skinPreview;
+    private readonly CanvasLayer _skinLayer;
+    private readonly Control _skinLayerHost;
+    private readonly Control _skinLayerBlocker;
+    private int _committedSkin;
 
     public FgoSettingsPanel(NCharacterSelectScreen screen)
     {
+        _screen = screen;
         _root = CreateRoot();
         _npSlider = CreateSlider();
         _npValueLabel = CreateLabel(string.Empty, 40);
         _noCostToggle = new CheckButton();
         _padoruToggle = new CheckButton();
+        _skinHeader = CreateSkinHeader();
+        _skinScroll = CreateSkinList();
+        _skinPreview = CreateSkinPreview();
+
+        // 展开列表挂在独立的高层 CanvasLayer 上：浮在全局最顶层，且不参与面板容器的布局计算。
+        _skinLayer = new CanvasLayer { Layer = SkinLayerIndex, Visible = false };
+        _skinLayerBlocker = new Control { MouseFilter = Control.MouseFilterEnum.Stop };
+        _skinLayerBlocker.SetAnchorsPreset(Control.LayoutPreset.FullRect);
+        _skinLayerBlocker.GuiInput += OnSkinLayerClickedOutside;
+        _skinLayerHost = new Control { MouseFilter = Control.MouseFilterEnum.Ignore };
+        _skinScroll.SetAnchorsPreset(Control.LayoutPreset.FullRect);
+        _skinLayerHost.AddChild(_skinScroll);
+        _skinLayer.AddChild(_skinLayerBlocker);
+        _skinLayer.AddChild(_skinLayerHost);
 
         BuildLayout();
         screen.AddChild(_root);
+        screen.AddChild(_skinLayer);
     }
 
     public void Refresh(bool show)
     {
         _root.Visible = show;
         if (!show)
+        {
+            CloseSkinList();
             return;
+        }
 
         FgoReflectedSettings.ReflectBoundValues();
 
         if (FgoReflectedSettings.TryGetIntBinding(FgoReflectedSettings.BaseNpPerCostEntryId, out var npBinding))
         {
-            int value = npBinding.Read();
+            var value = npBinding.Read();
             _npSlider.SetValueNoSignal(value);
             _npValueLabel.Text = value.ToString();
         }
@@ -125,6 +160,34 @@ internal sealed class FgoSettingsPanel
 
         if (FgoReflectedSettings.TryGetToggleBinding(FgoReflectedSettings.EnablePadoruEntryId, out var padoruBinding))
             _padoruToggle.SetPressedNoSignal(padoruBinding.Read());
+
+        if (FgoReflectedSettings.TryGetSkinBinding(out var skinBinding))
+        {
+            _committedSkin = (int)skinBinding.Read();
+            _skinHeader.Text = $"{_committedSkin} - {FgoSkinApplier.SkinNames[_committedSkin]}";
+            _skinPreview.Texture = FgoSkinApplier.LoadSkinTexture(_committedSkin);
+            FgoSkinApplier.ApplySkinToSelectPreview(_screen, _committedSkin);
+        }
+
+        CloseSkinList();
+    }
+
+    private void OnSkinPicked(int index)
+    {
+        if (FgoReflectedSettings.TryGetSkinBinding(out var binding))
+        {
+            binding.Write((CharacterSkinId)index);
+            _committedSkin = index;
+            _skinHeader.Text = $"{index} - {FgoSkinApplier.SkinNames[index]}";
+        }
+
+        CloseSkinList();
+    }
+
+    private void OnSkinHovered(int index)
+    {
+        _skinPreview.Texture = FgoSkinApplier.LoadSkinTexture(index);
+        FgoSkinApplier.ApplySkinToSelectPreview(_screen, index);
     }
 
     private void OnNpValueChanged(double value)
@@ -172,6 +235,159 @@ internal sealed class FgoSettingsPanel
         column.AddChild(BuildToggleRow(
             GetLoc("FGO_SETTINGS_UI_ENABLE_NO_COST_NOBLE_PHANTASM.title"), _noCostToggle, OnNoCostToggled));
         column.AddChild(BuildToggleRow(GetLoc("FGO_SETTINGS_UI_ENABLE_PADORU.title"), _padoruToggle, OnPadoruToggled));
+        column.AddChild(BuildSkinGroup());
+    }
+
+    private Control BuildSkinGroup()
+    {
+        var group = new VBoxContainer();
+        group.AddThemeConstantOverride("separation", 6);
+        group.SizeFlagsHorizontal = Control.SizeFlags.ExpandFill;
+
+        var label = CreateLabel("人物皮肤", 0);
+        label.AddThemeColorOverride("font_color", Gold);
+        group.AddChild(label);
+
+        _skinPreview.CustomMinimumSize = new Vector2(240f, 240f);
+        group.AddChild(_skinPreview);
+
+        group.AddChild(_skinHeader);
+
+        return group;
+    }
+
+    private static StyleBoxFlat SkinBorderStyle()
+    {
+        var sb = new StyleBoxFlat
+        {
+            BgColor = new Color(0f, 0f, 0f, 0f),
+            BorderColor = SkinBorderColor
+        };
+        sb.SetBorderWidthAll(1);
+        sb.SetCornerRadiusAll(6);
+        sb.SetContentMarginAll(6);
+        return sb;
+    }
+
+    private Button CreateSkinHeader()
+    {
+        var header = new Button
+        {
+            Text = "0 - 迦勒底（默认）",
+            SizeFlagsHorizontal = Control.SizeFlags.ExpandFill
+        };
+        header.AddThemeColorOverride("font_color", new Color(1f, 1f, 1f, 0.92f));
+        var border = SkinBorderStyle();
+        header.AddThemeStyleboxOverride("normal", border);
+        header.AddThemeStyleboxOverride("hover", border);
+        header.AddThemeStyleboxOverride("pressed", border);
+        header.AddThemeStyleboxOverride("focus", border);
+        header.Pressed += ToggleSkinList;
+        return header;
+    }
+
+    // 自定义下拉列表：纯 Control（不弹原生 PopupMenu 窗口），避免选人界面在弹窗打开时暂停 BGM。
+    private ScrollContainer CreateSkinList()
+    {
+        var scroll = new ScrollContainer
+        {
+            SizeFlagsHorizontal = Control.SizeFlags.ExpandFill,
+            HorizontalScrollMode = ScrollContainer.ScrollMode.Disabled,
+            MouseFilter = Control.MouseFilterEnum.Stop
+        };
+
+        // 边框画在 ScrollContainer 自身的 "panel" 上：可视区外框固定不动，不会随内容滚动。
+        var bg = new StyleBoxFlat
+        {
+            BgColor = new Color(0.1f, 0.08f, 0.05f, 0.98f),
+            BorderColor = SkinBorderColor
+        };
+        bg.SetBorderWidthAll(1);
+        bg.SetCornerRadiusAll(6);
+        bg.SetContentMarginAll(4);
+        scroll.AddThemeStyleboxOverride("panel", bg);
+
+        var list = new VBoxContainer { SizeFlagsHorizontal = Control.SizeFlags.ExpandFill };
+        list.AddThemeConstantOverride("separation", 2);
+
+        for (var i = 0; i < FgoSkinApplier.SkinCount; i++)
+        {
+            var idx = i;
+            var item = new Button
+            {
+                Text = $"{i} - {FgoSkinApplier.SkinNames[i]}",
+                SizeFlagsHorizontal = Control.SizeFlags.ExpandFill
+            };
+            item.AddThemeColorOverride("font_color", new Color(1f, 1f, 1f, 0.92f));
+            item.MouseEntered += () => OnSkinHovered(idx);
+            item.Pressed += () => OnSkinPicked(idx);
+            list.AddChild(item);
+        }
+
+        scroll.AddChild(list);
+        return scroll;
+    }
+
+    private void ToggleSkinList()
+    {
+        if (_skinLayer.Visible)
+        {
+            CloseSkinList();
+            return;
+        }
+
+        PositionSkinList();
+        _skinLayer.Visible = true;
+    }
+
+    private void CloseSkinList()
+    {
+        _skinLayer.Visible = false;
+        RestoreSkinPreview();
+    }
+
+    private void OnSkinLayerClickedOutside(InputEvent @event)
+    {
+        if (@event is InputEventMouseButton { Pressed: true })
+            CloseSkinList();
+    }
+
+    // 列表浮层不参与布局，所以按表头的屏幕矩形手动定位：默认挂在表头下方，空间不够时向上翻转。
+    private void PositionSkinList()
+    {
+        var header = _skinHeader.GetGlobalRect();
+        var viewport = _screen.GetViewport().GetVisibleRect().Size;
+
+        var width = Mathf.Max(header.Size.X, 120f);
+        var y = header.Position.Y + header.Size.Y + 4f;
+        var height = Mathf.Min(SkinListMaxHeight, viewport.Y - y - 8f);
+
+        if (height < 80f)
+        {
+            height = Mathf.Min(SkinListMaxHeight, Mathf.Max(header.Position.Y - 8f, 80f));
+            y = Mathf.Max(header.Position.Y - height - 4f, 0f);
+        }
+
+        _skinLayerHost.Position = new Vector2(header.Position.X, y);
+        _skinLayerHost.Size = new Vector2(width, height);
+    }
+
+    private void RestoreSkinPreview()
+    {
+        _skinPreview.Texture = FgoSkinApplier.LoadSkinTexture(_committedSkin);
+        FgoSkinApplier.ApplySkinToSelectPreview(_screen, _committedSkin);
+    }
+
+    private static TextureRect CreateSkinPreview()
+    {
+        return new TextureRect
+        {
+            // IgnoreSize：预览框尺寸固定（不随纹理比例变化），任何比例的皮肤图都在框内等比居中。
+            ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize,
+            StretchMode = TextureRect.StretchModeEnum.KeepAspectCentered,
+            SizeFlagsHorizontal = Control.SizeFlags.ExpandFill,
+            MouseFilter = Control.MouseFilterEnum.Ignore
+        };
     }
 
     private Control BuildSliderGroup()
@@ -249,9 +465,9 @@ internal sealed class FgoSettingsPanel
         root.GrowHorizontal = Control.GrowDirection.Begin;
         root.GrowVertical = Control.GrowDirection.Begin;
         root.OffsetLeft = -PanelWidth - EdgePadding;
-        root.OffsetTop = -PanelHeight * 0.5f;
+        root.OffsetTop = -PanelHeight * 0.4f;
         root.OffsetRight = -EdgePadding;
-        root.OffsetBottom = PanelHeight * 0.5f;
+        root.OffsetBottom = PanelHeight * 0.35f;
 
         var style = new StyleBoxFlat
         {

@@ -28,5 +28,7 @@
   "FGO_SETTINGS_UI_ENABLE_MOSS.hover.desc": "Enable Moss as an enemy encounter. Requires 'Enable Enemies' to be on.",
   "FGO_SETTINGS_UI_ENABLE_QUEEN_MORGAN.title": "Queen Morgan",
   "FGO_SETTINGS_UI_ENABLE_QUEEN_MORGAN.hover.desc": "Enable Queen Morgan as an enemy encounter. Requires 'Enable Enemies' to be on.",
-  "FGO_SETTINGS_UI_GENERAL.title": "BaseSetting"
+  "FGO_SETTINGS_UI_GENERAL.title": "BaseSetting",
+  "FGO_SETTINGS_UI_CHARACTER_SKIN.title": "Character Skin",
+  "FGO_SETTINGS_UI_CHARACTER_SKIN.hover.desc": "Select the protagonist skin (0-18; see the character select settings panel for names)."
 }

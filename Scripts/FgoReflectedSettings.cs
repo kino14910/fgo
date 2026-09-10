@@ -1,6 +1,35 @@
+using System;
+using System.Reflection;
 using STS2RitsuLib.Settings;
 
 namespace Fgo.Scripts;
+
+public enum CharacterSkinId : int
+{
+    Chaldea = 0,
+    HalloweenRoyalty = 1,
+    SchoolUniformChapter2 = 2,
+    MisakiHighUniform = 3,
+    NewYear = 4,
+    WhiteChristmas = 5,
+    SummerStreet = 6,
+    SounHighUniform = 7,
+    FifthTrueElement = 8,
+    SplendidNewYear = 9,
+    TropicalSummer = 10,
+    Fragment2004 = 11,
+    MoonBackMemory = 12,
+    MoonSeaMemory = 13,
+    BrightSummer = 14,
+    RoyalBrand = 15,
+    GoldenCelebration = 16,
+    ChaldeaExplorer = 17,
+    WinterCasual = 18,
+    MonteCristo = 19,
+    CatArcueidBrunestud = 20,
+    RomaniArchaman = 21,
+    Guda = 22,
+}
 
 [ModSettingsPage(Entry.ModId)]
 // [ModSettingsSection("enemies", TitleLocKey = "FGO_SETTINGS_UI_ENEMIES.title")]
@@ -12,6 +41,7 @@ public class FgoReflectedSettings
     public const string EnablePadoruEntryId = "enablePadoru";
     public const string EnableNoCostNoblePhantasmEntryId = "enableNoCostNoblePhantasm";
     public const string OpenNobleDeckKeyEntryId = "openNobleDeckKey";
+    public const string CharacterSkinEntryId = "characterSkin";
 
     [ModSettingsIntSlider(BaseNpPerCostEntryId, "general", 0, 10, LabelLocKey = "FGO_SETTINGS_UI_BASE_NP_PER_COST.title",
         DescriptionLocKey = "FGO_SETTINGS_UI_BASE_NP_PER_COST.hover.desc")]
@@ -33,6 +63,20 @@ public class FgoReflectedSettings
         DescriptionLocKey = "FGO_SETTINGS_UI_ENABLE_NO_COST_NOBLE_PHANTASM.hover.desc")]
     [ModSettingsBinding(Source = ModSettingsReflectionBindingSource.Global, DataKey = "enable_no_cost_noble_phantasm")]
     public static bool EnableNoCostNoblePhantasm { get; set; } = false;
+
+    [ModSettingsChoice(CharacterSkinEntryId, "general",
+        OptionLabels =
+        [
+            "迦勒底（默认）", "万圣节王室成员", "奏章2校服", "三咲高中校服", "新春装束",
+            "白色圣诞", "夏日街头", "总耶高中校服", "第五真实元素环境用迦勒底制服", "华美的新年",
+            "热带夏日", "2004年的碎片", "月之背面的记忆", "月之海的记忆", "明亮夏日",
+            "王室品牌", "金色庆典", "迦勒底探险者", "冬日便装",
+            "岩窟王　基督山", "猫姬", "罗曼", "人类恶"
+        ],
+        LabelLocKey = "FGO_SETTINGS_UI_CHARACTER_SKIN.title",
+        DescriptionLocKey = "FGO_SETTINGS_UI_CHARACTER_SKIN.hover.desc")]
+    [ModSettingsBinding(Source = ModSettingsReflectionBindingSource.Global, DataKey = "character_skin")]
+    public static CharacterSkinId CharacterSkin { get; set; } = CharacterSkinId.Chaldea;
 
     [ModSettingsKeyBinding(OpenNobleDeckKeyEntryId, "general", AllowModifierCombos = true, AllowModifierOnly = false,
         Label = "打开宝具牌堆 (Noble Deck)",
@@ -56,6 +100,7 @@ public class FgoReflectedSettings
         {
             if (entry is ToggleModSettingsEntryDefinition toggle) toggle.Binding.Read();
             else if (entry is IntSliderModSettingsEntryDefinition slider) slider.Binding.Read();
+            else ReadEntryBinding(entry);
         }
 
         _reflected = true;
@@ -89,6 +134,30 @@ public class FgoReflectedSettings
         }
 
         return false;
+    }
+
+    /// <summary>
+    ///     按 entry Id 取皮肤下拉(枚举)绑定，供选人页等 UI 直接 Read/Write（Write 会持久化 + 回填静态）。
+    /// </summary>
+    public static bool TryGetSkinBinding(out IModSettingsValueBinding<CharacterSkinId> binding)
+    {
+        binding = null!;
+        if (FindEntry(CharacterSkinEntryId) is ChoiceModSettingsEntryDefinition<CharacterSkinId> choice)
+        {
+            binding = choice.Binding;
+            return true;
+        }
+
+        return false;
+    }
+
+    private static void ReadEntryBinding(ModSettingsEntryDefinition entry)
+    {
+        var bindingProp = entry.GetType().GetProperty("Binding");
+        var binding = bindingProp?.GetValue(entry);
+        if (binding == null) return;
+        var read = binding.GetType().GetMethod("Read", Type.EmptyTypes);
+        read?.Invoke(binding, null);
     }
 
     private static ModSettingsEntryDefinition? FindEntry(string entryId)

@@ -28,5 +28,7 @@
   "FGO_SETTINGS_UI_ENABLE_MOSS.hover.desc": "启用莫斯作为敌方遭遇，需要开启「启用敌对」。",
   "FGO_SETTINGS_UI_ENABLE_QUEEN_MORGAN.title": "摩根女王",
   "FGO_SETTINGS_UI_ENABLE_QUEEN_MORGAN.hover.desc": "启用摩根女王作为敌方遭遇，需要开启「启用敌对」。",
-  "FGO_SETTINGS_UI_GENERAL.title": "基础设置"
+  "FGO_SETTINGS_UI_GENERAL.title": "基础设置",
+  "FGO_SETTINGS_UI_CHARACTER_SKIN.title": "人物皮肤",
+  "FGO_SETTINGS_UI_CHARACTER_SKIN.hover.desc": "选择主角外观皮肤（0-18，详细名称见选人界面设置面板）。"
 }

@@ -109,7 +109,10 @@ public class FgoCharacter : ModCharacterTemplate<FgoCardPool, FgoRelicPool, FgoP
     // 自动转换人物场景，让你不需要手动挂脚本。复制即可。
     protected override NCreatureVisuals? TryCreateCreatureVisuals()
     {
-        return RitsuGodotNodeFactories.CreateFromScenePath<NCreatureVisuals>(AssetProfile.Scenes!.VisualsPath!);
+        var visuals = RitsuGodotNodeFactories.CreateFromScenePath<NCreatureVisuals>(AssetProfile.Scenes!.VisualsPath!);
+        FgoReflectedSettings.ReflectBoundValues();
+        FgoSkinApplier.ApplySkinToCreature(visuals, (int)FgoReflectedSettings.CharacterSkin);
+        return visuals;
     }
 
     // 初始卡组，或者在卡牌类上用RegisterCharacterStarterCard就不用写这个
