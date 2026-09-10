@@ -14,7 +14,7 @@ namespace Fgo.Scripts.Patches;
 /// <summary>
 ///     选人页设置面板：当玩家在 <see cref="NCharacterSelectScreen" /> 选中 FGO 角色时，于屏幕右侧显示
 ///     一个修改 <see cref="FgoReflectedSettings" /> 的面板——一个整数滑块（每费用 NP 获取）+ 两个开关
-///     （宝具 0 费、圣诞彩蛋）。原为 Saya 皮肤选择器移植，这里只保留「修改设置的滑块与按钮」，去掉皮肤切换。
+///     （宝具 0 费、圣诞彩蛋）。仅保留修改设置的滑块与开关。
 ///     通过 RitsuLib 的 IPatchMethod 模式注册（见 Entry.Init），不直接用 Harmony.PatchAll。
 /// </summary>
 

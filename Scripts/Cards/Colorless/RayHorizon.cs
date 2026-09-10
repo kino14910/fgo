@@ -38,6 +38,7 @@ public class RayHorizon() : FgoBaseCardModel(0, CardType.Skill,
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
+        await PowerCmd.Apply<InvincibilityTurnPower>(choiceContext, Owner.Creature, 1m, Owner.Creature, this);
         var npCardPower = await PowerCmd.Apply<NpCardPower>(choiceContext, Owner.Creature, 1m, Owner.Creature, this);
         if (npCardPower != null)
             npCardPower.NobleCard = ModelDb.Card<HollowHeartAlbion>();

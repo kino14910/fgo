@@ -37,6 +37,7 @@ public class Entry
     private static IDisposable? _runStartedSubscription;
     private static IDisposable? _runLoadedSubscription;
     private static IDisposable? _gameReadySubscription;
+    private static IDisposable? _mainMenuReadySubscription;
     private static IRuntimeHotkeyHandle? _nobleDeckHotkey;
 
     /// <summary>
@@ -119,6 +120,9 @@ public class Entry
 
         // 游戏就绪后注册 N 快捷键打开 NobleDeck
         _gameReadySubscription = RitsuLibFramework.SubscribeLifecycle<GameReadyEvent>(OnGameReady);
+
+        // 玩家在主菜单设置页改了设置后，回到主菜单时同步一次。
+        _mainMenuReadySubscription = RitsuLibFramework.SubscribeLifecycle<MainMenuReadyEvent>(OnMainMenuReady);
         try
         {
             var harmony = new Harmony("Fgo.autoslay.fix");
@@ -129,6 +133,12 @@ public class Entry
         {
             Logger.ErrorNoTrace($"[Fgo] Failed to apply autoslay patch: {ex}");
         }
+    }
+
+    private static void OnMainMenuReady(MainMenuReadyEvent evt)
+    {
+        FgoReflectedSettings.ReflectBoundValues();
+        RegisterNobleDeckHotkey();
     }
 
     private static void OnRunStarted(RunStartedEvent evt)
@@ -173,21 +183,9 @@ public class Entry
         // 确保 NobleCardModel.CanonicalEnergyCost 等依赖开关值的覆盖在规范卡首次访问费用前读到正确值。
         FgoReflectedSettings.ReflectBoundValues();
 
-        // 注册 N 快捷键打开 NobleDeck
-        try
-        {
-            _nobleDeckHotkey = RuntimeHotkeyService.Register("N", OnNobleDeckHotkey,
-                new RuntimeHotkeyOptions
-                {
-                    Id = "fgo_open_noble_deck",
-                    DebugName = "FGO NobleDeck viewer"
-                });
-            Logger.Info("[Fgo] Registered N hotkey for NobleDeck viewer");
-        }
-        catch (Exception ex)
-        {
-            Logger.ErrorNoTrace($"[Fgo] Failed to register N hotkey: {ex}");
-        }
+        // 注册打开 NobleDeck 的快捷键：从设置页读取已持久化（SaveScope.Global）的按键绑定，
+        // 由 RitsuLib 的 RuntimeHotkeyService 在共享输入节点上路由回调。
+        RegisterNobleDeckHotkey();
     }
 
     /// <summary>
@@ -200,6 +198,40 @@ public class Entry
         if (globalUi == null) return;
         var button = globalUi.FindChild("ModCardPileButton_FGO_CARDPILE_NOBLE", true, false) as NModCardPileButton;
         button?.TriggerOpen();
+    }
+
+    /// <summary>
+    ///     从设置页读取 NobleDeck 快捷键绑定并注册到 RitsuLib 运行时热键路由器。
+    ///     绑定串为空（用户在设置中清空）时跳过注册；重复调用会先释放旧句柄避免重复注册。
+    /// </summary>
+    private static void RegisterNobleDeckHotkey()
+    {
+        _nobleDeckHotkey?.Dispose();
+        _nobleDeckHotkey = null;
+
+        var binding = FgoReflectedSettings.OpenNobleDeckKeyBinding;
+        if (string.IsNullOrWhiteSpace(binding))
+        {
+            Logger.Warn("[Fgo] NobleDeck hotkey binding is empty; skipping registration.");
+            return;
+        }
+
+        try
+        {
+            _nobleDeckHotkey = RuntimeHotkeyService.Register(
+                binding,
+                OnNobleDeckHotkey,
+                new RuntimeHotkeyOptions
+                {
+                    Id = "fgo_open_noble_deck",
+                    DebugName = "FGO NobleDeck viewer"
+                });
+            Logger.Info($"[Fgo] Registered NobleDeck hotkey '{binding}'.");
+        }
+        catch (Exception ex)
+        {
+            Logger.ErrorNoTrace($"[Fgo] Failed to register NobleDeck hotkey '{binding}': {ex}");
+        }
     }
 
     private static void DisableMod()

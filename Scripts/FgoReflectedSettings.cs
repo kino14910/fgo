@@ -11,6 +11,7 @@ public class FgoReflectedSettings
     public const string BaseNpPerCostEntryId = "baseNpPerCost";
     public const string EnablePadoruEntryId = "enablePadoru";
     public const string EnableNoCostNoblePhantasmEntryId = "enableNoCostNoblePhantasm";
+    public const string OpenNobleDeckKeyEntryId = "openNobleDeckKey";
 
     [ModSettingsIntSlider(BaseNpPerCostEntryId, "general", 0, 10, LabelLocKey = "FGO_SETTINGS_UI_BASE_NP_PER_COST.title",
         DescriptionLocKey = "FGO_SETTINGS_UI_BASE_NP_PER_COST.hover.desc")]
@@ -32,6 +33,12 @@ public class FgoReflectedSettings
         DescriptionLocKey = "FGO_SETTINGS_UI_ENABLE_NO_COST_NOBLE_PHANTASM.hover.desc")]
     [ModSettingsBinding(Source = ModSettingsReflectionBindingSource.Global, DataKey = "enable_no_cost_noble_phantasm")]
     public static bool EnableNoCostNoblePhantasm { get; set; } = false;
+
+    [ModSettingsKeyBinding(OpenNobleDeckKeyEntryId, "general", AllowModifierCombos = true, AllowModifierOnly = false,
+        Label = "打开宝具牌堆 (Noble Deck)",
+        Description = "战斗内按下此键打开 Noble Deck 宝具牌堆界面；可在设置中重新绑定。")]
+    [ModSettingsBinding(Source = ModSettingsReflectionBindingSource.Global, DataKey = "open_noble_deck_key")]
+    public static string OpenNobleDeckKeyBinding { get; set; } = "N";
 
     /// <summary>
     ///     RitsuLib 的 [ModSettingsBinding] 静态镜像是「随设置 UI 读写时同步」的，游戏启动时不会把

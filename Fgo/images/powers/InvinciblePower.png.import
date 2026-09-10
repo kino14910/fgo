@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://7rgeiq1yf676"
-path="res://.godot/imported/character_icon_fgo1.png-0209e1fbfd80679fe79b50ed6c49957a.ctex"
+uid="uid://d1blhq72t727f"
+path="res://.godot/imported/InvinciblePower.png-62120f0216b21ee10e53b5a85b032d4e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Fgo/images/charui/character_icon_fgo1.png"
-dest_files=["res://.godot/imported/character_icon_fgo1.png-0209e1fbfd80679fe79b50ed6c49957a.ctex"]
+source_file="res://Fgo/images/powers/InvinciblePower.png"
+dest_files=["res://.godot/imported/InvinciblePower.png-62120f0216b21ee10e53b5a85b032d4e.ctex"]
 
 [params]
 

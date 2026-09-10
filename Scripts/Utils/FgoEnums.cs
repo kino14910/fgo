@@ -21,6 +21,8 @@ public static class FgoEnums
                 // 显示在顶栏 deck 按钮旁。
                 Style = ModCardPileUiStyle.TopBarDeck,
                 IconPath = $"res://{modId}/images/ui/noble_deck_button.png",
+                // 复用 Deck 的牌堆界面能力：点击/右键卡牌打开原版检查界面（卡牌详情）。
+                View = ModCardPileViewSpec.DeckLike,
                 VisibleWhen = ctx =>
                     ctx.Player is null || ctx.Player.Character is FgoCharacter
             }).PileType;

@@ -18,7 +18,7 @@
   "FGO_STATIC_HOVER_TIPS_NOBLE.title": "Noble Phantasm",
   "FGO_CARDPILE_NOBLE.description": "Your [gold]Noble Deck[/gold].\nInitially contains [gold]Beautiful Journey[/gold] and [gold]Camelot[/gold].\nRight-click the [gold]Saint Quartz[/gold] relic to add more [gold]Noble[/gold] cards.\nCards are removed from this pile after being played.",
   "FGO_CARDPILE_NOBLE.empty": "Noble Deck is empty",
-  "FGO_CARDPILE_NOBLE.title": "Noble Deck",
+  "FGO_CARDPILE_NOBLE.title": "Noble Deck (N)",
   "FGO_STATIC_HOVER_TIPS_FOREIGNER.title": "Foreigner",
   "FGO_STATIC_HOVER_TIPS_FOREIGNER.description": "",
   "FGO_STATIC_HOVER_TIPS_KNIGHT_OF_CHALDEA.title": "Knight of Chaldea",
