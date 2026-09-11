@@ -20,7 +20,7 @@ public class LuckySpinning() : FgoCardModel(1, CardType.Skill,
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        ModCardVars.Int("Star", 1)
+        ModCardVars.Int("Star", 2)
     ];
 
     protected override void OnUpgrade()
