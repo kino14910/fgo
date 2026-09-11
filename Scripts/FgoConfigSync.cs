@@ -23,16 +23,21 @@ public static class FgoConfigSync
 
     public static void EnsureRegistered()
     {
-        RitsuLibSidecarConfigSyncService.RegisterTopic<FgoConfig, FgoConfig>(
-            Topic,
-            CurrentConfig(),
-            (_, _) => false,
-            (_, delta) => delta);
+        RegisterTopic(CurrentConfig());
 
         if (_subscribed) return;
         _subscribed = true;
         RitsuLibSidecarEvents.OnConfigTopicChanged(OnTopicChanged);
         RitsuLibSidecarEvents.OnHandshakeCompleted(OnHandshakeCompleted);
+    }
+
+    private static void RegisterTopic(FgoConfig initialState)
+    {
+        RitsuLibSidecarConfigSyncService.RegisterTopic<FgoConfig, FgoConfig>(
+            Topic,
+            initialState,
+            (_, _) => false,
+            (_, delta) => delta);
     }
 
     /// <summary>
@@ -42,8 +47,7 @@ public static class FgoConfigSync
     /// </summary>
     private static void OnHandshakeCompleted(SidecarHandshakeCompletedEvent _)
     {
-        if (RunManager.Instance?.NetService is NetHostGameService host)
-            RitsuLibSidecarConfigSyncService.PublishHostState(host, Topic, 0, "handshake");
+        PublishHostConfig("handshake");
     }
 
     /// <summary>
@@ -54,12 +58,9 @@ public static class FgoConfigSync
     /// </summary>
     public static void SyncAtRunStart(RunManager? runManager)
     {
-        if (runManager?.NetService is NetHostGameService host)
+        if (runManager?.NetService is NetHostGameService)
         {
-            var config = CurrentConfig();
-            NetworkNoCostNoblePhantasm = config.NoCostNoblePhantasm;
-            NetworkBaseNpPerCost = config.BaseNpPerCost;
-            RitsuLibSidecarConfigSyncService.PublishHostState(host, Topic, 0, "run_start");
+            PublishHostConfig("run_start");
         }
         else if (runManager?.NetService is not NetClientGameService)
         {
@@ -69,8 +70,35 @@ public static class FgoConfigSync
         }
     }
 
+    /// <summary>
+    ///     主机广播当前设置。**关键**：<see cref="RitsuLibSidecarConfigSyncService.PublishHostState" />
+    ///     只广播「主题缓存的状态」（即 <c>RegisterTopic</c> 时写入的 initial state），并不会去读
+    ///     <see cref="CurrentConfig" />；而该 initial state 是 mod 初始化（<see cref="Entry.Init" />）时
+    ///     用 C# 默认值写入的——彼时设置页尚未注册、<c>ReflectBoundValues</c> 还没把磁盘上的持久化值
+    ///     回填到静态成员。若不修正，主机永远只广播默认值，客户端拿到的 BaseNpPerCost /
+    ///     EnableNoCostNoblePhantasm 与主机不一致（联机设置不同步）。
+    ///     因此：先用最新 <see cref="CurrentConfig" /> 重置主题状态，再广播。
+    /// </summary>
+    private static void PublishHostConfig(string reason)
+    {
+        if (RunManager.Instance?.NetService is not NetHostGameService host) return;
+
+        var config = CurrentConfig();
+        NetworkNoCostNoblePhantasm = config.NoCostNoblePhantasm;
+        NetworkBaseNpPerCost = config.BaseNpPerCost;
+
+        RegisterTopic(config);
+        RitsuLibSidecarConfigSyncService.PublishHostState(host, Topic, 0, reason);
+
+        Entry.Logger.Info(
+            $"[Fgo] Host published config ({reason}): NoCostNoblePhantasm={config.NoCostNoblePhantasm}, BaseNpPerCost={config.BaseNpPerCost}");
+    }
+
     private static FgoConfig CurrentConfig()
     {
+        // 必须先回填：RitsuLib 的 [ModSettingsBinding] 静态镜像不会在启动时自动读磁盘，
+        // 不调用 ReflectBoundValues() 的话这里读到的永远是 C# 默认值（BaseNpPerCost=5 / 关闭 0 费）。
+        FgoReflectedSettings.ReflectBoundValues();
         return new FgoConfig(FgoReflectedSettings.EnableNoCostNoblePhantasm, FgoReflectedSettings.BaseNpPerCost);
     }
 
@@ -90,6 +118,9 @@ public static class FgoConfigSync
         if (cfg is null) return;
         NetworkNoCostNoblePhantasm = cfg.NoCostNoblePhantasm;
         NetworkBaseNpPerCost = cfg.BaseNpPerCost;
+
+        Entry.Logger.Info(
+            $"[Fgo] Applied config topic '{e.Topic}' ({e.Reason}): NoCostNoblePhantasm={cfg.NoCostNoblePhantasm}, BaseNpPerCost={cfg.BaseNpPerCost}");
     }
 
     public sealed record FgoConfig(bool NoCostNoblePhantasm, int BaseNpPerCost);
