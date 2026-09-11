@@ -58,6 +58,7 @@ public class Entry
         RitsuLibFramework.RegisterModSettingsReflectionProvider<FgoReflectedSettings>();
         FgoConfigSync.EnsureRegistered();
         FgoSkinSync.Init();
+        FgoNobleDeckSync.Init();
         FgoEnums.Initialize(ModId);
         FgoCombatUi.Initialize();
 

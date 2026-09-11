@@ -13,6 +13,7 @@ using MegaCrit.Sts2.Core.Nodes;
 using MegaCrit.Sts2.Core.Nodes.Screens.CardSelection;
 using MegaCrit.Sts2.Core.Nodes.Screens.Overlays;
 using MegaCrit.Sts2.Core.Nodes.Vfx;
+using MegaCrit.Sts2.Core.Random;
 using MegaCrit.Sts2.Core.Rooms;
 using STS2RitsuLib.Interactions.RightClick;
 using STS2RitsuLib.Interop.AutoRegistration;
@@ -88,8 +89,14 @@ public class SaintQuartz : FgoRelic, IModRightClickableRelic
             return;
         }
 
+        // 注意：候选选项的随机抽取必须使用【非同步】RNG（Rng.Chaotic）。
+        // CombatCardSelection / CombatCardGeneration 等 RunState.Rng.* 是联机网络的权威同步 RNG，
+        // 仅在“被复制的游戏动作”内部消耗才安全。本方法只在拥有者的本机运行（其余端在上方已 return），
+        // 若在本地直接消耗同步 RNG，会让各端 CombatCardSelection 计数永久分叉，触发“状态分歧”断线。
+        // 三个候选仅用于本地展示，最终选中的宝具由下方 CardPileCmd.Add（同步指令）复制给所有端，
+        // 因此用 Chaotic（装饰/UI 用的非同步 RNG，见 FgoNpGainVfx）即可，无需各端一致。
         var options = candidates
-            .TakeRandom(Math.Min(3, candidates.Count), player.RunState.Rng.CombatCardSelection)
+            .TakeRandom(Math.Min(3, candidates.Count), Rng.Chaotic)
             .Select(c => new CardCreationResult(c))
             .ToList();
 
@@ -113,6 +120,13 @@ public class SaintQuartz : FgoRelic, IModRightClickableRelic
         {
             var holder = screen?.GetCardHolder(selected);
             var result = await CardPileCmd.Add(selected, noblePile);
+
+            // 联机同步：NobleDeck 是 RunPersistent 牌堆，运行期间本机改动不会实时传播到其它端。
+            // 把「该玩家获得此宝具」广播出去，让主机与其它队友在本地 NobleDeck 内补记同一张卡，
+            // 否则后续 np_button 托管动作各端按不同候选重放 → 手牌分歧断线。
+            if (result is { success: true })
+                FgoNobleDeckSync.NotifyAdd(player, selected.Id);
+
             QuartzCounter -= CostPerChoice;
             UpdateAvailableVisual(CostPerChoice);
             Flash();

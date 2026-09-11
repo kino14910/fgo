@@ -4,6 +4,7 @@ using Fgo.Scripts.Character;
 using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.CardSelection;
 using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Context;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Relics;
 using MegaCrit.Sts2.Core.Models;
@@ -30,11 +31,13 @@ public class SummonTicket : FgoRelic, IModRightClickableRelic
 
     public bool CanHandleRightClickLocal(ModRightClickContext context)
     {
+        if (FgoConfigSync.IsNetworkedRun() && !LocalContext.IsMe(Owner)) return false;
         return QuartzCounter >= CostPerChoice;
     }
 
     public bool CanExecuteRightClick(ModRightClickExecutionContext context)
     {
+        if (FgoConfigSync.IsNetworkedRun() && !LocalContext.IsMe(Owner)) return false;
         return QuartzCounter >= CostPerChoice;
     }
 
@@ -42,6 +45,10 @@ public class SummonTicket : FgoRelic, IModRightClickableRelic
     {
         if (QuartzCounter < CostPerChoice) return;
         var player = context.Player;
+
+        // 与圣晶石一致：仅持有该遗物的本地玩家开启选择界面，其它端直接跳过。
+        if (FgoConfigSync.IsNetworkedRun() && !LocalContext.IsMe(Owner))
+            return;
         var prefs = new CardSelectorPrefs(SelectionScreenPrompt, 1);
 
         var existing = CardPile.Get(FgoEnums.NobleDeck, player)?.Cards
@@ -73,6 +80,12 @@ public class SummonTicket : FgoRelic, IModRightClickableRelic
         if (noblePile != null)
         {
             var result = await CardPileCmd.Add(selected, noblePile);
+
+            // 联机同步：把「该玩家获得此宝具」广播给其它端，使其本地 NobleDeck 保持一致
+            // （NobleDeck 为 RunPersistent 牌堆，运行期间本机改动不会自动传播）。
+            if (result is { success: true })
+                FgoNobleDeckSync.NotifyAdd(player, selected.Id);
+
             QuartzCounter -= CostPerChoice;
             UpdateAvailableVisual(CostPerChoice);
             Flash();

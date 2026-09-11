@@ -72,6 +72,11 @@ public sealed class FinalUnderworld : ModEventTemplate
         {
             var crown = Owner.RunState.CreateCard(ModelDb.Card<EdinShugurraCollapsar>(), Owner);
             var result = await CardPileCmd.Add(crown, noblePile);
+
+            // 联机同步：把「该玩家获得此宝具」广播给其它端，保持各端 NobleDeck 一致。
+            if (result is { success: true })
+                FgoNobleDeckSync.NotifyAdd(Owner, crown.Id);
+
             FgoCardActions.PreviewNoblePileAdd(result);
         }
 
