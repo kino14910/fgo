@@ -1,4 +1,6 @@
+using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -55,18 +57,21 @@ public class TerrorPower : FgoPowerModel, IPowerExtraIconAmountLabelSpecsProvide
         ];
     }
 
-    public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
+    public override async Task AfterSideTurnStart(CombatSide side, IReadOnlyList<Creature> participants,
+        ICombatState combatState)
     {
-        if (player.Creature != Owner) return;
-        // 玩家回合开始时判定，命中敌人紧接的下一意图，避免命中已执行意图而无事发生。
-        if (Owner is not { IsDead: false } || Owner.Monster == null || Owner.IsStunned) return;
-        if (TerrorChance <= 0m) return;
+        if (side == CombatSide.Enemy) return;
+        if (Owner.IsDead || Owner.Monster == null || Owner.IsStunned) return;
+        if (TerrorChance <= 0m)
+        {
+            await PowerCmd.Remove(this);
+            return;
+        }
 
         var applier = Applier;
         if (applier is not { Player: not null }) return;
 
-        // 以 TerrorChance 为概率单次掷骰；使用施法玩家的 RNG（怪物 Owner.Player 为 null）。
-        var roll = applier.Player.RunState.Rng.Niche.NextFloat() * 100f;
+        var roll = Owner.Monster.RunRng.MonsterAi.NextFloat() * 100f;
         if (roll < (float)TerrorChance)
         {
             Flash();

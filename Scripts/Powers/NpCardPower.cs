@@ -9,7 +9,7 @@ public class NpCardPower : FgoPowerModel
 {
     private NobleCardModel? _nobleCard;
     public override PowerType Type => PowerType.Buff;
-    public override PowerStackType StackType => PowerStackType.Counter;
+    public override PowerStackType StackType => PowerStackType.Single;
 
     /// <summary>
     ///     调用方通过 <c>ModelDb.Card&lt;T&gt;()</c> 泛型方法赋值。

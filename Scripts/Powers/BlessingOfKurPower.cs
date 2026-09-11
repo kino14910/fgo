@@ -20,9 +20,8 @@ public class BlessingOfKurPower : FgoPowerModel
         if (cardPlay.Card is KurKigalIrkalla)
         {
             Flash();
-            await CreatureCmd.Heal(Owner.Player.Creature, Amount, false);
-            await PowerCmd.Apply<StrengthPower>(context, Owner.Player.Creature, Amount / 3m, Owner.Player.Creature,
-                cardPlay.Card);
+            await PowerCmd.Apply<MaxHpPower>(context, Owner, Amount * 3, Owner, null);
+            await PowerCmd.Apply<StrengthPower>(context, Owner, Amount, Owner, null);
             await PowerCmd.Remove(this);
         }
     }

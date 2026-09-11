@@ -15,26 +15,22 @@ public class BlessingOfKur() : FgoCardModel(1, CardType.Power,
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
         HoverTipFactory.FromCard<KurKigalIrkalla>(),
-        HoverTipFactory.FromPower<BlessingOfKurPower>(),
-        HoverTipFactory.FromPower<MaxHpPower>()
+        HoverTipFactory.FromPower<BlessingOfKurPower>()
     ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        ModCardVars.Power<BlessingOfKurPower>(2),
-        ModCardVars.Power<MaxHpPower>(6)
+        ModCardVars.Power<BlessingOfKurPower>(2)
     ];
 
     protected override void OnUpgrade()
     {
-        DynamicVars[nameof(MaxHpPower)].UpgradeValueBy(3);
+        DynamicVars[nameof(BlessingOfKurPower)].UpgradeValueBy(1);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await PowerCmd.Apply<NpRatePower>(choiceContext, Owner.Creature, 3m, Owner.Creature, this);
-        await PowerCmd.Apply<MaxHpPower>(choiceContext, Owner.Creature, DynamicVars[nameof(MaxHpPower)].BaseValue,
-            Owner.Creature, this);
         await PowerCmd.Apply<BlessingOfKurPower>(choiceContext, Owner.Creature,
             DynamicVars[nameof(BlessingOfKurPower)].BaseValue,
             Owner.Creature, this);
