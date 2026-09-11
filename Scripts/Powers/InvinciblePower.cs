@@ -9,7 +9,7 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace Fgo.Scripts.Powers;
 
-public class InvincibilityTurnPower : FgoPowerModel
+public class InvinciblePower : FgoPowerModel
 {
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Counter;
