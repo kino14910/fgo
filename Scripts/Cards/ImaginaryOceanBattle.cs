@@ -32,7 +32,7 @@ public class ImaginaryOceanBattle() : FgoCardModel(1, CardType.Skill,
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await FgoResCmd.ModifyNp(DynamicVars["Np"].BaseValue, Owner);
+        await FgoResCmd.ModifyNp(DynamicVars.EvaluateValueOrDefault("Np"), Owner);
         await PowerCmd.Apply<ImaginarySpacePower>(choiceContext, Owner.Creature, 1m, Owner.Creature, this);
         await PowerCmd.Apply<WatersidePower>(choiceContext, Owner.Creature, 1m, Owner.Creature, this);
     }

@@ -47,7 +47,7 @@ public class GodsExecution() : FgoCardModel(3, CardType.Attack,
 
     public override Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        if (cardPlay.Card is NobleCardModel) SetToFreeThisTurn();
+        if (cardPlay.Player == Owner && cardPlay.Card is NobleCardModel) SetToFreeThisTurn();
 
         return Task.CompletedTask;
     }

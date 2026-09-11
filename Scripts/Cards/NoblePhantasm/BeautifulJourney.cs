@@ -31,11 +31,12 @@ public class BeautifulJourney() : NobleCardModel(2, CardType.Attack, TargetType.
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
+        var np = DynamicVars.EvaluateValueOrDefault("Np");
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
             .FromCard(this, cardPlay)
             .TargetingAllOpponents(CombatState!)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
-        await FgoResCmd.ModifyNp(DynamicVars["Np"].BaseValue, Owner);
+        await FgoResCmd.ModifyNp(np, Owner);
     }
 }

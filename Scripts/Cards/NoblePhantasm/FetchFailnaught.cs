@@ -40,7 +40,8 @@ public class FetchFailnaught() : NobleCardModel(1, CardType.Attack, TargetType.A
         var target = cardPlay.Target;
         if (target == null) return;
 
-        var finalDamage = DynamicVars.EvaluateValueOrDefault("FetchFailnaughtDamage");
+        var finalDamage = DynamicVars.EvaluateValueOrDefault(
+            "FetchFailnaughtDamage", target: cardPlay.Target);
 
         await DamageCmd.Attack(finalDamage)
             .FromCard(this, cardPlay)

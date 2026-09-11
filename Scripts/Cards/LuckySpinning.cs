@@ -9,7 +9,7 @@ using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
 
-public class LuckySpinning() : FgoCardModel(1, CardType.Skill,
+public class LuckySpinning() : FgoCardModel(0, CardType.Skill,
     CardRarity.Uncommon, TargetType.Self)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
@@ -20,7 +20,7 @@ public class LuckySpinning() : FgoCardModel(1, CardType.Skill,
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        ModCardVars.Int("Star", 2)
+        ModCardVars.Int("Star", 1)
     ];
 
     protected override void OnUpgrade()

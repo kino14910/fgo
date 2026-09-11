@@ -43,11 +43,11 @@ public class Desterrennacht() : NobleCardModel(3, CardType.Power, TargetType.Sel
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        var terror = await PowerCmd.Apply<TerrorPower>(choiceContext, CombatState!.HittableEnemies,
+        var powers = await PowerCmd.Apply<TerrorPower>(choiceContext, CombatState!.HittableEnemies,
             DynamicVars[nameof(TerrorPower)].IntValue,
             Owner.Creature, this);
 
-        terror.FirstOrDefault()!.TerrorChance = DynamicVars["TerrorChance"].BaseValue;
+        powers.ToList().ForEach(terror => terror.TerrorChance = DynamicVars["TerrorChance"].BaseValue);
 
         await PowerCmd.Apply<StrengthPower>(choiceContext, Owner.Creature,
             DynamicVars[nameof(StrengthPower)].BaseValue, Owner.Creature, this);
