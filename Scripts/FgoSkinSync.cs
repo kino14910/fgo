@@ -112,6 +112,9 @@ public static class FgoSkinSync
         // 若对应玩家的生物视觉已创建，立即按最新皮肤重套（覆盖视觉先于消息到达的情况）
         FgoCreatureSkinPatch.ReapplySkin(context.Message.NetId, context.Message.Skin);
 
+        // 世界场景（火堆）形象同理：若该玩家的形象已建好，按最新皮肤刷新
+        FgoWorldSkin.Refresh(context.Message.NetId, context.Message.Skin);
+
         Entry.Logger.Info($"[Fgo] Received skin sync: netId={context.Message.NetId}, skin={context.Message.Skin}");
     }
 }

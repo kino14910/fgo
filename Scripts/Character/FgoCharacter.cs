@@ -2,6 +2,7 @@ using Godot;
 using MegaCrit.Sts2.Core.Entities.Characters;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Nodes.Combat;
+using MegaCrit.Sts2.Core.Nodes.RestSite;
 using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Scaffolding.Characters;
 using STS2RitsuLib.Scaffolding.Content;
@@ -122,48 +123,37 @@ public class FgoCharacter : ModCharacterTemplate<FgoCardPool, FgoRelicPool, FgoP
     }
 
     /// <summary>
-    ///     商店人物场景：套用本机玩家选择的皮肤（商店/火堆是本机玩家的视图，使用本机设置即可）。
-    ///     guda_merchant.tscn 的皮肤精灵节点名为 "Icon"。
+    ///     商店人物场景：套用对应玩家的皮肤。guda_merchant.tscn 的皮肤精灵节点名为 "Icon"。
     /// </summary>
     protected override ModAnimStateMachine? SetupCustomMerchantAnimationStateMachine(Node merchantRoot,
         CharacterModel character)
     {
-        ApplyLocalSkinToScene(merchantRoot, "Icon");
+        FgoWorldSkin.Apply(merchantRoot, "Icon", ResolveOwnerNetId(merchantRoot));
         return base.SetupCustomMerchantAnimationStateMachine(merchantRoot, character);
     }
 
     /// <summary>
-    ///     火堆（休息处）人物场景：套用本机玩家选择的皮肤。
+    ///     火堆（休息处）人物场景：按<b>该形象的拥有者玩家</b>套用皮肤。
     ///     guda_rest_site.tscn 的皮肤精灵节点位于 "ControlRoot/Sprite"。
     /// </summary>
     protected override ModAnimStateMachine? SetupCustomRestSiteAnimationStateMachine(Node restSiteRoot,
         CharacterModel character)
     {
-        ApplyLocalSkinToScene(restSiteRoot, "ControlRoot/Sprite");
-        return base.SetupCustomRestSiteAnimationStateMachine(restSiteRoot, character);
+        FgoWorldSkin.Apply(restSiteRoot, "ControlRoot/Sprite", ResolveOwnerNetId(restSiteRoot));
+
+        // 不能调用 base：base 会转调 SetupCustomMerchantAnimationStateMachine，
+        // 而该重载找不到 "Icon" 时会退化为"第一个 Sprite2D"（正是 ControlRoot/Sprite），
+        // 于是再用本机皮肤覆盖一次 —— 多人下两个火堆形象就会变成同一张皮肤。
+        // 这里直接返回 null，与原来最终拿到的状态机（null）等价。
+        return null;
     }
 
     /// <summary>
-    ///     把本机玩家选择的皮肤贴到给定场景根下的精灵节点（优先指定路径，找不到则递归找第一个 Sprite2D）。
+    ///     取形象节点对应玩家的 NetId；取不到（商店等非玩家形象）时返回 null，交由调用方按本机玩家处理。
     /// </summary>
-    private static void ApplyLocalSkinToScene(Node? root, string spritePath)
+    private static ulong? ResolveOwnerNetId(Node root)
     {
-        if (root == null) return;
-        var sprite = root.GetNodeOrNull<Sprite2D>(spritePath) ?? FindFirstSprite(root);
-        if (sprite != null)
-            sprite.Texture = FgoSkinApplier.LoadSkinTexture((int)FgoReflectedSettings.CharacterSkin);
-    }
-
-    private static Sprite2D? FindFirstSprite(Node root)
-    {
-        foreach (var child in root.GetChildren())
-        {
-            if (child is Sprite2D found) return found;
-            var nested = FindFirstSprite(child);
-            if (nested != null) return nested;
-        }
-
-        return null;
+        return (root as NRestSiteCharacter)?.Player?.NetId;
     }
 
     // 初始卡组，或者在卡牌类上用RegisterCharacterStarterCard就不用写这个
