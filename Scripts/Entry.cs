@@ -9,6 +9,7 @@ using Fgo.Scripts.UI;
 using Fgo.Scripts.Utils;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.AutoSlay;
+using MegaCrit.Sts2.Core.Context;
 using MegaCrit.Sts2.Core.Logging;
 using MegaCrit.Sts2.Core.Modding;
 using MegaCrit.Sts2.Core.Nodes;
@@ -56,6 +57,7 @@ public class Entry
         ModTypeDiscoveryHub.RegisterModAssembly(ModId, assembly);
         RitsuLibFramework.RegisterModSettingsReflectionProvider<FgoReflectedSettings>();
         FgoConfigSync.EnsureRegistered();
+        FgoSkinSync.Init();
         FgoEnums.Initialize(ModId);
         FgoCombatUi.Initialize();
 
@@ -144,6 +146,7 @@ public class Entry
     private static void OnRunStarted(RunStartedEvent evt)
     {
         FgoConfigSync.SyncAtRunStart(RunManager.Instance);
+        FgoSkinSync.SendSkinSync();
         LoadCommandSpellForFgoPlayers(evt.RunState);
         InitializeNobleDecks(evt.RunState);
     }
@@ -258,6 +261,14 @@ public sealed class FgoRunState
     ///     挂在实例上的状态会丢失，而按玩家数据不受影响。
     /// </summary>
     public int QuartzCount { get; set; }
+
+    /// <summary>
+    ///     该玩家选择的皮肤（<see cref="CharacterSkinId" /> 的整数值）。
+    ///     按玩家存储并随存档/联机自动同步：选人页的「人物皮肤」是 per-machine 设置，
+    ///     联机时各端值不同会导致所有玩家都显示为本机皮肤；改为按玩家记录后，
+    ///     每个玩家的生物视觉应用"自己选择的皮肤"，跨端一致。
+    /// </summary>
+    public int Skin { get; set; }
 }
 
 [HarmonyPatch(typeof(NGame), nameof(NGame.IsReleaseGame))]

@@ -1,10 +1,12 @@
 using Godot;
 using MegaCrit.Sts2.Core.Entities.Characters;
+using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Nodes.Combat;
 using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Scaffolding.Characters;
 using STS2RitsuLib.Scaffolding.Content;
 using STS2RitsuLib.Scaffolding.Godot;
+using STS2RitsuLib.Scaffolding.Visuals.StateMachine;
 
 namespace Fgo.Scripts.Character;
 
@@ -43,7 +45,7 @@ public class FgoCharacter : ModCharacterTemplate<FgoCardPool, FgoRelicPool, FgoP
             new CharacterUiAssetSet(
                 // 对于图片，只要是godot支持的格式都可以，例如png,jpg,svg等等，之后不再说明
                 // 人物头像路径。自适应大小。
-                IconTexturePath: "res://Fgo/images/charui/character_icon_fgo.png",
+                "res://Fgo/images/charui/character_icon_fgo.png",
                 // 游戏左上角头像、角色统计页头像、每日挑战角色头像。这个是场景而不是图片。参考下方附赠资源搭建。
                 IconPath: "res://Fgo/scenes/fgo_icon.tscn",
                 // 人物选择背景。
@@ -110,9 +112,58 @@ public class FgoCharacter : ModCharacterTemplate<FgoCardPool, FgoRelicPool, FgoP
     protected override NCreatureVisuals? TryCreateCreatureVisuals()
     {
         var visuals = RitsuGodotNodeFactories.CreateFromScenePath<NCreatureVisuals>(AssetProfile.Scenes!.VisualsPath!);
+        // 先按本机选择的皮肤套用：单机/选人预览即正确，并作为兜底基线。
+        // 联机下 FgoCreatureSkinPatch（Creature.CreateVisuals 的 postfix）会在视觉创建后，
+        // 按「拥有者 Player 的 NetId」回写为该玩家自己同步出去的皮肤（CharacterModel 是同角色共享单例，
+        // 不能用它区分玩家，故挂点必须在每位玩家唯一的 Creature 上）。
         FgoReflectedSettings.ReflectBoundValues();
         FgoSkinApplier.ApplySkinToCreature(visuals, (int)FgoReflectedSettings.CharacterSkin);
         return visuals;
+    }
+
+    /// <summary>
+    ///     商店人物场景：套用本机玩家选择的皮肤（商店/火堆是本机玩家的视图，使用本机设置即可）。
+    ///     guda_merchant.tscn 的皮肤精灵节点名为 "Icon"。
+    /// </summary>
+    protected override ModAnimStateMachine? SetupCustomMerchantAnimationStateMachine(Node merchantRoot,
+        CharacterModel character)
+    {
+        ApplyLocalSkinToScene(merchantRoot, "Icon");
+        return base.SetupCustomMerchantAnimationStateMachine(merchantRoot, character);
+    }
+
+    /// <summary>
+    ///     火堆（休息处）人物场景：套用本机玩家选择的皮肤。
+    ///     guda_rest_site.tscn 的皮肤精灵节点位于 "ControlRoot/Sprite"。
+    /// </summary>
+    protected override ModAnimStateMachine? SetupCustomRestSiteAnimationStateMachine(Node restSiteRoot,
+        CharacterModel character)
+    {
+        ApplyLocalSkinToScene(restSiteRoot, "ControlRoot/Sprite");
+        return base.SetupCustomRestSiteAnimationStateMachine(restSiteRoot, character);
+    }
+
+    /// <summary>
+    ///     把本机玩家选择的皮肤贴到给定场景根下的精灵节点（优先指定路径，找不到则递归找第一个 Sprite2D）。
+    /// </summary>
+    private static void ApplyLocalSkinToScene(Node? root, string spritePath)
+    {
+        if (root == null) return;
+        var sprite = root.GetNodeOrNull<Sprite2D>(spritePath) ?? FindFirstSprite(root);
+        if (sprite != null)
+            sprite.Texture = FgoSkinApplier.LoadSkinTexture((int)FgoReflectedSettings.CharacterSkin);
+    }
+
+    private static Sprite2D? FindFirstSprite(Node root)
+    {
+        foreach (var child in root.GetChildren())
+        {
+            if (child is Sprite2D found) return found;
+            var nested = FindFirstSprite(child);
+            if (nested != null) return nested;
+        }
+
+        return null;
     }
 
     // 初始卡组，或者在卡牌类上用RegisterCharacterStarterCard就不用写这个
