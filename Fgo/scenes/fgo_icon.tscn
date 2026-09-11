@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://swm414tvd4f1"]
 
-[ext_resource type="Texture2D" uid="uid://ck2wyj0a5ybbr" path="res://Fgo/images/charui/character_icon_fgo.png" id="1_aci6t"]
+[ext_resource type="Texture2D" uid="uid://21pvf1r0vhkm" path="res://Fgo/images/charui/character_icon_fgo.png" id="1_aci6t"]
 
 [node name="FgoIcon" type="TextureRect"]
 anchors_preset = 15
