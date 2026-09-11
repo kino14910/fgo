@@ -16,9 +16,8 @@ public class FanNight : FgoRelic
 
     public override async Task AfterBlockBroken(PlayerChoiceContext choiceContext, Creature target, Creature? breaker)
     {
-        if (target == Owner.Creature) return;
+        if (target.IsPlayer || breaker != Owner.Creature) return;
         Flash();
-        await PowerCmd.Apply<WeakPower>(choiceContext, target, 2m, breaker,
-            choiceContext.LastInvolvedModel as CardModel);
+        await PowerCmd.Apply<WeakPower>(choiceContext, target, 2m, breaker, null);
     }
 }
