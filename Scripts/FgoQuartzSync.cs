@@ -1,6 +1,8 @@
+using System;
 using System.Text.Json;
 using Fgo.Scripts.Character;
 using Fgo.Scripts.Relics;
+using Godot;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Multiplayer;
 using MegaCrit.Sts2.Core.Multiplayer.Game;
@@ -84,13 +86,59 @@ public static class FgoQuartzSync
         }
     }
 
+    /// <summary>
+    ///     本地发生【不会被复制的】圣晶石计数变化后调用（典型：右键抽取消耗）。
+    ///     increment（AfterRoomEntered）是被复制的房间动作，各端本地自增即一致，无需广播；
+    ///     但右键消耗只在拥有者本机运行（其余端提前 return），而 QuartzCount 存于主机权威的
+    ///     PlayerRunSavedData（客户端写不回传主机）——若不上报，主机侧该玩家计数永远不减，
+    ///     且下次主机 BroadcastAll 会把客户端已扣的值覆盖回旧值。故由拥有者把最新计数上报/广播：
+    ///     客户端发往主机，主机广播全员（并在收到客户端的值时转发给其它队友）。
+    /// </summary>
+    public static void NotifyLocalCount(Player? player)
+    {
+        try
+        {
+            if (player == null) return;
+            var netService = RunManager.Instance?.NetService;
+            if (netService == null) return;
+
+            var count = Entry.RunState.Get(player).QuartzCount;
+            var msg = new QuartzSyncMessage(player.NetId, count);
+            switch (netService.Type)
+            {
+                case NetGameType.Client:
+                    RitsuLibSidecarTypedMessageRegistry.SendToHost(netService, QuartzSyncDescriptor, msg);
+                    break;
+                default:
+                    RitsuLibSidecarTypedMessageRegistry.Broadcast(netService, QuartzSyncDescriptor, msg);
+                    break;
+            }
+        }
+        catch (Exception ex)
+        {
+            // 同步是「尽力而为」的旁路：失败不得波及调用方的核心玩法（如右键扣费）。
+            Entry.Logger.Warn($"[Fgo] Quartz count sync send failed: {ex}");
+        }
+    }
+
     private static void OnReceived(RitsuLibSidecarTypedDispatchContext<QuartzSyncMessage> context)
     {
-        var runState = RunManager.Instance?.DebugOnlyGetState();
-        if (runState != null)
-            Entry.RunState.Modify(runState, context.Message.NetId, d => d.QuartzCount = context.Message.QuartzCount);
+        // 主机收到客户端上报后转发广播给其它队友（广播不回传发送方，无环）。
+        if (context.IsHostIngest)
+            RitsuLibSidecarTypedMessageRegistry.Broadcast(
+                RunManager.Instance?.NetService, QuartzSyncDescriptor, context.Message);
 
-        RefreshVisual(context.Message.NetId);
+        // 计数写入与遗物高亮都触碰游戏状态，调度回 Godot 主线程，避开网络接收线程竞态。
+        var msg = context.Message;
+        Callable.From(() => ApplyCount(msg)).CallDeferred();
+    }
+
+    private static void ApplyCount(QuartzSyncMessage msg)
+    {
+        var runState = RunManager.Instance?.DebugOnlyGetState();
+        if (runState == null) return;
+        Entry.RunState.Modify(runState, msg.NetId, d => d.QuartzCount = msg.QuartzCount);
+        RefreshVisual(msg.NetId);
     }
 
     private static void RefreshVisual(ulong netId)

@@ -125,9 +125,17 @@ public class SaintQuartz : FgoRelic, IModRightClickableRelic
             // 把「该玩家获得此宝具」广播出去，让主机与其它队友在本地 NobleDeck 内补记同一张卡，
             // 否则后续 np_button 托管动作各端按不同候选重放 → 手牌分歧断线。
             if (result is { success: true })
+            {
                 FgoNobleDeckSync.NotifyAdd(player, selected.Id);
 
-            QuartzCounter -= CostPerChoice;
+                // 扣费：右键抽取只在拥有者本机运行（非复制动作），而 QuartzCount 存于主机权威的
+                // PlayerRunSavedData（客户端写不回传主机）——不上报则主机侧不扣、且下次 BroadcastAll
+                // 会把已扣值覆盖回旧值。故扣费后显式把新计数上报/广播。放在“加卡成功”分支内，
+                // 避免加卡失败却照扣圣晶石。
+                QuartzCounter -= CostPerChoice;
+                FgoQuartzSync.NotifyLocalCount(player);
+            }
+
             RefreshQuartzActivationVisual(CostPerChoice);
             Flash();
 

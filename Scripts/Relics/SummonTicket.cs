@@ -84,9 +84,16 @@ public class SummonTicket : FgoRelic, IModRightClickableRelic
             // 联机同步：把「该玩家获得此宝具」广播给其它端，使其本地 NobleDeck 保持一致
             // （NobleDeck 为 RunPersistent 牌堆，运行期间本机改动不会自动传播）。
             if (result is { success: true })
+            {
                 FgoNobleDeckSync.NotifyAdd(player, selected.Id);
 
-            QuartzCounter -= CostPerChoice;
+                // 同 SaintQuartz：右键消耗只在拥有者本机运行（非复制动作），QuartzCount 又在主机权威的
+                // PlayerRunSavedData 上（客户端写不回传主机），故扣费后显式上报/广播新计数；
+                // 放在“加卡成功”分支内，避免加卡失败却照扣圣晶石。
+                QuartzCounter -= CostPerChoice;
+                FgoQuartzSync.NotifyLocalCount(player);
+            }
+
             RefreshQuartzActivationVisual(CostPerChoice);
             Flash();
             FgoCardActions.PreviewNoblePileAdd(result);
