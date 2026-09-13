@@ -5,7 +5,6 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
-using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.Nodes.CommonUi;
 using STS2RitsuLib.Cards.DynamicVars;
 
@@ -40,10 +39,6 @@ public class SecondLife() : NobleCardModel(1, CardType.Skill, TargetType.Self)
             CardCmd.Upgrade(copy, CardPreviewStyle.None);
         await FgoCardActions.AddToHand(copy);
 
-        foreach (var enemy in CombatState!.HittableEnemies.Where(enemy => enemy.HasPower<MinionPower>()).ToList())
-        {
-            await CreatureCmd.Kill(enemy);
-            await FgoResCmd.ModifyNp(DynamicVars["Np"].BaseValue, cardPlay.Player);
-        }
+        FgoKillMinionsCmd.Request(cardPlay.Player, (int)DynamicVars["Np"].BaseValue);
     }
 }

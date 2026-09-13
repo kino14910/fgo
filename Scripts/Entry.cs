@@ -63,11 +63,12 @@ public class Entry
         FgoEnums.Initialize(ModId);
         FgoCombatUi.Initialize();
 
-        // 注册 UI 按钮（NP 条/令咒）的托管网络动作 descriptor。
+        // 注册 UI 按钮（NP 条/令咒）与卡牌效果（即死爪牙）的托管网络动作 descriptor。
         // 必须在任何 peer 可能发起请求前于所有端注册完成，
         // 否则 ExecuteAction 按 opcode 找不到注册会抛异常。
         RitsuLibManagedNetActions.Register(FgoNoblePhantasmCmd.SyncDescriptor);
         RitsuLibManagedNetActions.Register(FgoCommandSpellCmd.SyncDescriptor);
+        RitsuLibManagedNetActions.Register(FgoKillMinionsCmd.SyncDescriptor);
 
         // 注册局内保存数据（令咒数量）
         using (RitsuLibFramework.BeginModDataRegistration(ModId))
