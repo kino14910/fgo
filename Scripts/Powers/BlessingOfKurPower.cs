@@ -9,6 +9,8 @@ namespace Fgo.Scripts.Powers;
 
 public class BlessingOfKurPower : FgoPowerModel
 {
+    public const int MaxHpPerStack = 3;
+
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Counter;
 
@@ -20,7 +22,7 @@ public class BlessingOfKurPower : FgoPowerModel
         if (cardPlay.Card is KurKigalIrkalla)
         {
             Flash();
-            await PowerCmd.Apply<MaxHpPower>(context, Owner, Amount * 3, Owner, null);
+            await PowerCmd.Apply<MaxHpPower>(context, Owner, Amount * MaxHpPerStack, Owner, null);
             await PowerCmd.Apply<StrengthPower>(context, Owner, Amount, Owner, null);
             await PowerCmd.Remove(this);
         }

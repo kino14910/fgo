@@ -59,7 +59,7 @@
   "FGO_CARD_STAR_HUNTER.title": "Star Hunter",
   "FGO_CARD_STAR_HUNTER.description": "Gain {Star:diff()} [gold]Critical Stars[/gold].\nFor the next 3 [gold]Critical[/gold], increase {CriticalDamageOncePower:diff()}% [gold]Critical Damage[/gold].",
   "FGO_CARD_BLESSING_OF_KUR.title": "Blessing of Kur",
-  "FGO_CARD_BLESSING_OF_KUR.description": "Gain 3 [gold]Golden Rule[/gold].\nThe next time you play [gold]Kur Kigal Irkalla[/gold], gain {MaxHpPower:diff()} [gold]Extra Max HP[/gold] and 2 [gold]Strength[/gold].",
+  "FGO_CARD_BLESSING_OF_KUR.description": "Gain 3 [gold]Golden Rule[/gold].\nThe next time you play [gold]Kur Kigal Irkalla[/gold], gain {MaxHpPower:diff()} [gold]Extra Max HP[/gold] and {BlessingOfKurPower:diff()} [gold]Strength[/gold].",
   "FGO_CARD_ORIGIN_BULLET.title": "Origin Bullet",
   "FGO_CARD_ORIGIN_BULLET.description": "For each status removed, double the damage of the next Attack card.",
   "FGO_CARD_GODS_EXECUTION.title": "God's Execution",

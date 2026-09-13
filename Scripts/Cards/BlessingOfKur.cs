@@ -12,6 +12,9 @@ namespace Fgo.Scripts.Cards;
 public class BlessingOfKur() : FgoCardModel(1, CardType.Power,
     CardRarity.Uncommon, TargetType.Self)
 {
+    private const int BaseStacks = 2;
+    private const int UpgradeStacks = 1;
+
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
         HoverTipFactory.FromCard<KurKigalIrkalla>(),
@@ -20,12 +23,14 @@ public class BlessingOfKur() : FgoCardModel(1, CardType.Power,
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        ModCardVars.Power<BlessingOfKurPower>(2)
+        ModCardVars.Power<BlessingOfKurPower>(BaseStacks),
+        ModCardVars.Power<MaxHpPower>(BaseStacks * BlessingOfKurPower.MaxHpPerStack)
     ];
 
     protected override void OnUpgrade()
     {
-        DynamicVars[nameof(BlessingOfKurPower)].UpgradeValueBy(1);
+        DynamicVars[nameof(BlessingOfKurPower)].UpgradeValueBy(UpgradeStacks);
+        DynamicVars[nameof(MaxHpPower)].UpgradeValueBy(UpgradeStacks * BlessingOfKurPower.MaxHpPerStack);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

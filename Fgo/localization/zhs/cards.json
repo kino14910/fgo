@@ -56,7 +56,7 @@
   "FGO_CARD_STAR_HUNTER.title": "星之猎人",
   "FGO_CARD_STAR_HUNTER.description": "获得{Star:diff()}颗[gold]暴击星[/gold]。\n之后3次[gold]暴击[/gold]，提高{CriticalDamageOncePower:diff()}%[gold]暴击威力[/gold]。",
   "FGO_CARD_BLESSING_OF_KUR.title": "冥界佑护",
-  "FGO_CARD_BLESSING_OF_KUR.description": "获得3层[gold]黄金律[/gold]。\n你打出下一张[gold]灵峰踏抱冥府之鞴[/gold]时，额外获得{MaxHpPower:diff()}点[gold]额外最大生命值[/gold]和2点[gold]力量[/gold]。",
+  "FGO_CARD_BLESSING_OF_KUR.description": "获得3层[gold]黄金律[/gold]。\n你打出下一张[gold]灵峰踏抱冥府之鞴[/gold]时，额外获得{MaxHpPower:diff()}点[gold]额外最大生命值[/gold]和{BlessingOfKurPower:diff()}点[gold]力量[/gold]。",
   "FGO_CARD_ORIGIN_BULLET.title": "起源弹",
   "FGO_CARD_ORIGIN_BULLET.description": "每去除一种状态，就使下一张攻击牌伤害增加1倍。",
   "FGO_CARD_GODS_EXECUTION.title": "封神执行",
