@@ -59,6 +59,7 @@ public class Entry
         FgoConfigSync.EnsureRegistered();
         FgoSkinSync.Init();
         FgoNobleDeckSync.Init();
+        FgoQuartzSync.Init();
         FgoEnums.Initialize(ModId);
         FgoCombatUi.Initialize();
 
@@ -156,6 +157,10 @@ public class Entry
     {
         LoadCommandSpellForFgoPlayers(evt.RunState);
         InitializeNobleDecks(evt.RunState);
+
+        // 读档回到当前房间时：客户端置「跳过下一次房间进入自增」标志抵消重放多 +1，
+        // 主机把全员圣晶石计数广播一次兜底，保证读档后客户端与主机一致。
+        FgoQuartzSync.OnRunLoaded(evt.RunState);
     }
 
     /// <summary>

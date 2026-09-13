@@ -40,26 +40,29 @@ public abstract class FgoRelic : ModRelicTemplate
     }
 
     /// <summary>
-    ///     当计数达到可进行一次宝具抽取的阈值时，把遗物状态置为 Active（图标高亮发光），
-    ///     提醒玩家可以右键圣晶石/召唤券进行宝具抽取；计数不足时恢复 Normal。
-    ///     参照原版 PollinousCore 用 RelicStatus.Active 反映"可激活"状态的做法。
+    ///     根据当前圣晶石计数与阈值刷新遗物的可激活高亮：
+    ///     计数达到阈值时把遗物状态置为 Active（图标发光），提醒可右键抽取宝具；不足时恢复 Normal。
+    ///     同时触发计数显示刷新。遗物子类与事件（消耗圣晶石后）均调用此方法。
     /// </summary>
-    protected void UpdateAvailableVisual(int threshold)
+    public void RefreshQuartzActivationVisual(int threshold)
     {
         Status = QuartzCounter >= threshold ? RelicStatus.Active : RelicStatus.Normal;
         InvokeDisplayAmountChanged();
     }
 
-    /// <summary>
-    ///     供模块外部（事件消耗圣晶石、战斗内好感度变化）刷新遗物的可激活高亮与计数显示。
-    /// </summary>
-    public void RefreshCounterVisual(int threshold)
-    {
-        UpdateAvailableVisual(threshold);
-    }
-
-    public void InvokeDisplayAmountChanged()
+    protected new void InvokeDisplayAmountChanged()
     {
         base.InvokeDisplayAmountChanged();
+    }
+
+    /// <summary>
+    ///     进入房间时 +1 圣晶石计数。各端本地自增（AfterRoomEntered 是被复制的房间动作，正常推进时所有端重放即一致）。
+    ///     联机读档重放当前房间导致客机多 +1 的问题由 FgoQuartzSync.ShouldSkipRoomEntry 在进入前拦截，
+    ///     主机额外广播权威值兜底，无需在此做幂等。
+    /// </summary>
+    protected void IncrementQuartzOnRoomEntry(int threshold)
+    {
+        QuartzCounter++;
+        RefreshQuartzActivationVisual(threshold);
     }
 }

@@ -33,7 +33,7 @@ namespace Fgo.Scripts.Relics;
 [RegisterCharacterStarterRelic(typeof(FgoCharacter))]
 public class SaintQuartz : FgoRelic, IModRightClickableRelic
 {
-    private const int CostPerChoice = 3;
+    public const int CostPerChoice = 3;
 
     public override RelicRarity Rarity => RelicRarity.Starter;
     public override bool ShowCounter => true;
@@ -128,7 +128,7 @@ public class SaintQuartz : FgoRelic, IModRightClickableRelic
                 FgoNobleDeckSync.NotifyAdd(player, selected.Id);
 
             QuartzCounter -= CostPerChoice;
-            UpdateAvailableVisual(CostPerChoice);
+            RefreshQuartzActivationVisual(CostPerChoice);
             Flash();
 
             if (holder != null && result is { success: true })
@@ -151,8 +151,10 @@ public class SaintQuartz : FgoRelic, IModRightClickableRelic
 
     public override Task AfterRoomEntered(AbstractRoom room)
     {
-        QuartzCounter++;
-        UpdateAvailableVisual(CostPerChoice);
+        // 读档重建当前房间时（仅客户端）重放本动作：已在存档里计过，跳过以免相对主机多 +1。
+        // 正常推进/单机/主机：各端本地自增，与原版 QuartzCounter++ 行为一致。
+        if (FgoQuartzSync.ShouldSkipRoomEntry()) return Task.CompletedTask;
+        IncrementQuartzOnRoomEntry(CostPerChoice);
         return Task.CompletedTask;
     }
 }

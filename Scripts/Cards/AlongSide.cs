@@ -28,7 +28,7 @@ public class AlongSide() : FgoCardModel(2, CardType.Skill, CardRarity.Rare, Targ
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        var block = (int)DynamicVars.EvaluateValueOrDefault("CalculatedBlock", target: cardPlay.Target);
+        var block = DynamicVars.EvaluateValueOrDefault("CalculatedBlock", target: cardPlay.Target);
         await CreatureCmd.GainBlock(Owner.Creature, block, ValueProp.Unpowered, cardPlay);
     }
 }

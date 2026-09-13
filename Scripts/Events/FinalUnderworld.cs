@@ -112,8 +112,8 @@ public sealed class FinalUnderworld : ModEventTemplate
 
         Entry.RunState.Modify(Owner, data => data.QuartzCount -= QuartzCost);
 
-        Owner.GetRelic<SaintQuartz>()?.RefreshCounterVisual(QuartzCost);
-        Owner.GetRelic<SummonTicket>()?.RefreshCounterVisual(QuartzCost);
+        Owner.GetRelic<SaintQuartz>()?.RefreshQuartzActivationVisual(QuartzCost);
+        Owner.GetRelic<SummonTicket>()?.RefreshQuartzActivationVisual(QuartzCost);
 
         await RelicCmd.Obtain<RelicAstralSwordEpitaph>(Owner);
 
