@@ -41,6 +41,6 @@ public class SwordOfSelection() : FgoCardModel(1, CardType.Skill,
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await CardPileCmd.Draw(choiceContext, DynamicVars.Cards.BaseValue, Owner);
-        await FgoResCmd.ModifyNp(DynamicVars["Np"].BaseValue, Owner);
+        await FgoResCmd.ModifyNp(DynamicVars.EvaluateValueOrDefault("Np"), Owner);
     }
 }
