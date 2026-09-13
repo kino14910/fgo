@@ -151,12 +151,17 @@ public class Entry
         FgoSkinSync.SendSkinSync();
         LoadCommandSpellForFgoPlayers(evt.RunState);
         InitializeNobleDecks(evt.RunState);
+
+        // 新局边界刷新 NobleDeck 同步的 Epoch 并重播一次，避免跨重启/跨局残留的旧版本基数挡住新快照。
+        FgoNobleDeckSync.OnRunStarted();
     }
 
     private static void OnRunLoaded(RunLoadedEvent evt)
     {
         LoadCommandSpellForFgoPlayers(evt.RunState);
         InitializeNobleDecks(evt.RunState);
+
+        FgoNobleDeckSync.OnRunStarted();
 
         // 读档回到当前房间时：客户端置「跳过下一次房间进入自增」标志抵消重放多 +1，
         // 主机把全员圣晶石计数广播一次兜底，保证读档后客户端与主机一致。
