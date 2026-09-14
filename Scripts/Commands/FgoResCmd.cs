@@ -17,7 +17,7 @@ public static class FgoResCmd
 
     public static async Task ResetNp(Player player)
     {
-        await FgoBattleHooks.Get(player).Reset();
+        await FgoBattleHooks.Get(player).ResetNp();
     }
 
     public static async Task ModifyStars(decimal amount, Player player)

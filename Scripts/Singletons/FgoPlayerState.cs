@@ -165,10 +165,15 @@ public sealed class FgoPlayerState
         return Task.CompletedTask;
     }
 
-    public Task Reset()
+    public async Task Reset()
+    {
+        await ResetCrit();
+        await ResetNp();
+    }
+    
+    public Task ResetNp()
     {
         Np = 0;
-        _stars = 0;
         _npButtonPressed = false;
         return Task.CompletedTask;
     }
@@ -181,7 +186,7 @@ public sealed class FgoPlayerState
 
     public async Task OnBeforeCardPlayed(CardPlay cardPlay)
     {
-        _crit.Reset();
+        await ResetCrit();
 
         if (cardPlay.Card is not { } card)
             return;
@@ -196,7 +201,7 @@ public sealed class FgoPlayerState
 
     public async Task OnBeforeAttack(AttackCommand command)
     {
-        _crit.Reset();
+        await ResetCrit();
 
         var card = command.CardPlay?.Card ?? command.ModelSource as CardModel;
         if (card is NobleCardModel)
@@ -252,9 +257,9 @@ public sealed class FgoPlayerState
         return _crit.Active;
     }
 
-    public void ResetCrit()
+    public async Task ResetCrit()
     {
-        _crit.Reset();
+        await _crit.Reset();
     }
 
     public void OnAfterPlayerTurnStart()
@@ -293,11 +298,12 @@ public sealed class FgoPlayerState
         public decimal DamageMultiplier;
         public bool Triggered;
 
-        public void Reset()
+        public Task Reset()
         {
             Active = false;
             Triggered = false;
             DamageMultiplier = 1m;
+            return Task.CompletedTask;
         }
     }
 }
