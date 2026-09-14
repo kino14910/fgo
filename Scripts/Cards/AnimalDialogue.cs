@@ -30,7 +30,7 @@ public class AnimalDialogue() : FgoCardModel(1, CardType.Skill,
     ];
 
     protected override bool ShouldGlowGoldInternal =>
-        IsMutable && Owner is not null &&
+        IsMutable &&
         FgoBattleHooks.Get(Owner).Np >= DynamicVars["Threshold"].IntValue;
 
     protected override void OnUpgrade()
