@@ -1,3 +1,4 @@
+using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Relics;
@@ -16,8 +17,10 @@ public class CosmicMedallion : FgoRelic
         Creature target, DamageResult result,
         ValueProp props, Creature? dealer, CardModel? cardSource)
     {
+        if (!CombatManager.Instance.IsInProgress) return;
+        if (Owner.Creature.CombatState?.CurrentSide != CombatSide.Player) return;
         if (target != Owner.Creature) return;
-        if (result.TotalDamage <= 0) return;
+        if (result.UnblockedDamage <= 0) return;
         Flash();
         await CreatureCmd.GainBlock(Owner.Creature, result.TotalDamage * 2,
             ValueProp.Unpowered, null);
