@@ -1,4 +1,3 @@
-using Fgo.Scripts.Cards;
 using Fgo.Scripts.Singletons;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -19,12 +18,11 @@ public class HeroicKingPower : FgoPowerModel
         PlayerChoiceContext choiceContext, Creature? dealer, DamageResult result,
         ValueProp props, Creature target, CardModel? cardSource)
     {
-        if (Owner != target || Owner != dealer) return;
-        if (Owner?.Player is not { } player || !FgoBattleHooks.Get(player).CritTriggered) return;
-        if (Amount <= 0) return;
+        if (dealer != Owner) return;
+        if (Owner.Player is not { } player || !FgoBattleHooks.Get(player).CritTriggered) return;
 
         Flash();
-        await PowerCmd.Apply<HeroicKingPower>(choiceContext, target, 1, dealer, cardSource);
+        await PowerCmd.Apply<HeroicKingPower>(choiceContext, Owner, 1m, Owner, cardSource);
     }
 
     public override async Task AfterDamageReceived(
@@ -32,15 +30,8 @@ public class HeroicKingPower : FgoPowerModel
         DamageResult result, ValueProp props, Creature? dealer, CardModel? cardSource)
     {
         if (target != Owner || result.TotalDamage <= 0) return;
-        if (Owner != target || Owner != dealer) return;
-
-        var player = Owner.Player;
-
-        var card = player?.PlayerCombatState?.DiscardPile.Cards.FirstOrDefault(card => card is HeroicKing);
-        if (card == null) return;
 
         Flash();
-        await CardPileCmd.Add(card, PileType.Hand, CardPilePosition.Top, this, true);
-        await PowerCmd.Apply<HeroicKingPower>(choiceContext, target, 1, dealer, cardSource);
+        await PowerCmd.Apply<HeroicKingPower>(choiceContext, Owner, 1m, Owner, cardSource);
     }
 }
