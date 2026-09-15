@@ -6,9 +6,15 @@ using STS2RitsuLib.Interop.AutoRegistration;
 
 namespace Fgo.Scripts.Cards.Colorless;
 
-[RegisterCard(typeof(CurseCardPool), Inherit = true)]
+[RegisterCard(typeof(CurseCardPool))]
 public class Dumuzid() : FgoBaseCardModel(3, CardType.Curse, CardRarity.Curse, TargetType.None)
 {
+    public override bool CanBeGeneratedByModifiers => false;
+
+    public override bool CanBeGeneratedInCombat => false;
+
+    public override int MaxUpgradeLevel => 0;
+
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         if (DeckVersion != null)

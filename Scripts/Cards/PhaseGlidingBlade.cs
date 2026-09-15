@@ -8,7 +8,7 @@ using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
 
-public class PhaseGlidingBlade() : FgoCardModel(1, CardType.Power,
+public class PhaseGlidingBlade() : FgoCardModel(2, CardType.Power,
     CardRarity.Rare, TargetType.Self)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
@@ -23,7 +23,7 @@ public class PhaseGlidingBlade() : FgoCardModel(1, CardType.Power,
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Cards.UpgradeValueBy(1);
+        EnergyCost.UpgradeBy(-1);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

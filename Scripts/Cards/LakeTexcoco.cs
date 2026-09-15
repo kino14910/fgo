@@ -16,6 +16,7 @@ public class LakeTexcoco() : FgoCardModel(1, CardType.Skill,
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
         HoverTipFactory.FromPower<LakeTexcocoPower>(),
+        HoverTipFactory.FromPower<WatersidePower>(),
         FgoHoverTipHelper.CreateNpHoverTip()
     ];
 
