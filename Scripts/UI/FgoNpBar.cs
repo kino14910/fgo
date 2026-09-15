@@ -1,5 +1,6 @@
 using Fgo.Scripts.Character;
 using Fgo.Scripts.Commands;
+using Fgo.Scripts.Powers;
 using Fgo.Scripts.Singletons;
 using Fgo.Scripts.Utils;
 using Godot;
@@ -7,6 +8,7 @@ using MegaCrit.Sts2.addons.mega_text;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Context;
 using MegaCrit.Sts2.Core.Entities.Players;
+using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Nodes.Combat;
 using MegaCrit.Sts2.Core.Nodes.HoverTips;
@@ -24,6 +26,8 @@ public sealed partial class FgoNpBar : Node
     private NinePatchRect? _bar2;
 
     private TextureButton? _button;
+
+    private NCreature? _creatureNode;
     private bool _hoverTipShown;
     private Control? _hpBarContainer;
     private MegaLabel? _hpLabel;
@@ -34,8 +38,8 @@ public sealed partial class FgoNpBar : Node
     private Vector2 _lastHpLabelPosition;
 
     private int _lastNp = -1;
+    private bool _lastSealed;
     private Control? _npBarRoot;
-
     private Player? _player;
     private FgoPlayerState? _subscribed;
 
@@ -68,6 +72,8 @@ public sealed partial class FgoNpBar : Node
             SetProcess(false);
             return;
         }
+
+        _creatureNode = creatureNode;
 
         var player = creatureNode.Entity.Player;
         if (player?.Character is not FgoCharacter)
@@ -114,8 +120,10 @@ public sealed partial class FgoNpBar : Node
             _button.MouseExited += OnNpButtonMouseExited;
         }
 
-        // 根节点 mouse_filter 为 IGNORE，Godot 的 MouseEntered/MouseExited 不会触发，
-        // 因此条区域的悬停提示统一在 _Process 中通过鼠标位置检测实现。
+        // npBar 是 NCreatureStateDisplay 的子节点，而 NCreature 的 %Hitbox 是 state display 之后的
+        // 兄弟节点（绘制在上层、命中测试先于整棵 state display 子树），且 npBar 的矩形恰好落在
+        // Hitbox 矩形内，所以 Godot 永远把鼠标判给 Hitbox，npBar 收不到 MouseEntered/MouseExited。
+        // 条区域与按钮的悬停统一在 _Process 中通过鼠标位置检测实现。
         InitializeBarLayout();
         SyncWithHealthBar();
 
@@ -145,7 +153,8 @@ public sealed partial class FgoNpBar : Node
         if (_subscribed != resources)
             TrySubscribe(resources);
 
-        if (resources.Np != _lastNp)
+        var sealedNow = _player != null && LocalContext.IsMe(_player) && _player.Creature.HasPower<SealNpPower>();
+        if (resources.Np != _lastNp || sealedNow != _lastSealed)
             OnNpChanged(resources.Np);
     }
 
@@ -245,9 +254,19 @@ public sealed partial class FgoNpBar : Node
         {
             // 多人下仅本机玩家可点击：远端玩家的 creature 也会在本机渲染，
             // 其按钮必须隐藏，否则点击后 hook action 因 owner 非本机而永不入队，造成卡死。
-            var canUse = np >= 100 && LocalContext.IsMe(_player);
-            _button.Visible = canUse;
+            var isMe = LocalContext.IsMe(_player);
+            var charged = isMe && np >= 100;
+            var sealedNp = charged && _player!.Creature.HasPower<SealNpPower>();
+            _lastSealed = sealedNp;
+
+            var canUse = charged && !sealedNp;
+            _button.Visible = charged;
             _button.Disabled = !canUse;
+
+            // Godot 的 BaseButton.Disabled 只拦截输入、不改变外观（TextureButton 未设
+            // texture_disabled 时仍画 texture_normal），所以置灰必须手动改 Modulate——
+            // 与本体 NTickbox / NRunModifierTickbox 在 OnDisable 里改 Modulate 的做法一致。
+            _button.Modulate = canUse ? Colors.White : StsColors.gray;
         }
     }
 
@@ -308,14 +327,14 @@ public sealed partial class FgoNpBar : Node
 
     private void OnNpButtonMouseEntered()
     {
-        if (_button == null)
+        if (_button == null || _player == null)
             return;
 
-        NHoverTipSet.CreateAndShow(
-            _button,
-            FgoHoverTipHelper.CreateNpBarHoverTip(),
-            HoverTipAlignment.Right
-        );
+        var tip = LocalContext.IsMe(_player) && _player!.Creature.HasPower<SealNpPower>()
+            ? FgoHoverTipHelper.CreateNpSealedHoverTip()
+            : FgoHoverTipHelper.CreateNpButtonHoverTip();
+
+        NHoverTipSet.CreateAndShow(_button, tip, HoverTipAlignment.Right);
     }
 
     private void OnNpButtonMouseExited()
@@ -327,30 +346,47 @@ public sealed partial class FgoNpBar : Node
     }
 
     /// <summary>
-    ///     条区域（含 NpButton）的悬停提示：根节点 mouse_filter 为 IGNORE，
-    ///     无法使用 MouseEntered 信号，改为每帧检测鼠标是否位于条矩形内。
+    ///     条区域的悬停提示：npBar 与 %Hitbox 矩形重叠且位于其下层，命中测试始终把鼠标判给 Hitbox，
+    ///     因此这里每帧自行判定指针进出，并同步压制生物的悬停提示（两者 owner 不同，会并存）。
     /// </summary>
     private void UpdateHoverTip()
     {
         if (_npBarRoot == null)
             return;
 
-        var inside = _npBarRoot.GetGlobalRect().HasPoint(GetViewport().GetMousePosition());
+        var mousePosition = GetViewport().GetMousePosition();
 
-        if (inside && !_hoverTipShown)
+        if (_npBarRoot.GetGlobalRect().HasPoint(mousePosition))
         {
+            // Hitbox 一直处于 mouse-over，指针移进 npBar 不会让它触发 MouseExited；
+            // 又因 OnFocus 订阅了 CombatStateChanged，战斗中状态变化还会让生物重弹提示，
+            // 所以每帧压制而非只在进入的那一帧调用（Remove 对不存在的 owner 是空操作）。
+            _creatureNode?.HideHoverTips();
+
+            if (_hoverTipShown)
+                return;
+
             _hoverTipShown = true;
             NHoverTipSet.CreateAndShow(
                 _npBarRoot,
                 FgoHoverTipHelper.CreateNpBarHoverTip(),
                 HoverTipAlignment.Right
             );
+
+            return;
         }
-        else if (!inside && _hoverTipShown)
-        {
-            _hoverTipShown = false;
-            NHoverTipSet.Remove(_npBarRoot);
-        }
+
+        if (!_hoverTipShown)
+            return;
+
+        _hoverTipShown = false;
+        NHoverTipSet.Remove(_npBarRoot);
+
+        // 指针只是从 npBar 移回生物身上时，Hitbox 仍是 mouse-over、Godot 不会再发 MouseEntered，
+        // 需在此补回生物的悬停提示；移出 Hitbox 则交给 Godot 自己处理。
+        if (_creatureNode != null &&
+            _creatureNode.Hitbox.GetGlobalRect().HasPoint(mousePosition))
+            _creatureNode.ShowHoverTips(_creatureNode.Entity.HoverTips);
     }
 
     private void DoNpButtonPressed()

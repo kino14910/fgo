@@ -16,16 +16,6 @@ namespace Fgo.Scripts.UI;
 
 public sealed partial class FgoGlobalHud : Control
 {
-    private static HoverTip CommandSpellHoverTip =>
-        new HoverTip(
-            new LocString("static_hover_tips", "FGO_STATIC_HOVER_TIPS_COMMAND_SPELL.title"),
-            new LocString("static_hover_tips", "FGO_STATIC_HOVER_TIPS_COMMAND_SPELL.description"));
-
-    private static HoverTip StarHoverTip =>
-        new HoverTip(
-            new LocString("static_hover_tips", "FGO_STATIC_HOVER_TIPS_STAR.title"),
-            new LocString("static_hover_tips", "FGO_STATIC_HOVER_TIPS_STAR.description"));
-
     private static readonly Color DisabledModulate = new(1, 1, 1, 0.35f);
 
     /// <summary>
@@ -58,6 +48,16 @@ public sealed partial class FgoGlobalHud : Control
     private int _lastStars = -1;
     private HBoxContainer _starBox = null!;
     private Label _starLabel = null!;
+
+    private static HoverTip CommandSpellHoverTip =>
+        new(
+            new LocString("static_hover_tips", "FGO_STATIC_HOVER_TIPS_COMMAND_SPELL.title"),
+            new LocString("static_hover_tips", "FGO_STATIC_HOVER_TIPS_COMMAND_SPELL.description"));
+
+    private static HoverTip StarHoverTip =>
+        new(
+            new LocString("static_hover_tips", "FGO_STATIC_HOVER_TIPS_STAR.title"),
+            new LocString("static_hover_tips", "FGO_STATIC_HOVER_TIPS_STAR.description"));
 
     public static void Initialize()
     {

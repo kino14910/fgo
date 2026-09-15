@@ -21,6 +21,16 @@ public static class FgoHoverTipHelper
         return BuildNpBarHoverTip();
     }
 
+    public static HoverTip CreateNpButtonHoverTip()
+    {
+        return BuildNpButtonHoverTip();
+    }
+
+    public static HoverTip CreateNpSealedHoverTip()
+    {
+        return BuildNpSealedHoverTip();
+    }
+
     public static HoverTip CreateForeignerBarHoverTip()
     {
         return BuildForeignerHoverTip();
@@ -53,6 +63,24 @@ public static class FgoHoverTipHelper
         var desc = new LocString("static_hover_tips", "FGO_STATIC_HOVER_TIPS_NP_BAR.description");
         var npRateVar = ModCardVars.Int("NpRate", FgoConfigSync.NetworkBaseNpPerCost);
         desc.Add(npRateVar);
+
+        return new HoverTip(title, desc);
+    }
+
+    private static HoverTip BuildNpButtonHoverTip()
+    {
+        var title = new LocString("cards", "FGO_CARD_RELEASE_NOBLE_PHANTASM.title");
+        var desc = new LocString("static_hover_tips", "FGO_STATIC_HOVER_TIPS_NP_BAR.description");
+        var npRateVar = ModCardVars.Int("NpRate", FgoConfigSync.NetworkBaseNpPerCost);
+        desc.Add(npRateVar);
+
+        return new HoverTip(title, desc);
+    }
+
+    private static HoverTip BuildNpSealedHoverTip()
+    {
+        var title = new LocString("cards", "FGO_CARD_RELEASE_NOBLE_PHANTASM.title");
+        var desc = new LocString("gameplay_ui", "FGO_GAMEPLAY_UI_NOBLE_PHANTASM.text_0");
 
         return new HoverTip(title, desc);
     }
