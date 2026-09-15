@@ -13,7 +13,7 @@ public class StargazerTeapot : FgoRelic
 
     public override async Task AfterPotionUsed(PotionModel potion, Creature? target)
     {
-        if (target?.Player != Owner) return; 
+        if (target?.Player != Owner) return;
         Flash();
         await PowerCmd.Apply<GutsPower>(new BlockingPlayerChoiceContext(), Owner.Creature, 2m, Owner.Creature, null);
     }

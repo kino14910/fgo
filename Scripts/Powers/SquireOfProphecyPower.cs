@@ -18,7 +18,7 @@ public class SquireOfProphecyPower : FgoPowerModel
         if (_triggeredThisTurn) return;
         if (Owner.Player?.PlayerCombatState is null) return;
         if (!Owner.Player.PlayerCombatState.Energy.Equals(0)) return;
-        
+
         Flash();
         await PlayerCmd.GainEnergy(2, Owner.Player);
         _triggeredThisTurn = true;

@@ -49,7 +49,7 @@ public class HolyShroud() : FgoCardModel(0, CardType.Skill,
         if (CombatState is not { } combatState) return 0m;
         if (Owner.Creature is not { } owner) return 0m;
 
-        decimal total = 0m;
+        var total = 0m;
         foreach (var enemy in combatState.Enemies)
         {
             if (!enemy.IsAlive) continue;

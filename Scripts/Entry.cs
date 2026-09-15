@@ -9,7 +9,6 @@ using Fgo.Scripts.UI;
 using Fgo.Scripts.Utils;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.AutoSlay;
-using MegaCrit.Sts2.Core.Context;
 using MegaCrit.Sts2.Core.Logging;
 using MegaCrit.Sts2.Core.Modding;
 using MegaCrit.Sts2.Core.Nodes;

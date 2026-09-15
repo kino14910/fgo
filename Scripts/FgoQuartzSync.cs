@@ -1,4 +1,3 @@
-using System;
 using System.Text.Json;
 using Fgo.Scripts.Character;
 using Fgo.Scripts.Relics;
@@ -8,7 +7,6 @@ using MegaCrit.Sts2.Core.Multiplayer;
 using MegaCrit.Sts2.Core.Multiplayer.Game;
 using MegaCrit.Sts2.Core.Runs;
 using STS2RitsuLib.Networking.Sidecar;
-using STS2RitsuLib.RunData;
 
 namespace Fgo.Scripts;
 
@@ -22,14 +20,12 @@ namespace Fgo.Scripts;
 /// </summary>
 public static class FgoQuartzSync
 {
-    public record QuartzSyncMessage(ulong NetId, int QuartzCount);
-
     private static readonly RitsuLibSidecarMessageDescriptor<QuartzSyncMessage> QuartzSyncDescriptor = new(
-        ModuleId: Entry.ModId,
-        MessageKey: "fgo_quartz_sync_v1",
-        Serialize: static msg => JsonSerializer.SerializeToUtf8Bytes(msg),
-        Deserialize: static bytes => JsonSerializer.Deserialize<QuartzSyncMessage>(bytes)!,
-        Delivery: RitsuLibSidecarDeliverySemantics.StableSync);
+        Entry.ModId,
+        "fgo_quartz_sync_v1",
+        static msg => JsonSerializer.SerializeToUtf8Bytes(msg),
+        static bytes => JsonSerializer.Deserialize<QuartzSyncMessage>(bytes)!,
+        RitsuLibSidecarDeliverySemantics.StableSync);
 
     private static IDisposable? _subscription;
     private static bool _handshakeSubscribed;
@@ -151,4 +147,6 @@ public static class FgoQuartzSync
         player.GetRelic<SaintQuartz>()?.RefreshQuartzActivationVisual(SaintQuartz.CostPerChoice);
         player.GetRelic<SummonTicket>()?.RefreshQuartzActivationVisual(SummonTicket.CostPerChoice);
     }
+
+    public record QuartzSyncMessage(ulong NetId, int QuartzCount);
 }

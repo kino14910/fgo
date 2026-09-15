@@ -51,7 +51,7 @@ public class WitchOfSalem() : FgoCardModel(3, CardType.Skill,
         var powers = await PowerCmd.Apply<TerrorPower>(choiceContext, CombatState.HittableEnemies,
             DynamicVars[nameof(TerrorPower)].IntValue,
             Owner.Creature, this);
-        
+
         powers.ToList().ForEach(terror => terror.TerrorChance = DynamicVars["TerrorChance"].BaseValue);
 
         await PowerCmd.Apply<VsTerrorDamagePower>(choiceContext, Owner.Creature,

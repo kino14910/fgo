@@ -1,4 +1,3 @@
-using System;
 using System.Runtime.CompilerServices;
 using Fgo.Scripts.Character;
 using Godot;
@@ -7,7 +6,6 @@ using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Nodes.Screens.CharacterSelect;
 using STS2RitsuLib.Patching.Models;
-using STS2RitsuLib.Settings;
 
 namespace Fgo.Scripts.Patches;
 
@@ -17,19 +15,22 @@ namespace Fgo.Scripts.Patches;
 ///     （宝具 0 费、圣诞彩蛋）。仅保留修改设置的滑块与开关。
 ///     通过 RitsuLib 的 IPatchMethod 模式注册（见 Entry.Init），不直接用 Harmony.PatchAll。
 /// </summary>
-
 public sealed class FgoCharacterSelectSettingsReadyPatch : IPatchMethod
 {
     public static string PatchId => "fgo.character_select.settings_ready";
     public static string Description => "Create the FGO settings panel on the character select screen";
     public static bool IsCritical => false;
 
-    public static ModPatchTarget[] GetTargets() =>
-        [PatchTarget.Method<NCharacterSelectScreen>(nameof(NCharacterSelectScreen._Ready))];
+    public static ModPatchTarget[] GetTargets()
+    {
+        return [PatchTarget.Method<NCharacterSelectScreen>(nameof(NCharacterSelectScreen._Ready))];
+    }
 
     [HarmonyPostfix]
     public static void Postfix(NCharacterSelectScreen __instance)
-        => FgoSettingsPanelRegistry.Get(__instance).Refresh(false);
+    {
+        FgoSettingsPanelRegistry.Get(__instance).Refresh(false);
+    }
 }
 
 public sealed class FgoCharacterSelectSettingsSelectPatch : IPatchMethod
@@ -38,8 +39,10 @@ public sealed class FgoCharacterSelectSettingsSelectPatch : IPatchMethod
     public static string Description => "Show the FGO settings panel when an FGO character is selected";
     public static bool IsCritical => false;
 
-    public static ModPatchTarget[] GetTargets() =>
-        [PatchTarget.Method<NCharacterSelectScreen>(nameof(NCharacterSelectScreen.SelectCharacter))];
+    public static ModPatchTarget[] GetTargets()
+    {
+        return [PatchTarget.Method<NCharacterSelectScreen>(nameof(NCharacterSelectScreen.SelectCharacter))];
+    }
 
     [HarmonyPostfix]
     public static void Postfix(
@@ -65,20 +68,26 @@ public sealed class FgoCharacterSelectSettingsClosedPatch : IPatchMethod
     public static string Description => "Hide the FGO settings panel when the character select closes";
     public static bool IsCritical => false;
 
-    public static ModPatchTarget[] GetTargets() =>
-        [PatchTarget.Method<NCharacterSelectScreen>(nameof(NCharacterSelectScreen.OnSubmenuClosed))];
+    public static ModPatchTarget[] GetTargets()
+    {
+        return [PatchTarget.Method<NCharacterSelectScreen>(nameof(NCharacterSelectScreen.OnSubmenuClosed))];
+    }
 
     [HarmonyPostfix]
     public static void Postfix(NCharacterSelectScreen __instance)
-        => FgoSettingsPanelRegistry.Get(__instance).Refresh(false);
+    {
+        FgoSettingsPanelRegistry.Get(__instance).Refresh(false);
+    }
 }
 
 internal static class FgoSettingsPanelRegistry
 {
     private static readonly ConditionalWeakTable<NCharacterSelectScreen, FgoSettingsPanel> Panels = new();
 
-    public static FgoSettingsPanel Get(NCharacterSelectScreen screen) =>
-        Panels.GetValue(screen, static s => new FgoSettingsPanel(s));
+    public static FgoSettingsPanel Get(NCharacterSelectScreen screen)
+    {
+        return Panels.GetValue(screen, static s => new FgoSettingsPanel(s));
+    }
 }
 
 internal sealed class FgoSettingsPanel
@@ -93,19 +102,19 @@ internal sealed class FgoSettingsPanel
     private static readonly Color Gold = new("c47e09");
     private static readonly Color PanelBg = new(0.06f, 0.04f, 0.02f, 0.92f);
     private static readonly Color SkinBorderColor = new(0.8f, 0.8f, 0.8f);
-
-    private readonly NCharacterSelectScreen _screen;
-    private readonly PanelContainer _root;
+    private readonly CheckButton _noCostToggle;
     private readonly HSlider _npSlider;
     private readonly Label _npValueLabel;
-    private readonly CheckButton _noCostToggle;
     private readonly CheckButton _padoruToggle;
+    private readonly PanelContainer _root;
+
+    private readonly NCharacterSelectScreen _screen;
     private readonly Button _skinHeader;
-    private readonly ScrollContainer _skinScroll;
-    private readonly TextureRect _skinPreview;
     private readonly CanvasLayer _skinLayer;
-    private readonly Control _skinLayerHost;
     private readonly Control _skinLayerBlocker;
+    private readonly Control _skinLayerHost;
+    private readonly TextureRect _skinPreview;
+    private readonly ScrollContainer _skinScroll;
     private int _committedSkin;
 
     public FgoSettingsPanel(NCharacterSelectScreen screen)
@@ -480,6 +489,8 @@ internal sealed class FgoSettingsPanel
         return root;
     }
 
-    private static string GetLoc(string key) =>
-        new LocString("settings_ui", key).GetFormattedText();
+    private static string GetLoc(string key)
+    {
+        return new LocString("settings_ui", key).GetFormattedText();
+    }
 }

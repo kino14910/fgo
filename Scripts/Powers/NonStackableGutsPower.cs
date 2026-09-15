@@ -78,8 +78,10 @@ public abstract class NonStackableGutsPower : GutsPower, IPowerExtraIconAmountLa
         ];
     }
 
-    public override bool ShouldDie(Creature creature) =>
-        creature != Owner || Times <= 0;
+    public override bool ShouldDie(Creature creature)
+    {
+        return creature != Owner || Times <= 0;
+    }
 
     public override async Task AfterPreventingDeath(Creature creature)
     {

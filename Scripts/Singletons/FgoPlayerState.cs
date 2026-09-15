@@ -170,7 +170,7 @@ public sealed class FgoPlayerState
         await ResetCrit();
         await ResetNp();
     }
-    
+
     public Task ResetNp()
     {
         Np = 0;

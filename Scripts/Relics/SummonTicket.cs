@@ -1,4 +1,3 @@
-using Fgo.Scripts.Cards.DerivativeMash;
 using Fgo.Scripts.Cards.NoblePhantasm;
 using Fgo.Scripts.Character;
 using Fgo.Scripts.Utils;

@@ -1,6 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Text;
+using System.Text.Json;
 using Fgo.Scripts.Cards.NoblePhantasm;
 using Fgo.Scripts.Character;
 using Fgo.Scripts.Utils;
@@ -35,38 +34,25 @@ namespace Fgo.Scripts;
 /// </remarks>
 public static class FgoNobleDeckSync
 {
-    /// <summary>
-    ///     整堆快照：拥有者 NetId、会话/局标识 Epoch、单调递增版本号、完整卡 Id 列表
-    ///     （可含重复，表示同名宝具多张）。卡 Id 以字符串传输（<see cref="ModelId" /> 的规范文本形式），
-    ///     避免 record 直接 JSON 化的坑。
-    ///     <para />
-    ///     Epoch 用于消除「跨进程重启 / 跨局重连」时版本号基数不一致的问题：拥有者在每次新会话 / 新局取一个
-    ///     新的（真实时间派生、单调递增的）Epoch，接收端见到更大的 Epoch 即无条件接受该快照。
-    /// </summary>
-    public record NobleDeckSnapshotMessage(ulong NetId, long Epoch, int Version, List<string> CardIds);
-
-    /// <summary>客户端请求主机把全员 NobleDeck 整体重播一次（覆盖中途加入前已加入的卡）。</summary>
-    public record NobleDeckResyncRequest;
-
     private static readonly RitsuLibSidecarMessageDescriptor<NobleDeckSnapshotMessage> SnapshotDescriptor = new(
-        ModuleId: Entry.ModId,
-        MessageKey: "fgo_nobledeck_snapshot_v1",
-        Serialize: static msg => System.Text.Encoding.UTF8.GetBytes(
-            System.Text.Json.JsonSerializer.Serialize(new SnapshotDto(msg.NetId, msg.Epoch, msg.Version, msg.CardIds))),
-        Deserialize: static bytes =>
+        Entry.ModId,
+        "fgo_nobledeck_snapshot_v1",
+        static msg => Encoding.UTF8.GetBytes(
+            JsonSerializer.Serialize(new SnapshotDto(msg.NetId, msg.Epoch, msg.Version, msg.CardIds))),
+        static bytes =>
         {
-            var dto = System.Text.Json.JsonSerializer.Deserialize<SnapshotDto>(
-                System.Text.Encoding.UTF8.GetString(bytes));
+            var dto = JsonSerializer.Deserialize<SnapshotDto>(
+                Encoding.UTF8.GetString(bytes));
             return new NobleDeckSnapshotMessage(dto!.NetId, dto.Epoch, dto.Version, dto.CardIds);
         },
-        Delivery: RitsuLibSidecarDeliverySemantics.StableSync);
+        RitsuLibSidecarDeliverySemantics.StableSync);
 
     private static readonly RitsuLibSidecarMessageDescriptor<NobleDeckResyncRequest> ResyncDescriptor = new(
-        ModuleId: Entry.ModId,
-        MessageKey: "fgo_nobledeck_resync_v1",
-        Serialize: static _ => System.Array.Empty<byte>(),
-        Deserialize: static _ => new NobleDeckResyncRequest(),
-        Delivery: RitsuLibSidecarDeliverySemantics.StableSync);
+        Entry.ModId,
+        "fgo_nobledeck_resync_v1",
+        static _ => Array.Empty<byte>(),
+        static _ => new NobleDeckResyncRequest(),
+        RitsuLibSidecarDeliverySemantics.StableSync);
 
     // 本机作为拥有者时的牌堆版本：每次本地改动自增，作为广播快照的版本号。
     private static readonly Dictionary<ulong, int> LocalVersion = new();
@@ -237,7 +223,8 @@ public static class FgoNobleDeckSync
                 break;
         }
 
-        Entry.Logger.Info($"[Fgo] NobleDeck snapshot sent: netId={player.NetId}, epoch={LocalEpoch}, version={version}");
+        Entry.Logger.Info(
+            $"[Fgo] NobleDeck snapshot sent: netId={player.NetId}, epoch={LocalEpoch}, version={version}");
     }
 
     private static void OnResyncReceived(RitsuLibSidecarTypedDispatchContext<NobleDeckResyncRequest> context)
@@ -307,8 +294,22 @@ public static class FgoNobleDeckSync
 
         AppliedEpoch[msg.NetId] = msg.Epoch;
         AppliedVersion[msg.NetId] = msg.Version;
-        Entry.Logger.Info($"[Fgo] NobleDeck snapshot applied: netId={msg.NetId}, epoch={msg.Epoch}, version={msg.Version}");
+        Entry.Logger.Info(
+            $"[Fgo] NobleDeck snapshot applied: netId={msg.NetId}, epoch={msg.Epoch}, version={msg.Version}");
     }
+
+    /// <summary>
+    ///     整堆快照：拥有者 NetId、会话/局标识 Epoch、单调递增版本号、完整卡 Id 列表
+    ///     （可含重复，表示同名宝具多张）。卡 Id 以字符串传输（<see cref="ModelId" /> 的规范文本形式），
+    ///     避免 record 直接 JSON 化的坑。
+    ///     <para />
+    ///     Epoch 用于消除「跨进程重启 / 跨局重连」时版本号基数不一致的问题：拥有者在每次新会话 / 新局取一个
+    ///     新的（真实时间派生、单调递增的）Epoch，接收端见到更大的 Epoch 即无条件接受该快照。
+    /// </summary>
+    public record NobleDeckSnapshotMessage(ulong NetId, long Epoch, int Version, List<string> CardIds);
+
+    /// <summary>客户端请求主机把全员 NobleDeck 整体重播一次（覆盖中途加入前已加入的卡）。</summary>
+    public record NobleDeckResyncRequest;
 
     private sealed record SnapshotDto(ulong NetId, long Epoch, int Version, List<string> CardIds);
 }
