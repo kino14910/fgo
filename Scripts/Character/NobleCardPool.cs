@@ -106,7 +106,11 @@ public sealed class NobleCardHideBannerPatch : IPatchMethod
 
     public static ModPatchTarget[] GetTargets()
     {
-        return [PatchTarget.Method<NCard>("Reload")];
+        return [
+            PatchTarget.Method<NCard>("Reload"),
+            PatchTarget.Method<NCard>("UpdateVisuals"),
+            PatchTarget.Method<NCard>("ReloadOverlay")
+        ];
     }
 
     [HarmonyPostfix]
@@ -115,9 +119,7 @@ public sealed class NobleCardHideBannerPatch : IPatchMethod
     {
         if (!GodotObject.IsInstanceValid(__instance)) return;
         if (__instance.Model?.Pool is not NobleCardPool) return;
-
-        if (__instance.GetNodeOrNull<CanvasItem>("%AncientBanner") is { } banner)
-            banner.Visible = false;
+        __instance.GetNodeOrNull<CanvasItem>("%AncientBanner")?.Hide();
     }
 }
 

@@ -53,7 +53,6 @@ public abstract class NobleCardModel(
         // FramePath: "", // 卡牌背景
         // PortraitBorderPath: "", // 边框（状态牌感染使用的）
         // BannerTexturePath: "" // 横幅（不同类型）
-        
     );
 
     // public PileType? GetResultPileTypeForCardPlay(CardModel card) => PileType.None;
