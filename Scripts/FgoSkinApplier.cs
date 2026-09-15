@@ -55,7 +55,7 @@ internal static class FgoSkinApplier
     public static Texture2D? LoadSkinTexture(int index)
     {
         index = Math.Clamp(index, 0, SkinCount - 1);
-        string name = index < MasterSkinCount
+        var name = index < MasterSkinCount
             ? $"Master{index}"
             : ExtraSkinTextures[index - MasterSkinCount];
         return GD.Load<Texture2D>($"{SkinTextureDir}{name}.png");

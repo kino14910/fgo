@@ -1,10 +1,8 @@
-using System;
-using System.Reflection;
 using STS2RitsuLib.Settings;
 
 namespace Fgo.Scripts;
 
-public enum CharacterSkinId : int
+public enum CharacterSkinId
 {
     Chaldea = 0,
     HalloweenRoyalty = 1,
@@ -28,7 +26,7 @@ public enum CharacterSkinId : int
     MonteCristo = 19,
     CatArcueidBrunestud = 20,
     RomaniArchaman = 21,
-    Guda = 22,
+    Guda = 22
 }
 
 [ModSettingsPage(Entry.ModId)]
@@ -43,7 +41,10 @@ public class FgoReflectedSettings
     public const string OpenNobleDeckKeyEntryId = "openNobleDeckKey";
     public const string CharacterSkinEntryId = "characterSkin";
 
-    [ModSettingsIntSlider(BaseNpPerCostEntryId, "general", 0, 10, LabelLocKey = "FGO_SETTINGS_UI_BASE_NP_PER_COST.title",
+    private static bool _reflected;
+
+    [ModSettingsIntSlider(BaseNpPerCostEntryId, "general", 0, 10,
+        LabelLocKey = "FGO_SETTINGS_UI_BASE_NP_PER_COST.title",
         DescriptionLocKey = "FGO_SETTINGS_UI_BASE_NP_PER_COST.hover.desc")]
     [ModSettingsBinding(Source = ModSettingsReflectionBindingSource.Global, DataKey = "base_np_per_cost")]
     public static int BaseNpPerCost { get; set; } = 5;
@@ -97,11 +98,9 @@ public class FgoReflectedSettings
 
         foreach (var section in page.Sections)
         foreach (var entry in section.Entries)
-        {
             if (entry is ToggleModSettingsEntryDefinition toggle) toggle.Binding.Read();
             else if (entry is IntSliderModSettingsEntryDefinition slider) slider.Binding.Read();
             else ReadEntryBinding(entry);
-        }
 
         _reflected = true;
     }
@@ -171,8 +170,6 @@ public class FgoReflectedSettings
 
         return null;
     }
-
-    private static bool _reflected;
 
     // [ModSettingsToggle("enableEnemies", "enemies", LabelLocKey = "FGO_SETTINGS_UI_ENABLE_ENEMIES.title",
     //     DescriptionLocKey = "FGO_SETTINGS_UI_ENABLE_ENEMIES.hover.desc")]

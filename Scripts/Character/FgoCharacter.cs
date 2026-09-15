@@ -2,7 +2,6 @@ using Godot;
 using MegaCrit.Sts2.Core.Entities.Characters;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Nodes.Combat;
-using MegaCrit.Sts2.Core.Nodes.RestSite;
 using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Scaffolding.Characters;
 using STS2RitsuLib.Scaffolding.Content;
@@ -128,7 +127,8 @@ public class FgoCharacter : ModCharacterTemplate<FgoCardPool, FgoRelicPool, FgoP
     protected override ModAnimStateMachine? SetupCustomMerchantAnimationStateMachine(Node merchantRoot,
         CharacterModel character)
     {
-        FgoWorldSkin.Apply(merchantRoot, "Icon", ResolveOwnerNetId(merchantRoot));
+        FgoWorldSkin.Apply(merchantRoot, FgoWorldSkin.MerchantSpritePath,
+            FgoWorldSkin.ResolveOwnerNetId(merchantRoot));
         return base.SetupCustomMerchantAnimationStateMachine(merchantRoot, character);
     }
 
@@ -139,21 +139,14 @@ public class FgoCharacter : ModCharacterTemplate<FgoCardPool, FgoRelicPool, FgoP
     protected override ModAnimStateMachine? SetupCustomRestSiteAnimationStateMachine(Node restSiteRoot,
         CharacterModel character)
     {
-        FgoWorldSkin.Apply(restSiteRoot, "ControlRoot/Sprite", ResolveOwnerNetId(restSiteRoot));
+        FgoWorldSkin.Apply(restSiteRoot, FgoWorldSkin.RestSiteSpritePath,
+            FgoWorldSkin.ResolveOwnerNetId(restSiteRoot));
 
         // 不能调用 base：base 会转调 SetupCustomMerchantAnimationStateMachine，
         // 而该重载找不到 "Icon" 时会退化为"第一个 Sprite2D"（正是 ControlRoot/Sprite），
         // 于是再用本机皮肤覆盖一次 —— 多人下两个火堆形象就会变成同一张皮肤。
         // 这里直接返回 null，与原来最终拿到的状态机（null）等价。
         return null;
-    }
-
-    /// <summary>
-    ///     取形象节点对应玩家的 NetId；取不到（商店等非玩家形象）时返回 null，交由调用方按本机玩家处理。
-    /// </summary>
-    private static ulong? ResolveOwnerNetId(Node root)
-    {
-        return (root as NRestSiteCharacter)?.Player?.NetId;
     }
 
     // 初始卡组，或者在卡牌类上用RegisterCharacterStarterCard就不用写这个

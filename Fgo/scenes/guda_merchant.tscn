@@ -5,6 +5,6 @@
 [node name="GudaMerchant" type="Node2D"]
 
 [node name="Icon" type="Sprite2D" parent="."]
-position = Vector2(-41, -242)
-scale = Vector2(2, 2)
+position = Vector2(-23, -179)
+scale = Vector2(1.405, 1.405)
 texture = ExtResource("1_qst7b")

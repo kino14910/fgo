@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
 using Fgo.Scripts.Character;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Entities.Creatures;
@@ -10,10 +8,9 @@ namespace Fgo.Scripts.Patches;
 
 /// <summary>
 ///     联机皮肤同步（战斗生物视觉）。
-///
 ///     【为什么挂在 Creature.CreateVisuals，而不是 CharacterModel.CreateVisuals】
 ///     游戏为"某位玩家"创建生物视觉的链路为：
-///         NCreature.Create(creature) → creature.CreateVisuals() → Player.Character.CreateVisuals()
+///     NCreature.Create(creature) → creature.CreateVisuals() → Player.Character.CreateVisuals()
 ///     其中 <c>Player.Character</c> 是 <c>ModelDb</c> 里的"规范化单例" CharacterModel
 ///     （见 Player.CreateForNewRun → ModelDb.Character&lt;T&gt;()、FromSerializable → ModelDb.GetById），
 ///     **同角色的所有玩家共享同一个 CharacterModel 实例**。

@@ -1,8 +1,5 @@
-using System.Collections.Generic;
 using System.Text.Json;
-using Fgo.Scripts.Character;
 using Fgo.Scripts.Patches;
-using MegaCrit.Sts2.Core.Multiplayer;
 using MegaCrit.Sts2.Core.Multiplayer.Game;
 using MegaCrit.Sts2.Core.Runs;
 using STS2RitsuLib.Networking.Sidecar;
@@ -27,14 +24,12 @@ public static class FgoSkinSync
     /// </summary>
     public static readonly Dictionary<ulong, int> RemoteSkins = new();
 
-    public record SkinSyncMessage(ulong NetId, int Skin);
-
     private static readonly RitsuLibSidecarMessageDescriptor<SkinSyncMessage> SkinSyncDescriptor = new(
-        ModuleId: Entry.ModId,
-        MessageKey: "fgo_skin_sync_v1",
-        Serialize: static msg => JsonSerializer.SerializeToUtf8Bytes(msg),
-        Deserialize: static bytes => JsonSerializer.Deserialize<SkinSyncMessage>(bytes)!,
-        Delivery: RitsuLibSidecarDeliverySemantics.StableSync);
+        Entry.ModId,
+        "fgo_skin_sync_v1",
+        static msg => JsonSerializer.SerializeToUtf8Bytes(msg),
+        static bytes => JsonSerializer.Deserialize<SkinSyncMessage>(bytes)!,
+        RitsuLibSidecarDeliverySemantics.StableSync);
 
     private static IDisposable? _subscription;
     private static bool _handshakeSubscribed;
@@ -104,10 +99,8 @@ public static class FgoSkinSync
         // 消息里的 NetId 就是发送者自身，二者相等会使该判定恒为假、转发永远不发生。
         // 这里只需判断 IsHostIngest（主机从客户端收到的消息），广播只发往对端、不会回传主机自身，无环。
         if (context.IsHostIngest)
-        {
             RitsuLibSidecarTypedMessageRegistry.Broadcast(
                 RunManager.Instance?.NetService, SkinSyncDescriptor, context.Message);
-        }
 
         // 若对应玩家的生物视觉已创建，立即按最新皮肤重套（覆盖视觉先于消息到达的情况）
         FgoCreatureSkinPatch.ReapplySkin(context.Message.NetId, context.Message.Skin);
@@ -117,4 +110,6 @@ public static class FgoSkinSync
 
         Entry.Logger.Info($"[Fgo] Received skin sync: netId={context.Message.NetId}, skin={context.Message.Skin}");
     }
+
+    public record SkinSyncMessage(ulong NetId, int Skin);
 }
