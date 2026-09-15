@@ -1,4 +1,5 @@
 using Fgo.Scripts.Character;
+using Fgo.Scripts.Powers;
 using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Models;
@@ -40,6 +41,8 @@ public abstract class NobleCardModel(
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Retain];
     public override CardPoolModel Pool => ModelDb.CardPool<NobleCardPool>();
+
+    public override int MaxUpgradeLevel => OverchargePower.MaxOvercharge;
 
     public override CardAssetProfile AssetProfile => new(
         $"res://Fgo/images/cards/noble/{GetType().Name}.png",

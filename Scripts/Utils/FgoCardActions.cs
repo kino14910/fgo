@@ -68,6 +68,18 @@ public static class FgoCardActions
         return copy;
     }
 
+    /// <summary>
+    ///     按次数逐级强化卡牌：每次 CardCmd.Upgrade 触发一次 OnUpgrade，使该级的数值成长生效，
+    ///     直到强化次数用尽或达到卡牌自身的 MaxUpgradeLevel（宝具为 OverchargePower.MaxOvercharge）。
+    ///     与 RitsuLib 调试工具的 ApplyAvailableUpgradeLevels 同一写法：MaxUpgradeLevel 为 1 的普通卡
+    ///     只会强化一次，可多次强化的卡会逐级累加。
+    /// </summary>
+    public static void ApplyUpgradeLevels(CardModel card, int levels)
+    {
+        for (var i = 0; i < levels && card.IsUpgradable; i++)
+            CardCmd.Upgrade(card, CardPreviewStyle.None);
+    }
+
     public static CardModel CreateCard<T>(Player owner, bool upgraded = false, bool free = false, bool exhaust = false)
         where T : CardModel
     {
@@ -219,8 +231,7 @@ public static class FgoCardActions
 
         // 继承源卡的升级次数：逐级触发 Upgrade 让 OnUpgrade 对数值的修改生效。
         // 此时 replacement 尚未加入牌堆（Pile 为 null），CardCmd.Upgrade 不会写入地图升级历史。
-        for (var i = 0; i < source.CurrentUpgradeLevel; i++)
-            CardCmd.Upgrade(replacement, CardPreviewStyle.None);
+        ApplyUpgradeLevels(replacement, source.CurrentUpgradeLevel);
 
         // 继承源卡的附魔：克隆独立实例后再赋予新卡，避免跨卡移动附魔触发
         // "Enchantments cannot be moved from one card to another"。

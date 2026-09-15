@@ -94,21 +94,43 @@ public sealed class FgoBattleHooks() : HookedSingletonModel(HookType.Combat)
             cardPlay);
     }
 
+    /// <summary>
+    ///     OverchargePower 层数上限的统一收口。
+    ///     <para>
+    ///         `PowerModel.Amount` 的 getter 不是 virtual（内部 `_amount` + `SetAmount`），无法靠重写 getter 封顶；
+    ///         唯一对显示开放的 virtual 是 `DisplayAmount`，但它只改角标数字、不改真实层数。
+    ///         因此上限必须拦在写入处：官方钩子 `TryModifyPowerAmountReceived` 是 PowerCmd 两条写入路径
+    ///         （首次施加 `Apply`、已存在时叠加 `ModifyAmount`）在 `SetAmount` 之前都会调用的修正点，
+    ///         返回 true 即用 `modifiedAmount` 覆盖本次增量。
+    ///     </para>
+    ///     这里把「当前层数 + 增量」钳进 [.., MaxOvercharge]：任何来源（卡牌/遗物/怪物）都无法把层数推过上限；
+    ///     顺带把历史存档里可能超上限的层数在下次变动时归一化回上限。
+    /// </summary>
+    public override bool TryModifyPowerAmountReceived(PowerModel canonicalPower, Creature target, decimal amount,
+        Creature? applier, out decimal modifiedAmount)
+    {
+        modifiedAmount = amount;
+        if (canonicalPower is not OverchargePower) return false;
+
+        var current = target.GetPower<OverchargePower>()?.Amount ?? 0;
+        var cappedDelta = Math.Min(OverchargePower.MaxOvercharge, current + (int)amount) - current;
+
+        // 未触及上限时不介入，避免抢掉其它修正逻辑。
+        if (cappedDelta == amount) return false;
+
+        modifiedAmount = cappedDelta;
+        return true;
+    }
+
     public override async Task AfterCardPlayedLate(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         if (cardPlay.Card?.Owner is not { Character: FgoCharacter } player)
             return;
 
-        // 打出任意宝具牌后，为该玩家获得 OverchargePower 层数（最多 MaxOvercharge 层）。
+        // 打出任意宝具牌后，为该玩家获得 1 层 OverchargePower；
+        // 层数上限由本类的 TryModifyPowerAmountReceived 统一封顶（满层时增量为 0，Apply 自动跳过）。
         if (cardPlay.Card is NobleCardModel)
-        {
-            var existing = player.Creature.GetPower<OverchargePower>();
-            var current = existing?.Amount ?? 0;
-            var delta = Math.Min(OverchargePower.MaxOvercharge, current + 1) - current;
-            if (delta > 0)
-                await PowerCmd.Apply<OverchargePower>(
-                    choiceContext, player.Creature, delta, player.Creature, null);
-        }
+            await PowerCmd.Apply<OverchargePower>(choiceContext, player.Creature, 1, player.Creature, null);
 
         Get(player).ResetCrit();
 

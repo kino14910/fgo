@@ -11,7 +11,6 @@ using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Models;
-using MegaCrit.Sts2.Core.Nodes.CommonUi;
 using MegaCrit.Sts2.Core.Runs;
 using STS2RitsuLib.Networking.ManagedActions;
 
@@ -60,14 +59,15 @@ public static class FgoNoblePhantasmCmd
         if (player.Creature.HasPower<SealNpPower>())
             return false;
 
-        // 宝具升级次数（最多 MaxOvercharge 层）
+        // OC 层数 = 宝具强化次数（0 ~ OverchargePower.MaxOvercharge，上限由 FgoBattleHooks 的
+        // TryModifyPowerAmountReceived 保证，故此处读到的 Amount 必定在范围内）。
         var overCharge = player.Creature.GetPower<OverchargePower>()?.Amount ?? 0;
 
         // 候选来自 NobleDeck pile（由 SaintQuartz 遗物管理初始卡 + 右键加入的卡）。
         var noblePile = CardPile.Get(FgoEnums.NobleDeck, player);
         if (noblePile == null || noblePile.IsEmpty) return false;
 
-        // pile 里的卡已经是注册到战斗的 mutable 实例，可直接用作候选。
+        // pile 里的卡是注册到战斗的 mutable 实例；其顺序即选牌界面的候选顺序。
         var cards = noblePile.Cards.OfType<NobleCardModel>().ToList();
 
         // NpCardPower: 角色拥有此 power 时，将对应的特定宝具卡加入候选列表。
@@ -79,8 +79,14 @@ public static class FgoNoblePhantasmCmd
 
         if (cards.Count == 0) return false;
 
+        // 选宝具页按当前 OC 预览强化后的数值：候选换成「已按 OC 逐级强化」的展示副本。
+        // 副本只用于渲染与选择（从 canonical 拷贝、不注册进战斗、不属于任何牌堆），
+        // 选完仍按 Id 取 canonical 生成真正的战斗卡，因此不改变既有行为。
+        // 顺序与索引和 cards 完全一致 —— 联机选牌结果按 index 同步，位置不能变。
+        var previews = cards.Select(card => BuildPreview(card, player, overCharge) ?? card).ToList();
+
         var prefs = new CardSelectorPrefs(new LocString("gameplay_ui", "FGO_GAMEPLAY_UI_NP_TEXT.text_2"), 1);
-        var selected = (await CardSelectCmd.FromSimpleGrid(choiceContext, cards, player, prefs)).FirstOrDefault();
+        var selected = (await CardSelectCmd.FromSimpleGrid(choiceContext, previews, player, prefs)).FirstOrDefault();
         if (selected == null) return false;
 
         if (npCardPower != null)
@@ -93,11 +99,28 @@ public static class FgoNoblePhantasmCmd
             return false;
 
         var playCopy = (NobleCardModel)player.Creature.CombatState!.CreateCard(canonical, player);
-        for (var i = 0; i < overCharge && playCopy.IsUpgradable; i++)
-            CardCmd.Upgrade(playCopy, CardPreviewStyle.None);
+
+        // OC 每层强化一次：按 OC 层数逐级升级副本（NobleCardModel.MaxUpgradeLevel = MaxOvercharge，
+        // 因此 overCharge 层数可完整生效；此前依赖单级 IsUpgradable 会在首次强化后提前终止）。
+        FgoCardActions.ApplyUpgradeLevels(playCopy, overCharge);
 
         await CardPileCmd.AddGeneratedCardToCombat(playCopy, PileType.Hand, player);
         await playerState.SpendNpForNoblePhantasm();
         return true;
+    }
+
+    /// <summary>
+    ///     生成选宝具页的展示副本：从 canonical 拷贝一个可变实例，按 OC 层数逐级强化，
+    ///     使候选卡在选牌界面直接显示「获得 OC 强化后」的数值（标题同步显示 卡名+N）。
+    ///     副本不注册进战斗、不属于任何牌堆，纯展示用；canonical 缺失时返回 null，由调用方回退原卡。
+    /// </summary>
+    private static NobleCardModel? BuildPreview(NobleCardModel card, Player player, int upgradeLevels)
+    {
+        if (ModelDb.GetByIdOrNull<NobleCardModel>(card.Id) is not { } canonical) return null;
+
+        var preview = (NobleCardModel)canonical.ToMutable();
+        preview.GiveToAnotherPlayer(player);
+        FgoCardActions.ApplyUpgradeLevels(preview, upgradeLevels);
+        return preview;
     }
 }
