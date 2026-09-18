@@ -2,6 +2,7 @@ using Fgo.Scripts.Character;
 using Fgo.Scripts.Commands;
 using Fgo.Scripts.Fields;
 using Fgo.Scripts.Singletons;
+using Fgo.Scripts.Utils;
 using Godot;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Context;
@@ -9,6 +10,8 @@ using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Nodes.Combat;
 using MegaCrit.Sts2.Core.Nodes.HoverTips;
+using MegaCrit.Sts2.Core.Nodes.Rooms;
+using STS2RitsuLib.CardPiles.Nodes;
 using STS2RitsuLib.Scaffolding.Godot.NodeAttachments;
 // ReSharper disable once RedundantUsingDirective
 using Fgo.Scripts;
@@ -71,8 +74,13 @@ public sealed partial class FgoGlobalHud : Control
     // 脏检查缓存: 仅值变化时才触碰控件，避免每帧无条件 GD.Load/赋值导致的重绘。
     private int _lastStars = -1;
 
+    // 〔虚数空间〕期间需要隐藏原版手牌区、并把额外手牌区对齐到原版位置，这里记上次的开关状态做脏检查。
+    private bool _lastVoidSpace;
     private HBoxContainer _starBox = null!;
     private Label _starLabel = null!;
+
+    // 缓存的额外手牌区容器（RitsuLib 挂在 NCombatUi 下），失效时重新查找。
+    private NModExtraHand? _voidHandView;
 
     private static HoverTip CommandSpellHoverTip =>
         new(
@@ -266,6 +274,9 @@ public sealed partial class FgoGlobalHud : Control
             hud._combatSeenActivated = false;
             // 新战斗的场地集合从空开始，版本号会归 0，必须让脏检查失效以重建场地行。
             hud._lastFieldVersion = -1;
+            // 上一场战斗若停在虚数空间，手牌区可能还是隐藏的，这里强制下次刷新时恢复。
+            hud._lastVoidSpace = false;
+            hud._voidHandView = null;
             hud.SetProcess(true);
         }
     }
@@ -318,6 +329,62 @@ public sealed partial class FgoGlobalHud : Control
             _lastFieldVersion = fieldVersion;
             RebuildFieldRow(state);
         }
+
+        SyncVoidSpaceHand(state);
+    }
+
+    /// <summary>
+    ///     〔虚数空间〕期间隐藏原版手牌区的牌、并把额外手牌区搬到原版手牌区的位置。
+    /// </summary>
+    /// <remarks>
+    ///     <para>
+    ///         <b>只藏 <c>CardHolderContainer</c>，绝不能藏整个 <c>NPlayerHand</c>。</b>
+    ///         原版出牌时 <c>NPlayerHand.StartCardPlay</c> 会把被拿起的 holder
+    ///         <c>Reparent(this)</c>（挂到 NPlayerHand 自己身上，而不是牌位容器里），并把拖动/目标预览节点
+    ///         <c>NMouseCardPlay</c> 也 <c>AddChild</c> 到 NPlayerHand 下。父节点一旦不可见，拖动跟手、
+    ///         目标选择时的居中预览就全部消失——只剩"点一下能出牌"。而原版手牌的牌位恰好全部住在
+    ///         <c>CardHolderContainer</c> 里（<c>AddCardHolder</c> 只往它里面塞 holder），所以藏它一个就够。
+    ///     </para>
+    ///     <para>
+    ///         真实手牌已被 <c>FgoVoidHand</c> 搬进无界面的暂存牌堆，但期间**新抽到的牌仍会落进原版手牌**，
+    ///         不隐藏的就会和额外手牌区（同一套手牌扇形布局）叠在一起。这里只改本机 UI，属表现层同步。
+    ///     </para>
+    /// </remarks>
+    private void SyncVoidSpaceHand(ICombatState? combat)
+    {
+        var inVoidSpace = FgoField.Has(combat, FgoFieldId.ImaginarySpace);
+        if (inVoidSpace != _lastVoidSpace)
+        {
+            _lastVoidSpace = inVoidSpace;
+            if (NPlayerHand.Instance?.CardHolderContainer is { } handCards)
+                handCards.Visible = !inVoidSpace;
+            _voidHandView = null;
+        }
+
+        if (!inVoidSpace) return;
+
+        if (_voidHandView is null || !IsInstanceValid(_voidHandView))
+            _voidHandView = FindVoidHandView();
+
+        if (_voidHandView is not { } view || NPlayerHand.Instance is not { } vanilla) return;
+        if (vanilla.CardHolderContainer is not { } holder) return;
+
+        // 手牌扇形坐标的原点: 原版是 CardHolderContainer（NPlayerHand.tscn 里锚点 (0.5, 1) 的零尺寸
+        // Control，即屏幕底边中点），RitsuLib 则是「容器左上角 + Size * 0.5」（见 NModExtraHand.ArrangeCards
+        // 的 center）。两者对齐后两边的 HandPosHelper 偏移就落在同一点上。
+        // 取「相对手牌节点」的偏移而不是全局坐标，是为了剔除手牌节点自身在入场(0→500)与禁用(+100)
+        // 动画里的平移——额外手牌区有自己那套等价的禁用表现（DisabledOffset 默认也是 (0,100)），跟着动会叠两倍。
+        var origin = holder.GlobalPosition - vanilla.GlobalPosition;
+        var aligned = origin - view.Size * 0.5f;
+        if (view.Position != aligned) view.Position = aligned;
+    }
+
+    /// <summary>找出〔虚数空间〕额外手牌区的容器节点（由 RitsuLib 挂在 NCombatUi 下）。</summary>
+    private static NModExtraHand? FindVoidHandView()
+    {
+        return NCombatRoom.Instance?.Ui?.GetChildren()
+            .OfType<NModExtraHand>()
+            .FirstOrDefault(static view => view.Definition.PileType.Equals(FgoEnums.VoidHand));
     }
 
     /// <summary>

@@ -68,6 +68,7 @@ public sealed class FgoBattleHooks() : HookedSingletonModel(HookType.Combat)
     public override async Task BeforeCombatStart()
     {
         FgoGlobalHud.WakeInstances();
+        FgoVoidSeaBackground.ResetForNewCombat();
 
         var combat = CurrentCombatState;
         if (combat == null) return;
@@ -160,10 +161,13 @@ public sealed class FgoBattleHooks() : HookedSingletonModel(HookType.Combat)
                 cd.DecrementCooldown();
     }
 
-    public override Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
+    public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
     {
+        // 场地效果对所有玩家生效（场地是战场级属性），先于 FGO 角色专有逻辑结算。
+        await FgoFieldEffects.OnPlayerTurnStart(choiceContext, player);
+
         if (player.Character is not FgoCharacter)
-            return Task.CompletedTask;
+            return;
         Get(player).OnAfterPlayerTurnStart();
         player.GetRelic<II>()?.OnAfterPlayerTurnStart();
     }

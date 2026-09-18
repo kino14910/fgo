@@ -137,6 +137,22 @@ public static class FgoFieldEffects
         await PowerCmd.Apply<VigorPower>(choiceContext, creature, sunlight, creature, null);
     }
 
+    /// <summary>
+    ///     每名玩家回合开始时: 对〔虚数空间〕的「替换手牌」状态做一次自愈式对账。
+    /// </summary>
+    /// <remarks>
+    ///     这一段刻意挂在 <c>AfterPlayerTurnStart</c>（每名玩家各一次）而不是 side 级钩子:
+    ///     状态是**按玩家**的（每个玩家的手牌/额外手牌各一份），按玩家结算才对得上。
+    ///     <para />
+    ///     实际进出由 <see cref="FgoVoidHand" /> 负责；这里只处理"该修就修"的两种情况，
+    ///     正常路径是进入那一刻（<c>GreatVoidSeaBattle</c> 出牌时）就已经替换好了。
+    /// </remarks>
+    public static Task OnPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
+    {
+        var combat = player.Creature.CombatState;
+        return combat == null ? Task.CompletedTask : FgoVoidHand.Reconcile(combat, player);
+    }
+
     /// <summary>战场上的所有存活单位（敌我双方）。</summary>
     private static List<Creature> LivingUnits(ICombatState combat) =>
         combat.Creatures.Where(static c => c.IsAlive).ToList();

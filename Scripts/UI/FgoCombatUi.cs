@@ -13,6 +13,7 @@ public static class FgoCombatUi
         // FgoCardNpUi.Initialize();
         FgoNpBar.Initialize();
         EnergyCounterPivotFix.Initialize();
+        FgoVoidSeaBackground.Initialize();
     }
 
     /// <returns>当前是否处于战斗可显示状态，供调用方决定是否关闭 _Process 轮询。</returns>
@@ -28,7 +29,10 @@ public static class FgoCombatUi
         if (!inCombat)
             return false;
 
+        var state = CombatManager.Instance.DebugOnlyGetState();
         FgoGlobalHud.Update();
+        FgoVoidSeaBackground.Update(state);
+
         return true;
     }
 }

@@ -280,6 +280,20 @@ public sealed class FgoRunState
     ///     每个玩家的生物视觉应用"自己选择的皮肤"，跨端一致。
     /// </summary>
     public int Skin { get; set; }
+
+    /// <summary>
+    ///     〔虚数大海战〕的永久基础宝具值加成（百分点）。由〔虚数脱出〕消耗探索点数换得，
+    ///     每 1 点 +1。基础宝具值 = 卡面写死的 5 + 本值；超过阈值时获得〔好似飞鸟〕并清回 0。
+    ///     存在这里（而非某张卡实例）的原因: 加成由"另一张卡"赋予，且同一位玩家只会有一份。
+    /// </summary>
+    public int GreatVoidSeaBattleBonusNp { get; set; }
+
+    /// <summary>
+    ///     是否已解锁〔好似飞鸟〕（〔虚数大海战〕的基础宝具值曾超过阈值）。
+    ///     这是"解锁"的唯一权威；卡上的〔好似飞鸟〕关键词只是它在局内的载体，
+    ///     由 <c>GreatVoidSeaBattle.EnsureLikeABird</c> 按本标志补齐（幂等，随存档保存）。
+    /// </summary>
+    public bool LikeABirdUnlocked { get; set; }
 }
 
 [HarmonyPatch(typeof(NGame), nameof(NGame.IsReleaseGame))]
