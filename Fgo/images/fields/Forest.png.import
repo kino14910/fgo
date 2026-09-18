@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b7j4ns5d5i53w"
-path="res://.godot/imported/WatersidePower.png-20efaed5a48c3414b109e9358b6a9406.ctex"
+uid="uid://bwk7oj0oo0ps6"
+path="res://.godot/imported/Forest.png-adf15c426376c703ccae48a56b63eb62.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Fgo/images/powers/WatersidePower.png"
-dest_files=["res://.godot/imported/WatersidePower.png-20efaed5a48c3414b109e9358b6a9406.ctex"]
+source_file="res://Fgo/images/fields/Forest.png"
+dest_files=["res://.godot/imported/Forest.png-adf15c426376c703ccae48a56b63eb62.ctex"]
 
 [params]
 

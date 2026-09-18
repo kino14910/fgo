@@ -12,8 +12,6 @@ namespace Fgo.Scripts.Cards.NoblePhantasm;
 
 public class Desterrennacht() : NobleCardModel(3, CardType.Power, TargetType.Self)
 {
-    protected override HashSet<CardTag> CanonicalTags => [FgoTags.Foreigner];
-
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
         HoverTipFactory.FromPower<StarsPerTurnPower>(),
@@ -22,9 +20,11 @@ public class Desterrennacht() : NobleCardModel(3, CardType.Power, TargetType.Sel
         HoverTipFactory.FromPower<StrengthPower>(),
         HoverTipFactory.FromPower<TerrorPower>(),
         HoverTipFactory.FromPower<StarsPerTurnPower>(),
-        FgoHoverTipFactory.FromNp()
+        FgoHoverTipFactory.FromNp(),
         FgoHoverTipFactory.FromForeigner()
     ];
+
+    protected override HashSet<CardTag> CanonicalTags => [FgoTags.Foreigner];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [

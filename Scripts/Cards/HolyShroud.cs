@@ -34,16 +34,6 @@ public class HolyShroud() : FgoCardModel(0, CardType.Skill,
 
     protected override bool ShouldGlowRedInternal => !ShouldGlowGoldInternal;
 
-    /// <summary>
-    ///     计算怪物本回合意图将对「卡牌拥有者」造成的总伤害。
-    ///     <para>
-    ///         联机要点：<b>不能</b>使用 <c>AttackIntent.GetTotalDamage</c> / <c>GetSingleDamage</c>。
-    ///         这两个方法内部用 <c>LocalContext.GetMe(combatState)</c>（<b>本机玩家</b>）作为受击者来跑伤害 Hook，
-    ///         多人下每个端算出的"意图伤害"各不相同；而本判定会在 <see cref="OnPlay" />（会被复制到所有端重放的动作）
-    ///         中决定是否施加减伤，一旦各端结果不同就会造成状态分歧断线。
-    ///         这里改为固定以「卡牌拥有者 <c>Owner.Creature</c>」为受击者自行复算：输入在各端完全一致，结果也就一致。
-    ///     </para>
-    /// </summary>
     private decimal IncomingDamageForOwner()
     {
         if (CombatState is not { } combatState) return 0m;
@@ -61,7 +51,6 @@ public class HolyShroud() : FgoCardModel(0, CardType.Skill,
                 if (intent.IntentType is not (IntentType.Attack or IntentType.DeathBlow)) continue;
                 if (intent.DamageCalc is not { } damageCalc) continue;
 
-                // 与游戏内一致：单发伤害走 Hook（力量 / 虚弱 / 易伤等），再乘攻击段数。
                 var perHit = Hook.ModifyDamage(
                     Owner.RunState,
                     combatState,

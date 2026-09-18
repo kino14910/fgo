@@ -1,5 +1,5 @@
 using Fgo.Scripts.Cards.Colorless.EventCards;
-using Fgo.Scripts.Powers;
+using Fgo.Scripts.Fields;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Relics;
 
@@ -29,7 +29,7 @@ public class II : FgoRelic
         return Affection - old;
     }
 
-    // 基础 +3；本回合第一张卡 +2；〔水边〕场地（WatersidePower）时 +10。
+    // 基础 +3；本回合第一张卡 +2；〔水边〕场地时 +10。
     public void OnBeforeCardPlayed(CardPlay cardPlay)
     {
         if (Owner is not { } owner)
@@ -43,7 +43,7 @@ public class II : FgoRelic
         {
             var gain = 3;
             if (CardsPlayedThisTurn == 1) gain += 2;
-            if (owner.Creature.HasPower<WatersidePower>()) gain += 10;
+            if (FgoField.Has(owner.Creature.CombatState, FgoFieldId.Waterside)) gain += 10;
             ModifyAffection(gain);
         }
     }

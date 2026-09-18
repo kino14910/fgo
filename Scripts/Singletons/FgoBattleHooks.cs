@@ -2,9 +2,11 @@ using Fgo.Scripts.Cards;
 using Fgo.Scripts.Cards.NoblePhantasm;
 using Fgo.Scripts.Character;
 using Fgo.Scripts.Commands;
+using Fgo.Scripts.Fields;
 using Fgo.Scripts.Powers;
 using Fgo.Scripts.Relics;
 using Fgo.Scripts.UI;
+using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Commands.Builders;
@@ -42,7 +44,7 @@ public sealed class FgoBattleHooks() : HookedSingletonModel(HookType.Combat)
 
     public override async Task BeforeCardPlayed(CardPlay cardPlay)
     {
-        if (cardPlay.Card?.Owner is not { Character: FgoCharacter } player)
+        if (cardPlay.Card.Owner is not { Character: FgoCharacter } player)
             return;
         await Get(player).OnBeforeCardPlayed(cardPlay);
         player.GetRelic<II>()?.OnBeforeCardPlayed(cardPlay);
@@ -58,12 +60,9 @@ public sealed class FgoBattleHooks() : HookedSingletonModel(HookType.Combat)
     /// <summary>枚举指定玩家分布在各牌堆中的所有冷却卡实例，用于统一重置/遍历。</summary>
     private static IEnumerable<FgoCooldownCardModel> CooldownCards(Player player)
     {
-        foreach (var pile in Enum.GetValues<PileType>())
-        {
-            if (pile == PileType.None) continue;
-            foreach (var card in pile.GetPile(player).Cards.OfType<FgoCooldownCardModel>())
-                yield return card;
-        }
+        return Enum.GetValues<PileType>()
+            .Where(pile => pile != PileType.None)
+            .SelectMany(pile => pile.GetPile(player).Cards.OfType<FgoCooldownCardModel>());
     }
 
     public override async Task BeforeCombatStart()
@@ -76,6 +75,14 @@ public sealed class FgoBattleHooks() : HookedSingletonModel(HookType.Combat)
         {
             if (player.Character is not FgoCharacter)
                 continue;
+
+            // 自愈：进入战斗前确保该玩家 NobleDeck 已播种（幂等，只在牌堆为空时补齐初始宝具）。
+            // run 开始/读档时的播种一旦因时序错过（例如该端此刻还解析不出角色、或该端本地副本被空快照清空），
+            // NobleDeck 会一直为空；而 np_button（CombatPlayPhaseOnly，只能在战斗中触发）在所有端各按【本地】
+            // NobleDeck 取候选 —— 空牌堆的那一端会直接跳过整段选牌，拥有者却照常选牌加卡 → 手牌分歧。
+            // 战斗开始前补一次即可覆盖这一窗口（战斗中的托管动作都在其之后执行）。
+            FgoCardActions.EnsureNobleDeckSeeded(player);
+
             await Get(player).Reset();
             // 好感度由 II 遗物重置: 默认 0，持星剑的墓志铭时 10
             player.GetRelic<II>()?.ResetAffectionForCombat();
@@ -122,9 +129,17 @@ public sealed class FgoBattleHooks() : HookedSingletonModel(HookType.Combat)
         return true;
     }
 
+    /// <summary>
+    ///     任意玩家打出一张牌后: 结算依赖打牌事件的场地（〔阳光照射〕→ 攻击牌返还活力）。
+    /// </summary>
+    public override async Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+    {
+        await FgoFieldEffects.OnCardPlayed(choiceContext, cardPlay);
+    }
+
     public override async Task AfterCardPlayedLate(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        if (cardPlay.Card?.Owner is not { Character: FgoCharacter } player)
+        if (cardPlay.Card.Owner is not { Character: FgoCharacter } player)
             return;
 
         // 打出任意宝具牌后，为该玩家获得 1 层 OverchargePower；
@@ -132,7 +147,7 @@ public sealed class FgoBattleHooks() : HookedSingletonModel(HookType.Combat)
         if (cardPlay.Card is NobleCardModel)
             await PowerCmd.Apply<OverchargePower>(choiceContext, player.Creature, 1, player.Creature, null);
 
-        Get(player).ResetCrit();
+        await Get(player).ResetCrit();
 
         // 冷却机制：
         // 1) 打出一张冷却卡 → 其冷却重置为 CooldownMax（重新进入冷却）；
@@ -151,7 +166,41 @@ public sealed class FgoBattleHooks() : HookedSingletonModel(HookType.Combat)
             return Task.CompletedTask;
         Get(player).OnAfterPlayerTurnStart();
         player.GetRelic<II>()?.OnAfterPlayerTurnStart();
-        return Task.CompletedTask;
+    }
+
+    /// <summary>
+    ///     我方（玩家方）回合开始: 结算场地（水边 → 全体格挡）。
+    ///     <para>
+    ///         这里刻意用 side 级钩子而不是 <see cref="AfterPlayerTurnStart" />：后者每名玩家各触发一次，
+    ///         多人模式下会把场地效果按玩家人数重复结算。side 级钩子每轮只触发一次。
+    ///     </para>
+    ///     时点上官方流程是「清除格挡 → AfterBlockCleared → AfterSideTurnStart」，
+    ///     因此此刻发放的格挡不会被本回合的开始清格挡抹掉。
+    /// </summary>
+    public override async Task AfterSideTurnStart(CombatSide side, IReadOnlyList<Creature> participants,
+        ICombatState combatState)
+    {
+        if (side != CombatSide.Player) return;
+
+        var combat = CurrentCombatState;
+        if (combat == null) return;
+
+        await FgoFieldEffects.OnPlayerSideTurnStart(combat);
+    }
+
+    /// <summary>
+    ///     我方（玩家方）回合结束: 结算场地（燃烧 → 全体伤害）。
+    ///     官方在 <c>EndPlayerTurnPhaseTwoInternal</c> 中以全体玩家为 participants 调用一次。
+    /// </summary>
+    public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side,
+        IEnumerable<Creature> participants)
+    {
+        if (side != CombatSide.Player) return;
+
+        var combat = CurrentCombatState;
+        if (combat == null) return;
+
+        await FgoFieldEffects.OnPlayerSideTurnEnd(choiceContext, combat);
     }
 
     public override async Task AfterDamageGiven(

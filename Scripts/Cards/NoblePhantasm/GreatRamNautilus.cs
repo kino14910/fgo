@@ -1,4 +1,4 @@
-using Fgo.Scripts.Powers;
+using Fgo.Scripts.Fields;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -12,8 +12,8 @@ public class GreatRamNautilus() : NobleCardModel(2, CardType.Attack, TargetType.
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
-        HoverTipFactory.FromPower<WatersidePower>(),
-        HoverTipFactory.FromPower<ImaginarySpacePower>()
+        FgoFieldId.Waterside.ToHoverTip(),
+        FgoFieldId.ImaginarySpace.ToHoverTip()
     ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
@@ -30,8 +30,8 @@ public class GreatRamNautilus() : NobleCardModel(2, CardType.Attack, TargetType.
     {
         ArgumentNullException.ThrowIfNull(cardPlay.Target, nameof(cardPlay.Target));
 
-        var hasWaterside = Owner.Creature.HasPower<WatersidePower>();
-        var hasImaginarySpace = Owner.Creature.HasPower<ImaginarySpacePower>();
+        var hasWaterside = FgoField.Has(Owner.Creature.CombatState, FgoFieldId.Waterside);
+        var hasImaginarySpace = FgoField.Has(Owner.Creature.CombatState, FgoFieldId.ImaginarySpace);
         var baseDmg = (int)DynamicVars.Damage.BaseValue;
         var totalDamage = hasWaterside || hasImaginarySpace ? (int)(baseDmg * 1.5m) : baseDmg;
 

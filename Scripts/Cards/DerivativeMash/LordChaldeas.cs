@@ -53,7 +53,7 @@ public class LordChaldeas() : NobleCardModel(1, CardType.Power, TargetType.Self)
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        // 除 NP 相关外，其余能力（ReducePercentDamage/Plating/Strength/Artifact）改为全体获得。
+        // 除 NP 相关外，其余能力（ReducePercentDamage/Plating/Strength/Artifact）为全体获得。
         var allies = CombatState!.GetTeammatesOf(Owner.Creature).ToList();
         await PowerCmd.Apply<ReducePercentDamagePower>(choiceContext, allies,
             DynamicVars[nameof(ReducePercentDamagePower)].BaseValue, Owner.Creature, this);

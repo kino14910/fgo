@@ -1,4 +1,4 @@
-using Fgo.Scripts.Powers;
+using Fgo.Scripts.Fields;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -13,7 +13,7 @@ public class SwanLake() : FgoCardModel(1, CardType.Attack,
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
-        HoverTipFactory.FromPower<WatersidePower>()
+        FgoFieldId.Waterside.ToHoverTip()
     ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
@@ -40,6 +40,6 @@ public class SwanLake() : FgoCardModel(1, CardType.Attack,
             .Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
-        await PowerCmd.Apply<WatersidePower>(choiceContext, Owner.Creature, 1m, Owner.Creature, this);
+        FgoField.Add(Owner.Creature.CombatState, FgoFieldId.Waterside, 3);
     }
 }

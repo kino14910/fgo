@@ -1,5 +1,6 @@
 using Fgo.Scripts.Character;
 using Fgo.Scripts.Commands;
+using Fgo.Scripts.Fields;
 using Fgo.Scripts.Singletons;
 using Godot;
 using MegaCrit.Sts2.Core.Combat;
@@ -16,6 +17,24 @@ namespace Fgo.Scripts.UI;
 
 public sealed partial class FgoGlobalHud : Control
 {
+    /// <summary>场地行里每个场地图标的显示边长（像素）。</summary>
+    private const float FieldIconSize = 64f;
+
+    /// <summary>场地行距屏幕顶部边缘的偏移（像素）。</summary>
+    private const float FieldRowTop = 120f;
+
+    /// <summary>场地行所在横带的高度（像素）。CenterContainer 需要一条有高度的横带才能水平居中。</summary>
+    private const float FieldRowHeight = 88f;
+
+    /// <summary>层数角标预留的方框边长（像素）；实际显示尺寸由字号决定，这个框只用于定位。</summary>
+    private const float FieldBadgeSize = 30f;
+
+    /// <summary>层数角标自图标右下角向内收缩的距离（像素），避免贴着边。</summary>
+    private const float FieldBadgeInset = 2f;
+
+    /// <summary>层数角标的字号（比场地名称小一号，压在图标右下角）。</summary>
+    private const int FieldBadgeFontSize = 22;
+
     private static readonly Color DisabledModulate = new(1, 1, 1, 0.35f);
 
     /// <summary>
@@ -41,11 +60,17 @@ public sealed partial class FgoGlobalHud : Control
     private bool _combatSeenActivated;
 
     private TextureButton _commandSpellButton = null!;
+
+    // 场地行: 显示当前战场上的场地。按版本号做脏检查，仅在场地集合变化时重建。
+    private CenterContainer _fieldRoot = null!;
+    private HBoxContainer _fieldRow = null!;
     private bool _lastCanUse;
     private int _lastCommandSpell = -1;
+    private int _lastFieldVersion = -1;
 
     // 脏检查缓存: 仅值变化时才触碰控件，避免每帧无条件 GD.Load/赋值导致的重绘。
     private int _lastStars = -1;
+
     private HBoxContainer _starBox = null!;
     private Label _starLabel = null!;
 
@@ -118,6 +143,31 @@ public sealed partial class FgoGlobalHud : Control
         _commandSpellButton.MouseExited += OnCommandSpellMouseExited;
 
         vbox.AddChild(_commandSpellButton);
+
+        //---------------------------------------
+        // Fields
+        //---------------------------------------
+
+        // 场地是战场级属性（对所有单位生效），因此只在 HUD 上显示一次，不给每个生物各挂图标。
+        // 位置: 顶部居中（TopCenter）。外层 CenterContainer 只占顶部一条横带（TopWide + 固定高度），
+        // 由它把场地行水平居中；上下位置改 FieldRowTop，横带高度改 FieldRowHeight。
+        _fieldRoot = new CenterContainer();
+        _fieldRoot.Name = "FieldRoot";
+        _fieldRoot.MouseFilter = MouseFilterEnum.Ignore;
+        _fieldRoot.SetAnchorsPreset(LayoutPreset.TopWide);
+        _fieldRoot.OffsetLeft = 0;
+        _fieldRoot.OffsetRight = 0;
+        _fieldRoot.OffsetTop = FieldRowTop;
+        _fieldRoot.OffsetBottom = FieldRowTop + FieldRowHeight;
+        AddChild(_fieldRoot);
+
+        _fieldRow = new HBoxContainer();
+        _fieldRow.Name = "FieldRow";
+        _fieldRow.AddThemeConstantOverride("separation", 16);
+        _fieldRow.Alignment = BoxContainer.AlignmentMode.Center;
+        _fieldRow.MouseFilter = MouseFilterEnum.Ignore;
+        _fieldRow.Visible = false;
+        _fieldRoot.AddChild(_fieldRow);
 
         //---------------------------------------
         // Star
@@ -214,6 +264,8 @@ public sealed partial class FgoGlobalHud : Control
         foreach (var hud in Instances)
         {
             hud._combatSeenActivated = false;
+            // 新战斗的场地集合从空开始，版本号会归 0，必须让脏检查失效以重建场地行。
+            hud._lastFieldVersion = -1;
             hud.SetProcess(true);
         }
     }
@@ -259,6 +311,92 @@ public sealed partial class FgoGlobalHud : Control
             _commandSpellButton.Modulate = canUse ? Colors.White : DisabledModulate;
             _commandSpellButton.Disabled = !canUse;
         }
+
+        var fieldVersion = FgoField.VersionOf(state);
+        if (fieldVersion != _lastFieldVersion)
+        {
+            _lastFieldVersion = fieldVersion;
+            RebuildFieldRow(state);
+        }
+    }
+
+    /// <summary>
+    ///     按当前场地集合重建场地行的子节点: 每个场地一个「图标 + 层数」的可悬停条目。
+    ///     只在版本号变化时调用，避免逐帧增删节点。
+    /// </summary>
+    private void RebuildFieldRow(ICombatState? combat)
+    {
+        foreach (var child in _fieldRow.GetChildren())
+        {
+            if (child is Control control) NHoverTipSet.Remove(control);
+            _fieldRow.RemoveChild(child);
+            child.QueueFree();
+        }
+
+        var active = FgoField.ActiveOf(combat).OrderBy(static id => (int)id).ToList();
+        _fieldRow.Visible = active.Count > 0;
+
+        foreach (var id in active)
+        {
+            var entry = new Control();
+            entry.CustomMinimumSize = new Vector2(FieldIconSize, FieldIconSize);
+            // 用 Pass 而不是 Stop: 悬停提示照常触发，但鼠标事件继续往下传，
+            // 万一场地行压到可点区域也不会吞掉点击。
+            entry.MouseFilter = MouseFilterEnum.Pass;
+
+            if (id.Icon() is { } icon)
+            {
+                var texture = new TextureRect();
+                texture.Texture = icon;
+                texture.SetAnchorsAndOffsetsPreset(LayoutPreset.FullRect);
+                texture.StretchMode = TextureRect.StretchModeEnum.KeepAspectCentered;
+                texture.MouseFilter = MouseFilterEnum.Ignore;
+                entry.AddChild(texture);
+            }
+            else
+            {
+                // 图标缺失（资源未导入）时退化为文字，保证场地仍然可见。
+                var fallback = new Label();
+                fallback.Text = id.ToTitle();
+                fallback.SetAnchorsAndOffsetsPreset(LayoutPreset.FullRect);
+                fallback.HorizontalAlignment = HorizontalAlignment.Center;
+                fallback.VerticalAlignment = VerticalAlignment.Center;
+                fallback.MouseFilter = MouseFilterEnum.Ignore;
+                fallback.AddThemeFontSizeOverride("font_size", 28);
+                entry.AddChild(fallback);
+            }
+
+            var stacks = FgoField.StacksOf(combat, id);
+            if (stacks > 1)
+            {
+                var count = new Label();
+                count.Text = stacks.ToString();
+                count.MouseFilter = MouseFilterEnum.Ignore;
+                count.AddThemeFontSizeOverride("font_size", FieldBadgeFontSize);
+                // 数字直接压在图标上容易糊，加一圈描边保证可读。
+                count.AddThemeConstantOverride("outline_size", 4);
+                count.AddThemeColorOverride("font_outline_color", Colors.Black);
+                // 锚到右下角并向内收缩; GrowDirection.Begin 让文字超出预留框时朝左上生长，
+                // 这样无论几位数都贴着右下角，不会溢出到图标外。
+                count.SetAnchorsPreset(LayoutPreset.BottomRight);
+                count.GrowHorizontal = GrowDirection.Begin;
+                count.GrowVertical = GrowDirection.Begin;
+                count.OffsetLeft = -FieldBadgeSize;
+                count.OffsetTop = -FieldBadgeSize;
+                count.OffsetRight = -FieldBadgeInset;
+                count.OffsetBottom = -FieldBadgeInset;
+                count.HorizontalAlignment = HorizontalAlignment.Right;
+                count.VerticalAlignment = VerticalAlignment.Bottom;
+                entry.AddChild(count);
+            }
+
+            var fieldId = id;
+            entry.MouseEntered += () =>
+                NHoverTipSet.CreateAndShow(entry, fieldId.ToHoverTip(), HoverTipAlignment.Left);
+            entry.MouseExited += () => NHoverTipSet.Remove(entry);
+
+            _fieldRow.AddChild(entry);
+        }
     }
 
     public override void _ExitTree()
@@ -273,6 +411,11 @@ public sealed partial class FgoGlobalHud : Control
         _starBox.MouseEntered -= OnStarMouseEntered;
         _starBox.MouseExited -= OnStarMouseExited;
         NHoverTipSet.Remove(_starBox);
+
+        if (_fieldRow != null)
+            foreach (var child in _fieldRow.GetChildren())
+                if (child is Control control)
+                    NHoverTipSet.Remove(control);
     }
 
     private static void OnCommandSpellButtonPressed()

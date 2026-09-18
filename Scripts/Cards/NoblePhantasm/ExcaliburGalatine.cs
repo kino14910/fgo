@@ -1,3 +1,4 @@
+using Fgo.Scripts.Fields;
 using Fgo.Scripts.Powers;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -14,7 +15,7 @@ public class ExcaliburGalatine() : NobleCardModel(2, CardType.Attack, TargetType
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
         HoverTipFactory.FromPower<VigorPower>(),
-        HoverTipFactory.FromPower<SunlightPower>(),
+        FgoFieldId.Sunlight.ToHoverTip(),
         HoverTipFactory.FromPower<CriticalDamagePower>()
     ];
 
@@ -38,11 +39,11 @@ public class ExcaliburGalatine() : NobleCardModel(2, CardType.Attack, TargetType
             .TargetingAllOpponents(CombatState!)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
-        await PowerCmd.Apply<SunlightPower>(choiceContext, Owner.Creature, DynamicVars["SunlightTurns"].BaseValue,
-            Owner.Creature, this);
+        FgoField.Add(Owner.Creature.CombatState, FgoFieldId.Sunlight,
+            (int)DynamicVars["SunlightTurns"].BaseValue);
         await PowerCmd.Apply<VigorPower>(choiceContext, Owner.Creature, DynamicVars[nameof(VigorPower)].BaseValue,
             Owner.Creature, this);
-        if (Owner.Creature.HasPower<SunlightPower>())
+        if (FgoField.Has(Owner.Creature.CombatState, FgoFieldId.Sunlight))
             await PowerCmd.Apply<CriticalDamagePower>(choiceContext, Owner.Creature,
                 DynamicVars[nameof(CriticalDamagePower)].BaseValue, Owner.Creature, this);
     }

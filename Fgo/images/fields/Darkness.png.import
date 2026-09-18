@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bmlu10fhhlwca"
-path="res://.godot/imported/ImaginaryOceanBattle.png-e123cf56432344dce71d526f780ab9a5.ctex"
+uid="uid://c4tea4s5b7836"
+path="res://.godot/imported/Darkness.png-f05581a2a646894075f1a8bc90d14f0f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Fgo/images/cards/ImaginaryOceanBattle.png"
-dest_files=["res://.godot/imported/ImaginaryOceanBattle.png-e123cf56432344dce71d526f780ab9a5.ctex"]
+source_file="res://Fgo/images/fields/Darkness.png"
+dest_files=["res://.godot/imported/Darkness.png-f05581a2a646894075f1a8bc90d14f0f.ctex"]
 
 [params]
 

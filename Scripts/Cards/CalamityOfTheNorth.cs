@@ -1,7 +1,9 @@
+using Fgo.Scripts.Fields;
 using Fgo.Scripts.Powers;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models.Powers;
 using STS2RitsuLib.Cards.DynamicVars;
@@ -11,6 +13,13 @@ namespace Fgo.Scripts.Cards;
 public class CalamityOfTheNorth() : FgoCardModel(2, CardType.Skill,
     CardRarity.Common, TargetType.AllEnemies)
 {
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
+    [
+        HoverTipFactory.FromPower<PoisonPower>(),
+        HoverTipFactory.FromPower<CursePower>(),
+        FgoFieldId.Darkness.ToHoverTip()
+    ];
+
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         ModCardVars.Power<PoisonPower>(4),
@@ -31,5 +40,7 @@ public class CalamityOfTheNorth() : FgoCardModel(2, CardType.Skill,
         await PowerCmd.Apply<CursePower>(choiceContext, CombatState!.HittableEnemies,
             DynamicVars[nameof(CursePower)].BaseValue,
             Owner.Creature, this);
+        // FgoField.Add 是同步方法（返回 bool，不返回 Task），所以不能 await。
+        FgoField.Add(Owner.Creature.CombatState, FgoFieldId.Darkness, 3);
     }
 }

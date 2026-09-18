@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://pnxav1w6vvqd"
-path="res://.godot/imported/WatersidePower.png-dc7d32373f641d42b12c709becae72a3.ctex"
+uid="uid://bcmujjx7f1k53"
+path="res://.godot/imported/Burning.png-42f5d934ab621d4f5053047815087726.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Fgo/images/powers/big/WatersidePower.png"
-dest_files=["res://.godot/imported/WatersidePower.png-dc7d32373f641d42b12c709becae72a3.ctex"]
+source_file="res://Fgo/images/fields/Burning.png"
+dest_files=["res://.godot/imported/Burning.png-42f5d934ab621d4f5053047815087726.ctex"]
 
 [params]
 

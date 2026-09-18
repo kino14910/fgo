@@ -1,4 +1,5 @@
 using Fgo.Scripts.Commands;
+using Fgo.Scripts.Fields;
 using Fgo.Scripts.Powers;
 using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.Commands;
@@ -38,7 +39,7 @@ public class WaterfrontSaintess() : FgoCardModel(1, CardType.Skill,
         await FgoResCmd.ModifyNp(DynamicVars["Np"].BaseValue, Owner);
         await PowerCmd.Apply<NpDamagePower>(choiceContext, Owner.Creature,
             DynamicVars[nameof(NpDamagePower)].BaseValue, Owner.Creature, this);
-        if (Owner.Creature.HasPower<WatersidePower>())
+        if (FgoField.Has(Owner.Creature.CombatState, FgoFieldId.Waterside))
             await PowerCmd.Apply<CriticalDamagePower>(choiceContext, Owner.Creature,
                 DynamicVars[nameof(CriticalDamagePower)].BaseValue, Owner.Creature, this);
     }

@@ -17,7 +17,9 @@ public class TrueClash() : FgoCardModel(1, CardType.Attack,
         ModCardVars.Block(6)
     ];
 
-    protected override bool ShouldGlowGoldInternal =>
+    protected override bool ShouldGlowGoldInternal => IsPlayable;
+
+    protected override bool IsPlayable =>
         CombatState != null &&
         CombatState.HittableEnemies.Any(e =>
             e.Monster?.IntendsToAttack ?? false);

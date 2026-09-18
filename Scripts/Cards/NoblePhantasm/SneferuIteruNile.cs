@@ -1,4 +1,4 @@
-using Fgo.Scripts.Powers;
+using Fgo.Scripts.Fields;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -15,7 +15,7 @@ public class SneferuIteruNile() : NobleCardModel(2, CardType.Attack, TargetType.
     [
         HoverTipFactory.FromPower<VulnerablePower>(),
         HoverTipFactory.FromPower<DoomPower>(),
-        HoverTipFactory.FromPower<WatersidePower>()
+        FgoFieldId.Waterside.ToHoverTip()
     ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
@@ -45,6 +45,6 @@ public class SneferuIteruNile() : NobleCardModel(2, CardType.Attack, TargetType.
             this);
 
 
-        await PowerCmd.Apply<WatersidePower>(choiceContext, Owner.Creature, 1m, Owner.Creature, this);
+        FgoField.Add(Owner.Creature.CombatState, FgoFieldId.Waterside, 3);
     }
 }
