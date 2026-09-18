@@ -331,8 +331,8 @@ public sealed partial class FgoNpBar : Node
             return;
 
         var tip = LocalContext.IsMe(_player) && _player!.Creature.HasPower<SealNpPower>()
-            ? FgoHoverTipHelper.CreateNpSealedHoverTip()
-            : FgoHoverTipHelper.CreateNpButtonHoverTip();
+            ? FgoHoverTipFactory.FromNpSealed()
+            : FgoHoverTipFactory.FromNpButton();
 
         NHoverTipSet.CreateAndShow(_button, tip, HoverTipAlignment.Right);
     }
@@ -369,7 +369,7 @@ public sealed partial class FgoNpBar : Node
             _hoverTipShown = true;
             NHoverTipSet.CreateAndShow(
                 _npBarRoot,
-                FgoHoverTipHelper.CreateNpBarHoverTip(),
+                FgoHoverTipFactory.FromNpBar(),
                 HoverTipAlignment.Right
             );
 

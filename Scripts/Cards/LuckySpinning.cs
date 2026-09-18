@@ -15,7 +15,7 @@ public class LuckySpinning() : FgoCardModel(0, CardType.Skill,
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
         HoverTipFactory.FromPower<LuckySpinningPower>(),
-        FgoHoverTipHelper.CreateStarHoverTip()
+        FgoHoverTipFactory.FromStar()
     ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>

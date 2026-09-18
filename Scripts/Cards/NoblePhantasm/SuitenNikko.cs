@@ -14,7 +14,7 @@ public class SuitenNikko() : NobleCardModel(2, CardType.Skill, TargetType.Self)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
-        FgoHoverTipHelper.CreateNpHoverTip()
+        FgoHoverTipFactory.FromNp()
     ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>

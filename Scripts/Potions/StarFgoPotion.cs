@@ -16,7 +16,7 @@ public class StarFgoPotion : FgoPotionModel
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
-        FgoHoverTipHelper.CreateStarHoverTip()
+        FgoHoverTipFactory.FromStar()
     ];
 
     protected override async Task OnUse(PlayerChoiceContext choiceContext, Creature? target)

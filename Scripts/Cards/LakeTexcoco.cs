@@ -17,7 +17,7 @@ public class LakeTexcoco() : FgoCardModel(1, CardType.Skill,
     [
         HoverTipFactory.FromPower<LakeTexcocoPower>(),
         HoverTipFactory.FromPower<WatersidePower>(),
-        FgoHoverTipHelper.CreateNpHoverTip()
+        FgoHoverTipFactory.FromNp()
     ];
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];

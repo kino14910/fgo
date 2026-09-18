@@ -17,7 +17,7 @@ public class CrownedWithLife() : FgoCardModel(-1, CardType.Skill,
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
         HoverTipFactory.FromPower<CursePower>(),
-        FgoHoverTipHelper.CreateStarHoverTip()
+        FgoHoverTipFactory.FromStar()
     ];
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Ethereal, CardKeyword.Unplayable];

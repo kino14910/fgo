@@ -19,7 +19,7 @@ public class ExtremelySpicyMapoTofu : FgoPotionModel
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
         HoverTipFactory.FromPower<NpDamagePower>(),
-        FgoHoverTipHelper.CreateNpHoverTip()
+        FgoHoverTipFactory.FromNp()
     ];
 
     protected override async Task OnUse(PlayerChoiceContext choiceContext, Creature? target)

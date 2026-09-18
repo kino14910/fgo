@@ -15,7 +15,7 @@ public class DepartureOfTheSun() : FgoCardModel(0, CardType.Skill,
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
-        FgoHoverTipHelper.CreateStarHoverTip()
+        FgoHoverTipFactory.FromStar()
     ];
 
     protected override HashSet<CardTag> CanonicalTags => [FgoTags.Foreigner];

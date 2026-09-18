@@ -16,7 +16,7 @@ public class KnightOfTheLake() : FgoCardModel(1, CardType.Skill,
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
         HoverTipFactory.FromPower<CriticalDamagePower>(),
-        FgoHoverTipHelper.CreateStarHoverTip()
+        FgoHoverTipFactory.FromStar()
     ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>

@@ -17,7 +17,7 @@ public class SpringOfFire() : FgoCardModel(3, CardType.Power,
         HoverTipFactory.FromPower<SpringOfFireGutsPower>(),
         HoverTipFactory.FromPower<SpringOfFirePower>(),
         HoverTipFactory.FromPower<NpDamagePower>(),
-        FgoHoverTipHelper.CreateNpHoverTip()
+        FgoHoverTipFactory.FromNp()
     ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>

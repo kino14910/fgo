@@ -14,7 +14,7 @@ public class HollowHeartAlbion() : NobleCardModel(2, CardType.Attack, TargetType
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
-        FgoHoverTipHelper.CreateStarHoverTip()
+        FgoHoverTipFactory.FromStar()
     ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>

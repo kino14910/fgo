@@ -15,7 +15,7 @@ public class OneWhoWishesforSalvation() : FgoCardModel(1, CardType.Power,
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
         HoverTipFactory.FromPower<NpPerTurnPower>(),
-        FgoHoverTipHelper.CreateNpHoverTip()
+        FgoHoverTipFactory.FromNp()
     ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>

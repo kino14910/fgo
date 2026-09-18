@@ -20,7 +20,7 @@ public class WitchOfSalem() : FgoCardModel(3, CardType.Skill,
         HoverTipFactory.FromPower<WeakPower>(),
         HoverTipFactory.FromPower<TerrorPower>(),
         HoverTipFactory.FromPower<VsTerrorDamagePower>(),
-        FgoHoverTipHelper.CreateNpHoverTip()
+        FgoHoverTipFactory.FromNp()
     ];
 
     protected override HashSet<CardTag> CanonicalTags => [FgoTags.Foreigner];

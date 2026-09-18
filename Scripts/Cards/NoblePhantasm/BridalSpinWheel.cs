@@ -15,7 +15,7 @@ public class BridalSpinWheel() : NobleCardModel(1, CardType.Skill, TargetType.Se
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
         HoverTipFactory.FromPower<PlatingPower>(),
-        FgoHoverTipHelper.CreateStarHoverTip()
+        FgoHoverTipFactory.FromStar()
     ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>

@@ -17,7 +17,7 @@ public class GodsExecution() : FgoCardModel(3, CardType.Attack,
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
         HoverTipFactory.FromPower<StrengthPower>(),
-        FgoHoverTipHelper.CreateNpHoverTip()
+        FgoHoverTipFactory.FromNp()
     ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>

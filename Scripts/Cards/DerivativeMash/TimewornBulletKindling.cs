@@ -29,8 +29,8 @@ public class TimewornBulletKindling() : FgoBaseCardModel(1, CardType.Attack,
         HoverTipFactory.Static(StaticHoverTip.Transform),
         HoverTipFactory.FromCard<ObscurantWallOfChalk>(),
         HoverTipFactory.FromPower<NpDamagePower>(),
-        FgoHoverTipHelper.CreateNpHoverTip(),
-        FgoHoverTipHelper.CreateStarHoverTip()
+        FgoHoverTipFactory.FromNp(),
+        FgoHoverTipFactory.FromStar()
     ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>

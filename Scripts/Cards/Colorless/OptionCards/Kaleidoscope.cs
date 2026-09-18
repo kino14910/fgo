@@ -16,7 +16,7 @@ public class Kaleidoscope() : FgoBaseCardModel(-1, CardType.Skill,
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
-        FgoHoverTipHelper.CreateNpHoverTip()
+        FgoHoverTipFactory.FromNp()
     ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>

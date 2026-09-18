@@ -17,7 +17,7 @@ public class WaterfrontSaintess() : FgoCardModel(1, CardType.Skill,
     [
         HoverTipFactory.FromPower<NpDamagePower>(),
         HoverTipFactory.FromPower<CriticalDamagePower>(),
-        FgoHoverTipHelper.CreateNpHoverTip()
+        FgoHoverTipFactory.FromNp()
     ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>

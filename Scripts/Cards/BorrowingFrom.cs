@@ -12,7 +12,7 @@ public class BorrowingFrom() : FgoCardModel(2, CardType.Skill,
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
-        FgoHoverTipHelper.CreateNpHoverTip()
+        FgoHoverTipFactory.FromNp()
     ];
 
     protected override void OnUpgrade()

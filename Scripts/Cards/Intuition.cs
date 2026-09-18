@@ -15,7 +15,7 @@ public class Intuition() : FgoCardModel(0, CardType.Skill, CardRarity.Basic, Tar
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
-        FgoHoverTipHelper.CreateStarHoverTip()
+        FgoHoverTipFactory.FromStar()
     ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>

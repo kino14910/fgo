@@ -18,7 +18,7 @@ public class SwifterThanSound() : FgoCardModel(1, CardType.Attack,
     [
         HoverTipFactory.FromCard<InfiniteSuffering>(),
         HoverTipFactory.FromCard<TheAbsoluteSword>(),
-        FgoHoverTipHelper.CreateStarHoverTip()
+        FgoHoverTipFactory.FromStar()
     ];
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];

@@ -16,8 +16,8 @@ public class MorningLark() : FgoCardModel(0, CardType.Skill,
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
         HoverTipFactory.FromPower<ReduceNpTurnEndPower>(),
-        FgoHoverTipHelper.CreateNpHoverTip(),
-        FgoHoverTipHelper.CreateStarHoverTip()
+        FgoHoverTipFactory.FromNp(),
+        FgoHoverTipFactory.FromStar()
     ];
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];

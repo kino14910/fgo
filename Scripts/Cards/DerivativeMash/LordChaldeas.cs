@@ -29,9 +29,9 @@ public class LordChaldeas() : NobleCardModel(1, CardType.Power, TargetType.Self)
         HoverTipFactory.FromCard<RayProofKyrielight>(),
         HoverTipFactory.FromCard<ObscurantWallOfChalkA>(),
         HoverTipFactory.FromCard<TimewornBulletKindling>(),
-        FgoHoverTipHelper.CreateKnightOfChaldeaHoverTip(),
-        FgoHoverTipHelper.CreateNpHoverTip(),
-        FgoHoverTipHelper.CreateStarHoverTip()
+        FgoHoverTipFactory.FromKnightOfChaldea(),
+        FgoHoverTipFactory.FromNp(),
+        FgoHoverTipFactory.FromStar()
     ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>

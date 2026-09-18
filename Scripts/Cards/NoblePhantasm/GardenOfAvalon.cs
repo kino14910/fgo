@@ -16,8 +16,8 @@ public class GardenOfAvalon() : NobleCardModel(1, CardType.Power, TargetType.Sel
     [
         HoverTipFactory.FromPower<NpPerTurnPower>(),
         HoverTipFactory.FromPower<StarsPerTurnPower>(),
-        FgoHoverTipHelper.CreateNpHoverTip(),
-        FgoHoverTipHelper.CreateStarHoverTip()
+        FgoHoverTipFactory.FromNp(),
+        FgoHoverTipFactory.FromStar()
     ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>

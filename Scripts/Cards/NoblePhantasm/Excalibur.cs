@@ -13,7 +13,7 @@ public class Excalibur() : NobleCardModel(2, CardType.Attack, TargetType.AllEnem
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
-        FgoHoverTipHelper.CreateNpHoverTip()
+        FgoHoverTipFactory.FromNp()
     ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>

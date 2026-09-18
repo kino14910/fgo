@@ -23,7 +23,7 @@ public class VeneratedWallOfSnowflakes() : FgoBaseCardModel(1, CardType.Skill,
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
         HoverTipFactory.FromPower<ReducePercentDamagePower>(),
-        FgoHoverTipHelper.CreateNpHoverTip()
+        FgoHoverTipFactory.FromNp()
     ];
 
     public override bool GainsBlock => true;

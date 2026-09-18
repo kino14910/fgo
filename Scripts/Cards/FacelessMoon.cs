@@ -16,7 +16,7 @@ public class FacelessMoon() : FgoCardModel(1, CardType.Skill,
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
         HoverTipFactory.FromKeyword(CardKeyword.Retain),
-        FgoHoverTipHelper.CreateStarHoverTip()
+        FgoHoverTipFactory.FromStar()
     ];
 
     protected override HashSet<CardTag> CanonicalTags => [FgoTags.Foreigner];

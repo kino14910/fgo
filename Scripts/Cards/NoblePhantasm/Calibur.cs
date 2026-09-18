@@ -12,7 +12,7 @@ public class Calibur() : NobleCardModel(1, CardType.Attack, TargetType.AllEnemie
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
-        FgoHoverTipHelper.CreateNpHoverTip()
+        FgoHoverTipFactory.FromNp()
     ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>

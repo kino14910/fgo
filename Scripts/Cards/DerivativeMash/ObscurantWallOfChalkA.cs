@@ -24,7 +24,7 @@ public class ObscurantWallOfChalkA() : FgoCooldownCardModel(1, CardType.Skill, C
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
         HoverTipFactory.FromPower<AntiPurgeDefensePower>(),
-        FgoHoverTipHelper.CreateNpHoverTip()
+        FgoHoverTipFactory.FromNp()
     ];
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Eternal];

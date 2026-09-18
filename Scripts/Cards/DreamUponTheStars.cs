@@ -20,7 +20,7 @@ public class DreamUponTheStars() : FgoCardModel(1, CardType.Skill,
     [
         HoverTipFactory.FromPower<NpDamagePower>(),
         HoverTipFactory.FromPower<OverchargePower>(),
-        FgoHoverTipHelper.CreateNpHoverTip()
+        FgoHoverTipFactory.FromNp()
     ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>

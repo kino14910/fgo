@@ -14,7 +14,7 @@ public class ExtremityOfVillains() : FgoCardModel(1, CardType.Attack,
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
-        FgoHoverTipHelper.CreateStarHoverTip()
+        FgoHoverTipFactory.FromStar()
     ];
 
     protected override HashSet<CardTag> CanonicalTags => [FgoTags.Foreigner];

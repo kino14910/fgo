@@ -25,7 +25,7 @@ public class VeneratedShieldOfSnowflakes() : FgoBaseCardModel(1, CardType.Skill,
         HoverTipFactory.Static(StaticHoverTip.Block),
         HoverTipFactory.FromPower<StrengthPower>(),
         HoverTipFactory.FromPower<CriticalDamagePower>(),
-        FgoHoverTipHelper.CreateNpHoverTip()
+        FgoHoverTipFactory.FromNp()
     ];
 
     public override bool GainsBlock => true;

@@ -15,8 +15,8 @@ public class RoadOfFallingFlowers() : FgoCardModel(0, CardType.Skill, CardRarity
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
         HoverTipFactory.FromPower<CriticalDamagePower>(),
-        FgoHoverTipHelper.CreateStarHoverTip(),
-        FgoHoverTipHelper.CreateNpHoverTip()
+        FgoHoverTipFactory.FromStar(),
+        FgoHoverTipFactory.FromNp()
     ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
