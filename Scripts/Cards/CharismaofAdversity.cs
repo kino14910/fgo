@@ -6,7 +6,8 @@ using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
 
-public class CharismaOfAdversity() : FgoCardModel(1, CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy)
+public class CharismaOfAdversity() : FgoCardModel(1, CardType.Attack,
+    CardRarity.Rare, TargetType.AnyEnemy)
 {
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [

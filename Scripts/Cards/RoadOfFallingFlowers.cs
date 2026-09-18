@@ -10,7 +10,8 @@ using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
 
-public class RoadOfFallingFlowers() : FgoCardModel(0, CardType.Skill, CardRarity.Ancient, TargetType.Self)
+public class RoadOfFallingFlowers() : FgoCardModel(0, CardType.Skill,
+    CardRarity.Ancient, TargetType.Self)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [

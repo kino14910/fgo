@@ -7,7 +7,8 @@ using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
 
-public class AlongSide() : FgoCardModel(2, CardType.Skill, CardRarity.Rare, TargetType.Self)
+public class AlongSide() : FgoCardModel(2, CardType.Skill,
+    CardRarity.Rare, TargetType.Self)
 {
     public override bool GainsBlock => true;
 
