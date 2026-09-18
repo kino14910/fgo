@@ -44,15 +44,13 @@ public static class FgoNobleDeckSync
             var dto = JsonSerializer.Deserialize<SnapshotDto>(
                 Encoding.UTF8.GetString(bytes));
             return new NobleDeckSnapshotMessage(dto!.NetId, dto.Epoch, dto.Version, dto.CardIds);
-        },
-        RitsuLibSidecarDeliverySemantics.StableSync);
+        });
 
     private static readonly RitsuLibSidecarMessageDescriptor<NobleDeckResyncRequest> ResyncDescriptor = new(
         Entry.ModId,
         "fgo_nobledeck_resync_v1",
         static _ => Array.Empty<byte>(),
-        static _ => new NobleDeckResyncRequest(),
-        RitsuLibSidecarDeliverySemantics.StableSync);
+        static _ => new NobleDeckResyncRequest());
 
     // 本机作为拥有者时的牌堆版本：每次本地改动自增，作为广播快照的版本号。
     private static readonly Dictionary<ulong, int> LocalVersion = new();
@@ -103,10 +101,51 @@ public static class FgoNobleDeckSync
         LocalEpoch = DateTime.UtcNow.Ticks;
 
         var netService = RunManager.Instance?.NetService;
+        if (netService == null) return;
+
+        // 【关键】每个端都把自己拥有的 FGO 玩家牌堆作为权威内容主动推一次，即使本局内容从未变过（版本仍为 0）。
+        // NobleDeck 只在本机播种 / 改动，而「只在改动时广播」有一个致命缺口：客户端牌堆的【基线内容】永远不会发给
+        // 主机（播种不是一次 NotifyAdd）。于是主机的本地副本一旦与拥有者不一致（例如该端此刻解析不出角色、
+        // 播种时机错过、或副本被空快照清空），就再没有任何机制能纠正它。
+        // 后果：np_button 托管动作在所有端各按【本地】NobleDeck 取候选 —— 主机牌堆为空时会直接 return false
+        // 跳过整段选择，而拥有者照常选牌并把宝具加进手牌 → 手牌数量分歧（曾表现为一端可选牌、另一端手牌少一张）。
+        BroadcastOwnDecks();
+
         if (netService is NetHostGameService)
-            BroadcastAllDecks();
+            BroadcastAllDecks(); // 顺带把已收到的其它玩家牌堆推给所有客户端
         else if (netService is NetClientGameService)
-            RequestFullResync();
+            RequestFullResync(); // 再向主机请求一次全量，覆盖中途加入前已存在的牌堆
+    }
+
+    /// <summary>
+    ///     把【本机拥有的】FGO 玩家 NobleDeck 作为权威内容各推一次（即使本局没改动过、版本仍为 0）。
+    ///     与 <see cref="BroadcastOwnDeck" /> 的区别：不递增版本号 —— 内容并没有变化，这里只是补发基线，
+    ///     让所有端都能拿到拥有者的真实牌堆内容，而不是各自本地播种的猜测。
+    /// </summary>
+    private static void BroadcastOwnDecks()
+    {
+        try
+        {
+            var netService = RunManager.Instance?.NetService;
+            var runState = RunManager.Instance?.DebugOnlyGetState();
+            if (netService == null || runState == null) return;
+
+            foreach (var player in runState.Players.Where(p =>
+                         p.Character is FgoCharacter && p.NetId == netService.NetId))
+            {
+                // 空牌堆不补发基线：空内容不携带任何信息，却会把对端已正确的副本 Clear 成空
+                // （例如握手事件早于读档播种触发）。NobleDeck 在正常玩法中不会被清空，
+                // 真正因改动而清空的情况仍由 NotifyAdd → BroadcastOwnDeck 照常广播。
+                var pile = CardPile.Get(FgoEnums.NobleDeck, player);
+                if (pile == null || pile.IsEmpty) continue;
+
+                SendOwnDeckSnapshot(player, LocalVersion.GetValueOrDefault(player.NetId));
+            }
+        }
+        catch (Exception ex)
+        {
+            Entry.Logger.Warn($"[Fgo] NobleDeck own-baseline broadcast failed: {ex}");
+        }
     }
 
     /// <summary>
@@ -197,17 +236,25 @@ public static class FgoNobleDeckSync
     /// </summary>
     private static void BroadcastOwnDeck(Player player)
     {
-        var netService = RunManager.Instance?.NetService;
-        var runState = RunManager.Instance?.DebugOnlyGetState();
-        if (netService == null || runState == null) return;
-
-        var pile = CardPile.Get(FgoEnums.NobleDeck, player);
-        if (pile == null) return;
-
         // 注意：不能用 `++LocalVersion[key]` —— Dictionary 索引器读缺失 key 会抛 KeyNotFoundException，
         // 该异常发生在调用方（SaintQuartz 右键）扣费之前，会导致整段右键逻辑中断（表现为“点了不扣圣晶石”）。
         var version = LocalVersion.GetValueOrDefault(player.NetId) + 1;
         LocalVersion[player.NetId] = version;
+        SendOwnDeckSnapshot(player, version);
+    }
+
+    /// <summary>
+    ///     把某个玩家 NobleDeck 的当前内容作为整堆快照发出去（客户端发往主机，主机 / 单机直接广播）。
+    ///     版本号由调用方决定：本地改动用递增后的版本，握手补发基线用当前版本（可能仍为 0）。
+    /// </summary>
+    private static void SendOwnDeckSnapshot(Player player, int version)
+    {
+        var netService = RunManager.Instance?.NetService;
+        if (netService == null) return;
+
+        var pile = CardPile.Get(FgoEnums.NobleDeck, player);
+        if (pile == null) return;
+
         var msg = new NobleDeckSnapshotMessage(
             player.NetId, LocalEpoch, version, pile.Cards.Select(c => c.Id.ToString()).ToList());
 
@@ -224,7 +271,7 @@ public static class FgoNobleDeckSync
         }
 
         Entry.Logger.Info(
-            $"[Fgo] NobleDeck snapshot sent: netId={player.NetId}, epoch={LocalEpoch}, version={version}");
+            $"[Fgo] NobleDeck snapshot sent: netId={player.NetId}, epoch={LocalEpoch}, version={version}, cards={msg.CardIds.Count}");
     }
 
     private static void OnResyncReceived(RitsuLibSidecarTypedDispatchContext<NobleDeckResyncRequest> context)

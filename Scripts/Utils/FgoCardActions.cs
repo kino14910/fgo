@@ -159,6 +159,8 @@ public static class FgoCardActions
         noblePile.AddInternal(player.RunState.CreateCard(ModelDb.Card<Camelot>(), player));
         noblePile.AddInternal(player.RunState.CreateCard(ModelDb.Card<BeautifulJourney>(), player));
         noblePile.AddInternal(player.RunState.CreateCard(ModelDb.Card<Calibur>(), player));
+        Entry.Logger.Info(
+            $"[Fgo] NobleDeck seeded for netId={player.NetId} with {noblePile.Cards.Count} card(s).");
     }
 
     /// <summary>

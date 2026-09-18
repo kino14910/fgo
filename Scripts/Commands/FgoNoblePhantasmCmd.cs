@@ -54,10 +54,16 @@ public static class FgoNoblePhantasmCmd
     {
         var playerState = FgoBattleHooks.Get(player);
         if (!playerState.CanUseNp)
+        {
+            Entry.Logger.Warn($"[Fgo] np_button skipped for netId={player.NetId}: NP={playerState.Np} < 100.");
             return false;
+        }
 
         if (player.Creature.HasPower<SealNpPower>())
+        {
+            Entry.Logger.Warn($"[Fgo] np_button skipped for netId={player.NetId}: SealNpPower present.");
             return false;
+        }
 
         // OC 层数 = 宝具强化次数（0 ~ OverchargePower.MaxOvercharge，上限由 FgoBattleHooks 的
         // TryModifyPowerAmountReceived 保证，故此处读到的 Amount 必定在范围内）。
@@ -65,7 +71,13 @@ public static class FgoNoblePhantasmCmd
 
         // 候选来自 NobleDeck pile（由 SaintQuartz 遗物管理初始卡 + 右键加入的卡）。
         var noblePile = CardPile.Get(FgoEnums.NobleDeck, player);
-        if (noblePile == null || noblePile.IsEmpty) return false;
+        if (noblePile == null || noblePile.IsEmpty)
+        {
+            // 到这里说明该端的 NobleDeck 与拥有者不同步：本端会跳过整段选牌，而拥有者照常选牌加卡 → 手牌分歧。
+            Entry.Logger.Warn(
+                $"[Fgo] np_button skipped for netId={player.NetId}: NobleDeck {(noblePile == null ? "missing" : "empty")} on this peer!");
+            return false;
+        }
 
         // pile 里的卡是注册到战斗的 mutable 实例；其顺序即选牌界面的候选顺序。
         var cards = noblePile.Cards.OfType<NobleCardModel>().ToList();
@@ -77,7 +89,16 @@ public static class FgoNoblePhantasmCmd
             && cards.All(c => c.Id != nobleCard.Id))
             cards.Add(nobleCard);
 
-        if (cards.Count == 0) return false;
+        if (cards.Count == 0)
+        {
+            Entry.Logger.Warn(
+                $"[Fgo] np_button skipped for netId={player.NetId}: NobleDeck has {noblePile.Cards.Count} card(s) but no noble card.");
+            return false;
+        }
+
+        // 选牌是按 index 同步的：候选的数量与顺序在所有端必须完全一致，否则各端会解析出不同的卡。
+        Entry.Logger.Info(
+            $"[Fgo] np_button candidates for netId={player.NetId}: [{string.Join(", ", cards.Select(c => c.Id.Entry))}]");
 
         // 选宝具页按当前 OC 预览强化后的数值：候选换成「已按 OC 逐级强化」的展示副本。
         // 副本只用于渲染与选择（从 canonical 拷贝、不注册进战斗、不属于任何牌堆），

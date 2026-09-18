@@ -190,13 +190,12 @@ public sealed class FgoPlayerState
 
         if (cardPlay.Card is not { } card)
             return;
+        if (card is NobleCardModel)
+            return;
 
-        if (card is FgoCardModel)
-        {
-            var multiplier = card.Owner.Creature.HasPower<NpRatePower>() ? 2 : 1;
-            await ModifyNp(card.EnergyCost.GetResolved() * FgoConfigSync.NetworkBaseNpPerCost * multiplier,
-                card.Owner);
-        }
+        var multiplier = card.Owner.Creature.HasPower<NpRatePower>() ? 2 : 1;
+        await ModifyNp(card.EnergyCost.GetResolved() * FgoConfigSync.NetworkBaseNpPerCost * multiplier,
+            card.Owner);
     }
 
     public async Task OnBeforeAttack(AttackCommand command)
@@ -231,6 +230,11 @@ public sealed class FgoPlayerState
         if (dealer?.Player == null || !props.IsPoweredAttack())
             return 1m;
 
+        return CritMultiplier(cardSource, cardPlay);
+    }
+
+    private decimal CritMultiplier(CardModel? cardSource, CardPlay? cardPlay)
+    {
         if (cardPlay == null)
         {
             if (cardSource is CharismaOfTheJade) return CanSpecialCrit ? 3m : 1m;
