@@ -4,7 +4,6 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
-using MegaCrit.Sts2.Core.Models.Powers;
 using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
@@ -14,7 +13,6 @@ public class PeerlessStrike() : FgoCardModel(0, CardType.Attack,
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
-        HoverTipFactory.FromPower<StrengthPower>(DynamicVars.Strength.IntValue),
         HoverTipFactory.FromPower<CriticalDamagePower>(DynamicVars[nameof(CriticalDamagePower)].IntValue)
     ];
 
@@ -22,8 +20,7 @@ public class PeerlessStrike() : FgoCardModel(0, CardType.Attack,
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        ModCardVars.Damage(24),
-        ModCardVars.Power<StrengthPower>(5),
+        ModCardVars.Damage(48),
         ModCardVars.Power<CriticalDamagePower>(100)
     ];
 
@@ -34,15 +31,13 @@ public class PeerlessStrike() : FgoCardModel(0, CardType.Attack,
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(8);
+        DynamicVars.Damage.UpgradeValueBy(12);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         ArgumentNullException.ThrowIfNull(cardPlay.Target, nameof(cardPlay.Target));
 
-        await PowerCmd.Apply<StrengthPower>(choiceContext, Owner.Creature, DynamicVars.Strength.BaseValue,
-            Owner.Creature, this);
         await PowerCmd.Apply<CriticalDamagePower>(choiceContext, Owner.Creature,
             DynamicVars[nameof(CriticalDamagePower)].BaseValue,
             Owner.Creature, this);

@@ -7,7 +7,7 @@ using STS2RitsuLib.CardTags;
 
 namespace Fgo.Scripts.Cards;
 
-public class EvilGodOfTheFlowers() : FgoCardModel(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+public class EvilGodOfTheFlowers() : FgoCardModel(1, CardType.Skill, CardRarity.Rare, TargetType.Self)
 {
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
     protected override HashSet<CardTag> CanonicalTags => [FgoTags.Foreigner];

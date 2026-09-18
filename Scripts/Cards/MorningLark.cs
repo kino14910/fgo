@@ -10,8 +10,8 @@ using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
 
-public class MorningLark() : FgoCardModel(0, CardType.Skill,
-    CardRarity.Rare, TargetType.Self)
+public class MorningLark() : FgoCardModel(1, CardType.Skill,
+    CardRarity.Uncommon, TargetType.Self)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [

@@ -25,7 +25,7 @@ public class WorldsEndFlowerGarden() : FgoCardModel(1, CardType.Power,
 
     protected override void OnUpgrade()
     {
-        DynamicVars[nameof(WorldsEndFlowerGardenPower)].UpgradeValueBy(5);
+        AddKeyword(CardKeyword.Eternal);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

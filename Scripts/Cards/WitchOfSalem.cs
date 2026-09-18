@@ -17,7 +17,6 @@ public class WitchOfSalem() : FgoCardModel(3, CardType.Skill,
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
         HoverTipFactory.FromPower<VulnerablePower>(),
-        HoverTipFactory.FromPower<WeakPower>(),
         HoverTipFactory.FromPower<TerrorPower>(),
         HoverTipFactory.FromPower<VsTerrorDamagePower>(),
         FgoHoverTipFactory.FromNp()
@@ -28,7 +27,6 @@ public class WitchOfSalem() : FgoCardModel(3, CardType.Skill,
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         ModCardVars.Power<VulnerablePower>(3),
-        ModCardVars.Power<WeakPower>(3),
         ModCardVars.Power<TerrorPower>(3),
         ModCardVars.Int("TerrorChance", 30),
         ModCardVars.Power<VsTerrorDamagePower>(50),
@@ -45,9 +43,6 @@ public class WitchOfSalem() : FgoCardModel(3, CardType.Skill,
     {
         await PowerCmd.Apply<VulnerablePower>(choiceContext, CombatState!.HittableEnemies,
             DynamicVars[nameof(VulnerablePower)].BaseValue, Owner.Creature, this);
-        await PowerCmd.Apply<WeakPower>(choiceContext, CombatState.HittableEnemies,
-            DynamicVars[nameof(WeakPower)].BaseValue,
-            Owner.Creature, this);
         var powers = await PowerCmd.Apply<TerrorPower>(choiceContext, CombatState.HittableEnemies,
             DynamicVars[nameof(TerrorPower)].IntValue,
             Owner.Creature, this);

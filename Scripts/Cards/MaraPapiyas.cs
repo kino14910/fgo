@@ -7,7 +7,7 @@ using STS2RitsuLib.Cards.DynamicVars;
 namespace Fgo.Scripts.Cards;
 
 public class MaraPapiyas() : FgoCardModel(0, CardType.Skill,
-    CardRarity.Uncommon, TargetType.Self)
+    CardRarity.Rare, TargetType.Self)
 {
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
@@ -16,7 +16,7 @@ public class MaraPapiyas() : FgoCardModel(0, CardType.Skill,
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Heal.UpgradeValueBy(6);
+        DynamicVars.Heal.UpgradeValueBy(4);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
