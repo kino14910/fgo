@@ -15,7 +15,8 @@ public class Insanity() : FgoCardModel(1, CardType.Power,
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
         HoverTipFactory.FromPower<InsanityPower>(),
-        FgoHoverTipFactory.FromNp()
+        FgoHoverTipFactory.FromNp(),
+        FgoHoverTipFactory.FromForeigner()
     ];
 
     protected override HashSet<CardTag> CanonicalTags => [FgoTags.Foreigner];

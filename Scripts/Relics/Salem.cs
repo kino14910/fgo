@@ -5,6 +5,7 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Relics;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.Models.RelicPools;
 using STS2RitsuLib.Interop.AutoRegistration;
@@ -15,6 +16,11 @@ namespace Fgo.Scripts.Relics;
 public class Salem : FgoRelic
 {
     public override RelicRarity Rarity => RelicRarity.Uncommon;
+
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
+    [
+        FgoHoverTipFactory.FromForeigner()
+    ];
 
     public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
     {

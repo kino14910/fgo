@@ -23,6 +23,7 @@ public class Desterrennacht() : NobleCardModel(3, CardType.Power, TargetType.Sel
         HoverTipFactory.FromPower<TerrorPower>(),
         HoverTipFactory.FromPower<StarsPerTurnPower>(),
         FgoHoverTipFactory.FromNp()
+        FgoHoverTipFactory.FromForeigner()
     ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>

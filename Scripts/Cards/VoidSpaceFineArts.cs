@@ -16,7 +16,8 @@ public class VoidSpaceFineArts() : FgoCardModel(1, CardType.Skill,
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
         HoverTipFactory.FromPower<GutsPower>(),
-        HoverTipFactory.FromPower<CursePower>()
+        HoverTipFactory.FromPower<CursePower>(),
+        FgoHoverTipFactory.FromForeigner()
     ];
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
