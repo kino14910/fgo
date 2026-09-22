@@ -148,7 +148,9 @@ public class Entry
     private static void OnRunStarted(RunStartedEvent evt)
     {
         FgoConfigSync.SyncAtRunStart(RunManager.Instance);
-        FgoSkinSync.SendSkinSync();
+        // 每个端在此把自己的皮肤作为权威值再推一次：握手事件常早于 NetService 就绪（会早退），
+        // 开局是"必然已有 NetService"的确定时点，可补上那次漏发。
+        FgoSkinSync.OnSessionBound();
         LoadCommandSpellForFgoPlayers(evt.RunState);
         InitializeNobleDecks(evt.RunState);
 
@@ -158,10 +160,16 @@ public class Entry
 
     private static void OnRunLoaded(RunLoadedEvent evt)
     {
+        // 读档同样要同步配置："重启游戏 → 继续存档" 不会再触发 RunStartedEvent，
+        // 若此处不同步，NetworkBaseNpPerCost 会停在 CLR 默认值（0），导致打出卡牌按费用获取宝具值失效。
+        FgoConfigSync.SyncAtRunStart(RunManager.Instance);
         LoadCommandSpellForFgoPlayers(evt.RunState);
         InitializeNobleDecks(evt.RunState);
 
         FgoNobleDeckSync.OnRunStarted();
+
+        // 读档回来时同样补发一次皮肤：期间可能有队友的皮肤从未同步到（例如对方中途加入）。
+        FgoSkinSync.OnSessionBound();
 
         // 读档回到当前房间时：客户端置「跳过下一次房间进入自增」标志抵消重放多 +1，
         // 主机把全员圣晶石计数广播一次兜底，保证读档后客户端与主机一致。

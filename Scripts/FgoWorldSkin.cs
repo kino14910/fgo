@@ -49,6 +49,10 @@ internal static class FgoWorldSkin
 
         Bindings.Remove(root);
         Bindings.Add(root, new SkinBinding { NetId = netId, SpritePath = spritePath });
+
+        // 该拥有者皮肤未知时请求一次全量重播（节流），到达后由 Refresh 纠正。
+        if (!FgoSkinSync.HasRemoteSkin(netId))
+            FgoSkinSync.RequestResyncFromVisualPath();
     }
 
     /// <summary>

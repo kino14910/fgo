@@ -37,9 +37,16 @@ public static class FgoCreatureSkinPatch
 
         VisualsCache[__instance] = __result;
 
-        // 按"拥有者的 NetId"取该玩家自己同步出去的皮肤（Sidecar 已缓存到 RemoteSkins）；
-        // 未同步到时回退本机设置，保证单机 / 开局瞬间也不会丢皮肤。
+        // 按"拥有者的 NetId"取该玩家自己同步出去的皮肤（Sidecar 已缓存到 RemoteSkins）：
+        // 本机玩家未同步到时回退本机设置（单机 / 开局瞬间），远端玩家缺值时返回各端一致的默认值，
+        // 绝不用本机皮肤顶替远端（否则"他没同步到"会表现为"他显示成我的皮肤"）。
         FgoSkinApplier.ApplySkinToCreature(__result, FgoSkinSync.ResolveSkin(player.NetId));
+
+        // 远端玩家皮肤未知（消息没到 / 对方从未发过）时请求一次全量重播：
+        // 视觉通常每场战斗重建，这里是"发现缺值"的天然时机。ResolveSkin 已保证此时不会
+        // 用本机皮肤顶替（远端缺值返回确定默认值），重播到达后会由 ReapplySkin 纠正。
+        if (!FgoSkinSync.HasRemoteSkin(player.NetId))
+            FgoSkinSync.RequestResyncFromVisualPath();
     }
 
     /// <summary>

@@ -167,8 +167,8 @@ public sealed class FgoPlayerState
 
     public async Task Reset()
     {
-        await ResetCrit();
         await ResetNp();
+        await ResetStars();
     }
 
     public Task ResetNp()
@@ -194,8 +194,23 @@ public sealed class FgoPlayerState
             return;
 
         var multiplier = card.Owner.Creature.HasPower<NpRatePower>() ? 2 : 1;
-        await ModifyNp(card.EnergyCost.GetResolved() * FgoConfigSync.NetworkBaseNpPerCost * multiplier,
+        await ModifyNp(CostForNp(cardPlay) * FgoConfigSync.NetworkBaseNpPerCost * multiplier,
             card.Owner);
+    }
+
+    /// <summary>
+    ///     取「计入宝具值的费用」。
+    ///     <para>
+    ///         优先用 <see cref="CardPlay.Resources" /> 里的 EnergyValue：它是本张牌实际被判定支付的费用，
+    ///         对 X 费牌也已是结算后的 X 值（<c>SpendResources</c> 内 <c>GetAmountToSpend()</c> 的产物）。
+    ///         而 <c>EnergyCost.GetResolved()</c> 对 X 费牌读的是 <c>CapturedXValue</c>，该字段在某个牌堆
+    ///         快照/重放路径下可能仍是 0，会漏算 X 费牌（如魔力装填）的宝具值。
+    ///     </para>
+    /// </summary>
+    private static int CostForNp(CardPlay cardPlay)
+    {
+        var energyValue = cardPlay.Resources.EnergyValue;
+        return energyValue > 0 ? energyValue : Math.Max(0, cardPlay.Card.EnergyCost.GetResolved());
     }
 
     public async Task OnBeforeAttack(AttackCommand command)

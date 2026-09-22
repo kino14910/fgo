@@ -18,8 +18,30 @@ public static class FgoConfigSync
 
     private static bool _subscribed;
 
+    /// <summary>是否已由「本机设置」或「远端快照」确定过权威值。</summary>
+    private static bool _resolved;
+
+    private static int _networkBaseNpPerCost;
+
     public static bool NetworkNoCostNoblePhantasm { get; private set; }
-    public static int NetworkBaseNpPerCost { get; private set; }
+
+    /// <summary>
+    ///     每点能量回复的 NP。**切勿在同步发生前把它当成 0**：C# 默认值是 0，而「同步尚未发生」与
+    ///     「设置为 0」无法从原值区分——前者会让打出卡牌按费用获取 NP 恒为 0（表现为重启/读档后该机制失效）。
+    ///     故未确定权威值且非联机对局时，回退读取本机设置；联机对局中权威值须来自主机快照，不能回退本机。
+    /// </summary>
+    public static int NetworkBaseNpPerCost =>
+        _resolved || IsNetworkedRun() ? _networkBaseNpPerCost : LocalBaseNpPerCost;
+
+    /// <summary>本机设置页里的 BaseNpPerCost（先回填磁盘持久化值再读取）。</summary>
+    private static int LocalBaseNpPerCost
+    {
+        get
+        {
+            FgoReflectedSettings.ReflectBoundValues();
+            return FgoReflectedSettings.BaseNpPerCost;
+        }
+    }
 
     public static void EnsureRegistered()
     {
@@ -66,7 +88,8 @@ public static class FgoConfigSync
         {
             var config = CurrentConfig();
             NetworkNoCostNoblePhantasm = config.NoCostNoblePhantasm;
-            NetworkBaseNpPerCost = config.BaseNpPerCost;
+            _networkBaseNpPerCost = config.BaseNpPerCost;
+            _resolved = true;
         }
     }
 
@@ -85,7 +108,8 @@ public static class FgoConfigSync
 
         var config = CurrentConfig();
         NetworkNoCostNoblePhantasm = config.NoCostNoblePhantasm;
-        NetworkBaseNpPerCost = config.BaseNpPerCost;
+        _networkBaseNpPerCost = config.BaseNpPerCost;
+        _resolved = true;
 
         RegisterTopic(config);
         RitsuLibSidecarConfigSyncService.PublishHostState(host, Topic, 0, reason);
@@ -117,7 +141,8 @@ public static class FgoConfigSync
         var cfg = JsonSerializer.Deserialize<FgoConfig>(e.StateJson);
         if (cfg is null) return;
         NetworkNoCostNoblePhantasm = cfg.NoCostNoblePhantasm;
-        NetworkBaseNpPerCost = cfg.BaseNpPerCost;
+        _networkBaseNpPerCost = cfg.BaseNpPerCost;
+        _resolved = true;
 
         Entry.Logger.Info(
             $"[Fgo] Applied config topic '{e.Topic}' ({e.Reason}): NoCostNoblePhantasm={cfg.NoCostNoblePhantasm}, BaseNpPerCost={cfg.BaseNpPerCost}");
