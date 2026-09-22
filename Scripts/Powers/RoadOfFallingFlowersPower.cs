@@ -10,7 +10,7 @@ public class RoadOfFallingFlowersPower : FgoPowerModel
     public decimal HealBonus { get; set; } = 0.3m;
 
     public override PowerType Type => PowerType.Buff;
-    public override PowerStackType StackType => PowerStackType.None;
+    public override PowerStackType StackType => PowerStackType.Single;
 
     public override async Task AfterCurrentHpChanged(Creature creature, decimal delta)
     {
