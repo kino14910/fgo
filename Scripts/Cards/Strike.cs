@@ -8,7 +8,7 @@ using STS2RitsuLib.Interop.AutoRegistration;
 
 namespace Fgo.Scripts.Cards;
 
-[RegisterCharacterStarterCard(typeof(FgoCharacter), 3)]
+[RegisterCharacterStarterCard(typeof(FgoCharacter), 4)]
 public class Strike() : FgoCardModel(1, CardType.Attack, CardRarity.Basic, TargetType.AnyEnemy)
 {
     protected override HashSet<CardTag> CanonicalTags => [CardTag.Strike];

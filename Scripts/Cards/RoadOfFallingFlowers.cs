@@ -22,16 +22,15 @@ public class RoadOfFallingFlowers() : FgoCardModel(0, CardType.Skill,
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        ModCardVars.Int("Star", 5),
+        ModCardVars.Int("Star", 10),
         ModCardVars.Int("Np", 10),
-        ModCardVars.Int("HealPercent", 30)
+        ModCardVars.Int("HealPercent", 50)
     ];
 
     protected override void OnUpgrade()
     {
         DynamicVars["Star"].UpgradeValueBy(5);
         DynamicVars["Np"].UpgradeValueBy(10);
-        DynamicVars["HealPercent"].UpgradeValueBy(20);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

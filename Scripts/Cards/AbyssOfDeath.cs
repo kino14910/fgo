@@ -18,13 +18,13 @@ public class AbyssOfDeath() : FgoCardModel(2, CardType.Power,
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        ModCardVars.Power<GutsPower>(10),
+        ModCardVars.Power<GutsPower>(15),
         ModCardVars.Power<DeathOfDeathPower>(1)
     ];
 
     protected override void OnUpgrade()
     {
-        DynamicVars[nameof(GutsPower)].UpgradeValueBy(15);
+        DynamicVars[nameof(GutsPower)].UpgradeValueBy(10);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

@@ -14,7 +14,7 @@ public class TrueClash() : FgoCardModel(1, CardType.Attack,
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         ModCardVars.Damage(8),
-        ModCardVars.Block(6)
+        ModCardVars.Block(8)
     ];
 
     protected override bool ShouldGlowGoldInternal => IsPlayable;
