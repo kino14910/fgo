@@ -5,5 +5,5 @@ using STS2RitsuLib.Interop.AutoRegistration;
 namespace Fgo.Scripts.Cards.Colorless.OptionCards;
 
 [RegisterCard(typeof(TokenCardPool))]
-public class RepairSpiritOrigin() : FgoBaseCardModel(-2, CardType.Power,
+public class RepairSpiritOrigin() : FgoBaseCardModel(-2, CardType.Skill,
     CardRarity.Token, TargetType.None);
