@@ -21,13 +21,13 @@ public class WildRule() : FgoCardModel(1, CardType.Attack,
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        ModCardVars.Damage(10),
+        ModCardVars.Damage(6),
         ModCardVars.Power<WildRulePower>(3)
     ];
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(4);
+        DynamicVars.Damage.UpgradeValueBy(3);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
