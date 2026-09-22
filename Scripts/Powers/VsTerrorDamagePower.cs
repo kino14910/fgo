@@ -13,8 +13,8 @@ public class VsTerrorDamagePower : FgoPowerModel
     public override PowerStackType StackType => PowerStackType.Counter;
 
     public override PowerAssetProfile AssetProfile => new(
-        "res://Fgo/images/powers/AtkUpPower.png",
-        "res://Fgo/images/powers/big/AtkUpPower.png"
+        "res://Fgo/images/powers/SpDmgUpPower.png",
+        "res://Fgo/images/powers/big/SpDmgUpPower.png"
     );
 
     public override decimal ModifyDamageMultiplicative(

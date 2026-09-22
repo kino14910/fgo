@@ -15,11 +15,11 @@ public abstract class TempStrengthPower<T> : ModTemporaryAppliedPowerTemplate<T,
     public override PowerAssetProfile AssetProfile => IsPositive
         ? new PowerAssetProfile(
             "res://Fgo/images/powers/AtkUpPower.png",
-            "res://Fgo/images/powers/AtkUpPower.png"
+            "res://Fgo/images/powers/big/AtkUpPower.png"
         )
         : new PowerAssetProfile(
             "res://Fgo/images/powers/AtkDownPower.png",
-            "res://Fgo/images/powers/AtkDownPower.png");
+            "res://Fgo/images/powers/big/AtkDownPower.png");
 
     // protected override bool IsPositive => false; // 正面效果还是负面
 
