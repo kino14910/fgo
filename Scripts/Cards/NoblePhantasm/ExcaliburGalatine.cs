@@ -39,7 +39,7 @@ public class ExcaliburGalatine() : NobleCardModel(2, CardType.Attack, TargetType
             .TargetingAllOpponents(CombatState!)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
-        FgoField.Add(Owner.Creature.CombatState, FgoFieldId.Sunlight,
+        await FgoField.Add(Owner.Creature.CombatState, FgoFieldId.Sunlight,
             (int)DynamicVars["SunlightTurns"].BaseValue);
         await PowerCmd.Apply<VigorPower>(choiceContext, Owner.Creature, DynamicVars[nameof(VigorPower)].BaseValue,
             Owner.Creature, this);

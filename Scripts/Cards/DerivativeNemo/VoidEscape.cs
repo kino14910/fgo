@@ -35,7 +35,7 @@ public class VoidEscape() : FgoCardModel(0, CardType.Skill,
 
         await GreatVoidSeaBattle.ConsumeExplorationPoints(choiceContext, Owner);
 
-        FgoField.Remove(combat, FgoFieldId.ImaginarySpace);
+        await FgoField.Remove(combat, FgoFieldId.ImaginarySpace);
         await FgoVoidHand.ExitAll(combat);
     }
 }

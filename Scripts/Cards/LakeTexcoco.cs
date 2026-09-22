@@ -37,7 +37,7 @@ public class LakeTexcoco() : FgoCardModel(1, CardType.Skill,
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await FgoResCmd.ModifyNp(DynamicVars["Np"].BaseValue, Owner);
-        FgoField.Add(Owner.Creature.CombatState, FgoFieldId.Waterside, 3);
+        await FgoField.Add(Owner.Creature.CombatState, FgoFieldId.Waterside, 3);
         await PowerCmd.Apply<LakeTexcocoPower>(choiceContext, Owner.Creature,
             DynamicVars[nameof(LakeTexcocoPower)].BaseValue, Owner.Creature, this);
     }

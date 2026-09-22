@@ -62,6 +62,6 @@ public class CafeterrasBijNacht() : NobleCardModel(2, CardType.Attack, TargetTyp
             foreach (var enemy in enemies)
                 await CreatureCmd.Stun(enemy);
 
-        FgoField.Add(combat, FgoFieldId.City, CityTurns);
+        await FgoField.Add(combat, FgoFieldId.City, CityTurns);
     }
 }

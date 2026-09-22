@@ -40,6 +40,6 @@ public class SwanLake() : FgoCardModel(1, CardType.Attack,
             .Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
-        FgoField.Add(Owner.Creature.CombatState, FgoFieldId.Waterside, 3);
+        await FgoField.Add(Owner.Creature.CombatState, FgoFieldId.Waterside, 3);
     }
 }

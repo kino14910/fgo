@@ -18,6 +18,18 @@ namespace Fgo.Scripts.Fields;
 ///     各端会各自执行同一份逻辑，因此无需额外的 Sidecar 广播。
 ///     一旦出现「只在本地发起」的场地改动（例如 UI 按钮、右键交互），必须补一层版本化快照广播，
 ///     否则该场地只在本机生效，进而导致各端状态分叉。
+///     <para />
+///     <b>关于返回 <c>Task</c></b>: 写入方法返回 <c>Task</c> 只是为了与项目里其它效果 API
+///     （<c>PlayerCmd.LoseEnergy</c> 等）保持一致的调用形状——调用方一律 <c>await</c>，
+///     读起来不会出现"别的都是 await、只有场地是裸调用"的割裂。
+///     <b>但返回的 Task 恒为已完成，这些方法内部绝不能引入真正的 <c>await</c>。</b>
+///     原因有二:
+///     ① 调用点普遍是「连续写入 → 紧接着读取」的模式（如 <c>GreatVoidSeaBattle</c> 连加两个场地后立刻
+///     <c>EnterAll</c>；<c>FgoFieldEffects.OnPlayerSideTurnStart</c> <c>TickDown</c> 之后马上按 <c>Has</c> 结算），
+///     一旦中间真的让出，游戏循环可能插进来跑一帧，逐帧轮询的 HUD / 背景就会观察到"只写了一半"的状态；
+///     ② 这些写入发生在被复制的游戏动作内，各端各跑一遍，同步落地才能保证各端序列一致。
+///     真正的异步（需要 <c>PlayerChoiceContext</c> 的引擎调用）请放在 <see cref="FgoFieldEffects" /> 里，
+///     由**调用方**在拿到 <c>context</c> 后自行 await。
 /// </remarks>
 public static class FgoField
 {
@@ -43,23 +55,26 @@ public static class FgoField
     ///     叠加场地层数（= 持续回合数）。已存在则累加，因此重复施加可以延长同一个场地。
     ///     回合数由施加方（各张卡牌）自行给出，这里不做统一。
     /// </summary>
-    public static bool Add(ICombatState? combat, FgoFieldId id, int stacks = 1) =>
-        combat != null && States.GetOrCreate(combat).Add(id, stacks);
+    /// <returns>是否发生了实际变化。返回的 Task 恒为已完成，见类型 remarks。</returns>
+    public static Task<bool> Add(ICombatState? combat, FgoFieldId id, int stacks = 1) =>
+        Task.FromResult(combat != null && States.GetOrCreate(combat).Add(id, stacks));
 
     /// <summary>移除场地。原本不存在时返回 false。</summary>
-    public static bool Remove(ICombatState? combat, FgoFieldId id) =>
-        combat != null && States.GetValueOrDefault(combat) is { } state && state.Remove(id);
+    public static Task<bool> Remove(ICombatState? combat, FgoFieldId id) =>
+        Task.FromResult(combat != null && States.GetValueOrDefault(combat) is { } state && state.Remove(id));
 
     /// <summary>每回合开始时调用: 对所有「有时限」的场地各 -1 层，归零即移除。</summary>
-    public static void TickDown(ICombatState? combat)
+    public static Task TickDown(ICombatState? combat)
     {
-        if (combat == null) return;
+        if (combat == null) return Task.CompletedTask;
         States.GetValueOrDefault(combat)?.TickDown();
+        return Task.CompletedTask;
     }
 
-    public static void Clear(ICombatState? combat)
+    public static Task Clear(ICombatState? combat)
     {
-        if (combat == null) return;
+        if (combat == null) return Task.CompletedTask;
         States.GetValueOrDefault(combat)?.Clear();
+        return Task.CompletedTask;
     }
 }

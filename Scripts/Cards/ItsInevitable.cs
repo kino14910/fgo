@@ -42,7 +42,7 @@ public class ItsInevitable() : FgoCardModel(1, CardType.Attack,
         await PowerCmd.Apply<ItsInevitablePower>(choiceContext, Owner.Creature,
             DynamicVars[nameof(ItsInevitablePower)].BaseValue,
             Owner.Creature, this);
-        FgoField.Add(CombatState, FgoFieldId.Burning, 3);
+        await FgoField.Add(CombatState, FgoFieldId.Burning, 3);
         await FgoCardActions.AddToHand(CombatState!.CreateCard<Burn>(Owner));
     }
 }

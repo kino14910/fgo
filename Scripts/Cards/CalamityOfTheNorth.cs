@@ -40,7 +40,6 @@ public class CalamityOfTheNorth() : FgoCardModel(2, CardType.Skill,
         await PowerCmd.Apply<CursePower>(choiceContext, CombatState!.HittableEnemies,
             DynamicVars[nameof(CursePower)].BaseValue,
             Owner.Creature, this);
-        // FgoField.Add 是同步方法（返回 bool，不返回 Task），所以不能 await。
-        FgoField.Add(Owner.Creature.CombatState, FgoFieldId.Darkness, 3);
+        await FgoField.Add(Owner.Creature.CombatState, FgoFieldId.Darkness, 3);
     }
 }

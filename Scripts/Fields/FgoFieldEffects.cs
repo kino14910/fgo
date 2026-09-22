@@ -58,10 +58,13 @@ public static class FgoFieldEffects
     ///     <para />
     ///     能力来源是战场本身而非某个生物，因此 <c>applier</c> 传 null。
     ///     <c>PowerCmd.Apply</c> 显式支持 null applier（内部只跳过「施加方修正」那一段）。
+    ///     <para />
+    ///     <c>await FgoField.TickDown</c> 的 Task 恒为已完成（见 <see cref="FgoField" /> 的 remarks），
+    ///     因此递减仍是同步落地的，紧随其后的 <c>Has</c> 判定看到的一定是递减后的状态。
     /// </remarks>
     public static async Task OnPlayerSideTurnStart(ICombatState combat)
     {
-        FgoField.TickDown(combat);
+        await FgoField.TickDown(combat);
 
         if (FgoField.Has(combat, FgoFieldId.Waterside))
             foreach (var creature in LivingUnits(combat))
@@ -69,13 +72,13 @@ public static class FgoFieldEffects
 
         var choiceContext = new BlockingPlayerChoiceContext();
         var units = LivingUnits(combat);
-        if (units.Count == 0) return;
+        if (units.Count <= 0) return;
 
         if (FgoField.Has(combat, FgoFieldId.Darkness))
             await PowerCmd.Apply<BlindPower>(choiceContext, units, DarknessBlindStacks, null, null);
 
         if (FgoField.Has(combat, FgoFieldId.Forest))
-            await PowerCmd.Apply<ThornsPower>(choiceContext, units, ForestThornsStacks, null, null);
+            await PowerCmd.Apply<RegenPower>(choiceContext, units, ForestRegenAmount, null, null);
     }
 
     /// <summary>
@@ -105,10 +108,8 @@ public static class FgoFieldEffects
 
         if (FgoField.Has(combat, FgoFieldId.Forest))
         {
-            var wounded = LivingUnits(combat)
-                .Where(static c => c.CurrentHp < c.MaxHp * ForestRegenHpRatio).ToList();
-            if (wounded.Count > 0)
-                await PowerCmd.Apply<RegenPower>(choiceContext, wounded, ForestRegenAmount, null, null);
+            var units = LivingUnits(combat);
+            await PowerCmd.Apply<ThornsPower>(choiceContext, units, ForestThornsStacks, null, null);
         }
 
         if (FgoField.Has(combat, FgoFieldId.Sunlight))

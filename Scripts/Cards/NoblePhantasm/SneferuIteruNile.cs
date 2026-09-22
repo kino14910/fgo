@@ -45,6 +45,6 @@ public class SneferuIteruNile() : NobleCardModel(2, CardType.Attack, TargetType.
             this);
 
 
-        FgoField.Add(Owner.Creature.CombatState, FgoFieldId.Waterside, 3);
+        await FgoField.Add(Owner.Creature.CombatState, FgoFieldId.Waterside, 3);
     }
 }
