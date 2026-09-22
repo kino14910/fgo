@@ -1,4 +1,5 @@
 using Fgo.Scripts.Keywords;
+using Fgo.Scripts.Powers;
 using Godot;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -72,4 +73,9 @@ public abstract class FgoBaseCardModel(
 
         return amount;
     }
+
+    protected override bool ShouldGlowGoldInternal =>
+        Tags.Contains(CardTag.Strike)
+        && Owner.Creature.HasPower<WildRulePower>()
+        && (CombatState?.Enemies.Any(e => e.HasPower<StrengthPower>()) ?? false);
 }

@@ -1,4 +1,3 @@
-using Fgo.Scripts.Powers;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -15,18 +14,18 @@ public class PursuerOfLove() : FgoCardModel(0, CardType.Skill,
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
         HoverTipFactory.FromPower<StrengthPower>(),
-        HoverTipFactory.FromPower<PursuePower>()
+        HoverTipFactory.FromPower<VulnerablePower>()
     ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         ModCardVars.Power<StrengthPower>(1),
-        ModCardVars.Int("Pursue", 2)
+        ModCardVars.Power<VulnerablePower>(2)
     ];
 
     protected override void OnUpgrade()
     {
-        DynamicVars["Pursue"].UpgradeValueBy(1);
+        DynamicVars["VulnerablePower"].UpgradeValueBy(1);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -35,7 +34,7 @@ public class PursuerOfLove() : FgoCardModel(0, CardType.Skill,
 
         await PowerCmd.Apply<StrengthPower>(choiceContext, cardPlay.Target,
             DynamicVars[nameof(StrengthPower)].BaseValue, Owner.Creature, this);
-        await PowerCmd.Apply<PursuePower>(choiceContext, cardPlay.Target, DynamicVars["Pursue"].BaseValue,
+        await PowerCmd.Apply<VulnerablePower>(choiceContext, cardPlay.Target, DynamicVars["VulnerablePower"].BaseValue,
             Owner.Creature,
             this);
     }

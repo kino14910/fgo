@@ -1,3 +1,4 @@
+using Fgo.Scripts.Powers;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -9,10 +10,11 @@ using STS2RitsuLib.Cards.DynamicVars;
 namespace Fgo.Scripts.Cards;
 
 public class WildRule() : FgoCardModel(1, CardType.Attack,
-    CardRarity.Uncommon, TargetType.AnyEnemy)
+    CardRarity.Common, TargetType.AnyEnemy)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
+        HoverTipFactory.FromPower<WildRulePower>(),
         HoverTipFactory.FromPower<StrengthPower>(),
         HoverTipFactory.FromPower<VulnerablePower>()
     ];
@@ -20,12 +22,8 @@ public class WildRule() : FgoCardModel(1, CardType.Attack,
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         ModCardVars.Damage(10),
-        ModCardVars.Power<StrengthPower>(1),
-        ModCardVars.Power<VulnerablePower>(3)
+        ModCardVars.Power<WildRulePower>(3)
     ];
-
-    protected override bool ShouldGlowGoldInternal =>
-        CombatState?.HittableEnemies.Any(e => e.GetPowerAmount<StrengthPower>() > 0) ?? false;
 
     protected override void OnUpgrade()
     {
@@ -41,15 +39,8 @@ public class WildRule() : FgoCardModel(1, CardType.Attack,
             .Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_bite")
             .Execute(choiceContext);
-
-        await CreatureCmd.Heal(Owner.Creature, 3m);
-
-        if (cardPlay.Target.GetPowerAmount<StrengthPower>() > 0)
-        {
-            await PowerCmd.Apply<StrengthPower>(choiceContext, cardPlay.Target,
-                -DynamicVars[nameof(StrengthPower)].BaseValue, Owner.Creature, this);
-            await PowerCmd.Apply<VulnerablePower>(choiceContext, cardPlay.Target,
-                DynamicVars[nameof(VulnerablePower)].BaseValue, Owner.Creature, this);
-        }
+        
+        await PowerCmd.Apply<WildRulePower>(choiceContext, Owner.Creature,
+            DynamicVars[nameof(WildRulePower)].BaseValue, Owner.Creature, this);
     }
 }
