@@ -77,16 +77,16 @@ public class FgoCharacter : ModCharacterTemplate<FgoCardPool, FgoRelicPool, FgoP
                 // 过渡音效
                 // CharacterTransitionSfx: "event:/sfx/ui/wipe_ironclad"
             ),
-            // Multiplayer: new CharacterMultiplayerAssetSet(
+            Multiplayer: new CharacterMultiplayerAssetSet(
             // 多人模式-手指。
-            // ArmPointingTexturePath: null,
+            ArmPointingTexturePath: "res://Fgo/images/charui/point.png",
             // 多人模式剪刀石头布-石头。
-            // ArmRockTexturePath: null,
+            ArmRockTexturePath: "res://Fgo/images/charui/rock.png",
             // 多人模式剪刀石头布-布。
-            // ArmPaperTexturePath: null,
+            ArmPaperTexturePath: "res://Fgo/images/charui/paper.png",
             // 多人模式剪刀石头布-剪刀。
-            // ArmScissorsTexturePath: null
-            // )
+            ArmScissorsTexturePath: "res://Fgo/images/charui/scissors.png"
+            ),
             // 其余如果有需要自行取消注释使用
             // Spine: null,
             // VisualCues: null, // 帧动画静态图人物使用，查看角色动画一章
