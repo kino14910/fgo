@@ -1,3 +1,4 @@
+using Fgo.Scripts.Singletons;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
@@ -8,9 +9,13 @@ using STS2RitsuLib.Scaffolding.Content;
 namespace Fgo.Scripts.Powers;
 
 /// <summary>
-///     打出任意宝具牌后会获得层数，最多 <see cref="MaxOvercharge" /> 层；
-///     选择宝具页面按本 power 的层数强化被选中的宝具副本。
+/// 打出任意宝具牌后获得层数，
+/// 选择宝具页面按本power层数强化被选中的宝具副本。
 /// </summary>
+/// <remarks>
+/// 层数范围为 0 ~ <see cref="OverchargePower.MaxOvercharge"/>，
+/// 上限由 <see cref="FgoBattleHooks.TryModifyPowerAmountReceived"/> 保证。
+/// </remarks>
 public class OverchargePower : FgoPowerModel
 {
     public const int MaxOvercharge = 4;

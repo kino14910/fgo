@@ -41,6 +41,6 @@ public class RoadOfFallingFlowers() : FgoCardModel(0, CardType.Skill,
         var power = await PowerCmd.Apply<RoadOfFallingFlowersPower>(
             choiceContext, Owner.Creature, 1, Owner.Creature, this);
         if (power != null)
-            power.HealBonus = DynamicVars["HealPercent"].BaseValue / 100m;
+            power.HealPercent = DynamicVars["HealPercent"].BaseValue;
     }
 }

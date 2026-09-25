@@ -1,3 +1,4 @@
+using Fgo.Scripts.Character;
 using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -32,11 +33,8 @@ public class EvilGodOfTheFlowers() : FgoCardModel(1, CardType.Skill,
 
         var foreignerCards = allUnlocked
             .Where(c => c.HasModCardTag(FgoTags.Foreigner))
-            .ToList();
-
-        var ownType = GetType();
-        foreignerCards = foreignerCards
-            .Where(c => c.GetType() != ownType)
+            .Where(c => c.GetType() != GetType())
+            .Where(c => c.Pool is not NobleCardPool)
             .ToList();
 
         if (foreignerCards.Count == 0)

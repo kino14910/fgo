@@ -1,3 +1,4 @@
+using Fgo.Scripts.Cards.DerivativeNemo;
 using Fgo.Scripts.Cards.NoblePhantasm;
 using Fgo.Scripts.Powers;
 using Fgo.Scripts.Singletons;
@@ -65,8 +66,6 @@ public static class FgoNoblePhantasmCmd
             return false;
         }
 
-        // OC 层数 = 宝具强化次数（0 ~ OverchargePower.MaxOvercharge，上限由 FgoBattleHooks 的
-        // TryModifyPowerAmountReceived 保证，故此处读到的 Amount 必定在范围内）。
         var overCharge = player.Creature.GetPower<OverchargePower>()?.Amount ?? 0;
 
         // 候选来自 NobleDeck pile（由 SaintQuartz 遗物管理初始卡 + 右键加入的卡）。

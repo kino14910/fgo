@@ -62,6 +62,12 @@ public abstract class FgoBaseCardModel(
             amount++;
         }
 
+        // if (target.HasPower<IntangiblePower>())
+        // {
+        //     await PowerCmd.Remove<IntangiblePower>(target);
+        //     amount++;
+        // }
+
         return amount;
     }
 
@@ -69,7 +75,8 @@ public abstract class FgoBaseCardModel(
     {
         if (targets == null) return 0;
         var amount = 0;
-        foreach (var target in targets) amount += await IgnoreInvincibleAction(target);
+        foreach (var target in targets)
+            amount += await IgnoreInvincibleAction(target);
 
         return amount;
     }

@@ -35,18 +35,22 @@ public class SaintQuartz : FgoRelic, IModRightClickableRelic
 {
     public const int CostPerChoice = 3;
 
+    internal static bool RightClickSuppressed { get; set; }
+
     public override RelicRarity Rarity => RelicRarity.Starter;
     public override bool ShowCounter => true;
     public override int DisplayAmount => QuartzCounter;
 
     public bool CanHandleRightClickLocal(ModRightClickContext context)
     {
+        if (RightClickSuppressed) return false;
         if (FgoConfigSync.IsNetworkedRun() && !LocalContext.IsMe(Owner)) return false;
         return QuartzCounter >= CostPerChoice;
     }
 
     public bool CanExecuteRightClick(ModRightClickExecutionContext context)
     {
+        if (RightClickSuppressed) return false;
         if (FgoConfigSync.IsNetworkedRun() && !LocalContext.IsMe(Owner)) return false;
         return QuartzCounter >= CostPerChoice;
     }
@@ -58,6 +62,7 @@ public class SaintQuartz : FgoRelic, IModRightClickableRelic
     public async Task OnRightClick(ModRightClickExecutionContext context)
     {
         if (QuartzCounter < CostPerChoice) return;
+        if (RightClickSuppressed) return;
 
         var player = context.Player;
 

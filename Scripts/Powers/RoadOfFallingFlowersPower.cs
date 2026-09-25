@@ -1,16 +1,31 @@
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Powers;
 
 public class RoadOfFallingFlowersPower : FgoPowerModel
 {
     private bool _isHealing;
-    public decimal HealBonus { get; set; } = 0.3m;
 
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Single;
+
+    protected override IEnumerable<DynamicVar> CanonicalVars => [ModCardVars.Int("HealPercent", 30)];
+
+    public decimal HealPercent
+    {
+        get => DynamicVars["HealPercent"].BaseValue;
+        set
+        {
+            DynamicVars["HealPercent"].BaseValue = value;
+            InvokeDisplayAmountChanged();
+        }
+    }
+
+    private decimal HealBonus => HealPercent / 100m;
 
     public override async Task AfterCurrentHpChanged(Creature creature, decimal delta)
     {

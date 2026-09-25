@@ -40,6 +40,18 @@ public sealed class FinalUnderworld : ModEventTemplate
         ];
     }
 
+    protected override Task BeforeEventStarted(bool isPreFinished)
+    {
+        SaintQuartz.RightClickSuppressed = true;
+        return base.BeforeEventStarted(isPreFinished);
+    }
+
+    protected override void OnEventFinished()
+    {
+        SaintQuartz.RightClickSuppressed = false;
+        base.OnEventFinished();
+    }
+
     /// <summary>接受她的招待: 获得女神的砂糖卡，进入下一页。</summary>
     private async Task Accept()
     {
@@ -93,15 +105,12 @@ public sealed class FinalUnderworld : ModEventTemplate
 
     private Task Continue()
     {
-        // 圣晶石不足 3 层时不提供献祭选项。
-        var options = new List<EventOption>
-        {
-            new(this, RefuseGift, ModOptionKey("GIFT", "REFUSE"))
-        };
-        if (Owner != null && Entry.RunState.Get(Owner).QuartzCount >= QuartzCost)
-            options.Insert(0, new EventOption(this, OfferQuartz, ModOptionKey("GIFT", "OFFER_QUARTZ")));
-
-        SetEventState(PageDescription("GIFT"), options);
+        SetEventState(PageDescription("GIFT"), [
+            new EventOption(this, RefuseGift, ModOptionKey("GIFT", "REFUSE")),
+            (Owner != null && Entry.RunState.Get(Owner).QuartzCount < QuartzCost)
+                ? new EventOption(this, null, ModOptionKey("GIFT", "LOCKED"))
+                : new EventOption(this, OfferQuartz, ModOptionKey("GIFT", "OFFER_QUARTZ"))
+        ]);
         return Task.CompletedTask;
     }
 

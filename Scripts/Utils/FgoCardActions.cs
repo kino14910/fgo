@@ -57,7 +57,8 @@ public static class FgoCardActions
         typeof(ObscurantWallOfChalk),
         typeof(RayProofKyrielight),
         typeof(EdinShugurraCollapsar),
-        typeof(Calibur)
+        typeof(Calibur),
+        typeof(HollowHeartAlbion)
     };
 
     public static CardModel CreateGeneratedCopy(CardModel card, Player owner, bool free = false, bool exhaust = false)
@@ -249,7 +250,7 @@ public static class FgoCardActions
         await Task.CompletedTask;
     }
 
-    public static async Task AddCopiesToHand(IEnumerable<CardModel> cards, bool free = false, bool exhaust = false)
+    public static async Task AddCopyToHand(IEnumerable<CardModel> cards, bool free = false, bool exhaust = false)
     {
         foreach (var card in cards)
             await AddToPile(CreateGeneratedCopy(card, card.Owner, free, exhaust), PileType.Hand);
