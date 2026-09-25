@@ -353,5 +353,17 @@
   "FGO_POWER_TEMP_CRIT_DAMAGE_POWER.smartDescription": "Gain [blue]{Amount}[/blue] [gold]Critical Damage[/gold] until the end of this turn.",
   "FGO_POWER_VS_TERROR_DAMAGE_POWER.title": "Anti-Terror Damage",
   "FGO_POWER_VS_TERROR_DAMAGE_POWER.description": "Deal extra damage to enemies with [gold]Terror[/gold] this turn.",
-  "FGO_POWER_VS_TERROR_DAMAGE_POWER.smartDescription": "Deal [blue]{Amount}%[/blue] extra damage to enemies with [gold]Terror[/gold] this turn."
+  "FGO_POWER_VS_TERROR_DAMAGE_POWER.smartDescription": "Deal [blue]{Amount}%[/blue] extra damage to enemies with [gold]Terror[/gold] this turn.",
+  "FGO_POWER_SONG_OF_LOVE_POWER.title": "Song of Love",
+  "FGO_POWER_SONG_OF_LOVE_POWER.description": "This turn, all [gold]Critical Stars[/gold] gained from allies' attacks are gained by you.",
+  "FGO_POWER_SONG_OF_LOVE_POWER.smartDescription": "This turn, all [gold]Critical Stars[/gold] gained from allies' attacks are gained by you.",
+  "FGO_POWER_FULLNESS_POWER.title": "Fullness",
+  "FGO_POWER_FULLNESS_POWER.description": "Fullness accumulated by dish cards. Each dish card grants 2 Fullness; once capped, dish cards no longer grant Fullness and stop working. Each Attack card with an energy cost played reduces this by 1.",
+  "FGO_POWER_FULLNESS_POWER.smartDescription": "Top right is the [gold]Fullness[/gold] cap, bottom right is current [gold]Fullness[/gold]. Each dish card grants 2 Fullness; once capped, dish cards no longer grant Fullness and stop working. Each Attack card with an energy cost played reduces this by 1.",
+  "FGO_POWER_KURAKURAS_MEALS_POWER.title": "Kurakura's Meals",
+  "FGO_POWER_KURAKURAS_MEALS_POWER.description": "At the start of each turn, gain a [gold]dish[/gold] card in rotation.",
+  "FGO_POWER_KURAKURAS_MEALS_POWER.smartDescription": "At the start of each turn, gain a [gold]dish[/gold] card in rotation; each [gold]dish[/gold] grants [blue]{Star}[/blue] [gold]Critical Stars[/gold] and 2 [gold]Fullness[/gold].",
+  "FGO_POWER_ROAD_OF_FALLING_FLOWERS_POWER.title": "Road of Falling Flowers",
+  "FGO_POWER_ROAD_OF_FALLING_FLOWERS_POWER.description": "Whenever you recover HP, recover an additional [blue]50%[/blue] of that amount.",
+  "FGO_POWER_ROAD_OF_FALLING_FLOWERS_POWER.smartDescription": "Whenever you recover HP, recover an additional [blue]{HealPercent}%[/blue] of that amount."
 }

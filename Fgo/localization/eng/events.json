@@ -71,6 +71,8 @@
   "FGO_EVENT_FINAL_UNDERWORLD.pages.GIFT.description": "You have reached the deeper reaches of the Underworld.\nThe girl stops before a vast gate of stars.\nThere is no path beyond it.\nOnly countless stars that have already ended, and those yet to come.\nShe holds out her hand.\n\"There's one last thing.\"\n\"But this time... it isn't hospitality.\"",
   "FGO_EVENT_FINAL_UNDERWORLD.pages.GIFT.options.OFFER_QUARTZ.title": "Offer 3 Saint Quartz",
   "FGO_EVENT_FINAL_UNDERWORLD.pages.GIFT.options.OFFER_QUARTZ.description": "Spend 3 Saint Quartz (Summon Tickets).",
+  "FGO_EVENT_FINAL_UNDERWORLD.pages.GIFT.options.LOCKED.title": "Locked",
+  "FGO_EVENT_FINAL_UNDERWORLD.pages.GIFT.options.LOCKED.description": "Not enough Saint Quartz.。",
   "FGO_EVENT_FINAL_UNDERWORLD.pages.GIFT.options.REFUSE.title": "Refuse",
   "FGO_EVENT_FINAL_UNDERWORLD.pages.GIFT.options.REFUSE.description": "Give nothing more.",
   "FGO_EVENT_FINAL_UNDERWORLD.pages.GIFTED.description": "You place three Saint Quartz in her hands.\nShe pauses.\n\"...All three?\"\nFor a moment, she says nothing.\n\"Thank you.\"\nThe starlight vanishes into her hands.\nAfter a long silence, a Star Sword appears, as though buried at the very edge of the universe.\n\"This is for those who make it this far.\"\n\"I think... this is the right time to give it to you.\"",

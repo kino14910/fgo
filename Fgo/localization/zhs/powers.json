@@ -314,5 +314,17 @@
   "FGO_POWER_HUGE_SCALE_POWER.smartDescription": "在你的回合开始时，获得[blue]{Amount}[/blue]点[gold]额外最大生命值[/gold]，并将一张[gold]幼儿退化[/gold]加入[gold]手牌[/gold]。",
   "FGO_POWER_PHASE_GLIDING_BLADE_POWER.title": "相位滑剑",
   "FGO_POWER_PHASE_GLIDING_BLADE_POWER.description": "每打出一张牌，从[gold]抽牌堆[/gold]随机取一张不同类型的牌加入你的[gold]手牌[/gold]。",
-  "FGO_POWER_PHASE_GLIDING_BLADE_POWER.smartDescription": "每打出一张牌，从[gold]抽牌堆[/gold]随机取一张不同类型的牌加入你的[gold]手牌[/gold]。可触发{Amount:cond:>1?[blue]{Amount}[/blue]次|一次}。"
+  "FGO_POWER_PHASE_GLIDING_BLADE_POWER.smartDescription": "每打出一张牌，从[gold]抽牌堆[/gold]随机取一张不同类型的牌加入你的[gold]手牌[/gold]。可触发{Amount:cond:>1?[blue]{Amount}[/blue]次|一次}。",
+  "FGO_POWER_SONG_OF_LOVE_POWER.title": "恋歌",
+  "FGO_POWER_SONG_OF_LOVE_POWER.description": "本回合内全体友方攻击获得的[gold]暴击星[/gold]都由你获得。",
+  "FGO_POWER_SONG_OF_LOVE_POWER.smartDescription": "本回合内全体友方攻击获得的[gold]暴击星[/gold]都由你获得。",
+  "FGO_POWER_FULLNESS_POWER.title": "饱腹",
+  "FGO_POWER_FULLNESS_POWER.description": "菜品卡累积的饱腹。每张菜品卡+2层，达到上限后菜品卡不再累积饱腹也不再产生任何效果；每打出一张有费用的攻击卡减少1层。",
+  "FGO_POWER_FULLNESS_POWER.smartDescription": "右上为[gold]满腹槽上限[/gold]，右下为当前[gold]饱腹[/gold]。每张菜品卡+2层，达到上限后菜品卡不再累积饱腹也不再产生任何效果；每打出一张有费用的攻击卡减少1层。",
+  "FGO_POWER_KURAKURAS_MEALS_POWER.title": "回转膳食",
+  "FGO_POWER_KURAKURAS_MEALS_POWER.description": "每回合开始时轮流获得一张[gold]菜品卡[/gold]。",
+  "FGO_POWER_KURAKURAS_MEALS_POWER.smartDescription": "每回合开始时轮流获得一张[gold]菜品卡[/gold]；每张[gold]菜品卡[/gold]附带[blue]{Star}[/blue]颗[gold]暴击星[/gold]与2层[gold]饱腹[/gold]。",
+  "FGO_POWER_ROAD_OF_FALLING_FLOWERS_POWER.title": "落花之路",
+  "FGO_POWER_ROAD_OF_FALLING_FLOWERS_POWER.description": "每当你回复生命值时，额外回复该值的[blue]50%[/blue]。",
+  "FGO_POWER_ROAD_OF_FALLING_FLOWERS_POWER.smartDescription": "每当你回复生命值时，额外回复该值的[blue]{HealPercent}%[/blue]。"
 }
