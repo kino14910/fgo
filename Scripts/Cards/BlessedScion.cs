@@ -15,6 +15,6 @@ public class BlessedScion() : FgoCardModel(1, CardType.Skill,
 
         var selected = await CardSelectCmd.FromHand(choiceContext, Owner,
             new CardSelectorPrefs(SelectionScreenPrompt, 1), _ => true, this);
-        await FgoCardActions.AddCopiesToHand(selected, IsUpgraded);
+        await FgoCardActions.AddCopyToHand(selected, IsUpgraded);
     }
 }
