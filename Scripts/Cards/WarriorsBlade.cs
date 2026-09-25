@@ -5,6 +5,7 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.ValueProps;
 using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
@@ -19,8 +20,8 @@ public class WarriorsBlade() : FgoCardModel(1, CardType.Attack,
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        ModCardVars.Damage(1),
-        ModCardVars.Int("Hits", 4),
+        ModCardVars.Damage(1, ValueProp.Unpowered),
+        ModCardVars.Int("Hits", 5),
         ModCardVars.Int("Star", 4)
     ];
 
@@ -38,6 +39,7 @@ public class WarriorsBlade() : FgoCardModel(1, CardType.Attack,
             .FromCard(this, cardPlay)
             .Targeting(cardPlay.Target)
             .WithHitCount(DynamicVars["Hits"].IntValue)
+            .Unpowered()
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
 

@@ -218,7 +218,7 @@ public sealed class FgoPlayerState
         await ResetCrit();
 
         var card = command.CardPlay?.Card ?? command.ModelSource as CardModel;
-        if (card is NobleCardModel)
+        if (card is NobleCardModel or WarriorsBlade)
             return;
 
         if (card is CharismaOfTheJade)
