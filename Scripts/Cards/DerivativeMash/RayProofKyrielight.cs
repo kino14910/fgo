@@ -59,5 +59,14 @@ public class RayProofKyrielight() : NobleCardModel(1, CardType.Attack, TargetTyp
             foreach (var buff in buffs)
                 await PowerCmd.Remove(buff);
         }
+
+        var wall = CombatState!.CreateCard<ObscurantWallOfChalkA>(Owner);
+        if (wall is FgoCooldownCardModel wallCd)
+            wallCd.ReadyCooldown();
+        
+        var bulletKindling = Owner.PlayerCombatState!.AllCards
+            .FirstOrDefault(c => c is TimewornBulletKindling);
+        if (bulletKindling != null)
+            await CardCmd.Transform(bulletKindling, wall);
     }
 }
