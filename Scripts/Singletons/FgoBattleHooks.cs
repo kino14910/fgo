@@ -215,7 +215,9 @@ public sealed class FgoBattleHooks() : HookedSingletonModel(HookType.Combat)
             || cardSource is not FgoCardModel { Type: CardType.Attack }
             || result.TotalDamage <= 0) return;
 
-        await Get(player).ModifyStars(1, player);
+        // 〔恋歌〕: 本回合内所有友方攻击产生的暴击星统一归收星者，不再留在攻击者身上。
+        var receiver = SongOfLovePower.ResolveStarReceiver(CurrentCombatState) ?? player;
+        await Get(receiver).ModifyStars(1, receiver);
     }
 
     public override async Task AfterDamageReceived(PlayerChoiceContext choiceContext, Creature target,

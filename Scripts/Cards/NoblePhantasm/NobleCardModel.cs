@@ -13,9 +13,8 @@ public abstract class NobleCardModel(
     int energyCost,
     CardType type,
     CardRarity rarity,
-    TargetType targetType,
-    bool shouldShowInCardLibrary = true)
-    : FgoBaseCardModel(energyCost, type, rarity, targetType, shouldShowInCardLibrary)
+    TargetType targetType)
+    : FgoBaseCardModel(energyCost, type, rarity, targetType)
 {
     private readonly int _baseEnergyCost = energyCost;
 

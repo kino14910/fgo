@@ -17,12 +17,16 @@ public abstract class FgoCooldownCardModel(
     int energyCost,
     CardType type,
     CardRarity rarity,
-    TargetType targetType,
-    bool shouldShowInCardLibrary = true)
-    : FgoCardModel(energyCost, type, rarity, targetType, shouldShowInCardLibrary)
+    TargetType targetType)
+    : FgoCardModel(energyCost, type, rarity, targetType)
 {
     /// <summary>基础冷却值。打出后冷却重置回此值。</summary>
     public abstract int CooldownMax { get; }
+
+    /// <summary>
+    ///     战斗开始时的初始冷却。默认 0（战斗开始即可打出）；重写可让本卡开局自带冷却。
+    /// </summary>
+    public virtual int CombatStartCooldown => 0;
 
     /// <summary>
     ///     请在 <see cref="AdditionalCanonicalVars" /> 中追加各自的额外变量。
@@ -54,10 +58,10 @@ public abstract class FgoCooldownCardModel(
         SetCooldown(DynamicVars["CooldownMax"].IntValue);
     }
 
-    /// <summary>将当前冷却清零（战斗开始时可直接打出）。</summary>
+    /// <summary>将当前冷却重置为战斗开始时的初始值（<see cref="CombatStartCooldown" />）。</summary>
     public void ReadyCooldown()
     {
-        SetCooldown(0);
+        SetCooldown(CombatStartCooldown);
     }
 
     public void DecrementCooldown()
