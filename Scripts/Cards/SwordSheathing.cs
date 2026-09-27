@@ -10,7 +10,7 @@ namespace Fgo.Scripts.Cards;
 
 /// <summary>
 ///     〔纳刀〕: 下一次选宝具时把〔拔刀·神威〕追加进候选，并在其打出前封锁其他攻击牌。
-///     追加候选沿用光之地平线的 NpCardPower（选完宝具即消耗）；出牌封锁由
+///     追加候选沿用光之地平线的 NpCardPower（选中该牌时才消耗）；出牌封锁由
 ///     <see cref="SwordSheathingPower" /> 负责，直到拔刀·神威真正打出才解除。
 /// </summary>
 public class SwordSheathing() : FgoCardModel(0, CardType.Skill,

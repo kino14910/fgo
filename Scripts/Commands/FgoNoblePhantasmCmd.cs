@@ -82,6 +82,8 @@ public static class FgoNoblePhantasmCmd
         var cards = noblePile.Cards.OfType<NobleCardModel>().ToList();
 
         // NpCardPower: 角色拥有此 power 时，将对应的特定宝具卡加入候选列表。
+        // 该追加候选会一直保留 —— 只有玩家真正选中它时 power 才被移除，
+        // 因此中途选了别的宝具不会白白丢掉这份候选。
         // NobleCard 存储的是 canonical singleton，可直接用作候选。
         var npCardPower = player.Creature.GetPower<NpCardPower>();
         if (npCardPower?.NobleCard is { } nobleCard
@@ -109,7 +111,10 @@ public static class FgoNoblePhantasmCmd
         var selected = (await CardSelectCmd.FromSimpleGrid(choiceContext, previews, player, prefs)).FirstOrDefault();
         if (selected == null) return false;
 
-        if (npCardPower != null)
+        // selected 可能是展示副本（BuildPreview），其 Id 与 canonical 一致，故按 Id 而非引用比对。
+        // NobleCard 未赋值时照旧移除，避免 power 永久残留在角色身上。
+        var grantedCard = npCardPower?.NobleCard;
+        if (npCardPower != null && (grantedCard == null || selected.Id == grantedCard.Id))
             await PowerCmd.Remove(npCardPower);
 
         // NobleDeck 是 RunPersistent 牌堆，卡需跨战斗保留，因此不打出去原卡。
