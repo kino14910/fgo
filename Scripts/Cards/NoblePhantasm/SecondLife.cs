@@ -1,9 +1,14 @@
 using Fgo.Scripts.Commands;
 using Fgo.Scripts.Utils;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.Nodes.CommonUi;
+using STS2RitsuLib;
 using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards.NoblePhantasm;
@@ -27,18 +32,39 @@ public class SecondLife() : NobleCardModel(1, CardType.Skill, TargetType.Self)
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        var exhaustCards = Owner.PlayerCombatState!.ExhaustPile.Cards.ToList();
-        if (exhaustCards.Count == 0) return;
+        await GetExhaustedCard(cardPlay.Player);
+        await KillMinions(cardPlay.Player, DynamicVars["Np"].IntValue);
+    }
+    
+    private static async Task GetExhaustedCard(Player player){
+        var exhaustCards = player.PlayerCombatState?.ExhaustPile.Cards.ToList() ?? [];
+        if (exhaustCards.Count > 0)
+        {
+            var card = player.RunState.Rng.CombatCardSelection.NextItem(exhaustCards);
+            if (card is not null)
+            {
+                var copy = card.CreateClone();
+                CardCmd.Upgrade(card, CardPreviewStyle.None);
+                await FgoCardActions.AddToHand(copy);
+            }
+        }
+    }
 
-        var card = Owner.RunState.Rng.CombatCardSelection.NextItem(exhaustCards);
-        if (card is null) return;
-        var copy = card.CreateClone();
-        // 卡面只承诺「升级」一次（{IfUpgraded:show:升级并且|}），升级层数不随本卡的 OC 层数放大。
-        // 注意 CreateClone 已继承源卡的升级层数，这里是在其之上再额外升一级，并受该卡 MaxUpgradeLevel 限制。
-        if (IsUpgraded)
-            FgoCardActions.ApplyUpgradeLevels(copy, 1);
-        await FgoCardActions.AddToHand(copy);
+    private static async Task KillMinions(Player player, int npPerMinion)
+    {
+        // Player.Character 是共享单例，判归属一律走 Creature / CombatState以保持同步。
+        var combatState = player.Creature.CombatState;
+        if (combatState == null)
+            return;
 
-        FgoKillMinionsCmd.Request(cardPlay.Player, (int)DynamicVars["Np"].BaseValue);
+        var minions = combatState.Enemies
+            .Where(static e => e is { IsAlive: true, IsSecondaryEnemy: true })
+            .ToList();
+        
+        if (minions.Count == 0)
+            return;
+
+        await CreatureCmd.Kill(minions);
+        await FgoResCmd.ModifyNp(npPerMinion * minions.Count, player);
     }
 }
