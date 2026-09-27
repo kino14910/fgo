@@ -20,6 +20,8 @@ public class VoidEscape() : FgoCardModel(0, CardType.Skill,
     CardRarity.Token, TargetType.Self,
     shouldShowInCardLibrary: false)
 {
+    public override bool CanBeGeneratedInCombat => false;
+
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>

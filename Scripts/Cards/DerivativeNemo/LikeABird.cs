@@ -19,6 +19,8 @@ public class LikeABird() : FgoCardModel(0, CardType.Power,
     CardRarity.Token, TargetType.Self,
     shouldShowInCardLibrary: false)
 {
+    public override bool CanBeGeneratedInCombat => false;
+
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
         FgoFieldId.ImaginarySpace.ToHoverTip(),

@@ -20,6 +20,8 @@ public class RoutePlanning() : FgoCardModel(0, CardType.Skill,
     CardRarity.Token, TargetType.Self,
     shouldShowInCardLibrary: false)
 {
+    public override bool CanBeGeneratedInCombat => false;
+
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
         FgoFieldId.Waterside.ToHoverTip(),
