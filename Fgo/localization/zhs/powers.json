@@ -326,5 +326,8 @@
   "FGO_POWER_KURAKURAS_MEALS_POWER.smartDescription": "每回合开始时轮流获得一张[gold]菜品卡[/gold]；每张[gold]菜品卡[/gold]附带[blue]{Star}[/blue]颗[gold]暴击星[/gold]与2层[gold]饱腹[/gold]。",
   "FGO_POWER_ROAD_OF_FALLING_FLOWERS_POWER.title": "落花之路",
   "FGO_POWER_ROAD_OF_FALLING_FLOWERS_POWER.description": "每当你回复生命值时，额外回复该值的[blue]50%[/blue]。",
-  "FGO_POWER_ROAD_OF_FALLING_FLOWERS_POWER.smartDescription": "每当你回复生命值时，额外回复该值的[blue]{HealPercent}%[/blue]。"
+  "FGO_POWER_ROAD_OF_FALLING_FLOWERS_POWER.smartDescription": "每当你回复生命值时，额外回复该值的[blue]{HealPercent}%[/blue]。",
+  "FGO_POWER_SWORD_SHEATHING_POWER.title": "纳刀",
+  "FGO_POWER_SWORD_SHEATHING_POWER.description": "直到打出[gold]拔刀·神威[/gold]前，你不能打出其他[gold]攻击牌[/gold]。",
+  "FGO_POWER_SWORD_SHEATHING_POWER.smartDescription": "直到打出[gold]拔刀·神威[/gold]前，你不能打出其他[gold]攻击牌[/gold]。"
 }

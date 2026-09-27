@@ -55,7 +55,7 @@
   "FGO_CARD_YIN_YANG_FISH.title": "Yin Yang Fish",
   "FGO_CARD_YIN_YANG_FISH.description": "{IfUpgraded:show:Gain 30% [gold]NP[/gold].\n|}Heal {Heal:diff()} HP.\nLose 10% [gold]NP[/gold].",
   "FGO_CARD_WARRIORS_BLADE.title": "Warriors Blade",
-  "FGO_CARD_WARRIORS_BLADE.description": "Deal {Damage:diff()} damage {Hits:diff()} times.\nGain {Star:diff()} [gold]Critical Stars[/gold].\nDamage of this card will not change.",
+  "FGO_CARD_WARRIORS_BLADE.description": "Deal {Damage:diff()} damage {Hits:diff()} times.\nGain {Star:diff()} [gold]Critical Stars[/gold].\nDamage of this card will not change by powers.",
   "FGO_CARD_STAR_HUNTER.title": "Star Hunter",
   "FGO_CARD_STAR_HUNTER.description": "Gain {Star:diff()} [gold]Critical Stars[/gold].\nFor the next 3 [gold]Critical[/gold], increase {CriticalDamageOncePower:diff()}% [gold]Critical Damage[/gold].",
   "FGO_CARD_BLESSING_OF_KUR.title": "Blessing of Kur",
@@ -190,7 +190,7 @@
   "FGO_CARD_EARTH_HEART_RHYTHM.title": "Earth Heart Rhythm",
   "FGO_CARD_EARTH_HEART_RHYTHM.description": "Gain {Np:diff()}% [gold]NP[/gold].\nGain {NpDamagePower:diff()}% [gold]NP Damage[/gold].\n[gold]Overcharge[/gold].",
   "FGO_CARD_WORLDS_END_FLOWER_GARDEN.title": "World's End Flower Garden",
-  "FGO_CARD_WORLDS_END_FLOWER_GARDEN.description": "Whenever you deal [gold]Critical[/gold], gain {WorldsEndFlowerGardenPower:diff()}% [gold]NP[/gold].",
+  "FGO_CARD_WORLDS_END_FLOWER_GARDEN.description": "Whenever you deal [gold]Critical[/gold], gain {WorldsEndFlowerGardenPower:diff()}% [gold]NP[/gold].\nHeal {Heal:diff()} HP.。",
   "FGO_CARD_IMITATION_IMMORTALITY.title": "Imitation Immortality",
   "FGO_CARD_IMITATION_IMMORTALITY.description": "Gain {GutsPower:diff()} [gold]Guts[/gold].\nGain {RegenPower:diff()} [gold]Regen[/gold].\nGain {NpPerTurnPower:diff()}% [gold]NP[/gold] each turn.\nGain {ReducePercentDamagePower:diff()}% [gold]Damage Reduction[/gold].",
   "FGO_CARD_MAGIC_BULLET_CHARGING.title": "Magic Bullet Charging",
@@ -391,5 +391,11 @@
   "FGO_CARD_LEGENDARY_ONIGIRI.title": "Legendary Onigiri",
   "FGO_CARD_LEGENDARY_ONIGIRI.description": "All allies gain {StrengthPower:diff()} [gold]Strength[/gold], {MaxHpPower:diff()} [gold]Extra Max HP[/gold], {Np:diff()}% [gold]NP[/gold], {NpDamagePower:diff()}% [gold]NP Damage[/gold], {CriticalDamagePower:diff()}% [gold]Critical Damage[/gold], and heal {Heal:diff()} HP.",
   "FGO_CARD_JYUUOU_MANPUKU_TSUZURA_NO_ENKAI.title": "Jyuuou Manpuku Tsuzura no Enkai",
-  "FGO_CARD_JYUUOU_MANPUKU_TSUZURA_NO_ENKAI.description": "Deal {Damage:diff()} damage to ALL enemies.\nAll allies' [gold]Fullness[/gold] cap is raised by 4, {MaxHpPower:diff()} [gold]Extra Max HP[/gold] and {Np:diff()}% [gold]NP[/gold], and lose all [gold]Poison[/gold] and [gold]Evil Curse[/gold]."
+  "FGO_CARD_JYUUOU_MANPUKU_TSUZURA_NO_ENKAI.description": "Deal {Damage:diff()} damage to ALL enemies.\nAll allies' [gold]Fullness[/gold] cap is raised by 4, {MaxHpPower:diff()} [gold]Extra Max HP[/gold] and {Np:diff()}% [gold]NP[/gold], and lose all [gold]Poison[/gold] and [gold]Evil Curse[/gold].",
+  "FGO_CARD_SWORD_SHEATHING.title": "Sword Sheathing",
+  "FGO_CARD_SWORD_SHEATHING.description": "The next [gold]Noble Phantasm[/gold] will add a [gold]Battou Kamui[/gold].\nUntil [gold]Battou Kamui[/gold] is played, you cannot play other [gold]Attack[/gold] cards.",
+  "FGO_CARD_BATTOU_KAMUI.title": "Battou Kamui",
+  "FGO_CARD_BATTOU_KAMUI.description": "Gain {BattouKamuiPower:diff()} [gold]Temporary Strength[/gold].\nEnemy loses {Damage:diff()} HP.\nThis card is affected by powers and [gold]Critical[/gold].",
+  "FGO_CARD_KIKAKU_ICHIJIN.title": "Kikaku Ichijin",
+  "FGO_CARD_KIKAKU_ICHIJIN.description": "Kill another ally, dealing damage equal to {Percent:diff()}% of their Max HP.{InCombat:\n(Deal {KikakuDamage:diff()} damage)|}"
 }

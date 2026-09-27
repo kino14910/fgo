@@ -52,7 +52,7 @@
   "FGO_CARD_YIN_YANG_FISH.title": "阴阳鱼",
   "FGO_CARD_YIN_YANG_FISH.description": "{IfUpgraded:show:获得30%[gold]宝具值[/gold]。\n|}回复{Heal:diff()}点生命。\n失去10%[gold]宝具值[/gold]。",
   "FGO_CARD_WARRIORS_BLADE.title": "击剑矫捷如鹰隼",
-  "FGO_CARD_WARRIORS_BLADE.description": "造成{Damage:diff()}点伤害{Hits:diff()}次。\n获得{Star:diff()}颗[gold]暴击星[/gold]。\n这张卡的伤害不会变化。",
+  "FGO_CARD_WARRIORS_BLADE.description": "造成{Damage:diff()}点伤害{Hits:diff()}次。\n获得{Star:diff()}颗[gold]暴击星[/gold]。\n这张卡的伤害不受能力影响。",
   "FGO_CARD_STAR_HUNTER.title": "星之猎人",
   "FGO_CARD_STAR_HUNTER.description": "获得{Star:diff()}颗[gold]暴击星[/gold]。\n之后3次[gold]暴击[/gold]，提高{CriticalDamageOncePower:diff()}%[gold]暴击威力[/gold]。",
   "FGO_CARD_BLESSING_OF_KUR.title": "冥界佑护",
@@ -179,7 +179,7 @@
   "FGO_CARD_EXTREMITY_OF_VILLAINS.description": "造成{Damage:diff()}点伤害。\n如果这张卡[gold]暴击[/gold]，获得{energyPrefix:energyIcons(1)}并抽{Cards:diff()}张卡。",
   "FGO_CARD_EXTREMITY_OF_VILLAINS.flavor": "领域外生命。",
   "FGO_CARD_WORLDS_END_FLOWER_GARDEN.title": "万花盛放的辉彩花园",
-  "FGO_CARD_WORLDS_END_FLOWER_GARDEN.description": "每当你造成[gold]暴击[/gold]时，获得{WorldsEndFlowerGardenPower:diff()}%[gold]宝具值[/gold]。",
+  "FGO_CARD_WORLDS_END_FLOWER_GARDEN.description": "每当你造成[gold]暴击[/gold]时，获得{WorldsEndFlowerGardenPower:diff()}%[gold]宝具值[/gold]。\n回复{Heal:diff()}点血量。",
   "FGO_CARD_IMITATION_IMMORTALITY.title": "仿造不灭",
   "FGO_CARD_IMITATION_IMMORTALITY.description": "获得{GutsPower:diff()}层[gold]毅力[/gold]。\n获得{RegenPower:diff()}点[gold]再生[/gold]。\n每回合获得{NpPerTurnPower:diff()}%[gold]宝具值[/gold]。\n获得{ReducePercentDamagePower:diff()}%[gold]伤害减免[/gold]。",
   "FGO_CARD_MAGIC_BULLET_CHARGING.title": "魔弹装填",
@@ -379,5 +379,11 @@
   "FGO_CARD_LEGENDARY_ONIGIRI.title": "传说中的饭团",
   "FGO_CARD_LEGENDARY_ONIGIRI.description": "全体友方获得{StrengthPower:diff()}点[gold]力量[/gold]、{MaxHpPower:diff()}点[gold]额外最大生命值[/gold]、{Np:diff()}%[gold]宝具值[/gold]、{NpDamagePower:diff()}%[gold]宝具威力[/gold]、{CriticalDamagePower:diff()}%[gold]暴击威力[/gold]，并回复{Heal:diff()}点生命值。",
   "FGO_CARD_JYUUOU_MANPUKU_TSUZURA_NO_ENKAI.title": "十王满腹·葛笼宴海",
-  "FGO_CARD_JYUUOU_MANPUKU_TSUZURA_NO_ENKAI.description": "对所有敌人造成{Damage:diff()}点伤害。\n全体友方的[gold]满腹槽上限[/gold]增加4，获得{MaxHpPower:diff()}点[gold]额外最大生命值[/gold]和{Np:diff()}%[gold]宝具值[/gold]，失去所有[gold]中毒[/gold]和[gold]诅呪[/gold]。"
+  "FGO_CARD_JYUUOU_MANPUKU_TSUZURA_NO_ENKAI.description": "对所有敌人造成{Damage:diff()}点伤害。\n全体友方的[gold]满腹槽上限[/gold]增加4，获得{MaxHpPower:diff()}点[gold]额外最大生命值[/gold]和{Np:diff()}%[gold]宝具值[/gold]，失去所有[gold]中毒[/gold]和[gold]诅呪[/gold]。",
+  "FGO_CARD_SWORD_SHEATHING.title": "纳刀",
+  "FGO_CARD_SWORD_SHEATHING.description": "下一张[gold]宝具卡[/gold]添加[gold]拔刀·神威[/gold]。\n直到[gold]拔刀·神威[/gold]打出前，你不能打出其他[gold]攻击牌[/gold]。",
+  "FGO_CARD_BATTOU_KAMUI.title": "拔刀·神威",
+  "FGO_CARD_BATTOU_KAMUI.description": "获得{BattouKamuiPower:diff()}点[gold]临时力量[/gold]。\n使敌人失去{Damage:diff()}点生命。\n这张卡受暴击影响。",
+  "FGO_CARD_KIKAKU_ICHIJIN.title": "掎角一阵",
+  "FGO_CARD_KIKAKU_ICHIJIN.description": "令一名其他友方死亡，造成其最大生命值{Percent:diff()}%的伤害。{InCombat:\n（造成{KikakuDamage:diff()}点伤害）|}"
 }
