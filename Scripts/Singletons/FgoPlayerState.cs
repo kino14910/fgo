@@ -218,7 +218,23 @@ public sealed class FgoPlayerState
         await ResetCrit();
 
         var card = command.CardPlay?.Card ?? command.ModelSource as CardModel;
-        if (card is NobleCardModel or WarriorsBlade)
+        if (card is WarriorsBlade)
+            return;
+
+        await TryActivateCrit(card);
+    }
+
+    /// <summary>
+    ///     消耗暴击星并为这张牌开启暴击判定。
+    ///     <para>
+    ///         走 AttackCommand 的攻击由 <see cref="OnBeforeAttack" /> 自动调用；
+    ///         不经过 AttackCommand 的攻击（如拔刀·神威那段「失去生命」）由卡牌自身在结算伤害前调用，
+    ///         这样「受暴击影响」的牌也能吃到 <see cref="ModifyDamageMultiplicative" /> 的倍率。
+    ///     </para>
+    /// </summary>
+    public async Task TryActivateCrit(CardModel? card)
+    {
+        if (card is null)
             return;
 
         if (card is CharismaOfTheJade)
@@ -228,15 +244,27 @@ public sealed class FgoPlayerState
                 _crit.Active = true;
                 _crit.DamageMultiplier = 3m;
             }
+
+            return;
         }
-        else if (card is { Type: CardType.Attack } and not NobleCardModel)
+
+        if (!IsCritEligibleAttack(card))
+            return;
+
+        if (await TryConsumeCritStars(false, card.Owner) > 0)
         {
-            if (await TryConsumeCritStars(false, card.Owner) > 0)
-            {
-                _crit.Active = true;
-                _crit.DamageMultiplier = 2m;
-            }
+            _crit.Active = true;
+            _crit.DamageMultiplier = 2m;
         }
+    }
+
+    /// <summary>
+    ///     是否为参与暴击的攻击牌：普通攻击牌参与，宝具默认不参与，
+    ///     <see cref="NobleCardModel.CanCrit" /> 为 true 的宝具（如拔刀·神威）例外。
+    /// </summary>
+    private static bool IsCritEligibleAttack(CardModel? card)
+    {
+        return card is { Type: CardType.Attack } && (card is not NobleCardModel noble || noble.CanCrit);
     }
 
     public decimal ModifyDamageMultiplicative(Creature? target, decimal amount, ValueProp props,
@@ -253,7 +281,7 @@ public sealed class FgoPlayerState
         if (cardPlay == null)
         {
             if (cardSource is CharismaOfTheJade) return CanSpecialCrit ? 3m : 1m;
-            if (cardSource is { Type: CardType.Attack } and not NobleCardModel) return CanCrit ? 2m : 1m;
+            if (IsCritEligibleAttack(cardSource)) return CanCrit ? 2m : 1m;
             return 1m;
         }
 
@@ -269,7 +297,7 @@ public sealed class FgoPlayerState
         if (isPreview)
         {
             if (cardSource is CharismaOfTheJade) return CanSpecialCrit;
-            if (cardSource is { Type: CardType.Attack } and not NobleCardModel) return CanCrit;
+            if (IsCritEligibleAttack(cardSource)) return CanCrit;
             return false;
         }
 

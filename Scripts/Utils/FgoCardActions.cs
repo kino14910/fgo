@@ -47,7 +47,9 @@ public static class FgoCardActions
     /// <summary>
     ///     圣晶石/召唤券按右键抽宝具时排除的类型：这些宝具由剧情/进化链或特殊途径获取，
     ///     不应出现在随机候选里。Camelot/LordCamelot/LordChaldeas 为进化链、
-    ///     ObscurantWallOfChalk/RayProofKyrielight 为玛修衍生物、EdinShugurraCollapsar 为特殊宝具。
+    ///     ObscurantWallOfChalk/RayProofKyrielight 为玛修衍生物、EdinShugurraCollapsar 为特殊宝具，
+    ///     HollowHeartAlbion（由〔光之地平线〕追加）与 BattouKamui（由〔纳刀〕追加）为派生宝具。
+    ///     排除只影响圣晶石随机抽取；NpCardPower 追加候选取 canonical，不受此表影响。
     /// </summary>
     public static IReadOnlySet<Type> ExcludedFromNobleDrawing { get; } = new HashSet<Type>
     {
@@ -58,7 +60,8 @@ public static class FgoCardActions
         typeof(RayProofKyrielight),
         typeof(EdinShugurraCollapsar),
         typeof(Calibur),
-        typeof(HollowHeartAlbion)
+        typeof(HollowHeartAlbion),
+        typeof(BattouKamui)
     };
 
     public static CardModel CreateGeneratedCopy(CardModel card, Player owner, bool free = false, bool exhaust = false)

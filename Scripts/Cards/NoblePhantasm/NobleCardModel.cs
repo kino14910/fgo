@@ -41,6 +41,13 @@ public abstract class NobleCardModel(
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Retain];
     public override CardPoolModel Pool => ModelDb.CardPool<NobleCardPool>();
 
+    /// <summary>
+    ///     是否参与暴击判定。宝具默认不暴击（暴击只作用于普通攻击牌）；个别宝具
+    ///     （如拔刀·神威）重写为 true，从而走与攻击牌相同的暴击星消耗与倍率。
+    ///     判定读取处见 FgoPlayerState.IsCritEligibleAttack。
+    /// </summary>
+    public virtual bool CanCrit => false;
+
     public override int MaxUpgradeLevel => OverchargePower.MaxOvercharge;
 
     public override CardAssetProfile AssetProfile => new(

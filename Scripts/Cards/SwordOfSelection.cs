@@ -1,4 +1,5 @@
 using Fgo.Scripts.Commands;
+using Fgo.Scripts.Powers;
 using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;

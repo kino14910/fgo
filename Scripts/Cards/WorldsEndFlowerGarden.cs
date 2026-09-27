@@ -20,7 +20,8 @@ public class WorldsEndFlowerGarden() : FgoCardModel(1, CardType.Power,
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        ModCardVars.Power<WorldsEndFlowerGardenPower>(10)
+        ModCardVars.Power<WorldsEndFlowerGardenPower>(10),
+        ModCardVars.Heal(4)
     ];
 
     protected override void OnUpgrade()
@@ -32,5 +33,6 @@ public class WorldsEndFlowerGarden() : FgoCardModel(1, CardType.Power,
     {
         await PowerCmd.Apply<WorldsEndFlowerGardenPower>(choiceContext, Owner.Creature,
             DynamicVars[nameof(WorldsEndFlowerGardenPower)].BaseValue, Owner.Creature, this);
+        await CreatureCmd.Heal(Owner.Creature, DynamicVars.Heal.BaseValue);
     }
 }
