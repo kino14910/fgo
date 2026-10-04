@@ -1,4 +1,5 @@
 using Fgo.Scripts.Powers;
+using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -11,8 +12,11 @@ public class GoddessMetamorphosisBeast() : FgoCardModel(2, CardType.Power,
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
-        HoverTipFactory.FromPower<GoddessMetamorphosisBeastPower>()
+        HoverTipFactory.FromPower<GoddessMetamorphosisBeastPower>(),
+        FgoHoverTipFactory.FromForeigner()
     ];
+    
+    protected override HashSet<CardTag> CanonicalTags => [FgoTags.Foreigner];
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Ethereal];
 
