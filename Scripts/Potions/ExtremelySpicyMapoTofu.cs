@@ -73,6 +73,10 @@ public class ExtremelySpicyMapoTofu : FgoPotionModel
         };
 
         var selected = await CardSelectCmd.FromChooseACardScreen(choiceContext, options, Owner);
+
+        // 未选中的候选从未入堆，必须从 CombatState 摘除，否则每次使用都留下废卡。
+        FgoCardActions.DiscardUnpiledCandidates(combatState, options, selected);
+
         if (selected == null) return;
 
         switch (selected)

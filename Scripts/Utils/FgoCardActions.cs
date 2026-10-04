@@ -1,6 +1,7 @@
 using Fgo.Scripts.Cards.DerivativeMash;
 using Fgo.Scripts.Cards.NoblePhantasm;
 using Godot;
+using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Context;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -103,6 +104,27 @@ public static class FgoCardActions
     public static async Task AddToHand(CardModel card)
     {
         await AddToPile(card, PileType.Hand, CardPilePosition.Bottom, 0);
+    }
+
+    /// <summary>
+    ///     清理「生成一批候选卡 → 选一张 → 其余作废」流程中未被选中的候选。
+    ///     这些候选由 <c>CombatState.CreateCard</c> 生成、从未进入任何牌堆，因此
+    ///     <c>Pile == null</c>，**不能**走 <c>CardPileCmd.RemoveFromCombat</c>
+    ///     （会抛 "Card must be in a combat pile for it to be removed"）；
+    ///     正确做法是从 <c>CombatState</c> 的卡表摘除，并标记 <c>HasBeenRemovedFromState</c>，
+    ///     否则每次选牌都会在 <c>_allCards</c> 里留下废卡。
+    ///     <para />
+    ///     不传 <paramref name="keep"/> 时全部清理（用于选牌被取消的场景）。
+    /// </summary>
+    public static void DiscardUnpiledCandidates(
+        ICombatState combat, IEnumerable<CardModel> candidates, CardModel? keep = null)
+    {
+        foreach (var candidate in candidates)
+        {
+            if (candidate == keep) continue;
+            combat.RemoveCard(candidate);
+            candidate.HasBeenRemovedFromState = true;
+        }
     }
 
     /// <summary>
