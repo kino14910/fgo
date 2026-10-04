@@ -43,5 +43,7 @@
   "FGO_STATIC_HOVER_TIPS_FIELD_IMAGINARYSPACE.description": "[gold]Field[/gold]: On entry, your hand is replaced by [gold]Route Planning[/gold], [gold]To the Surface, Nautilus[/gold] and [gold]Imaginary Breakout[/gold].\nLoses [blue]1[/blue] stack at the start of each turn.",
   "FGO_CARDPILE_VOIDHAND.title": "Imaginary Scramble",
   "FGO_CARDPILE_VOIDHAND.description": "While in [gold]Imaginary Space[/gold], your hand is replaced by this pile.",
-  "FGO_CARDPILE_VOIDHAND.empty": "Imaginary Space is empty"
+  "FGO_CARDPILE_VOIDHAND.empty": "Imaginary Space is empty",
+  "FGO_STATIC_HOVER_TIPS_FATIGUE.title": "Fatigue",
+  "FGO_STATIC_HOVER_TIPS_FATIGUE.description": "A value on the [gold]Charisma[/gold] card. Gain 1 [gold]Fatigue[/gold] for each missing Energy.\nIt has no effect other than determining whether [gold]Doom[/gold] is applied."
 }

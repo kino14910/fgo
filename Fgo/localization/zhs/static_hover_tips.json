@@ -43,5 +43,7 @@
   "FGO_STATIC_HOVER_TIPS_FIELD_IMAGINARYSPACE.description": "[gold]场地[/gold]: 进入时把你的手牌替换为[gold]航线规划[/gold]、[gold]上浮吧鹦鹉螺号[/gold]与[gold]虚数脱出[/gold]。\n每回合开始时减少[blue]1[/blue]层，归零后消失。",
   "FGO_CARDPILE_VOIDHAND.title": "幻想急航",
   "FGO_CARDPILE_VOIDHAND.description": "在[gold]虚数空间[/gold]中，你的手牌被替换为这组牌。",
-  "FGO_CARDPILE_VOIDHAND.empty": "虚数空间为空"
+  "FGO_CARDPILE_VOIDHAND.empty": "虚数空间为空",
+  "FGO_STATIC_HOVER_TIPS_FATIGUE.title": "疲劳",
+  "FGO_STATIC_HOVER_TIPS_FATIGUE.description": "[gold]领袖气质[/gold]卡牌上的一个数值。每缺少1点能量，获得1层[gold]疲劳[/gold]。\n除了决定是否施加[gold]灾厄[/gold]外，它没有任何作用。"
 }

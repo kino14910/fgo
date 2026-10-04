@@ -351,7 +351,7 @@
   "FGO_POWER_TEMP_CRIT_DAMAGE_POWER.title": "Temporary Critical Damage",
   "FGO_POWER_TEMP_CRIT_DAMAGE_POWER.description": "Gain [gold]Critical Damage[/gold] until the end of this turn.",
   "FGO_POWER_TEMP_CRIT_DAMAGE_POWER.smartDescription": "Gain [blue]{Amount}[/blue] [gold]Critical Damage[/gold] until the end of this turn.",
-  "FGO_POWER_VS_TERROR_DAMAGE_POWER.title": "Anti-Terror Damage",
+  "FGO_POWER_VS_TERROR_DAMAGE_POWER.title": "VS Terror Damage",
   "FGO_POWER_VS_TERROR_DAMAGE_POWER.description": "Deal extra damage to enemies with [gold]Terror[/gold] this turn.",
   "FGO_POWER_VS_TERROR_DAMAGE_POWER.smartDescription": "Deal [blue]{Amount}%[/blue] extra damage to enemies with [gold]Terror[/gold] this turn.",
   "FGO_POWER_SONG_OF_LOVE_POWER.title": "Song of Love",
@@ -368,5 +368,8 @@
   "FGO_POWER_ROAD_OF_FALLING_FLOWERS_POWER.smartDescription": "Whenever you recover HP, recover an additional [blue]{HealPercent}%[/blue] of that amount.",
   "FGO_POWER_SWORD_SHEATHING_POWER.title": "Sword Sheathing",
   "FGO_POWER_SWORD_SHEATHING_POWER.description": "Until you play [gold]Battou Kamui[/gold], you cannot play other [gold]Attack[/gold] cards.",
-  "FGO_POWER_SWORD_SHEATHING_POWER.smartDescription": "Until you play [gold]Battou Kamui[/gold], you cannot play other [gold]Attack[/gold] cards."
+  "FGO_POWER_SWORD_SHEATHING_POWER.smartDescription": "Until you play [gold]Battou Kamui[/gold], you cannot play other [gold]Attack[/gold] cards.",
+  "FGO_POWER_CHARISMA_POWER.title": "Charisma",
+  "FGO_POWER_CHARISMA_POWER.description": "You may play cards even without enough Energy. For each missing Energy, lose 1 HP and gain 1 [gold]Fatigue[/gold].",
+  "FGO_POWER_CHARISMA_POWER.smartDescription": "You may play cards even without enough Energy. For each missing Energy, lose 1 HP and gain 1 [gold]Fatigue[/gold]."
 }

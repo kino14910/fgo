@@ -224,8 +224,8 @@
   "FGO_POWER_IGNORE_INVINCIBLE_POWER.description": "下一张攻击牌造成倍伤害。",
   "FGO_POWER_IGNORE_INVINCIBLE_POWER.smartDescription": "下一张攻击牌造成[blue]{Amount}[/blue]倍伤害。",
   "FGO_POWER_VS_TERROR_DAMAGE_POWER.title": "对恐怖特攻",
-  "FGO_POWER_VS_TERROR_DAMAGE_POWER.description": "你在这个回合内对有恐怖的敌人额外造成伤害。",
-  "FGO_POWER_VS_TERROR_DAMAGE_POWER.smartDescription": "你在这个回合内对有恐怖的敌人额外造成[blue]{Amount}%[/blue]伤害。",
+  "FGO_POWER_VS_TERROR_DAMAGE_POWER.description": "在本回合结束前对有[gold]恐怖[/gold]的敌人额外造成伤害。",
+  "FGO_POWER_VS_TERROR_DAMAGE_POWER.smartDescription": "在本回合结束前对有[gold]恐怖[/gold]的敌人额外造成[blue]{Amount}%[/blue]伤害。",
   "FGO_POWER_INDOMITABLE_POWER.title": "不屈",
   "FGO_POWER_INDOMITABLE_POWER.description": "[gold]毅力[/gold]发动时，获得力量。",
   "FGO_POWER_INDOMITABLE_POWER.smartDescription": "[gold]毅力[/gold]发动时，获得[blue]{Amount}[/blue]点力量。",
@@ -329,5 +329,8 @@
   "FGO_POWER_ROAD_OF_FALLING_FLOWERS_POWER.smartDescription": "每当你回复生命值时，额外回复该值的[blue]{HealPercent}%[/blue]。",
   "FGO_POWER_SWORD_SHEATHING_POWER.title": "纳刀",
   "FGO_POWER_SWORD_SHEATHING_POWER.description": "直到打出[gold]拔刀·神威[/gold]前，你不能打出其他[gold]攻击牌[/gold]。",
-  "FGO_POWER_SWORD_SHEATHING_POWER.smartDescription": "直到打出[gold]拔刀·神威[/gold]前，你不能打出其他[gold]攻击牌[/gold]。"
+  "FGO_POWER_SWORD_SHEATHING_POWER.smartDescription": "直到打出[gold]拔刀·神威[/gold]前，你不能打出其他[gold]攻击牌[/gold]。",
+  "FGO_POWER_CHARISMA_POWER.title": "领袖气质",
+  "FGO_POWER_CHARISMA_POWER.description": "你可以在能量不足时打出卡牌。每缺少1点能量，失去1点生命并获得1层[gold]疲劳[/gold]。",
+  "FGO_POWER_CHARISMA_POWER.smartDescription": "你可以在能量不足时打出卡牌。每缺少1点能量，失去1点生命并获得1层[gold]疲劳[/gold]（[gold]领袖气质[/gold]已升级时免除生命损失）。"
 }
