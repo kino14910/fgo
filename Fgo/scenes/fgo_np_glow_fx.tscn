@@ -1,0 +1,113 @@
+[gd_scene load_steps=9 format=3 uid="uid://dqp8n3glowfxa"]
+
+[ext_resource type="Script" uid="uid://cvoxrj2161l6e" path="res://Scripts/UI/FgoNpGlowFx.cs" id="1_script"]
+[ext_resource type="Shader" uid="uid://bqdanpe2hcsxp" path="res://Fgo/shaders/np_gold_rays.gdshader" id="2_shader"]
+[ext_resource type="Texture2D" uid="uid://cgjjtdxp6icae" path="res://Fgo/images/ui/np_spark.png" id="3_spark"]
+
+; 下列 uniform 仅为美术默认值；运行期由 FgoNpBar 每帧整体覆写
+; （Scripts/UI/FgoNpBar.cs 的 NpGlowTuning）。改这里只影响编辑器预览。
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rays"]
+shader = ExtResource("2_shader")
+shader_parameter/origin = Vector2(0.5, 0.5)
+shader_parameter/aspect = 1.3
+shader_parameter/intensity = 1.0
+shader_parameter/ray_color = Color(1, 0.7, 0.21, 1)
+shader_parameter/glow_color = Color(1, 0.78, 0.3, 1)
+shader_parameter/core_color = Color(1, 0.965, 0.855, 1)
+shader_parameter/spark_color = Color(1, 0.93, 0.7, 1)
+shader_parameter/breathe_speed = 0.3
+shader_parameter/breathe_amount = 0.18
+shader_parameter/core_size = 0.07
+shader_parameter/core_soft = 2.2
+shader_parameter/core_gain = 1.0
+shader_parameter/halo_size = 0.26
+shader_parameter/halo_soft = 2.8
+shader_parameter/halo_gain = 0.55
+shader_parameter/streak_gain = 0.3
+shader_parameter/ray_count = 30.0
+shader_parameter/ray_width = 0.3
+shader_parameter/ray_sharp = 1.6
+shader_parameter/ray_reach = 0.3
+shader_parameter/ray_falloff = 1.5
+shader_parameter/ray_gain = 0.42
+shader_parameter/ray_shimmer = 0.2
+shader_parameter/star_sectors = 22.0
+shader_parameter/star_rings = 7.0
+shader_parameter/star_density = 0.42
+shader_parameter/star_size = 0.34
+shader_parameter/star_arm = 2.6
+shader_parameter/star_sharp = 1.5
+shader_parameter/star_reach = 0.3
+shader_parameter/star_inner = 0.05
+shader_parameter/star_speed = 0.3
+shader_parameter/star_gain = 0.55
+shader_parameter/star_twinkle = 0.45
+shader_parameter/star_dim = 0.7
+
+; 光尘层：加色混合，叠在解析光效之上，模拟空气中的浮尘。
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_spark"]
+blend_mode = 1
+
+[sub_resource type="Gradient" id="Gradient_spark"]
+offsets = PackedFloat32Array(0, 0.14, 0.55, 1)
+colors = PackedColorArray(1, 0.95, 0.72, 0, 1, 0.94, 0.7, 0.95, 1, 0.76, 0.32, 0.55, 0.98, 0.6, 0.12, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_spark"]
+gradient = SubResource("Gradient_spark")
+
+; 从光心向四周扩散：极小的球形发射口 + 径向加速度，叠一点切向加速度做旋涡感。
+; 初速/加速度按「最远飞行距离 ≈ v·t + ½·a·t² ≈ 60px（等比 0.30）」反推，
+; 与 star_reach / ray_reach 对齐，否则光尘会跑到光芒之外拖出一条长尾。
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_spark"]
+lifetime_randomness = 0.6
+emission_shape = 1
+emission_sphere_radius = 2.0
+angle_min = -180.0
+angle_max = 180.0
+direction = Vector3(0, -1, 0)
+spread = 180.0
+initial_velocity_min = 3.0
+initial_velocity_max = 12.0
+radial_accel_min = 5.0
+radial_accel_max = 14.0
+tangential_accel_min = -4.0
+tangential_accel_max = 4.0
+gravity = Vector3(0, 0, 0)
+damping_min = 2.0
+damping_max = 8.0
+scale_min = 0.04
+scale_max = 0.14
+color_ramp = SubResource("GradientTexture1D_spark")
+turbulence_enabled = true
+turbulence_noise_strength = 0.18
+turbulence_noise_frequency = 2.4
+
+[node name="FgoNpGlowFx" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 260.0
+offset_bottom = 200.0
+mouse_filter = 2
+script = ExtResource("1_script")
+
+[node name="Rays" type="ColorRect" parent="."]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_rays")
+layout_mode = 0
+offset_right = 260.0
+offset_bottom = 200.0
+mouse_filter = 2
+
+[node name="Sparks" type="GPUParticles2D" parent="."]
+unique_name_in_owner = true
+material = SubResource("CanvasItemMaterial_spark")
+position = Vector2(130, 100)
+emitting = false
+amount = 28
+texture = ExtResource("3_spark")
+lifetime = 2.2
+preprocess = 2.2
+randomness = 0.7
+visibility_rect = Rect2(-93, -93, 186, 186)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_spark")
