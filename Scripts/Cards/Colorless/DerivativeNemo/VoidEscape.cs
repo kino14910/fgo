@@ -38,8 +38,12 @@ public class VoidEscape() : FgoBaseCardModel(0, CardType.Skill,
         var combat = Owner.Creature.CombatState;
         if (combat == null) return;
 
+        // 探索点数是「按玩家」挂在 Creature 上的能力，且兑换结果写进该玩家的局内存档，
+        // 所以只有出牌者本人结算；其余玩家只跟着退出，不获利。
         await GreatVoidSeaBattle.ConsumeExplorationPoints(choiceContext, Owner);
 
+        // 移除场地 → 全体退出。放在兑换之后：兑换只读 Owner.Creature 上的能力，
+        // 不依赖场地；而 RemoveFromCombat 会清掉所有人的额外手牌，先退出会把本卡一起清掉。
         await FgoField.Remove(combat, FgoFieldId.ImaginarySpace);
         await FgoVoidHand.ExitAll(combat);
     }
