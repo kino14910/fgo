@@ -1,3 +1,4 @@
+using Fgo.Scripts.Fields;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization;
 using STS2RitsuLib.Cards.DynamicVars;
@@ -129,4 +130,20 @@ public static class FgoHoverTipFactory
 
         return new HoverTip(title, desc);
     }
+
+    public static HoverTip FromFatigue()
+    {
+        var title = new LocString(
+            "static_hover_tips",
+            "FGO_STATIC_HOVER_TIPS_FATIGUE.title"
+        );
+        var desc = new LocString(
+            "static_hover_tips",
+            "FGO_STATIC_HOVER_TIPS_FATIGUE.description"
+        );
+
+        return new HoverTip(title, desc);
+    }
+
+    public static HoverTip FromField(FgoFieldId id) => id.ToHoverTip();
 }

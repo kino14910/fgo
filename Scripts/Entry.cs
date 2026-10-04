@@ -116,6 +116,14 @@ public class Entry
             DisableMod,
             "Character select settings patcher failed; in-run settings panel will not work.");
 
+        // 领袖气质（Charisma）: 能量不足时仍可打出（缺失能量改由生命值支付）。
+        var cardCostPatcher = RitsuLibFramework.CreatePatcher(ModId, "card_cost");
+        cardCostPatcher.RegisterPatch<FgoCharismaCostPatch>();
+        RitsuLibFramework.ApplyRequiredPatcher(
+            cardCostPatcher,
+            DisableMod,
+            "Charisma cost patcher failed; Charisma cannot be played with insufficient energy.");
+
         // 订阅 run 开始/加载事件，从 RunSavedData 恢复令咒数量
         _runStartedSubscription = RitsuLibFramework.SubscribeLifecycle<RunStartedEvent>(OnRunStarted);
         _runLoadedSubscription = RitsuLibFramework.SubscribeLifecycle<RunLoadedEvent>(OnRunLoaded);
