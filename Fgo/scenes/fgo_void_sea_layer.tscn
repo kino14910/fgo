@@ -1,7 +1,26 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=6 format=3]
 
 [ext_resource type="Script" path="res://Scripts/UI/FgoVoidSeaLayer.cs" id="1_layer"]
 [ext_resource type="Texture2D" path="res://Fgo/images/bg/VoidSea.png" id="2_voidsea"]
+[ext_resource type="Shader" path="res://Fgo/shaders/fgo_void_sea_transition.gdshader" id="3_maskshader"]
+[ext_resource type="Texture2D" uid="uid://w2aeki7brmgn" path="res://Fgo/images/charui/fgo_transition.webp" id="4_masktex"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_voidmask"]
+resource_local_to_scene = true
+shader = ExtResource("3_maskshader")
+shader_parameter/transitionTex = ExtResource("4_masktex")
+shader_parameter/threshold = 1.0
+shader_parameter/aspect = 2.13
+shader_parameter/abyss = Color(0.043, 0.031, 0.078, 1)
+shader_parameter/deepblue = Color(0.055, 0.176, 0.361, 1)
+shader_parameter/violet = Color(0.271, 0.106, 0.443, 1)
+shader_parameter/glowblue = Color(0.278, 0.639, 0.949, 1)
+shader_parameter/crack_gain = 1.0
+shader_parameter/surge_gain = 1.0
+shader_parameter/eye_gain = 1.0
+shader_parameter/noise_gain = 1.0
+shader_parameter/erode = 0.16
+shader_parameter/noise_scale = 2.4
 
 [node name="VoidSea" type="Control"]
 layout_mode = 3
@@ -16,6 +35,7 @@ offset_right = 1440.77
 offset_bottom = 675.36
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("1_layer")
 
 [node name="Visual" type="TextureRect" parent="."]
@@ -25,6 +45,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 texture = ExtResource("2_voidsea")
 expand_mode = 1
 
@@ -36,5 +57,17 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 texture = ExtResource("2_voidsea")
 expand_mode = 1
+
+[node name="TransitionMask" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0)
+material = SubResource("ShaderMaterial_voidmask")

@@ -1,23 +1,21 @@
 [gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://c333sucyfnvv2"]
 
-[ext_resource type="Texture2D" uid="uid://w2aeki7brmgn" path="res://Fgo/images/charui/fgo_transition.webp" id="1_2pnya"]
-
-[sub_resource type="Shader" id="Shader_wjwex"]
-code = "shader_type canvas_item;
-
-uniform sampler2D transitionTex;
-uniform float threshold : hint_range(0,1);
-
-void fragment() {
-    float falloff = 1.0 - texture(transitionTex, UV).r;
-    
-    // helps with falloff artifacts issues towards the transition extremes
-    float remap  = mix(-0.1, 1.1, threshold);
-    falloff = step(falloff, remap);
-    COLOR.a = falloff;
-}"
+[ext_resource type="Shader" path="res://Fgo/shaders/fgo_transition.gdshader" id="1_shader"]
+[ext_resource type="Texture2D" uid="uid://w2aeki7brmgn" path="res://Fgo/images/charui/fgo_transition.webp" id="2_2pnya"]
 
 [resource]
-shader = SubResource("Shader_wjwex")
-shader_parameter/transitionTex = ExtResource("1_2pnya")
+resource_local_to_scene = true
+shader = ExtResource("1_shader")
+shader_parameter/transitionTex = ExtResource("2_2pnya")
 shader_parameter/threshold = 0.0
+shader_parameter/aspect = 2.42
+shader_parameter/gold = Color(1, 0.816, 0.31, 1)
+shader_parameter/azure = Color(0.204, 0.451, 0.855, 1)
+shader_parameter/crimson = Color(0.78, 0.145, 0.18, 1)
+shader_parameter/deep = Color(0.024, 0.028, 0.063, 1)
+shader_parameter/seal_gain = 1.0
+shader_parameter/circle_gain = 0.9
+shader_parameter/beam_gain = 1.0
+shader_parameter/sparkle_gain = 1.0
+shader_parameter/rim_gain = 1.0
+shader_parameter/spin = 1.0
