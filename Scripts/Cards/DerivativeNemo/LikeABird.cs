@@ -5,6 +5,8 @@ using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
+using MegaCrit.Sts2.Core.Models.CardPools;
+using STS2RitsuLib.Interop.AutoRegistration;
 
 namespace Fgo.Scripts.Cards.DerivativeNemo;
 
@@ -15,7 +17,8 @@ namespace Fgo.Scripts.Cards.DerivativeNemo;
 ///     仅当玩家解锁过（<see cref="GreatVoidSeaBattle.IsLikeABirdUnlocked" />）时，
 ///     加入和移除逻辑由 <see cref="FgoVoidHand" /> 管理。
 /// </remarks>
-public class LikeABird() : FgoCardModel(0, CardType.Power, 
+[RegisterCard(typeof(TokenCardPool))]
+public class LikeABird() : FgoBaseCardModel(0, CardType.Power, 
     CardRarity.Token, TargetType.Self,
     shouldShowInCardLibrary: false)
 {

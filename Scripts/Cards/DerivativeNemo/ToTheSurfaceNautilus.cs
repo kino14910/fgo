@@ -6,6 +6,8 @@ using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
+using MegaCrit.Sts2.Core.Models.CardPools;
+using STS2RitsuLib.Interop.AutoRegistration;
 
 namespace Fgo.Scripts.Cards.DerivativeNemo;
 
@@ -18,7 +20,8 @@ namespace Fgo.Scripts.Cards.DerivativeNemo;
 ///     （<c>Creature.IsAlive</c> = <c>CurrentHp &gt; 0</c>，被「毅力」救回仍算存活，
 ///     比 <c>WasTargetKilled</c> 的"血量触底"更贴合「斩杀」含义）。
 /// </remarks>
-public class ToTheSurfaceNautilus() : FgoCardModel(0, CardType.Power, 
+[RegisterCard(typeof(TokenCardPool))]
+public class ToTheSurfaceNautilus() : FgoBaseCardModel(0, CardType.Power, 
     CardRarity.Token, TargetType.AnyEnemy,
     shouldShowInCardLibrary: false)
 {
