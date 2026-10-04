@@ -11,12 +11,11 @@ using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
 
-public class WitchOfSalem() : FgoCardModel(3, CardType.Skill,
+public class WitchOfSalem() : FgoCardModel(1, CardType.Skill,
     CardRarity.Rare, TargetType.Self)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
-        HoverTipFactory.FromPower<VulnerablePower>(),
         HoverTipFactory.FromPower<TerrorPower>(),
         HoverTipFactory.FromPower<VsTerrorDamagePower>(),
         FgoHoverTipFactory.FromNp(),
@@ -27,7 +26,6 @@ public class WitchOfSalem() : FgoCardModel(3, CardType.Skill,
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        ModCardVars.Power<VulnerablePower>(3),
         ModCardVars.Power<TerrorPower>(3),
         ModCardVars.Int("TerrorChance", 30),
         ModCardVars.Power<VsTerrorDamagePower>(50),
@@ -42,8 +40,6 @@ public class WitchOfSalem() : FgoCardModel(3, CardType.Skill,
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await PowerCmd.Apply<VulnerablePower>(choiceContext, CombatState!.HittableEnemies,
-            DynamicVars[nameof(VulnerablePower)].BaseValue, Owner.Creature, this);
         var powers = await PowerCmd.Apply<TerrorPower>(choiceContext, CombatState.HittableEnemies,
             DynamicVars[nameof(TerrorPower)].IntValue,
             Owner.Creature, this);

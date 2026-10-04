@@ -13,7 +13,7 @@ namespace Fgo.Scripts.Cards;
 ///     追加候选沿用光之地平线的 NpCardPower（选中该牌时才消耗）；出牌封锁由
 ///     <see cref="SwordSheathingPower" /> 负责，直到拔刀·神威真正打出才解除。
 /// </summary>
-public class SwordSheathing() : FgoCardModel(0, CardType.Skill,
+public class SwordSheathing() : FgoCardModel(1, CardType.Skill,
     CardRarity.Rare, TargetType.Self)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
@@ -21,6 +21,11 @@ public class SwordSheathing() : FgoCardModel(0, CardType.Skill,
         HoverTipFactory.FromPower<NpCardPower>(),
         HoverTipFactory.FromPower<SwordSheathingPower>()
     ];
+
+    protected override void OnUpgrade()
+    {
+        EnergyCost.UpgradeBy(-1);
+    }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {

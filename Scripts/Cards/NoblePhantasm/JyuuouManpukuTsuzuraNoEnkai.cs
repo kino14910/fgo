@@ -16,7 +16,7 @@ namespace Fgo.Scripts.Cards.NoblePhantasm;
 ///     十王满腹·葛笼宴海（Jyuuou Manpuku Tsuzura no Enkai）: 多人专用宝具。
 ///     群伤之后抬高全队的满腹槽上限，附带额外最大生命值与宝具值，并净化全队的中毒与诅呪。
 /// </summary>
-public class JyuuouManpukuTsuzuraNoEnkai() : NobleCardModel(1, CardType.Skill, TargetType.AllEnemies)
+public class JyuuouManpukuTsuzuraNoEnkai() : NobleCardModel(1, CardType.Attack, TargetType.AllEnemies)
 {
     /// <summary>每次抬高满腹槽上限的点数。</summary>
     public const int FullnessCapacityPerPlay = 4;
