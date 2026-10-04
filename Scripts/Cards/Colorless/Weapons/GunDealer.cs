@@ -1,3 +1,5 @@
+using Fgo.Scripts.Utils;
+using MegaCrit.Sts2.Core.CardSelection;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -13,10 +15,12 @@ namespace Fgo.Scripts.Cards.Colorless.Weapons;
 /// </summary>
 /// <remarks>
 ///     四个候选都由 <c>CombatState.CreateCard</c> 从 canonical 生成 —— 数量与顺序各端完全一致，
-///     因此 <c>CardSelectCmd.FromChooseACardScreen</c> 的"按 index 跨端同步"是安全的。
+///     因此 <c>CardSelectCmd.FromSimpleGrid</c> 的"按 index 跨端同步"是安全的。
 ///     <para />
-///     未被选中的候选从未进过任何牌堆，选完显式 <c>CardPileCmd.RemoveFromCombat</c> 清掉，
-///     免得每次打出都往 <c>CombatState._allCards</c> 里留下 3 张废卡。
+///     未被选中的候选从未进过任何牌堆（<c>Pile == null</c>），因此**不能**用
+///     <c>CardPileCmd.RemoveFromCombat</c> 清理（它会因 "Card must be in a combat pile" 抛异常）；
+///     正确做法是 <c>CombatState.RemoveCard</c> 把它从 <c>_allCards</c> 摘掉，再置
+///     <c>HasBeenRemovedFromState</c>，免得每次打出都留下 3 张废卡。
 /// </remarks>
 [RegisterCard(typeof(TokenCardPool))]
 public class GunDealer() : FgoBaseCardModel(0, CardType.Skill, CardRarity.Token, TargetType.Self)
@@ -26,7 +30,7 @@ public class GunDealer() : FgoBaseCardModel(0, CardType.Skill, CardRarity.Token,
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
         HoverTipFactory.FromCard<Pistol>(),
-        HoverTipFactory.FromCard<MachineGun>(),
+        HoverTipFactory.FromCard<SMG>(),
         HoverTipFactory.FromCard<SniperRifle>(),
         HoverTipFactory.FromCard<RocketLauncher>()
     ];
@@ -39,16 +43,17 @@ public class GunDealer() : FgoBaseCardModel(0, CardType.Skill, CardRarity.Token,
         var options = new List<CardModel>
         {
             combat.CreateCard<Pistol>(Owner),
-            combat.CreateCard<MachineGun>(Owner),
+            combat.CreateCard<SMG>(Owner),
             combat.CreateCard<SniperRifle>(Owner),
             combat.CreateCard<RocketLauncher>(Owner)
         };
 
-        var selected = await CardSelectCmd.FromChooseACardScreen(choiceContext, options, Owner);
 
-        foreach (var option in options)
-            if (option != selected)
-                await CardPileCmd.RemoveFromCombat(option, skipVisuals: true);
+        var selected = (await CardSelectCmd.FromSimpleGrid(choiceContext, options, Owner, new CardSelectorPrefs(
+            SelectionScreenPrompt, 1
+        ))).FirstOrDefault();
+
+        FgoCardActions.DiscardUnpiledCandidates(combat, options, selected);
 
         if (selected == null) return;
 

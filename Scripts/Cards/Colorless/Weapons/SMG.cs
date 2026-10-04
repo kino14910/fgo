@@ -8,9 +8,9 @@ using STS2RitsuLib.Interop.AutoRegistration;
 
 namespace Fgo.Scripts.Cards.Colorless.Weapons;
 
-/// <summary>机枪: 造成 1 点伤害 4 次。</summary>
+/// <summary>冲锋枪: 造成 1 点伤害 4 次。</summary>
 [RegisterCard(typeof(TokenCardPool))]
-public class MachineGun() : FgoBaseCardModel(0, CardType.Attack, CardRarity.Token, TargetType.AnyEnemy)
+public class SMG() : FgoBaseCardModel(0, CardType.Attack, CardRarity.Token, TargetType.AnyEnemy)
 {
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
