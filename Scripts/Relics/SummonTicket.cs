@@ -5,8 +5,11 @@ using MegaCrit.Sts2.Core.CardSelection;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Context;
 using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Relics;
 using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Nodes.Screens.CardSelection;
+using MegaCrit.Sts2.Core.Nodes.Screens.Overlays;
 using MegaCrit.Sts2.Core.Rooms;
 using STS2RitsuLib.Interactions.RightClick;
 using STS2RitsuLib.Interop.AutoRegistration;
@@ -40,63 +43,74 @@ public class SummonTicket : FgoRelic, IModRightClickableRelic
         return QuartzCounter >= CostPerChoice;
     }
 
-    public async Task OnRightClick(ModRightClickExecutionContext context)
+    /// <summary>
+    ///     右键触发: 弹出全部候选的网格界面，玩家手动挑选一张加入 NobleDeck 并消耗 3 计数。
+    ///     <para>
+    ///         与圣晶石一致：本方法是同步动作的执行体，只发起、不等待（界面在动作之外打开，
+    ///         选完由 <see cref="FgoQuartzSummonCmd" /> 广播结果），
+    ///         避免等待玩家点击把 ActionExecutor 全局堵死。
+    ///     </para>
+    /// </summary>
+    public Task OnRightClick(ModRightClickExecutionContext context)
     {
-        if (QuartzCounter < CostPerChoice) return;
+        if (QuartzCounter < CostPerChoice) return Task.CompletedTask;
         var player = context.Player;
 
         // 与圣晶石一致：仅持有该遗物的本地玩家开启选择界面，其它端直接跳过。
         if (FgoConfigSync.IsNetworkedRun() && !LocalContext.IsMe(Owner))
-            return;
-        var prefs = new CardSelectorPrefs(SelectionScreenPrompt, 1);
+            return Task.CompletedTask;
 
-        var existing = CardPile.Get(FgoEnums.NobleDeck, player)?.Cards
-            .Select(c => c.GetType())
-            .ToHashSet() ?? [];
+        FgoQuartzSummon.Begin(() => SummonFlow(player));
+        return Task.CompletedTask;
+    }
 
-        // 候选 = 未在宝具卡组本局已拥有的 && 不在共享排除列表（见 FgoCardActions.ExcludedFromNobleDrawing）。
-        var candidates = ModelDb.CardPool<NobleCardPool>()
-            .GetUnlockedCards(player.UnlockState, player.RunState.CardMultiplayerConstraint)
-            .OfType<NobleCardModel>()
-            .Where(card => !existing.Contains(card.GetType()) &&
-                           !FgoCardActions.ExcludedFromNobleDrawing.Contains(card.GetType()))
-            .Select(card => player.RunState.CreateCard(card, player))
-            .ToList();
-
+    private async Task SummonFlow(Player player)
+    {
+        var candidates = FgoQuartzSummon.BuildCandidates(player);
         if (candidates.Count == 0)
         {
             Flash();
             return;
         }
 
-        var selected = (await CardSelectCmd.FromSimpleGrid(
-                context.PlayerChoiceContext!, candidates, player, prefs))
-            .FirstOrDefault();
+        if (!FgoQuartzSummon.CanRequestNow())
+        {
+            Flash();
+            return;
+        }
 
+        var prefs = new CardSelectorPrefs(SelectionScreenPrompt, 1);
+        var screen = NSimpleCardSelectScreen.Create(candidates, prefs);
+        var overlayStack = NOverlayStack.Instance;
+        if (overlayStack == null)
+        {
+            Flash();
+            return;
+        }
+
+        overlayStack.Push(screen);
+
+        CardModel? selected;
+        try
+        {
+            selected = (await screen.CardsSelected()).FirstOrDefault();
+        }
+        catch (TaskCanceledException)
+        {
+            // 未选择就关闭界面：不扣费、不加卡。
+            return;
+        }
+
+        overlayStack.Remove(screen);
         if (selected == null) return;
 
-        var noblePile = CardPile.Get(FgoEnums.NobleDeck, player);
-        if (noblePile != null)
+        if (!FgoQuartzSummon.Submit(player, selected))
         {
-            var result = await CardPileCmd.Add(selected, noblePile);
-
-            // 联机同步：把「该玩家获得此宝具」广播给其它端，使其本地 NobleDeck 保持一致
-            // （NobleDeck 为 RunPersistent 牌堆，运行期间本机改动不会自动传播）。
-            if (result is { success: true })
-            {
-                FgoNobleDeckSync.NotifyAdd(player, selected.Id);
-
-                // 同 SaintQuartz：右键消耗只在拥有者本机运行（非复制动作），QuartzCount 又在主机权威的
-                // PlayerRunSavedData 上（客户端写不回传主机），故扣费后显式上报/广播新计数；
-                // 放在“加卡成功”分支内，避免加卡失败却照扣圣晶石。
-                QuartzCounter -= CostPerChoice;
-                FgoQuartzSync.NotifyLocalCount(player);
-            }
-
-            RefreshQuartzActivationVisual(CostPerChoice);
             Flash();
-            FgoCardActions.PreviewNoblePileAdd(result);
+            return;
         }
+
+        Flash();
     }
 
     public override Task AfterRoomEntered(AbstractRoom room)

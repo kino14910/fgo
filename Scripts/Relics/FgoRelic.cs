@@ -22,6 +22,21 @@ public abstract class FgoRelic : ModRelicTemplate
         set => Entry.RunState.Modify(Owner, data => data.QuartzCount = value);
     }
 
+    /// <summary>
+    ///     当前计数的只读访问（供抽取提交动作读取与校验；遗物实例可能被点金石替换，真值按玩家存放）。
+    /// </summary>
+    internal int QuartzCount => QuartzCounter;
+
+    /// <summary>
+    ///     扣除圣晶石计数并刷新高亮。由抽取提交动作（FgoQuartzSummonCmd）在所有端确定性调用：
+    ///     主机侧的写入是权威值，客户端的写入会被主机的广播覆盖，因此各端都执行不会算重。
+    /// </summary>
+    internal void SpendQuartz(int amount)
+    {
+        QuartzCounter -= amount;
+        RefreshQuartzActivationVisual(SaintQuartz.CostPerChoice);
+    }
+
     public override RelicAssetProfile AssetProfile
     {
         get
