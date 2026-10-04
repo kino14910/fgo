@@ -1,6 +1,9 @@
+using MegaCrit.Sts2.Core.Combat;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.ValueProps;
 using STS2RitsuLib.Scaffolding.Content;
@@ -27,5 +30,14 @@ public class VsTerrorDamagePower : FgoPowerModel
         if (target == null) return 1m;
         if (!target.HasPower<TerrorPower>()) return 1m;
         return (100m + Amount) / 100m;
+    }
+
+    public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side,
+        IEnumerable<Creature> participants)
+    {
+        if (!participants.Contains(Owner)) return;
+        if (side != CombatSide.Player) return;
+
+        await PowerCmd.Remove(this);
     }
 }
