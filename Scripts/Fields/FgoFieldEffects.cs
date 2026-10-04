@@ -66,6 +66,10 @@ public static class FgoFieldEffects
     {
         await FgoField.TickDown(combat);
 
+        // 递减之后立刻结算〔虚数空间〕的到期退出：side 级钩子每轮只跑一次，
+        // 因此「场次结束」会在同一份复制动作里对所有人同时发生（见 FgoVoidHand.ExitIfInactive）。
+        await FgoVoidHand.ExitIfInactive(combat);
+
         if (FgoField.Has(combat, FgoFieldId.Waterside))
             foreach (var creature in LivingUnits(combat))
                 await CreatureCmd.GainBlock(creature, WatersideBlock, ValueProp.Unpowered, null);

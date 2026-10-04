@@ -46,12 +46,16 @@ public class GreatVoidSeaBattle() : FgoCardModel(1, CardType.Skill,
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
+        // 宝具值只给打出者本人（奖励不共享）；〔虚数空间〕则是战场级场地，所有人共享。
         await FgoResCmd.ModifyNp(DynamicVars.EvaluateValueOrDefault("Np"), Owner);
 
         await FgoField.Add(Owner.Creature.CombatState, FgoFieldId.ImaginarySpace, 3);
         await FgoField.Add(Owner.Creature.CombatState, FgoFieldId.Waterside, 3);
 
         // 〔虚数空间〕: 进入的这一刻就把所有玩家的手牌换成额外手牌（航线规划 / 上浮吧鹦鹉螺号 / 虚数脱出）。
+        // 走 EnterAll（全体）而非只换自己的：场地是战场级的，只换自己会让其余玩家
+        // 留在虚数空间里却顶着一手原版牌，与场地效果（鹦鹉螺的大冲角 1.5 倍）的前提不符。
+        // 重复打出是安全的——FgoVoidHand.Enter 按成员身份幂等，不会把新抽的牌二次暂存。
         if (Owner.Creature.CombatState is { } combat)
             await FgoVoidHand.EnterAll(choiceContext, combat);
     }
