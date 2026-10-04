@@ -18,7 +18,12 @@ public class JaguarPunch() : FgoCardModel(1, CardType.Power,
         FgoHoverTipFactory.FromStar(),
         FgoHoverTipFactory.FromField(FgoFieldId.Forest)
     ];
-    
+
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        ModCardVars.Int("Star", 10)
+    ];
+
     protected override void OnUpgrade()
     {
         AddKeyword(CardKeyword.Retain);
@@ -27,6 +32,6 @@ public class JaguarPunch() : FgoCardModel(1, CardType.Power,
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await FgoField.Add(CombatState, FgoFieldId.Forest, 3);
-        await FgoResCmd.ModifyStars(10, Owner);
+        await FgoResCmd.ModifyStars(DynamicVars["Star"].BaseValue, Owner);
     }
 }
