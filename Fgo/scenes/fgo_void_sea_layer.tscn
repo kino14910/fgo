@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://Scripts/UI/FgoVoidSeaLayer.cs" id="1_layer"]
 [ext_resource type="Texture2D" path="res://Fgo/images/bg/VoidSea.png" id="2_voidsea"]
 [ext_resource type="Shader" path="res://Fgo/shaders/fgo_void_sea_transition.gdshader" id="3_maskshader"]
-[ext_resource type="Texture2D" uid="uid://w2aeki7brmgn" path="res://Fgo/images/charui/fgo_transition.webp" id="4_masktex"]
+[ext_resource type="Texture2D" path="res://Fgo/images/transitions/void_sea_dissolve.png" id="4_masktex"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_voidmask"]
 resource_local_to_scene = true
@@ -16,11 +16,10 @@ shader_parameter/deepblue = Color(0.055, 0.176, 0.361, 1)
 shader_parameter/violet = Color(0.271, 0.106, 0.443, 1)
 shader_parameter/glowblue = Color(0.278, 0.639, 0.949, 1)
 shader_parameter/crack_gain = 1.0
-shader_parameter/surge_gain = 1.0
-shader_parameter/eye_gain = 1.0
-shader_parameter/noise_gain = 1.0
-shader_parameter/erode = 0.16
-shader_parameter/noise_scale = 2.4
+shader_parameter/surge_gain = 0.85
+shader_parameter/eye_gain = 0.9
+shader_parameter/edge_gain = 1.0
+shader_parameter/edge_soft = 0.055
 
 [node name="VoidSea" type="Control"]
 layout_mode = 3

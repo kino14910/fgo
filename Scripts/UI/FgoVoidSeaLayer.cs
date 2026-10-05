@@ -34,11 +34,26 @@ public sealed partial class FgoVoidSeaLayer : NCombatBackgroundLayer
 
     private static readonly StringName ThresholdParamName = new("threshold");
 
-    /// <summary>起手保持完全覆盖的时长（秒），让遮罩先「坐实」再开始溶解。</summary>
-    private const float CoverSeconds = 0.08f;
+    /// <summary>
+    ///     起手保持完全覆盖的时长（秒）。
+    ///     <para>
+    ///         要盖住虚数之海本体的入场淡入（<c>FgoVoidSeaBackground.EnterFadeSeconds = 0.25</c>）
+    ///         再留一点「深渊先成形」的读图时间，所以必须 &gt; 入场淡入。
+    ///     </para>
+    /// </summary>
+    private const float CoverSeconds = 0.40f;
 
-    /// <summary>溶解时长（秒）。</summary>
-    private const float DissolveSeconds = 0.8f;
+    /// <summary>
+    ///     溶解时长（秒）。
+    ///     <para>
+    ///         原版角色选人转场是 <c>NTransition.FadeOut</c> 的 <b>0.8s</b>，但那是全黑幕退场、
+    ///         没有内容要辨认；本遮罩是「有内容的画面自左向右溶解」，沿用 0.8s 时
+    ///         肉眼几乎只看到一闪而过（实测反馈：过快、看不清）。
+    ///         取 <b>1.5s</b> = 原版的 1.9 倍，配合下面的保持段，整段入场约
+    ///         <c>0.40 + 1.50 = 1.9s</c>，足够看清溶解锋面推过全屏。
+    ///     </para>
+    /// </summary>
+    private const float DissolveSeconds = 1.5f;
 
     public override void _Ready()
     {
@@ -53,10 +68,16 @@ public sealed partial class FgoVoidSeaLayer : NCombatBackgroundLayer
     ///     收尾把节点本身 <c>Visible=false</c>，避免战斗全程白跑一个全屏 shader。
     /// </summary>
     /// <remarks>
-    ///     本图层每次进入虚数空间都会被 <c>FgoVoidSeaBackground.AddLayerInto</c> 重新实例化，
-    ///     所以 <c>_Ready</c> 里起一次补间即可，不需要外部驱动、也不需要复位。
-    ///     缓动取 <c>EASE_OUT + TRANS_CUBIC</c>：threshold 走 <c>(1-t)^3</c>，
-    ///     也就是「先快速退场、末尾轻柔收束到 0」，末尾不会出现突然消失的硬跳。
+    ///     <para>
+    ///         本图层每次进入虚数空间都会被 <c>FgoVoidSeaBackground.AddLayerInto</c> 重新实例化，
+    ///         所以 <c>_Ready</c> 里起一次补间即可，不需要外部驱动、也不需要复位。
+    ///     </para>
+    ///     <para>
+    ///         <b>缓动取 <c>EASE_IN_OUT + TRANS_CUBIC</c>（S 形）而不是 <c>EASE_OUT</c>。</b>
+    ///         threshold 单调下降，且首尾速度都趋 0：起手不会「一上来就褪掉一大块」，
+    ///         收尾也不会在最后一帧突然消失 —— 正好对应「无闪烁、无突然跳变」。
+    ///         运动过程完全由 threshold 单调驱动，shader 的 cover 不含 TIME，故中途无抖动。
+    ///     </para>
     /// </remarks>
     private void PlayEnterTransition()
     {
@@ -69,7 +90,7 @@ public sealed partial class FgoVoidSeaLayer : NCombatBackgroundLayer
         var tween = CreateTween();
         tween.TweenInterval(CoverSeconds);
         tween.TweenProperty(material, ThresholdParamPath, 0f, DissolveSeconds)
-            .SetEase(Tween.EaseType.Out)
+            .SetEase(Tween.EaseType.InOut)
             .SetTrans(Tween.TransitionType.Cubic);
         tween.TweenCallback(Callable.From(() => mask.Visible = false));
     }

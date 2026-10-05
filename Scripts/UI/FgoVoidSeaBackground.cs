@@ -42,8 +42,27 @@ public sealed partial class FgoVoidSeaBackground : Node
     /// <summary>虚数之海图层场景。必须内含 <c>Visual</c> 与 <c>PhobiaModeVisual</c> 两个直属子节点。</summary>
     private const string VoidSeaLayerPath = "res://Fgo/scenes/fgo_void_sea_layer.tscn";
 
-    /// <summary>淡入淡出时长（秒）。</summary>
-    private const float FadeSeconds = 0.6f;
+    /// <summary>
+    ///     进入时把虚数之海本体推到不透明所需的时长（秒）。
+    ///     <para>
+    ///         <b>刻意压得很短。</b>画面的「切入」现在由 <c>TransitionMask</c> 的遮罩溶解负责，
+    ///         这里的 modulate 只负责在遮罩完全盖住屏幕的期间把底图备好；
+    ///         若这里也拖到 1s+，就会和遮罩溶解叠成「两层同时淡入」，
+    ///         看起来又像原来的直接交叉淡入，遮罩的溶解过程反而被冲淡。
+    ///         0.25s 足够在不透过遮罩的前提下完成，且远小于
+    ///         <c>FgoVoidSeaLayer.CoverSeconds = 0.40</c>，不会漏出底图。
+    ///     </para>
+    /// </summary>
+    private const float EnterFadeSeconds = 0.25f;
+
+    /// <summary>
+    ///     离开时淡出并拆除的时长（秒）。
+    ///     <para>
+    ///         离场没有遮罩接管（图层会整体淡掉），所以保留一段可读的交叉淡出，
+    ///         取 0.9s：比原来的 0.6s 慢一半，肉眼能看清是「虚数之海退去」而不是闪断。
+    ///     </para>
+    /// </summary>
+    private const float ExitFadeSeconds = 0.9f;
 
     private static FgoVoidSeaBackground? _instance;
 
@@ -187,8 +206,10 @@ public sealed partial class FgoVoidSeaBackground : Node
         }
         else
         {
-            fade.TweenProperty(voidSea, "modulate:a", 1f, FadeSeconds);
-            if (vanilla != null) fade.TweenProperty(vanilla, "modulate:a", 0f, FadeSeconds);
+            // 这里只把底图「备好」到不透明；真正的画面切入由图层内 TransitionMask 的
+            // 遮罩溶解完成，所以这段刻意很短（EnterFadeSeconds），避免和溶解叠成两重淡入。
+            fade.TweenProperty(voidSea, "modulate:a", 1f, EnterFadeSeconds);
+            if (vanilla != null) fade.TweenProperty(vanilla, "modulate:a", 0f, EnterFadeSeconds);
         }
 
         _voidSea = voidSea;
@@ -226,13 +247,13 @@ public sealed partial class FgoVoidSeaBackground : Node
             return;
         }
 
-        fade.TweenProperty(voidSea, "modulate:a", 0f, FadeSeconds);
+        fade.TweenProperty(voidSea, "modulate:a", 0f, ExitFadeSeconds);
         if (vanilla != null)
         {
             // 原版背景从当前 alpha 补到不透明。Enter 时它已被补到 0 附近，
             // 若整段淡入尚未跑完就被打断，这里从"当前值"续上即可，不必强行重置到 0。
             SetVanillaAlpha(vanilla, vanilla.Modulate.A);
-            fade.TweenProperty(vanilla, "modulate:a", 1f, FadeSeconds);
+            fade.TweenProperty(vanilla, "modulate:a", 1f, ExitFadeSeconds);
         }
 
         fade.TweenCallback(Callable.From(Finish));
