@@ -68,13 +68,11 @@ public static class FgoVoidHand
     /// </remarks>
     public static async Task Enter(PlayerChoiceContext choiceContext, ICombatState combat, Player player)
     {
-        if (combat == null) return;
         var state = States.GetOrCreate(combat);
         if (state.IsMember(player)) return;
 
         state.Join(player);
-        await PowerCmd.Apply<NoDrawPower>(choiceContext, player.Creature, 1m, player.Creature, null);
-
+        
         // VoidHold 为 null 说明该玩家没有牌堆（理论上不会发生），此时仍要继续补额外手牌，
         // 否则玩家会拿到一个空手牌区且无法自救。
         if (CardPile.Get(FgoEnums.VoidHold, player) is { } hold)
@@ -92,7 +90,6 @@ public static class FgoVoidHand
     /// </summary>
     public static async Task EnterAll(PlayerChoiceContext choiceContext, ICombatState combat)
     {
-        if (combat == null) return;
         foreach (var player in combat.Players)
             await Enter(choiceContext, combat, player);
     }
@@ -102,7 +99,6 @@ public static class FgoVoidHand
     /// </summary>
     public static async Task Exit(ICombatState combat, Player player)
     {
-        if (combat == null) return;
         var state = States.GetOrCreate(combat);
         if (!state.IsMember(player)) return;
 
@@ -115,7 +111,6 @@ public static class FgoVoidHand
     /// </summary>
     public static async Task ExitAll(ICombatState combat)
     {
-        if (combat == null) return;
         foreach (var player in combat.Players)
             await Exit(combat, player);
         States.GetOrCreate(combat).Reset();
@@ -158,8 +153,6 @@ public static class FgoVoidHand
     /// </remarks>
     public static async Task Reconcile(ICombatState combat, Player player)
     {
-        if (combat == null) return;
-
         if (!FgoField.Has(combat, FgoFieldId.ImaginarySpace))
         {
             // 场地没了但人还在名单里：按退出处理（幂等，名单外直接返回）。
@@ -211,7 +204,11 @@ public static class FgoVoidHand
 
     private static async Task RestoreHand(Player player)
     {
-        // 离开〔虚数空间〕即失去〔好似飞鸟〕的能力（能力在身 ⇔ 人在虚数空间）。
+        // 以下能力都是「人在虚数空间」的挂件，离开即失效——放在这里而不是散落在各调用点，
+        // 是因为三条退出路径（主动打出〔虚数脱出〕/ 场地到期 / Reconcile 自愈）都汇聚到本方法，
+        // 能力清理与手牌归还在同一处收口，不会出现「牌还了但能力还在」的半退出状态。
+
+        // 〔好似飞鸟〕: 能力在身 ⇔ 人在虚数空间。
         if (player.Creature.HasPower<LikeABirdPower>())
             await PowerCmd.Remove<LikeABirdPower>(player.Creature);
 
