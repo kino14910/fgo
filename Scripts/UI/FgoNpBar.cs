@@ -468,30 +468,44 @@ public sealed partial class FgoNpBar : Node
     }
 
     /// <summary>
-    ///     挂上发光粒子层，使其绘制在 <c>NpButton</c> 及其所有子节点<b>之下</b>（按钮在最前），且不拦截鼠标。
+    ///     挂上发光粒子层，使其绘制在 <c>NpButton</c> 之下（按钮保持最前），同时仍高于生物立绘。
     /// </summary>
     /// <remarks>
     ///     <para>
-    ///         Godot 的 CanvasItem 绘制顺序是「先按 <c>z_index</c> 升序、同 z 再按树序」，
-    ///         所以要让按钮压住粒子层，三个条件必须同时成立：
+    ///         Godot 的 CanvasItem 绘制顺序是「先按有效 <c>z_index</c> 升序、同 z 再按树序」，
+    ///         有效 z = 父节点有效 z + 自身 <c>z_index</c>（<c>z_as_relative</c> 开启时）。
+    ///     </para>
+    ///     <para>
+    ///         <b>为什么不能简单取 <c>_button.ZIndex - 1</c>：</b>
+    ///         本层挂在 <c>NCreatureStateDisplay</c> 子树里，而立绘
+    ///         <c>NCreature.Visuals</c> 是 state display 的<b>兄弟</b>且
+    ///         <c>z_index = 0</c>（原版在 NCreature.cs 里用 <c>MoveChild(Visuals, 0)</c>
+    ///         把它强制到树序最前）。本机玩家 state display 的有效 z 也是 0，于是：
+    ///     </para>
+    ///     <list type="bullet">
+    ///         <item><c>fx.ZIndex = +1</c> → 有效 z = 1，<b>高于</b>立绘(0) ⇒ 可见（但会盖住按钮）</item>
+    ///         <item><c>fx.ZIndex = -1</c> → 有效 z = -1，<b>低于</b>立绘(0) ⇒ 被立绘整个盖住 ⇒ 看不见</item>
+    ///     </list>
+    ///     <para>
+    ///         所以正确做法是让本层与按钮<b>同 z（0），靠树序决胜</b>：本层仍是 state display
+    ///         子树内的一员，有效 z 与立绘同为 0，而它在树序上远后于立绘（Visuals 是 Creature 的
+    ///         第 0 个子节点），因此依旧画在立绘之上；同时在 npBar 内部把它 <c>MoveChild</c> 到
+    ///         按钮之前，按钮后绘制、稳稳压住它。
     ///     </para>
     ///     <list type="number">
     ///         <item>
-    ///             <b>z_index</b> —— 取 <c>_button.ZIndex - 1</c>。这是主因：
-    ///             <c>z_index</c> 在 <c>z_as_relative</c> 开启时相对父节点生效，而粒子层与按钮
-    ///             是同一父节点 <c>_npBarRoot</c> 的兄弟，所以「-1」就等于「比按钮子树里
-    ///             任何节点都低一级」，无需递归比较子节点的 z。
+    ///             <b>z_index</b> —— 与按钮取<b>相同</b>值（<c>_button.ZIndex</c>，通常 0）。
+    ///             不能 +1 也不能 -1：前者盖住按钮，后者掉到立绘之下。
     ///         </item>
     ///         <item>
-    ///             <b>树序</b> —— <c>MoveChild</c> 到按钮<b>之前</b>。同 z 时树序才是决胜条件，
-    ///             放在按钮前可保证「即使 z 被外部改回同值」按钮仍是后绘制、仍能压住粒子层。
+    ///             <b>树序</b> —— <c>MoveChild</c> 到按钮<b>之前</b>。同 z 时树序是唯一决胜条件，
+    ///             这是「按钮在前」真正生效的地方。
     ///         </item>
     ///         <item>
     ///             <b>鼠标</b> —— 根节点与 <c>Rays</c> 都设了 <c>mouse_filter = Ignore</c>，
     ///             <see cref="FgoNpGlowFx" /> 的 <c>_Ready</c> 再兜底设一次；
     ///             <c>Sparks</c> 是 <c>GPUParticles2D</c>（Node2D），本身不参与 GUI 命中测试。
-    ///             粒子层现在在按钮下方，即使漏设也不会挡点击，但保留 Ignore 更稳妥
-    ///             （条区域与生物 Hitbox 的命中测试也要靠它让路）。
+    ///             本层整块覆盖按钮区域，必须 Ignore 才不会吃掉点击。
     ///         </item>
     ///     </list>
     ///     <para>
@@ -518,12 +532,13 @@ public sealed partial class FgoNpBar : Node
 
         _npBarRoot.AddChild(fx);
 
-        // 放到按钮之前：与上面的 z_index 形成双重保险。
+        // 放到按钮之前：与按钮同 z 时，树序是唯一决胜条件，这一步才是「按钮在前」真正生效的地方。
         _npBarRoot.MoveChild(fx, _button.GetIndex());
 
-        // 关键：粒子层在按钮之下，按钮保持最前（贴图与数字不被加色泛白）。
+        // 关键：与按钮【同 z】，靠树序决胜。
+        // 不能 -1（会掉到 NCreature.Visuals 立绘之下被整个盖住），也不能 +1（会盖住按钮）。
         fx.ZAsRelative = true;
-        fx.ZIndex = _button.ZIndex - 1;
+        fx.ZIndex = _button.ZIndex;
 
         _glowFx = fx;
 
@@ -540,6 +555,27 @@ public sealed partial class FgoNpBar : Node
         }
 
         Entry.Logger.Info($"[Fgo] NpGlowFx tree after insert: {order}");
+
+        // 诊断：打印【有效 z】与立绘的相对关系。遮挡问题只看相对 z 看不出来 ——
+        // 立绘 Visuals 是 state display 的兄弟（z=0，原版用 MoveChild(Visuals, 0) 强制到树序最前），
+        // 本层若有效 z < 0 就会掉到它下面被整个盖住，而画面上完全看不出原因。
+        var parent = GetParent();
+        var parentZ = (parent as CanvasItem)?.ZIndex ?? 0;
+        var siblings = new System.Text.StringBuilder();
+
+        if (parent != null)
+        {
+            for (var i = 0; i < parent.GetChildCount(); i++)
+            {
+                var child = parent.GetChild(i);
+                siblings.Append($"{i}:{child.Name}(z={(child as CanvasItem)?.ZIndex ?? 0}) ");
+            }
+        }
+
+        // fx 的有效 z = 沿链累加；这里只关心「相对 parent 的 z」是否与立绘同级。
+        Entry.Logger.Info(
+            $"[Fgo] NpGlowFx z: fx={fx.ZIndex} npBar={_npBarRoot.ZIndex} button={_button.ZIndex} " +
+            $"parent={parent?.Name}(z={parentZ}) | parentChildren=[{siblings}]");
     }
 
     /// <summary>
