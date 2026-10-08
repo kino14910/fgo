@@ -53,28 +53,8 @@ public class SparksRoute() : FgoCardModel(0, CardType.Skill,
         foreach (var card in upgraded)
             CardCmd.Upgrade(card, CardPreviewStyle.None);
 
-        // 3. 放回抽牌堆顶部 —— 不经过 Discard，也不触发弃牌钩子。
-        await CardPileCmd.Add(toMove, PileType.Draw.GetPile(Owner), CardPilePosition.Top);
+        await CardPileCmd.Add(toMove, PileType.Draw.GetPile(Owner), CardPilePosition.Random);
 
-        // 4. 补播「升级 + 飞入抽牌堆」特效。CardCmd.Upgrade 只给 Deck 里的卡播 NCardUpgradeVfx，
-        //    战斗内手牌升级不会自动出特效，这里手动补上。
-        PlayUpgradeVfx(upgraded);
-
-        // 5. 抽相同数量张牌。
         await CardPileCmd.Draw(choiceContext, toMove.Count, Owner);
-    }
-
-    /// <summary>
-    ///     给刚升级的卡播 <see cref="NCardUpgradeVfx" />：卡面缩放出现并飘粒子，
-    ///     1.75 秒后自动飞向该卡当前所在牌堆（此时已放回抽牌堆）。
-    /// </summary>
-    private static void PlayUpgradeVfx(IEnumerable<CardModel> cards)
-    {
-        var container = NCombatRoom.Instance?.CombatVfxContainer;
-        if (container == null) return;
-
-        foreach (var card in cards)
-            if (NCardUpgradeVfx.Create(card) is { } vfx)
-                container.AddChildSafely(vfx);
     }
 }
