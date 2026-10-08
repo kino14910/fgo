@@ -1,5 +1,6 @@
 ﻿using Fgo.Scripts.Commands;
 using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.DevConsole.ConsoleCommands;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -25,5 +26,8 @@ public class AtTheWellPower : FgoPowerModel
         await FgoResCmd.ModifyNp(80, player);
         await CreatureCmd.Kill(Owner);
         await PowerCmd.Remove(this);
+        await PlayerCmd.GainEnergy(3, player);
+        await CardPileCmd.Draw(choiceContext, 3, player);
+        
     }
 }
