@@ -1,3 +1,4 @@
+using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
@@ -20,8 +21,28 @@ public class InvinciblePower : FgoPowerModel
         CardPlay? cardPlay)
     {
         if (target != Owner) return 1m;
-        if (!props.IsCardOrMonsterMove()) return 1m;
         return 0m;
+    }
+
+    public override decimal ModifyHpLostAfterOsty(
+        Creature target, decimal amount, ValueProp props,
+        Creature? dealer, CardModel? cardSource)
+    {
+        if (!CombatManager.Instance.IsInProgress) return amount;
+        if (target != Owner) return amount;
+        return 0m;
+    }
+
+    public override Task AfterModifyingDamageAmount(CardModel? cardSource)
+    {
+        Flash();
+        return Task.CompletedTask;
+    }
+
+    public override Task AfterModifyingHpLostAfterOsty()
+    {
+        Flash();
+        return Task.CompletedTask;
     }
 
     public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
