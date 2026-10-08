@@ -82,6 +82,10 @@ public class Entry
                 });
         }
 
+        // FTUE 首见标记。必须单开一个 using 块：上面那个用的是 GetRunSavedDataStore，
+        // 这里用的是 GetDataStore（两个不同的 store 实例）。
+        FgoFtue.Register();
+
         // Noble 卡牌图书馆筛选按钮: 调用 RitsuLib 的注册 API，
         // 由 RitsuLib 的 CardLibraryCompendiumPatch 在 NCardLibrary._Ready
         // postfix 中自动构造按钮、加入 strip、连接信号、注册到 _poolFilters。

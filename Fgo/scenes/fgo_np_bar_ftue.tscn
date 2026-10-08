@@ -1,0 +1,115 @@
+[gd_scene load_steps=10 format=3]
+
+[ext_resource type="Script" path="res://Scripts/UI/FgoNpBarFtue.cs" id="1_fgoftue"]
+[ext_resource type="Material" path="res://Fgo/materials/ftue_popup.tres" id="2_mat"]
+[ext_resource type="Texture2D" path="res://Fgo/images/ftue/ftue_popup.png" id="3_popup"]
+[ext_resource type="FontVariation" path="res://Fgo/themes/kreon_bold_glyph_space_two.tres" id="4_bold2"]
+[ext_resource type="PackedScene" path="res://Fgo/scenes/fgo_ftue_confirm_button.tscn" id="5_btn"]
+[ext_resource type="FontVariation" path="res://Fgo/themes/kreon_regular_glyph_space_one.tres" id="6_reg1"]
+[ext_resource type="FontVariation" path="res://Fgo/themes/kreon_bold_glyph_space_one.tres" id="7_bold1"]
+[ext_resource type="Texture2D" path="res://Fgo/images/ftue/ftue_pointer_arrow.png" id="8_arrow"]
+
+[node name="FgoNpBarFtue" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_fgoftue")
+
+[node name="FtuePopup" type="TextureRect" parent="."]
+material = ExtResource("2_mat")
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -682.0
+offset_top = -469.0
+offset_right = -103.0
+offset_bottom = -212.0
+grow_horizontal = 0
+grow_vertical = 0
+texture = ExtResource("3_popup")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="Header" type="Label" parent="FtuePopup"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 82.0
+offset_top = 20.0
+offset_right = -36.0
+offset_bottom = 76.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.937255, 0.784314, 0.317647, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.12549)
+theme_override_colors/font_outline_color = Color(0.33, 0.2475, 0, 1)
+theme_override_constants/shadow_offset_x = 5
+theme_override_constants/shadow_offset_y = 4
+theme_override_constants/outline_size = 12
+theme_override_fonts/font = ExtResource("4_bold2")
+theme_override_font_sizes/font_size = 26
+text = "Tip: Your NP is full!"
+vertical_alignment = 1
+
+[node name="FtueConfirmButton" parent="FtuePopup" instance=ExtResource("5_btn")]
+layout_mode = 1
+anchors_preset = 7
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = -137.5
+offset_top = -67.0
+offset_right = 137.5
+offset_bottom = 8.0
+grow_vertical = 0
+
+[node name="DescriptionContainer" type="MarginContainer" parent="FtuePopup"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 37.0
+offset_top = 73.0
+offset_right = -35.0
+offset_bottom = -65.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_top = 32
+
+[node name="Description" type="RichTextLabel" parent="FtuePopup/DescriptionContainer"]
+layout_mode = 2
+theme_override_colors/default_color = Color(1, 0.964706, 0.886275, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.25098)
+theme_override_constants/line_separation = -2
+theme_override_constants/shadow_offset_x = 3
+theme_override_constants/shadow_offset_y = 2
+theme_override_fonts/normal_font = ExtResource("6_reg1")
+theme_override_fonts/bold_font = ExtResource("7_bold1")
+theme_override_font_sizes/normal_font_size = 22
+theme_override_font_sizes/bold_font_size = 22
+theme_override_font_sizes/bold_italics_font_size = 22
+theme_override_font_sizes/italics_font_size = 22
+theme_override_font_sizes/mono_font_size = 22
+bbcode_enabled = true
+text = "Your [gold]NP Gauge[/gold] is full. Press the button to unleash your [gold]Noble Phantasm[/gold]!"
+scroll_active = false
+
+[node name="Arrow" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -640.0
+offset_top = -697.0
+offset_right = -396.0
+offset_bottom = -493.0
+grow_horizontal = 0
+grow_vertical = 0
+pivot_offset = Vector2(122, 102)
+texture = ExtResource("8_arrow")

@@ -289,6 +289,16 @@ public sealed partial class FgoNpBar : Node
 
     private int _lastNp = -1;
     private bool _lastSealed;
+
+    /// <summary>
+    ///     上一次的 <c>canUse</c>（NP 满且未封印）状态。
+    /// </summary>
+    /// <remarks>
+    ///     与 <see cref="_lastGlowOn" /> 分开：那个只用于光效的边沿诊断日志，
+    ///     语义是「光效是否点亮」；这个用于 FTUE 触发的 false→true 上升沿。
+    ///     两者恰好同值，但用途与生命周期不同，合并会让「光效诊断日志」被 FTUE 逻辑污染。
+    /// </remarks>
+    private bool _lastCanUse;
     private Control? _npBarRoot;
     private Player? _player;
     private FgoPlayerState? _subscribed;
@@ -820,6 +830,17 @@ public sealed partial class FgoNpBar : Node
                 _lastGlowOn = canUse;
                 _glowFx?.DumpRuntimeState($"canUse={canUse},np={np}");
             }
+
+            // FTUE：宝具条「刚变得可用」的那一刻弹一次教学。
+            // 只认 false→true 上升沿，避免每次 NpChanged 变更都重复尝试弹窗。
+            // 首见标记由 FgoFtue 用 Global 存档槽维护，弹过一次之后这里就是空转。
+            //
+            // 传按钮的屏幕矩形：NP 条跟着 HP 条走，位置随分辨率/玩家位置变化，
+            // 弹窗要贴着按钮弹、箭头要指着按钮，都得运行时算而不是场景里写死。
+            if (canUse && !_lastCanUse)
+                FgoFtue.MaybeShowNpBarFtue(_button.GetGlobalRect());
+
+            _lastCanUse = canUse;
         }
     }
 
