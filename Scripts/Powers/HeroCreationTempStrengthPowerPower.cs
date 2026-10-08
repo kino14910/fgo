@@ -4,7 +4,6 @@ using STS2RitsuLib.Scaffolding.Content;
 
 namespace Fgo.Scripts.Powers;
 
-[RegisterPower]
 public class HeroCreationTempStrengthPowerPower : TempStrengthPower<HeroCreation>
 {
     public override PowerAssetProfile AssetProfile => new(

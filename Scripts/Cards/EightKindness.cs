@@ -23,7 +23,7 @@ public class EightKindness() : FgoCardModel(2, CardType.Power,
         HoverTipFactory.FromPower<IntangiblePower>(),
         HoverTipFactory.FromPower<NpRatePower>()
     ];
-
+    
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         ModCardVars.Power<StrengthPower>(1)
