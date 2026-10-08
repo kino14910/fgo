@@ -3,7 +3,7 @@ render_mode blend_mix, unshaded;
 
 // ════════════════════════════════════════════════════════════════════
 //  FGO 选角 → 进战斗 转场遮罩
-//  令紋（Command Seal）/ 萨博・阿尔托莉雅 / 藤丸立香
+//  令咒（Command Seal）
 //
 //  契约（勿改名、勿删）：
 //    uniform sampler2D transitionTex;  推进遮罩的 falloff 场

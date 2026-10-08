@@ -1,9 +1,9 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=6 format=3 uid="uid://b0fmkyddwhyvm"]
 
-[ext_resource type="Script" path="res://Scripts/UI/FgoVoidSeaLayer.cs" id="1_layer"]
-[ext_resource type="Texture2D" path="res://Fgo/images/bg/VoidSea.png" id="2_voidsea"]
-[ext_resource type="Shader" path="res://Fgo/shaders/fgo_void_sea_transition.gdshader" id="3_maskshader"]
-[ext_resource type="Texture2D" path="res://Fgo/images/transitions/void_sea_dissolve.png" id="4_masktex"]
+[ext_resource type="Script" uid="uid://d1ybfjwcu4hcf" path="res://Scripts/UI/FgoVoidSeaLayer.cs" id="1_layer"]
+[ext_resource type="Texture2D" uid="uid://122i4etkf3fp" path="res://Fgo/images/bg/VoidSea.png" id="2_voidsea"]
+[ext_resource type="Shader" uid="uid://crqdwsex135kx" path="res://Fgo/shaders/fgo_void_sea_transition.gdshader" id="3_maskshader"]
+[ext_resource type="Texture2D" uid="uid://c3plxei087gsm" path="res://Fgo/images/transitions/void_sea_dissolve.png" id="4_masktex"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_voidmask"]
 resource_local_to_scene = true
@@ -61,6 +61,7 @@ texture = ExtResource("2_voidsea")
 expand_mode = 1
 
 [node name="TransitionMask" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_voidmask")
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -69,4 +70,3 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 color = Color(0, 0, 0, 0)
-material = SubResource("ShaderMaterial_voidmask")
