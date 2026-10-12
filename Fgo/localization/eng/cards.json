@@ -50,7 +50,7 @@
   "FGO_CARD_ITS_INEVITABLE.flavor": "Test art can be changed.",
   "FGO_CARD_BLESSED_SCION.title": "Blessed Scion",
   "FGO_CARD_BLESSED_SCION.description": "Choose a card.\nAdd a copy of that card into your [gold]Hand[/gold].{IfUpgraded:show: It's free to play this turn.|}",
-  "FGO_CARD_BLESSED_SCION.selectionScreenPrompt": "Choose {Copies:diff()} {Copies:plural:card|cards} to Copy.",
+  "FGO_CARD_BLESSED_SCION.selectionScreenPrompt": "Choose a card to Copy.",
   "FGO_CARD_BLESSED_SCION.flavor": "Test art can be changed.",
   "FGO_CARD_YIN_YANG_FISH.title": "Yin Yang Fish",
   "FGO_CARD_YIN_YANG_FISH.description": "{IfUpgraded:show:Gain 30% [gold]NP[/gold].\n|}Heal {Heal:diff()} HP.\nLose 10% [gold]NP[/gold].",
