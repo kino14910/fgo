@@ -1,28 +1,30 @@
+using Fgo.Scripts.Character;
 using Fgo.Scripts.Powers;
+using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Relics;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.Models.RelicPools;
 using STS2RitsuLib.Interop.AutoRegistration;
 
 namespace Fgo.Scripts.Relics;
 
-[RegisterRelic(typeof(DeprecatedRelicPool))]
+[RegisterCharacterStarterRelic(typeof(FgoCharacter))]
 public class MidsummerNightDream : FgoRelic
 {
-    public override RelicRarity Rarity => RelicRarity.Uncommon;
+    public override RelicRarity Rarity => RelicRarity.Rare;
 
-    public override bool TryModifyPowerAmountReceived(PowerModel power, Creature target,
-        decimal amount, Creature? source, out decimal modifiedAmount)
+    public override Task AfterPowerAmountChanged(PlayerChoiceContext choiceContext, PowerModel power,
+        decimal amount, Creature? applier, CardModel? cardSource)
     {
-        if (target == Owner.Creature && power is CursePower && amount > 0)
-        {
-            Flash();
-            modifiedAmount = 0m;
-            return true;
-        }
+        if (power is not CursePower || amount <= 0m || power.Owner != Owner.Creature)
+            return Task.CompletedTask;
 
-        modifiedAmount = amount;
-        return false;
+        Flash();
+        return PowerCmd.Apply<RegenPower>(new BlockingPlayerChoiceContext(), Owner.Creature, amount,
+            Owner.Creature, null);
     }
 }
