@@ -219,7 +219,7 @@
   "FGO_POWER_MAX_HP_POWER.smartDescription": "Raise your [gold]Max HP[/gold] by [blue]{Amount}[/blue] this combat. At the end of combat, lose all raise.",
   "FGO_POWER_FACELESS_MOON_POWER.title": "Equilibrium",
   "FGO_POWER_FACELESS_MOON_POWER.description": "Retain your hand this turn. Gain [gold]Block[/gold] for each Retain.",
-  "FGO_POWER_FACELESS_MOON_POWER.smartDescription": "Retain your hand this turn. Gain [blue]{Amount}[/blue] [gold]Block[/gold] for each Retain.",
+  "FGO_POWER_FACELESS_MOON_POWER.smartDescription": "Retain your hand this turn. Gain [blue]1[/blue] [gold]Block[/gold] for each Retain.",
   "FGO_POWER_MAGIC_BULLET_POWER.title": "Magic Bullet",
   "FGO_POWER_MAGIC_BULLET_POWER.description": "You have [gold]Magic Bullet[/gold].",
   "FGO_POWER_MAGIC_BULLET_POWER.smartDescription": "You have [blue]{Amount}[/blue] [gold]Magic Bullet[/gold].",

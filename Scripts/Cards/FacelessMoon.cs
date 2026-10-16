@@ -22,16 +22,10 @@ public class FacelessMoon() : FgoCardModel(1, CardType.Skill,
 
     protected override HashSet<CardTag> CanonicalTags => [FgoTags.Foreigner];
 
-    protected override IEnumerable<DynamicVar> CanonicalVars =>
-    [
-        ModCardVars.Power<FacelessMoonPower>(1)
-    ];
-
     public override bool GainsBlock => true;
 
     protected override void OnUpgrade()
     {
-        DynamicVars[nameof(FacelessMoonPower)].UpgradeValueBy(1);
         AddKeyword(CardKeyword.Retain);
     }
 
@@ -40,6 +34,6 @@ public class FacelessMoon() : FgoCardModel(1, CardType.Skill,
         await PowerCmd.Apply<RetainHandPower>(choiceContext, Owner.Creature,
             1, Owner.Creature, cardPlay.Card);
         await PowerCmd.Apply<FacelessMoonPower>(choiceContext, Owner.Creature,
-            DynamicVars[nameof(FacelessMoonPower)].BaseValue, Owner.Creature, cardPlay.Card);
+            1, Owner.Creature, cardPlay.Card);
     }
 }

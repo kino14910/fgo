@@ -213,7 +213,7 @@
   "FGO_POWER_MAX_HP_POWER.smartDescription": "在本场战斗，你的最大生命值增加[blue]{Amount}[/blue]点。在战斗结束时失去所有临时增加的最大生命。",
   "FGO_POWER_FACELESS_MOON_POWER.title": "无貌之月",
   "FGO_POWER_FACELESS_MOON_POWER.description": "在本回合结束时，每有一张手牌，就获得[gold]格挡[/gold]。",
-  "FGO_POWER_FACELESS_MOON_POWER.smartDescription": "在本回合结束时，每有一张手牌，就获得[blue]{Amount}[/blue]点[gold]格挡[/gold]。",
+  "FGO_POWER_FACELESS_MOON_POWER.smartDescription": "在本回合结束时，每有一张手牌，就获得[blue]1[/blue]点[gold]格挡[/gold]。",
   "FGO_POWER_MAGIC_BULLET_POWER.title": "魔弹",
   "FGO_POWER_MAGIC_BULLET_POWER.description": "你当前有魔弹。",
   "FGO_POWER_MAGIC_BULLET_POWER.smartDescription": "你当前有[blue]{Amount}[/blue]个魔弹。",

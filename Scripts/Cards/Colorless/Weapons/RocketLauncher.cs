@@ -11,7 +11,8 @@ namespace Fgo.Scripts.Cards.Colorless.Weapons;
 
 /// <summary>火箭筒: 对主目标造成 12 点伤害，对**其他**敌人各造成 6 点溅射伤害。</summary>
 [RegisterCard(typeof(TokenCardPool))]
-public class RocketLauncher() : FgoBaseCardModel(0, CardType.Attack, CardRarity.Token, TargetType.AnyEnemy)
+public class RocketLauncher() : FgoBaseCardModel(0, CardType.Attack, 
+    CardRarity.Token, TargetType.AnyEnemy)
 {
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
