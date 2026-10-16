@@ -171,7 +171,7 @@
   "FGO_CARD_EXTRATERRESTRIAL_OCTOPUS.description": "Deal damage equal to {StarMultiplier:diff()} × your [gold]Critical Stars[/gold] count.{InCombat:\n(Deal {StarsDamage:diff()} damage)|}",
   "FGO_CARD_EXTRATERRESTRIAL_OCTOPUS.flavor": "Life beyond the domain.",
   "FGO_CARD_FACELESS_MOON.title": "Faceless Moon",
-  "FGO_CARD_FACELESS_MOON.description": "Retain your [gold]hand[/gold] this turn.\nGain {FacelessMoonPower:diff()} [gold]Block[/gold] and [gold]Critical Stars[/gold] for each.",
+  "FGO_CARD_FACELESS_MOON.description": "Retain your [gold]hand[/gold] this turn.\nGain 1 [gold]Block[/gold] and [gold]Critical Stars[/gold] for each.",
   "FGO_CARD_FACELESS_MOON.flavor": "Life beyond the domain.",
   "FGO_CARD_VOID_SPACE_FINE_ARTS.title": "Void Space Fine Arts",
   "FGO_CARD_VOID_SPACE_FINE_ARTS.description": "Gain 10 [gold]Guts[/gold].\nGain 1 [gold]Evil Curse[/gold] 3 times.\nGain [gold]NP[/gold] equal to {CurseStacks:diff()} times your [gold]Evil Curse[/gold].{InCombat:\n(Gain {Np:diff()}% [gold]NP[/gold].)|}",

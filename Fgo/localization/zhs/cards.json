@@ -163,7 +163,7 @@
   "FGO_CARD_EXTRATERRESTRIAL_OCTOPUS.description": "造成你的[gold]暴击星[/gold]数量{StarMultiplier:diff()}倍伤害。{InCombat:\n（造成{StarsDamage:diff()}点伤害）|}",
   "FGO_CARD_EXTRATERRESTRIAL_OCTOPUS.flavor": "领域外生命。",
   "FGO_CARD_FACELESS_MOON.title": "无貌之月",
-  "FGO_CARD_FACELESS_MOON.description": "在本回合[gold]保留[/gold]你的[gold]手牌[/gold]，每[gold]保留[/gold]一张牌，就获得{FacelessMoonPower:diff()}点[gold]格挡[/gold]和[gold]暴击星[/gold]。",
+  "FGO_CARD_FACELESS_MOON.description": "在本回合[gold]保留[/gold]你的[gold]手牌[/gold]，每[gold]保留[/gold]一张牌，就获得1点[gold]格挡[/gold]和[gold]暴击星[/gold]。",
   "FGO_CARD_FACELESS_MOON.flavor": "领域外生命。",
   "FGO_CARD_VOID_SPACE_FINE_ARTS.title": "虚数美术",
   "FGO_CARD_VOID_SPACE_FINE_ARTS.description": "获得10层[gold]毅力[/gold]。\n获得1层[gold]诅呪[/gold]3次。\n获得你[gold]诅呪[/gold]数量{CurseStacks:diff()}倍的[gold]宝具值[/gold]。{InCombat:\n（获得{Np:diff()}%[gold]宝具值[/gold]。）|}",
