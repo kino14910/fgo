@@ -1,3 +1,4 @@
+using STS2RitsuLib;
 using STS2RitsuLib.Settings;
 using STS2RitsuLib.Telemetry;
 
@@ -31,13 +32,14 @@ public static class FgoTelemetry
                 TelemetryRequest.ModInventory(
                     "发送已安装的模组列表。"),
 
-                TelemetryRequest.RunHistory(
+                TelemetryRequest.RunHistoryFiltered(
                     ModSettingsText.Literal(
-                        "发送已结束跑局的原版 run-history，用来分析平衡性。"),
+                        "发送 run-history，用来分析平衡性。"),
+                    // 只上报到达 7 层以上的对局，排除开局即结束的短局
+                    static ctx => ctx.SourceData is RunEndedEvent evt && evt.Run.FloorReached > 6,
                     [
                         "other.mod/challenge_context"
-                    ],
-                    evt => !evt.IsAbandoned),
+                    ]),
 
                 TelemetryRequest.Diagnostics(
                     ModSettingsText.Literal(
