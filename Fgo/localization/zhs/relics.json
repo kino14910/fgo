@@ -41,6 +41,9 @@
   "FGO_RELIC_COSMIC_MEDALLION.title": "宇宙徽章",
   "FGO_RELIC_COSMIC_MEDALLION.description": "每当你在你的回合损失生命时，获得两倍的等量格挡。",
   "FGO_RELIC_COSMIC_MEDALLION.flavor": "从者宇宙制奖章。",
+  "FGO_RELIC_MIDSUMMER_NIGHT_DREAM.title": "仲夏夜之梦",
+  "FGO_RELIC_MIDSUMMER_NIGHT_DREAM.description": "每当你获得[gold]诅呪[/gold]时，获得等量的[gold]再生[/gold]。",
+  "FGO_RELIC_MIDSUMMER_NIGHT_DREAM.flavor": "这些幻景确曾显现；而这乏味的主题，不再屈服，仅剩一场梦。",
   "FGO_RELIC_SALEM.title": "领域外生命",
   "FGO_RELIC_SALEM.description": "每张领域外生命牌: 回合开始获得2活力和[gold]暴击星[/gold]。",
   "FGO_RELIC_SALEM.flavor": "来自虚空的降临者。",
@@ -48,7 +51,7 @@
   "FGO_RELIC_SKULL_CANDY.description": "你的御主技能选项被[gold]升级[/gold]。",
   "FGO_RELIC_SKULL_CANDY.flavor": "你可能曾经有过它。",
   "FGO_RELIC_ARCHETYPE_O_R_T.title": "Archetype ORT",
-  "FGO_RELIC_ARCHETYPE_O_R_T.description": "",
+  "FGO_RELIC_ARCHETYPE_O_R_T.description": "将你的[gold]无敌[/gold]转化为[gold]肃正防御[/gold]。在你的第[blue]2[/blue]个回合开始时及之后每个回合，获得[blue]10[/blue]点[gold]暴击星[/gold]和[blue]3%[/blue][gold]宝具值[/gold]。",
   "FGO_RELIC_ARCHETYPE_O_R_T.flavor": "使用ORT的心脏与星际外来种融合制作（设计）出来的生命体。",
   "FGO_RELIC_B_B.title": "BB",
   "FGO_RELIC_B_B.description": "在战斗开始时随机获得正面或负面状态。正面状态: 获得 2 点[gold]力量[/gold]和 敏捷 。负面状态: 获得 #b1 层[gold]易伤[/gold]、 脆弱 或 虚弱 。",
@@ -64,6 +67,5 @@
   "FGO_RELIC_II.flavor": "她递来的第二份礼物。",
   "FGO_RELIC_ASTRAL_SWORD_EPITAPH.title": "星剑的墓志铭",
   "FGO_RELIC_ASTRAL_SWORD_EPITAPH.description": "[gold]II[/gold]的好感度默认值变为 10（战斗开始时不清空，而是变为 10）。",
-  "FGO_RELIC_ASTRAL_SWORD_EPITAPH.flavor": "埋葬于宇宙尽头的星之剑。",
-  "SEA_GLASS.FGO_FGO.title": "FGO玻璃"
+  "FGO_RELIC_ASTRAL_SWORD_EPITAPH.flavor": "埋葬于宇宙尽头的星之剑。"
 }

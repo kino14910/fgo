@@ -1,4 +1,4 @@
-﻿{
+{
   "FGO_EVENT_WINTER_EVENT.title": "Crystallization of Winter",
   "FGO_EVENT_WINTER_EVENT.description_0": "The masterpiece of a certain alchemist family, born in the castle of eternal winter. \n The useless magic circuit engraved on her whole body is the proud girl's reason for being, and also―――the proof of her bond with a great \"Hero\".",
   "FGO_EVENT_WINTER_EVENT.description_1": "You have a desire to take her away and take action for it.",
@@ -44,7 +44,6 @@
   "FGO_EVENT_BEYOND_THE.pages.PHASE_1.description": "I have to live. \n I need to put myself together, refuse to falter any further, and take a stand as many times as is necessary. I must keep moving forward, even if countless regrets drag me down. \nFor the girl who disappeared like a snowy blossom, for she who came from a world that no longer exists... \n I am her one and only Master. \n Kadoc Zemlupus.",
   "FGO_EVENT_BEYOND_THE.pages.PHASE_1.options.SHVIBZIK.title": "[Continue] Get a Shvibzik.",
   "FGO_EVENT_BEYOND_THE.pages.PHASE_1.options.MAXHP.title": "[Kadoc] Gain ",
-  "FGO_EVENT_BEYOND_THE.pages.PHASE_1.options.MAXHP.description": " Max HP.",
   "FGO_EVENT_BEYOND_THE.pages.LEAVE.description": "You continue walking towards the top of the tower.",
   "FGO_EVENT_DEVIL_SLOT.title": "Devil Slot",
   "FGO_EVENT_DEVIL_SLOT.pages.INITIAL.description": "This is the worst-case scenario, you have no other choice.",

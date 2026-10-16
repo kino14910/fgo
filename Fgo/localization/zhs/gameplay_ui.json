@@ -58,12 +58,5 @@
   "FGO_GAMEPLAY_UI_FTUE.text_1": "当宝具值达到 100 时，点击按钮来使用宝具，点击后[gold]宝具值[/gold]会清空。 \n 当宝具值达到 200 或 300 或打出[gold]宝具卡[/gold]时，你会获得 宝具充能上升 效果，最多为 4 层，宝具会根据层数获得强化。",
   "FGO_GAMEPLAY_UI_FTUE.text_2": "当你造成伤害时，会获得[gold]暴击星[/gold]，到达 10 颗后打出攻击牌会消耗 10 颗将伤害翻倍。",
   "FGO_GAMEPLAY_UI_FTUE.text_3": "如果战斗陷入困境，可以点击使用 令咒 来帮助战斗， 令咒 只能使用 3 次，如果剩余3划的情况下死亡，会消耗3划 令咒 复活并获得 300%[gold]宝具值[/gold]。",
-  "FGO_GAMEPLAY_UI_RELIC_EVENT_HELPER.text_0": "选择%d张牌",
-  "FGO_GAMEPLAY_UI_RELIC_EVENT_HELPER.text_1": "选择%d张牌升级",
-  "FGO_GAMEPLAY_UI_RELIC_EVENT_HELPER.text_2": "选择%d张牌移除",
-  "FGO_GAMEPLAY_UI_RELIC_EVENT_HELPER.text_3": "选择%d张牌获得",
-  "FGO_GAMEPLAY_UI_RELIC_EVENT_HELPER.text_4": "选择%d张牌变化",
-  "FGO_GAMEPLAY_UI_RELIC_EVENT_HELPER.text_5": "额外奖励！",
-  "FGO_GAMEPLAY_UI_RELIC_EVENT_HELPER.text_6": "选择任意张牌弃置",
   "FGO_GAMEPLAY_UI_POOL_NOBLE": "宝具"
 }

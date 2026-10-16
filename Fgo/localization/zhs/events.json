@@ -1,4 +1,4 @@
-﻿{
+{
   "FGO_EVENT_WINTER_EVENT.title": "冬之结晶",
   "FGO_EVENT_WINTER_EVENT.description_0": "诞生于常冬之城， \n 某个炼金术师一族的最高杰作。 \n刻在全身， \n 作为魔术回路毫无用处的那个， \n 是骄傲少女的存在理由， \n 也是与伟大“英雄”的——牵绊的证明。",
   "FGO_EVENT_WINTER_EVENT.description_1": "有一种想带走她的欲望，并为之了付诸行动。",
@@ -45,17 +45,6 @@
   "FGO_EVENT_BEYOND_THE.pages.PHASE_1.options.SHVIBZIK.title": "[继续] 获得一张 小恶魔。",
   "FGO_EVENT_BEYOND_THE.pages.PHASE_1.options.MAXHP.title": "[卡多克] 获得  %d 点最大生命。",
   "FGO_EVENT_BEYOND_THE.pages.LEAVE.description": "你继续向塔顶走去。",
-  "FGO_EVENT_DAILY_LIFEATTHE_BEYOND.title": "彼方的时光",
-  "FGO_EVENT_DAILY_LIFEATTHE_BEYOND.description_0": "何时曾见的道路。 \n 如今隐没在记忆彼方的光景，其一角。 \n……想要归去的地方也好。 \n ……渴望相见的人们也好。",
-  "FGO_EVENT_DAILY_LIFEATTHE_BEYOND.description_1": "说不定是将几许偶然，几许幸运， \n 几许“如果”重合在一起， \n 才总算有可能存在的， \n 仅此一次的，按下快门的最佳时机（Shutter chance）。",
-  "FGO_EVENT_DAILY_LIFEATTHE_BEYOND.description_2": "——这是一幅梦想的影像数据。 \n 没有失去任何事物，终于得以迎来的温暖春日。 \n 你在脑海中轻柔地描绘着， \n 明明理应也存在于自己心中，却再也无从得见的，那段时光的延续。",
-  "FGO_EVENT_DAILY_LIFEATTHE_BEYOND.option_0": "[都可以拿走] 获得 复仇者 。 失去 ",
-  "FGO_EVENT_DAILY_LIFEATTHE_BEYOND.option_1": "[都可以拿走] 获得 忘却补正 。 失去 ",
-  "FGO_EVENT_DAILY_LIFEATTHE_BEYOND.option_2": "[都可以拿走] 获得 自我回复（魔力） 。 失去 ",
-  "FGO_EVENT_DAILY_LIFEATTHE_BEYOND.option_3": "[离开]",
-  "FGO_EVENT_DAILY_LIFEATTHE_BEYOND.option_4": "[锁定]",
-  "FGO_EVENT_DAILY_LIFEATTHE_BEYOND.option_5": "[继续]",
-  "FGO_EVENT_DAILY_LIFEATTHE_BEYOND.option_6": " 点生命。",
   "FGO_EVENT_DEVIL_SLOT.title": "恶魔老虎机",
   "FGO_EVENT_DEVIL_SLOT.pages.INITIAL.description": "这可是最糟的情况，你走投无路。",
   "FGO_EVENT_DEVIL_SLOT.pages.INITIAL.options.BB.title": "[恶魔的小礼物] 获得 BB 。",
