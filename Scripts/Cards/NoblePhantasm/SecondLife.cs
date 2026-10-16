@@ -44,7 +44,7 @@ public class SecondLife() : NobleCardModel(1, CardType.Skill, TargetType.Self)
             if (card is not null)
             {
                 var copy = card.CreateClone();
-                CardCmd.Upgrade(card, CardPreviewStyle.None);
+                CardCmd.Upgrade(copy, CardPreviewStyle.None);
                 await FgoCardActions.AddToHand(copy);
             }
         }
