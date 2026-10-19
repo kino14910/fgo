@@ -99,7 +99,7 @@
   "FGO_CARD_TESLA_COIL.title": "特斯拉线圈",
   "FGO_CARD_TESLA_COIL.description": "造成{Damage:diff()}点伤害。\n获得{NpRatePower:diff()}层[gold]黄金律[/gold]。",
   "FGO_CARD_TAMESHI_MONO.title": "试刀",
-  "FGO_CARD_TAMESHI_MONO.description": "从弃牌堆[gold]消耗[/gold]最多{ExhaustCount:diff()}张卡，每消耗一张获得3颗[gold]暴击星[/gold]。",
+  "FGO_CARD_TAMESHI_MONO.description": "从弃牌堆[gold]消耗[/gold]{IfUpgraded:show:任意数量|最多{ExhaustCount:diff()}}张卡，每消耗一张获得3颗[gold]暴击星[/gold]。",
   "FGO_CARD_SWAN_LAKE.title": "天鹅湖",
   "FGO_CARD_SWAN_LAKE.description": "造成{Damage:diff()}点伤害。\n场地获得[gold]水边[/gold]3回合。",
   "FGO_CARD_LUCKY_SPINNING.title": "幸运的纺线",
