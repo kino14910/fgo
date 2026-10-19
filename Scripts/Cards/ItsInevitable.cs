@@ -29,6 +29,7 @@ public class ItsInevitable() : FgoCardModel(1, CardType.Attack,
     {
         DynamicVars.Damage.UpgradeValueBy(3);
         DynamicVars[nameof(ItsInevitablePower)].UpgradeValueBy(3);
+        AddKeyword(CardKeyword.Exhaust);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
