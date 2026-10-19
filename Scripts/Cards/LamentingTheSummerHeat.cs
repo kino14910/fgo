@@ -20,12 +20,14 @@ public class LamentingTheSummerHeat() : FgoCardModel(0, CardType.Skill,
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         ModCardVars.HpLoss(1),
-        ModCardVars.Power<WeakPower>(2)
+        ModCardVars.Power<WeakPower>(3)
     ];
+
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
     protected override void OnUpgrade()
     {
-        DynamicVars[nameof(WeakPower)].UpgradeValueBy(1);
+        RemoveKeyword(CardKeyword.Exhaust);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
