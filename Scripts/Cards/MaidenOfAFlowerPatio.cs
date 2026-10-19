@@ -8,7 +8,7 @@ using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
 
-public class MaidenOfAFlowerPatio() : FgoCardModel(2, CardType.Skill,
+public class MaidenOfAFlowerPatio() : FgoCardModel(1, CardType.Skill,
     CardRarity.Common, TargetType.Self)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
@@ -18,7 +18,7 @@ public class MaidenOfAFlowerPatio() : FgoCardModel(2, CardType.Skill,
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        ModCardVars.Block(15),
+        ModCardVars.Block(12),
         ModCardVars.Power<CursePower>(1)
     ];
 
@@ -26,7 +26,7 @@ public class MaidenOfAFlowerPatio() : FgoCardModel(2, CardType.Skill,
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Block.UpgradeValueBy(5);
+        DynamicVars.Block.UpgradeValueBy(3);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
