@@ -22,7 +22,6 @@ namespace Fgo.Scripts.Relics;
 ///     计数与圣晶石共享同一个按玩家的 FgoRunState 槽位（见 FgoRelic.QuartzCounter），
 ///     替换圣晶石后计数原样保留。
 /// </summary>
-[RegisterRelic(typeof(FgoRelicPool))]
 public class SummonTicket : FgoRelic, IModRightClickableRelic
 {
     public const int CostPerChoice = 3;

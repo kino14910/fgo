@@ -12,7 +12,6 @@ using STS2RitsuLib.Interop.AutoRegistration;
 
 namespace Fgo.Scripts.Relics;
 
-[RegisterCharacterStarterRelic(typeof(FgoCharacter))]
 public class MidsummerNightDream : FgoRelic
 {
     public override RelicRarity Rarity => RelicRarity.Rare;

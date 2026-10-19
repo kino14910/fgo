@@ -12,7 +12,6 @@ using STS2RitsuLib.Interop.AutoRegistration;
 
 namespace Fgo.Scripts.Relics;
 
-[RegisterRelic(typeof(DeprecatedRelicPool))]
 public class Salem : FgoRelic
 {
     public override RelicRarity Rarity => RelicRarity.Uncommon;
@@ -30,7 +29,7 @@ public class Salem : FgoRelic
         {
             Flash();
             await PowerCmd.Apply<VigorPower>(choiceContext, Owner.Creature, foreignerCount * 2, Owner.Creature, null);
-            await FgoResCmd.ModifyStars(foreignerCount * 2, Owner.Creature.Player);
+            await FgoResCmd.ModifyStars(foreignerCount * 2, Owner);
         }
     }
 }
