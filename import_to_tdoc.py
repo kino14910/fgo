@@ -1,60 +1,134 @@
-import sys
+"""Push the FGO card table to the remote Tencent Doc sheet.
+
+Usage:
+    python import_to_tdoc.py            # export from source -> push to remote -> verify
+    python import_to_tdoc.py --dry      # export only, no remote write
+"""
+
+import importlib.util
 import json
-from openpyxl import load_workbook
+import os
+import re
+import sys
 
-TD = "C:/Users/14910/.workbuddy/plugins/cache/workbuddy-builtin/tencent-docs-plugin/5.5.3-wb.37748631.g104760a2.h1a8f7c37fe76/skills/tencent-docs"
-sys.path.insert(0, TD)
-import tencentdocs as td
-
+ROOT = "D:/projects/fgo"
 FILE_URL = "https://docs.qq.com/sheet/DSGR3bE1zZkJoR1Jh"
-XLSX = "D:/projects/fgo/cards_export.xlsx"
-SHEET_NAME = "卡牌"
+SHEET_ID = "qbPkXC"
 
-# 1. read local xlsx
-wb = load_workbook(XLSX)
-ws = wb.active
-grid = [list(r) for r in ws.iter_rows(values_only=True)]
-print("local rows:", len(grid), "cols:", len(grid[0]))
-
-# 2. 子表「卡牌」已在上一轮创建（空表，ID 见下）；直接复用，避免重名
-new_id = "qbPkXC"
-print("reuse sheet_id:", new_id)
+HEADERS = [
+    "卡名", "描述", "费用", "稀有度", "类型",
+    "英文卡名(title)", "英文描述(description)",
+    "日文卡名(title)", "日文描述(description)",
+]
 
 
-# 3. build values
-values = []
-for r, row in enumerate(grid):
-    for c, cell in enumerate(row):
-        if cell is None:
-            cell = ""
-        if c == 2 and r >= 1:  # 费用列(数据行) -> NUMBER；表头行保持文本
-            try:
-                num = int(cell)
-            except (ValueError, TypeError):
-                num = 0
-            values.append({"row": r, "col": c, "value_type": "NUMBER", "number_value": num})
-        else:
-            values.append({"row": r, "col": c, "value_type": "STRING", "string_value": str(cell)})
-print("values cells:", len(values))
+def load_export_cards():
+    spec = importlib.util.spec_from_file_location(
+        "export_cards", os.path.join(ROOT, "export_cards.py")
+    )
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
 
-# 4. write
-res2, err2 = td.call_tool("sheet-mcp", "set_range_value", {
-    "file_url": FILE_URL,
-    "sheet_id": new_id,
-    "values": values,
-})
-print("set_range_value err:", err2)
-print("set_range_value result:", json.dumps(res2, ensure_ascii=False)[:300])
 
-# 5. verify a small range
-res3, err3 = td.call_tool("sheet-mcp", "get_cell_data", {
-    "file_url": FILE_URL,
-    "sheet_id": new_id,
-    "start_row": 0, "start_col": 0, "end_row": 5, "end_col": 5,
-    "return_csv": True,
-})
-print("verify err:", err3)
-if res3:
-    txt = json.dumps(res3, ensure_ascii=False)
-    print("verify sample:", txt[:400])
+def find_tencentdocs():
+    """Locate the newest installed tencent-docs-plugin skill dir (version changes often)."""
+    base = "C:/Users/14910/.workbuddy/plugins/cache/workbuddy-builtin"
+    cands = glob_paths(os.path.join(base, "tencent-docs-plugin", "*", "skills", "tencent-docs"))
+    if not cands:
+        raise SystemExit("tencent-docs plugin not found under " + base)
 
+    def verkey(p):
+        m = re.search(r"tencent-docs-plugin/(\d+)\.(\d+)\.(\d+)", p.replace("\\", "/"))
+        return tuple(int(x) for x in m.groups()) if m else (0, 0, 0)
+
+    cands.sort(key=verkey)
+    return cands[-1]
+
+
+def glob_paths(pattern):
+    import glob
+
+    return glob.glob(pattern)
+
+
+def build_values(rows):
+    values = []
+    for c, h in enumerate(HEADERS):
+        values.append({"row": 0, "col": c, "value_type": "STRING", "string_value": h})
+    for i, r in enumerate(rows, start=1):
+        cells = [
+            (r["name_zh"] or "", "STRING"),
+            (r["desc_zh"] or "", "STRING"),
+            (r["cost"], "NUMBER"),
+            (r["rarity"] or "", "STRING"),
+            (r["type"] or "", "STRING"),
+            (r["name_en"] or "", "STRING"),
+            (r["desc_en"] or "", "STRING"),
+            (r["name_jp"] or "", "STRING"),
+            (r["desc_jp"] or "", "STRING"),
+        ]
+        for c, (val, kind) in enumerate(cells):
+            cell = {"row": i, "col": c}
+            if kind == "NUMBER" and val is not None:
+                cell["value_type"] = "NUMBER"
+                cell["number_value"] = val
+            else:
+                cell["value_type"] = "STRING"
+                cell["string_value"] = str(val) if val is not None else ""
+            values.append(cell)
+    return values
+
+
+def main():
+    dry = "--dry" in sys.argv
+    ec = load_export_cards()
+    rows, unresolved = ec.collect_rows(ec.build_global_const_table())
+    print("卡牌行数：", len(rows))
+    print("未解析项：", len(unresolved))
+    for item in unresolved:
+        print("  -", item[0], ":", item[1])
+    if unresolved:
+        raise SystemExit("abort: unresolved placeholders remain")
+    if dry:
+        return
+
+    sys.path.insert(0, find_tencentdocs())
+    import tencentdocs as td
+
+    values = build_values(rows)
+    print("写入单元格数：", len(values))
+    res, err = td.call_tool("sheet-mcp", "set_range_value", {
+        "file_url": FILE_URL, "sheet_id": SHEET_ID, "values": values,
+    })
+    print("set_range_value err:", err)
+
+    # keep the filter covering the whole (possibly grown/shrunk) table
+    res2, err2 = td.call_tool("sheet-mcp", "update_filter", {
+        "file_url": FILE_URL, "sheet_id": SHEET_ID, "is_update_range": True,
+        "start_row": 0, "start_col": 0, "end_row": len(rows), "end_col": len(HEADERS) - 1,
+    })
+    print("update_filter err:", err2)
+
+    # verify: card-name column has exactly len(rows) non-empty cells, header is 9 wide
+    res3, err3 = td.call_tool("sheet-mcp", "get_cell_data", {
+        "file_url": FILE_URL, "sheet_id": SHEET_ID,
+        "start_row": 0, "start_col": 0, "end_row": len(rows) + 5, "end_col": 0,
+        "return_csv": True,
+    })
+    names = []
+    for line in json.loads(res3["result"]["content"][0]["text"])["csv_data"].split("\n")[1:]:
+        if line.strip():
+            names.append(line.strip().strip('"'))
+    print("verify -> remote data rows:", len(names), "| first:", names[0] if names else None,
+          "| last:", names[-1] if names else None)
+
+    res4, err4 = td.call_tool("sheet-mcp", "get_cell_data", {
+        "file_url": FILE_URL, "sheet_id": SHEET_ID,
+        "start_row": 0, "start_col": 0, "end_row": 0, "end_col": 8, "return_csv": True,
+    })
+    print("verify -> header:", json.loads(res4["result"]["content"][0]["text"])["csv_data"])
+
+
+if __name__ == "__main__":
+    main()
