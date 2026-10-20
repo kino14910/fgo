@@ -24,7 +24,7 @@ public class CharismaOfTheJade() : FgoCardModel(3, CardType.Attack,
     ];
 
     protected override bool ShouldGlowGoldInternal =>
-        IsMutable && Owner is not null && FgoBattleHooks.Get(Owner).CanSpecialCrit;
+        IsMutable && FgoBattleHooks.Get(Owner).CanSpecialCrit;
 
     protected override void OnUpgrade()
     {

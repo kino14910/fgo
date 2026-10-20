@@ -3,10 +3,12 @@ using Fgo.Scripts.Cards;
 using Fgo.Scripts.Character;
 using Fgo.Scripts.Commands;
 using Fgo.Scripts.Patches;
+using Fgo.Scripts.Powers;
 using Fgo.Scripts.Relics;
 using Fgo.Scripts.Singletons;
 using Fgo.Scripts.UI;
 using Fgo.Scripts.Utils;
+using GodotColor = Godot.Color;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.AutoSlay;
 using MegaCrit.Sts2.Core.Logging;
@@ -127,6 +129,19 @@ public class Entry
             cardCostPatcher,
             DisableMod,
             "Charisma cost patcher failed; Charisma cannot be played with insufficient energy.");
+
+        // 领袖气质（Charisma）紫光: 只能靠该能力超能量额打出的卡，手牌描边改为紫色。
+        // 原版 NCardHighlight 只有青(playable)/金/红三色，任意色必须走 RitsuLib 的
+        // ModCardHandOutlineRegistry —— 它 postfix NHandCardHolder.UpdateCard 把
+        // CardHighlight.Modulate 写成规则颜色；refreshEveryFrame 的规则每帧重算，
+        // 打出卡后能量变化自动刷新，无需手动 refresh。
+        // 注册在 CardModel 上 ⇒ 覆盖所有卡（FGO 卡/无色/原版卡），与能力的全局语义一致；
+        // 判定逻辑收敛在 CharismaPower.ShouldGlowPurple（持有能力 + 出牌阶段 + 可打出 + 能量缺口）。
+        // 须在 ModelDb 冻结内容注册前调用（与上面的 RegisterCardLibraryCompendiumSharedPoolFilter 同）。
+        ModContentRegistry
+            .For(ModId)
+            .RegisterCardHandOutline<MegaCrit.Sts2.Core.Models.CardModel>(
+                card => CharismaPower.ShouldGlowPurple(card) ? CharismaPower.GlowColor : (GodotColor?)null);
 
         // 订阅 run 开始/加载事件，从 RunSavedData 恢复令咒数量
         _runStartedSubscription = RitsuLibFramework.SubscribeLifecycle<RunStartedEvent>(OnRunStarted);
