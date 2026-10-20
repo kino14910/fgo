@@ -26,7 +26,7 @@ public class MaidenOfAFlowerPatio() : FgoCardModel(1, CardType.Skill,
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Block.UpgradeValueBy(3);
+        DynamicVars.Block.UpgradeValueBy(4);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
