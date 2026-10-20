@@ -1,0 +1,20 @@
+{
+  "FGO_TUTORIALS_COMMAND_SPELL.label_0": "令呪",
+  "FGO_TUTORIALS_COMMAND_SPELL.text_0": " 宝具解放：100%のNPを獲得する。 \n 令呪を1つ消費して発動する。 \n\n",
+  "FGO_TUTORIALS_COMMAND_SPELL.text_1": " 霊基修復：HPを30回復する。 \n 令呪を1つ消費して発動する。 \n\n",
+  "FGO_TUTORIALS_COMMAND_SPELL.text_2": " 霊基復元：致命的なダメージを耐え、HPを全回復する。 \n 300%のNPを獲得する。 \n 敗北しそうになった時に発動し、令呪を3つ消費する。 ",
+  "FGO_TUTORIALS_NOBLE_PHANTASM.label_0": "宝具解放",
+  "FGO_TUTORIALS_NOBLE_PHANTASM.text_0": "NPが100%に達した時、クリックして宝具カードを1枚選んで手札に加えると、NPがリセットされる。 \n\n",
+  "FGO_TUTORIALS_NOBLE_PHANTASM.text_1": "NPが100%を超えた時、超えた100%ごとに、選択できる宝具カードがアップグレードされる。",
+  "FGO_TUTORIALS_MYSTIC_CODE.label_0": "魔術礼装",
+  "FGO_TUTORIALS_MYSTIC_CODE.text_0": "輝く伴奏：スターを{M:diff()}個獲得する。 \n {Np:diff()} %のNPを獲得する。クールダウン：8ターン",
+  "FGO_TUTORIALS_MYSTIC_CODE.text_1": "純粋なる組合せ：このターン、無敵を2回獲得する。クールダウン：8ターン",
+  "FGO_TUTORIALS_MYSTIC_CODE.text_2": "幸福なる再生：エナジーを2獲得する。 \n カードを2枚引く。クールダウン：8ターン",
+  "FGO_TUTORIALS_MYSTIC_CODE.text_3": "予測の演算：カードを1枚捨てる。 \n 山札からカードを1枚選んで手札に加える。 \n 第2幕で追加。クールダウン：8ターン",
+  "FGO_TUTORIALS_NOBLE_DECK_PANEL_ITEM.text_0": "宝具デッキ",
+  "FGO_TUTORIALS_NOBLE_DECK_PANEL_ITEM.text_1": "現在アンロック済みの宝具カードを見ることができる。尖塔を探索するにつれて、さらに多くの宝具カードがアンロックされる。",
+  "FGO_TUTORIALS_NOBLE_DECK_PANEL_ITEM.text_2": "現在アンロック済みの宝具カード。",
+  "FGO_TUTORIALS_NOBLE_DECK_VIEW_SCREEN.text_0": "これらのカードは保留され、プレイ後は戦闘から取り除かれる。",
+  "FGO_TUTORIALS_NOBLE_DECK_VIEW_SCREEN.text_1": "戻る",
+  "FGO_TUTORIALS_NOBLE_DECK_VIEW_SCREEN.text_2": "クリックで詳細"
+}

@@ -1,0 +1,21 @@
+{
+  "FGO_CHARACTER_FGO_CHARACTER.aromaPrinciple": "[sine][blue]……待っている……[/blue][/sine]",
+  "FGO_CHARACTER_FGO_CHARACTER.banter.alive.endTurnPing": "……",
+  "FGO_CHARACTER_FGO_CHARACTER.banter.dead.endTurnPing": "……",
+  "FGO_CHARACTER_FGO_CHARACTER.cardsModifierDescription": "マスターのカードが報酬や商店に出現するようになる。",
+  "FGO_CHARACTER_FGO_CHARACTER.cardsModifierTitle": "マスターカード",
+  "FGO_CHARACTER_FGO_CHARACTER.defeatMessage": "……",
+  "FGO_CHARACTER_FGO_CHARACTER.description": "聖杯に選ばれた魔術師。\nサーヴァントと共に戦う。",
+  "FGO_CHARACTER_FGO_CHARACTER.eventDeathPrevention": "まだ……待ち続けなければ……",
+  "FGO_CHARACTER_FGO_CHARACTER.flavor": "……",
+  "FGO_CHARACTER_FGO_CHARACTER.goldMonologue": "[sine]この金のコイン……いつか役立つかもしれない……[/sine]",
+  "FGO_CHARACTER_FGO_CHARACTER.possessiveAdjective": "彼女の",
+  "FGO_CHARACTER_FGO_CHARACTER.pronounObject": "彼女を",
+  "FGO_CHARACTER_FGO_CHARACTER.pronounPossessive": "彼女のもの",
+  "FGO_CHARACTER_FGO_CHARACTER.pronounSubject": "彼女",
+  "FGO_CHARACTER_FGO_CHARACTER.selectMessage": "……",
+  "FGO_CHARACTER_FGO_CHARACTER.title": "マスター",
+  "FGO_CHARACTER_FGO_CHARACTER.titleObject": "マスター",
+  "FGO_CHARACTER_FGO_CHARACTER.unlockText": "[pink]{Prerequisite}[/pink]で1回のランをプレイして、このキャラクターをアンロックする。",
+  "FGO_CHARACTER_FGO_CHARACTER.victoryMessage": "……"
+}
