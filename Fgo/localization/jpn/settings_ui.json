@@ -3,8 +3,6 @@
   "FGO_SETTINGS_UI_BASE_NP_PER_COST.title": "コストあたりのNP獲得量",
   "FGO_SETTINGS_UI_BASE_NP_PER_COST.sliderFormat": "{0:0}%",
   "FGO_SETTINGS_UI_BASE_NP_PER_COST.hover.desc": "宝具カード以外のカードに消費したエナジー1つにつき、獲得できるNPの量。",
-  "FGO_SETTINGS_UI_ENABLE_COLORLESS_CARDS.title": "無色カードを有効にする（ゲームの再起動が必要）",
-  "FGO_SETTINGS_UI_ENABLE_COLORLESS_CARDS.hover.desc": "カードのプールに無色カードを追加する。ゲームの再起動が必要。",
   "FGO_SETTINGS_UI_ENABLE_PADORU.title": "クリスマスのイースターエッグを有効にする",
   "FGO_SETTINGS_UI_ENABLE_PADORU.hover.desc": "クリスマスをテーマにした特別なコンテンツを有効にする。",
   "FGO_SETTINGS_UI_ENABLE_FTUE.title": "初心者チュートリアルを有効にする",

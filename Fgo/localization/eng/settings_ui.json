@@ -3,8 +3,6 @@
   "FGO_SETTINGS_UI_BASE_NP_PER_COST.title": "NP Gain per Cost",
   "FGO_SETTINGS_UI_BASE_NP_PER_COST.sliderFormat": "{0:0}%",
   "FGO_SETTINGS_UI_BASE_NP_PER_COST.hover.desc": "How much Noble Phantasm Gauge you gain for each point of energy spent on non-NP cards.",
-  "FGO_SETTINGS_UI_ENABLE_COLORLESS_CARDS.title": "Enable Colorless Cards (Requires game restart)",
-  "FGO_SETTINGS_UI_ENABLE_COLORLESS_CARDS.hover.desc": "Adds colorless cards to the card pool. Requires a game restart to take effect.",
   "FGO_SETTINGS_UI_ENABLE_PADORU.title": "Enable Christmas Easter Egg",
   "FGO_SETTINGS_UI_ENABLE_PADORU.hover.desc": "Enables special Christmas-themed content.",
   "FGO_SETTINGS_UI_ENABLE_FTUE.title": "Enable Ftue",

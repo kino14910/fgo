@@ -3,8 +3,6 @@
   "FGO_SETTINGS_UI_BASE_NP_PER_COST.title": "每费用获得的宝具值",
   "FGO_SETTINGS_UI_BASE_NP_PER_COST.sliderFormat": "{0:0}%",
   "FGO_SETTINGS_UI_BASE_NP_PER_COST.hover.desc": "打出非宝具卡时，每消耗1点能量可获取的宝具值。",
-  "FGO_SETTINGS_UI_ENABLE_COLORLESS_CARDS.title": "启用无色卡（需要重启游戏）",
-  "FGO_SETTINGS_UI_ENABLE_COLORLESS_CARDS.hover.desc": "将无色卡加入牌池，需要重启游戏后生效。",
   "FGO_SETTINGS_UI_ENABLE_PADORU.title": "启用圣诞节彩蛋",
   "FGO_SETTINGS_UI_ENABLE_PADORU.hover.desc": "启用圣诞主题的特殊内容。",
   "FGO_SETTINGS_UI_ENABLE_FTUE.title": "启用新手教程",

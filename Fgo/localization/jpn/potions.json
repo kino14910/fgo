@@ -1,12 +1,10 @@
 {
-  "FGO_POTION_POTION_I_D.title": "何かのポーション",
-  "FGO_POTION_POTION_I_D.description": "説明文に組み込まれる小さな断片。具体的な内容はポーション次第で、好きなように設定できる。",
   "FGO_POTION_ELIXIR_OF_REJUVENATION.title": "回春の霊薬",
   "FGO_POTION_ELIXIR_OF_REJUVENATION.description": "HPを[blue]10[/blue]回復する。 ",
   "FGO_POTION_EXTREMELY_SPICY_MAPO_TOFU.title": "激辛麻婆豆腐",
   "FGO_POTION_EXTREMELY_SPICY_MAPO_TOFU.description": "[blue]100%[/blue]の[gold]NP[/gold]か[blue]80%[/blue]の[gold]宝具威力[/gold]、どちらを得るかを選ぶ。",
   "FGO_POTION_CURSE_POTION.title": "呪いのポーション",
-  "FGO_POTION_CURSE_POTION.description": "[gold]呪詛[/gold]を[blue]5[/blue]スタック付与する。",
+  "FGO_POTION_CURSE_POTION.description": "[gold]呪い[/gold]を[blue]5[/blue]スタック付与する。",
   "FGO_POTION_STAR_FGO_POTION.title": "スターのポーション",
   "FGO_POTION_STAR_FGO_POTION.description": "[gold]スター[/gold]を[blue]10[/blue]得る。",
   "FGO_POTION_FGO_POTION_MODEL.description": "作者に見えたら報告してください",

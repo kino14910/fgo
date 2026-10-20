@@ -11,8 +11,6 @@
   "FGO_STATIC_HOVER_TIPS_NP_DAMAGE.description": "[gold]宝具[/gold]攻撃のダメージをこの割合だけ増加させる。",
   "FGO_STATIC_HOVER_TIPS_CRITICAL_DAMAGE.title": "クリティカルダメージ",
   "FGO_STATIC_HOVER_TIPS_CRITICAL_DAMAGE.description": "[gold]クリティカルヒット[/gold]のダメージをこの割合だけ増加させる。",
-  "FGO_STATIC_HOVER_TIPS_EVIL_CURSE.title": "呪詛",
-  "FGO_STATIC_HOVER_TIPS_EVIL_CURSE.description": "ターンの開始時に、[gold]呪詛[/gold]のスタック数に等しいHPを失う。",
   "FGO_STATIC_HOVER_TIPS_COMMAND_SPELL.title": "令呪",
   "FGO_STATIC_HOVER_TIPS_COMMAND_SPELL.description": "[gold]宝具解放[/gold]：[blue]100%[/blue]の[gold]NP[/gold]を獲得する。\n[blue]1[/blue]つの[gold]令呪[/gold]を消費して発動する。\n\n[gold]霊基修復[/gold]：HPを[blue]30[/blue]回復する。\n[blue]1[/blue]つの[gold]令呪[/gold]を消費して発動する。\n\n[gold]霊基復元[/gold]：致命的なダメージを耐え、HPを全回復する。\n[blue]300%[/blue]の[gold]NP[/gold]を獲得する。\n敗北しそうになった時に発動し、[gold]令呪[/gold]を[blue]3[/blue]つ消費する。",
   "FGO_STATIC_HOVER_TIPS_NOBLE.description": "[gold]宝具のカード[/gold]は[gold]保留[/gold]を持ち、プレイするとこの戦闘から取り除かれる。",
