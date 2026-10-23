@@ -20,6 +20,11 @@ public sealed class FgoFieldState
 
     public IReadOnlyCollection<FgoFieldId> Active => _stacks.Keys;
 
+    /// <summary>
+    ///     〔阳光照射〕本回合（side turn）是否已触发过「首次攻击牌返还活力」；每回合开始时重置。
+    /// </summary>
+    public bool SunlightAttackPlayedThisTurn { get; set; }
+
     public bool Has(FgoFieldId id) => _stacks.GetValueOrDefault(id) > 0;
 
     public int StacksOf(FgoFieldId id) => _stacks.GetValueOrDefault(id);

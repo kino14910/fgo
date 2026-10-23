@@ -35,17 +35,17 @@ public static class FgoFieldEffects
     /// <summary>〔黑暗〕我方回合开始时，每个单位获得的「盲目」层数。</summary>
     public const decimal DarknessBlindStacks = 1m;
 
-    /// <summary>〔森林〕我方回合开始时，每个单位获得的「荆棘」层数。</summary>
-    public const decimal ForestThornsStacks = 1m;
-
-    /// <summary>〔森林〕我方回合结束时，符合条件单位获得的「再生」层数。</summary>
+    /// <summary>〔森林〕我方回合开始时，符合条件单位获得的「再生」层数。</summary>
     public const decimal ForestRegenAmount = 3m;
 
     /// <summary>〔森林〕获得再生的生命值门槛（占最大生命值的比例，低于此值才获得）。</summary>
     public const decimal ForestRegenHpRatio = 0.5m;
 
+    /// <summary>〔阳光照射〕我方回合开始时，己方单位在翻倍既有「活力」之外额外获得的「活力」层数。</summary>
+    public const decimal SunlightTurnStartVigor = 4m;
+
     /// <summary>
-    ///     我方（玩家方）回合开始: 先让有时限的场地递减，再依次结算「水边」「黑暗」「森林」。
+    ///     我方（玩家方）回合开始: 先让有时限的场地递减，再依次结算「水边」「黑暗」「森林」「阳光照射」。
     /// </summary>
     /// <remarks>
     ///     先递减再结算: 层数 N 表示该场地存在 N 个我方回合（施放当回合算第 1 个）。
@@ -66,6 +66,11 @@ public static class FgoFieldEffects
     {
         await FgoField.TickDown(combat);
 
+        // 重置〔阳光照射〕的「本回合首次攻击牌」标记：每回合重新计一次。
+        var sunlightTurn = FgoField.Of(combat);
+        if (sunlightTurn != null)
+            sunlightTurn.SunlightAttackPlayedThisTurn = false;
+
         // 递减之后立刻结算〔虚数空间〕的到期退出：side 级钩子每轮只跑一次，
         // 因此「场次结束」会在同一份复制动作里对所有人同时发生（见 FgoVoidHand.ExitIfInactive）。
         await FgoVoidHand.ExitIfInactive(combat);
@@ -82,21 +87,31 @@ public static class FgoFieldEffects
             await PowerCmd.Apply<BlindPower>(choiceContext, units, DarknessBlindStacks, null, null);
 
         if (FgoField.Has(combat, FgoFieldId.Forest))
-            await PowerCmd.Apply<RegenPower>(choiceContext, units, ForestRegenAmount, null, null);
+        {
+            var wounded = units.Where(static c => c.CurrentHp < c.MaxHp * ForestRegenHpRatio).ToList();
+            if (wounded.Count > 0)
+                await PowerCmd.Apply<RegenPower>(choiceContext, wounded, ForestRegenAmount, null, null);
+        }
+
+        if (FgoField.Has(combat, FgoFieldId.Sunlight))
+            foreach (var ally in LivingAllies(combat))
+            {
+                var vigor = ally.GetPower<VigorPower>()?.Amount ?? 0;
+                await PowerCmd.Apply<VigorPower>(choiceContext, ally, vigor + SunlightTurnStartVigor, null, null);
+            }
     }
 
     /// <summary>
-    ///     我方（玩家方）回合结束: 依次结算「燃烧」（伤害）、「森林」（再生）、「阳光照射」（活力）。
+    ///     我方（玩家方）回合结束: 结算「燃烧」（伤害）。
     /// </summary>
     /// <remarks>
-    ///     顺序固定为「先伤害、后增益」: 森林的再生门槛读取的是本回合结束、燃烧伤害已经落地之后的血量，
-    ///     多个场地同时存在时行为仍然可预测。
     ///     <para>
     ///         伤害用 <see cref="ValueProp.Unpowered" />（来自能力/效果而非攻击）结算:
     ///         不吃力量、不吃易伤，也不会触发暴击、宝具值等攻击侧逻辑；可被格挡。
     ///     </para>
     ///     <para>
-    ///         〔阳光照射〕是唯一**只对己方单位生效**的场地（<c>combat.Allies</c>，含随从），
+    ///         〔阳光照射〕已改到回合开始结算（见 <see cref="OnPlayerSideTurnStart" />），
+    ///         是唯一**只对己方单位生效**的场地（<c>combat.Allies</c>，含随从），
     ///         其余场地均对战场上所有单位（含敌方）生效。
     ///     </para>
     /// </remarks>
@@ -109,36 +124,30 @@ public static class FgoFieldEffects
                 await CreatureCmd.Damage(choiceContext, targets, BurningDamage, ValueProp.Unpowered,
                     null, null, null);
         }
-
-        if (FgoField.Has(combat, FgoFieldId.Forest))
-        {
-            var units = LivingUnits(combat);
-            await PowerCmd.Apply<ThornsPower>(choiceContext, units, ForestThornsStacks, null, null);
-        }
-
-        if (FgoField.Has(combat, FgoFieldId.Sunlight))
-        {
-            var sunlight = FgoField.StacksOf(combat, FgoFieldId.Sunlight);
-            var allies = LivingAllies(combat);
-            if (sunlight > 0 && allies.Count > 0)
-                await PowerCmd.Apply<VigorPower>(choiceContext, allies, sunlight, null, null);
-        }
     }
 
     /// <summary>
-    ///     任意玩家打出一张牌时: 〔阳光照射〕下，打出攻击牌的玩家获得等同于剩余层数的「活力」。
+    ///     任意玩家打出一张牌时: 〔阳光照射〕下，本回合**第一次**打出攻击牌的玩家获得等同于剩余层数的「活力」。
     /// </summary>
     /// <remarks>
     ///     这一段天然只作用于玩家方——怪物攻击不走 <c>CardPlay</c>。
+    ///     <para />
+    ///     「本回合第一次」由 <see cref="FgoFieldState.SunlightAttackPlayedThisTurn" /> 标记，
+    ///     在 <see cref="OnPlayerSideTurnStart" /> 每回合重置；命中后立即置位，同回合后续攻击牌不再触发。
     /// </remarks>
     public static async Task OnCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         if (cardPlay.Card is not { Type: CardType.Attack }) return;
 
         var creature = cardPlay.Player.Creature;
-        var sunlight = FgoField.StacksOf(creature.CombatState, FgoFieldId.Sunlight);
+        var combat = creature.CombatState;
+        var sunlight = FgoField.StacksOf(combat, FgoFieldId.Sunlight);
         if (sunlight <= 0) return;
 
+        var fieldState = FgoField.Of(combat);
+        if (fieldState == null || fieldState.SunlightAttackPlayedThisTurn) return;
+
+        fieldState.SunlightAttackPlayedThisTurn = true;
         await PowerCmd.Apply<VigorPower>(choiceContext, creature, sunlight, creature, null);
     }
 

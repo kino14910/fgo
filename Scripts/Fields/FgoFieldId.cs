@@ -30,9 +30,8 @@ public enum FgoFieldId
     Darkness,
 
     /// <summary>
-    ///     〔森林〕我方回合开始时，所有单位获得 <see cref="FgoFieldEffects.ForestThornsStacks" /> 层荆棘；
-    ///     我方回合结束时，生命值低于 <see cref="FgoFieldEffects.ForestRegenHpRatio" /> 最大生命值的单位
-    ///     获得 <see cref="FgoFieldEffects.ForestRegenAmount" /> 层再生。
+    ///     〔森林〕我方回合开始时，生命值低于 <see cref="FgoFieldEffects.ForestRegenHpRatio" /> 最大生命值的单位
+    ///     获得 <see cref="FgoFieldEffects.ForestRegenAmount" /> 层「再生」。
     /// </summary>
     Forest,
 
@@ -43,8 +42,9 @@ public enum FgoFieldId
     City,
 
     /// <summary>
-    ///     〔阳光照射〕打出攻击牌时出牌者获得等同于剩余层数的「活力」；我方回合结束时
-    ///     <b>己方单位</b>获得等量「活力」（唯一只对己方生效的场地）。
+    ///     〔阳光照射〕我方回合开始时，<b>己方单位</b>的「活力」翻倍并获得
+    ///     <see cref="FgoFieldEffects.SunlightTurnStartVigor" /> 层「活力」；
+    ///     每回合第一次打出攻击牌时，出牌者获得等同于剩余层数的「活力」（唯一只对己方生效的场地）。
     ///     层数 = 剩余回合数。
     /// </summary>
     Sunlight,
