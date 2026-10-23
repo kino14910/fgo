@@ -11,7 +11,7 @@ using STS2RitsuLib.Cards.DynamicVars;
 namespace Fgo.Scripts.Cards;
 
 public class TameshiMono() : FgoCardModel(1, CardType.Skill,
-    CardRarity.Common, TargetType.Self)
+    CardRarity.Uncommon, TargetType.Self)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
@@ -36,6 +36,6 @@ public class TameshiMono() : FgoCardModel(1, CardType.Skill,
         foreach (var card in cards)
             await CardCmd.Exhaust(choiceContext, card);
 
-        await FgoResCmd.ModifyStars(cards.Count * 3, cardPlay.Player);
+        await FgoResCmd.ModifyStars(cards.Count * 4, Owner);
     }
 }

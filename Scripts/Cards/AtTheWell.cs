@@ -21,12 +21,12 @@ public class AtTheWell() : FgoCardModel(0, CardType.Skill,
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        ModCardVars.Power<GutsPower>(6)
+        ModCardVars.Power<GutsPower>(5)
     ];
 
     protected override void OnUpgrade()
     {
-        DynamicVars[nameof(GutsPower)].UpgradeValueBy(6);
+        DynamicVars[nameof(GutsPower)].UpgradeValueBy(10);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

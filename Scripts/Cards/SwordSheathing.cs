@@ -19,7 +19,8 @@ public class SwordSheathing() : FgoCardModel(1, CardType.Skill,
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
         HoverTipFactory.FromPower<NpCardPower>(),
-        HoverTipFactory.FromPower<SwordSheathingPower>()
+        HoverTipFactory.FromPower<SwordSheathingPower>(), 
+        HoverTipFactory.FromCard<BattouKamui>()
     ];
 
     protected override void OnUpgrade()

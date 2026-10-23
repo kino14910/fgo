@@ -23,16 +23,20 @@ public class SpringOfFire() : FgoCardModel(3, CardType.Power,
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         ModCardVars.Power<SpringOfFirePower>(20),
+        ModCardVars.Power<NpRatePower>(6),
         ModCardVars.Heal(3)
     ];
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Heal.UpgradeValueBy(3);
+        AddKeyword(CardKeyword.Innate);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
+        await PowerCmd.Apply<NpRatePower>(choiceContext, Owner.Creature,
+            DynamicVars[nameof(NpRatePower)].BaseValue,
+            Owner.Creature, this);
         var guts = await PowerCmd.Apply<SpringOfFireGutsPower>(choiceContext, Owner.Creature,
             DynamicVars.Heal.BaseValue,
             Owner.Creature, this);

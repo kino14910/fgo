@@ -9,7 +9,7 @@ using STS2RitsuLib.Cards.DynamicVars;
 namespace Fgo.Scripts.Cards;
 
 public class Indomitable() : FgoCardModel(1, CardType.Power,
-    CardRarity.Rare, TargetType.Self)
+    CardRarity.Uncommon, TargetType.Self)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
@@ -25,7 +25,7 @@ public class Indomitable() : FgoCardModel(1, CardType.Power,
 
     protected override void OnUpgrade()
     {
-        DynamicVars[nameof(IndomitableGutsPower)].UpgradeValueBy(10);
+        DynamicVars[nameof(IndomitableGutsPower)].UpgradeValueBy(8);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

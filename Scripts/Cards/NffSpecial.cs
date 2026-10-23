@@ -21,7 +21,11 @@ public class NffSpecial() : FgoCardModel(0, CardType.Skill,
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
-        HoverTipFactory.FromCard<GunDealer>()
+        HoverTipFactory.FromCard<GunDealer>(),
+        HoverTipFactory.FromCard<Pistol>(),
+        HoverTipFactory.FromCard<SMG>(),
+        HoverTipFactory.FromCard<SniperRifle>(),
+        HoverTipFactory.FromCard<RocketLauncher>()
     ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>

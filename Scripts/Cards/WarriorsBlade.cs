@@ -27,8 +27,7 @@ public class WarriorsBlade() : FgoCardModel(1, CardType.Attack,
 
     protected override void OnUpgrade()
     {
-        DynamicVars["Hits"].UpgradeValueBy(1);
-        DynamicVars["Star"].UpgradeValueBy(1);
+        DynamicVars.Damage.UpgradeValueBy(1);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

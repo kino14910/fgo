@@ -24,14 +24,15 @@ public class WaterfrontSaintess() : FgoCardModel(1, CardType.Skill,
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         ModCardVars.Int("Np", 20),
-        ModCardVars.Power<NpDamagePower>(20),
-        ModCardVars.Power<CriticalDamagePower>(20)
+        ModCardVars.Power<NpDamagePower>(10),
+        ModCardVars.Power<CriticalDamagePower>(30)
     ];
 
     protected override void OnUpgrade()
     {
         DynamicVars["Np"].UpgradeValueBy(10);
         DynamicVars[nameof(NpDamagePower)].UpgradeValueBy(10);
+        DynamicVars[nameof(CriticalDamagePower)].UpgradeValueBy(20);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

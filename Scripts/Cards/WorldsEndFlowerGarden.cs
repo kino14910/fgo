@@ -9,7 +9,7 @@ using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
 
-public class WorldsEndFlowerGarden() : FgoCardModel(1, CardType.Power,
+public class WorldsEndFlowerGarden() : FgoCardModel(0, CardType.Power,
     CardRarity.Uncommon, TargetType.Self)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
@@ -31,8 +31,8 @@ public class WorldsEndFlowerGarden() : FgoCardModel(1, CardType.Power,
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
+        await CreatureCmd.Heal(Owner.Creature, DynamicVars.Heal.BaseValue);
         await PowerCmd.Apply<WorldsEndFlowerGardenPower>(choiceContext, Owner.Creature,
             DynamicVars[nameof(WorldsEndFlowerGardenPower)].BaseValue, Owner.Creature, this);
-        await CreatureCmd.Heal(Owner.Creature, DynamicVars.Heal.BaseValue);
     }
 }

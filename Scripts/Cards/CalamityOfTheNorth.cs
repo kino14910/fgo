@@ -17,6 +17,7 @@ public class CalamityOfTheNorth() : FgoCardModel(2, CardType.Skill,
     [
         HoverTipFactory.FromPower<PoisonPower>(),
         HoverTipFactory.FromPower<CursePower>(),
+        HoverTipFactory.FromPower<BlindPower>(),
         FgoFieldId.Darkness.ToHoverTip()
     ];
 
