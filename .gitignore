@@ -8,8 +8,10 @@ bin/
 
 # IDE specific files
 .idea/
+qodana.yaml
 
 # Build artifacts
 Fgo.sln.DotSettings.user
 
-qodana.yaml
+# Agent
+.workbuddy/

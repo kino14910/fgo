@@ -30,7 +30,7 @@ public class WildRulePower : FgoPowerModel
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        ModCardVars.Heal("Heal", 3m),
+        ModCardVars.Heal("Heal", 3),
         ModCardVars.Power<StrengthPower>(1),
         ModCardVars.Power<VulnerablePower>(1)
     ];

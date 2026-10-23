@@ -23,10 +23,10 @@ public class FgoCharacter : ModCharacterTemplate<FgoCardPool, FgoRelicPool, FgoP
     public override Color MapDrawingColor => new("c47e09");
 
     // 人物性别（男女中立）
-    public override CharacterGender Gender => CharacterGender.Masculine;
+    public override CharacterGender Gender => CharacterGender.Feminine;
 
     // 初始血量和金币
-    public override int StartingHp => 80;
+    public override int StartingHp => 72;
     public override int StartingGold => 99;
 
     public override CharacterAssetProfile AssetProfile => CharacterAssetProfiles.Merge(
