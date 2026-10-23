@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bpgwfy1l8mn7"
-path="res://.godot/imported/LuckySpinning.png-94919c62536582b795044bb07dd6aefb.ctex"
+uid="uid://dh3xx2a61xe4e"
+path="res://.godot/imported/AthNGabla.png-e270ed0f3a137ea058e4b856af6ea905.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Fgo/images/cards/LuckySpinning.png"
-dest_files=["res://.godot/imported/LuckySpinning.png-94919c62536582b795044bb07dd6aefb.ctex"]
+source_file="res://Fgo/images/cards/AthNGabla.png"
+dest_files=["res://.godot/imported/AthNGabla.png-e270ed0f3a137ea058e4b856af6ea905.ctex"]
 
 [params]
 
