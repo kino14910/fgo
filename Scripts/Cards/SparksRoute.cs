@@ -29,10 +29,8 @@ public class SparksRoute() : FgoCardModel(0, CardType.Skill,
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        // 1. 失去至少 10% 宝具值（向上取整，至少 1 点）。
-        var state = FgoBattleHooks.Get(Owner);
-        var loss = Math.Max(1, (int)Math.Ceiling(state.Np * 0.1m));
-        await FgoResCmd.ModifyNp(-loss, Owner);
+        // 1. 失去至少 10% 宝具值。
+        await FgoResCmd.ModifyNp(-10, Owner);
 
         var hand = PileType.Hand.GetPile(Owner).Cards.ToList();
         if (hand.Count == 0) return;

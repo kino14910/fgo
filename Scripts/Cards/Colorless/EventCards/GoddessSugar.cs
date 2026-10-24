@@ -15,7 +15,7 @@ namespace Fgo.Scripts.Cards.Colorless.EventCards;
 /// <summary>
 ///     配合遗物[gold]女神的砂糖[/gold]使用: 打出时获得好感度。
 /// </summary>
-[RegisterCard(typeof(TokenCardPool))]
+[RegisterCard(typeof(EventCardPool))]
 public class GoddessSugar() : FgoBaseCardModel(1, CardType.Attack,
     CardRarity.Event, TargetType.AnyEnemy)
 {
