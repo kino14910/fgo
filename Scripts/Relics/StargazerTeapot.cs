@@ -15,6 +15,6 @@ public class StargazerTeapot : FgoRelic
     {
         if (target?.Player != Owner) return;
         Flash();
-        await PowerCmd.Apply<GutsPower>(new BlockingPlayerChoiceContext(), Owner.Creature, 2m, Owner.Creature, null);
+        await PowerCmd.Apply<GutsPower>(new ThrowingPlayerChoiceContext(), Owner.Creature, 2m, Owner.Creature, null);
     }
 }

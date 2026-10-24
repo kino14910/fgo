@@ -27,7 +27,7 @@ public class ManaBurstGemsPower : FgoPowerModel
 
         Flash();
         await PowerCmd.Apply<StrengthPower>(
-            new BlockingPlayerChoiceContext(), Owner, Amount, Owner, choiceContext.LastInvolvedModel as CardModel);
+            choiceContext, Owner, Amount, Owner, choiceContext.LastInvolvedModel as CardModel);
         await PowerCmd.Remove(this);
     }
 }

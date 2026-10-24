@@ -18,6 +18,6 @@ public class LockChocolate : FgoRelic
     public override async Task BeforeCombatStart()
     {
         Flash();
-        await PowerCmd.Apply<CursePower>(new BlockingPlayerChoiceContext(), Owner.Creature, 1m, Owner.Creature, null);
+        await PowerCmd.Apply<CursePower>(new ThrowingPlayerChoiceContext(), Owner.Creature, 1m, Owner.Creature, null);
     }
 }

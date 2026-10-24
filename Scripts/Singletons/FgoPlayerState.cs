@@ -108,7 +108,7 @@ public sealed class FgoPlayerState
         var delta = Math.Clamp(baseCount + net, 0, OverchargePower.MaxOvercharge) - baseCount;
         if (delta != 0)
             await PowerCmd.Apply<OverchargePower>(
-                new BlockingPlayerChoiceContext(), creature, delta, creature, null);
+                new ThrowingPlayerChoiceContext(), creature, delta, creature, null);
     }
 
     public Task SpendNpForNoblePhantasm()

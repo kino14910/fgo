@@ -27,7 +27,7 @@ public class DeathOfDeathPower : FgoPowerModel
         {
             Flash();
             await PowerCmd.Apply<ShadowStepPower>(
-                new BlockingPlayerChoiceContext(), Owner, 1m, Owner, ModelDb.Card<AbyssOfDeath>());
+                choiceContext, Owner, 1m, Owner, ModelDb.Card<AbyssOfDeath>());
         }
     }
 }

@@ -23,7 +23,7 @@ public class MidsummerNightDream : FgoRelic
             return Task.CompletedTask;
 
         Flash();
-        return PowerCmd.Apply<RegenPower>(new BlockingPlayerChoiceContext(), Owner.Creature, amount,
+        return PowerCmd.Apply<RegenPower>(choiceContext, Owner.Creature, amount,
             Owner.Creature, null);
     }
 }
