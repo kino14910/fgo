@@ -21,13 +21,13 @@ public class SniperRifle() : FgoBaseCardModel(0, CardType.Attack,
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        ModCardVars.Int("LowHpBonus", 8),
-        ModCardVars.ComputedDamage("SniperDamage", 8m, static (card, target) =>
+        ModCardVars.Int("LowHpBonus", 6),
+        ModCardVars.ComputedDamage("SniperDamage", 6m, static (card, target) =>
         {
-            var baseDamage = card?.DynamicVars["SniperDamage"].BaseValue ?? 8m;
+            var baseDamage = card?.DynamicVars["SniperDamage"].BaseValue ?? 6m;
             var bonus = card?.DynamicVars["LowHpBonus"].BaseValue ?? 0m;
-            // 目标生命值低于上限的一半才加成（严格小于）。
-            return target != null && target.CurrentHp * 2m < target.MaxHp ? baseDamage + bonus : baseDamage;
+            // 目标生命值低于上限的一半才加成。
+            return target != null && target.CurrentHp * 2m <= target.MaxHp ? baseDamage + bonus : baseDamage;
         })
     ];
 

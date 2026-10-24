@@ -18,7 +18,7 @@ public class SMG() : FgoBaseCardModel(0, CardType.Attack, CardRarity.Token,
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         ModCardVars.Damage(1),
-        ModCardVars.Int("Hits", 4)
+        ModCardVars.Int("Hits", 3)
     ];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

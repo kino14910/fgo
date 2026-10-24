@@ -17,7 +17,7 @@ public class Pistol() : FgoBaseCardModel(0, CardType.Attack,
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        ModCardVars.Damage(4),
+        ModCardVars.Damage(3),
         ModCardVars.Cards(1)
     ];
 

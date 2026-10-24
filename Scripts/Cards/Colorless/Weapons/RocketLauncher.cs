@@ -18,8 +18,8 @@ public class RocketLauncher() : FgoBaseCardModel(0, CardType.Attack,
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        ModCardVars.Damage(12),
-        ModCardVars.Int("Splash", 6)
+        ModCardVars.Damage(8),
+        ModCardVars.Int("Splash", 4)
     ];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
