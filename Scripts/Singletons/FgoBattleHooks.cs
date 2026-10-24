@@ -212,7 +212,6 @@ public sealed class FgoBattleHooks() : HookedSingletonModel(HookType.Combat)
         ValueProp props, Creature target, CardModel? cardSource)
     {
         if (dealer?.Player is not { Character: FgoCharacter } player
-            || cardSource is not FgoCardModel { Type: CardType.Attack }
             || result.TotalDamage <= 0) return;
 
         // 〔恋歌〕: 本回合内所有友方攻击产生的暴击星统一归收星者，不再留在攻击者身上。
@@ -228,7 +227,10 @@ public sealed class FgoBattleHooks() : HookedSingletonModel(HookType.Combat)
             && dealer is { IsMonster: true }
             && result.TotalDamage > 0
             && props.IsPoweredAttack())
-            await FgoResCmd.ModifyNp(result.TotalDamage, target.Player);
+        {
+            var multiplier = target.HasPower<NpRatePower>() ? 2 : 1;
+            await FgoResCmd.ModifyNp(result.TotalDamage * multiplier, target.Player);
+        }
     }
 
     public override bool ShouldDie(Creature creature)
