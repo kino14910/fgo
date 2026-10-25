@@ -44,7 +44,7 @@ public class NffSpecial() : FgoCardModel(0, CardType.Skill,
         var count = Math.Min(DynamicVars.Cards.IntValue, PileType.Hand.GetPile(Owner).Cards.Count);
         if (count <= 0) return;
 
-        var prefs = new CardSelectorPrefs(SelectionScreenPrompt, count);
+        var prefs = new CardSelectorPrefs(SelectionScreenPrompt, 0, count);
         var selected = (await CardSelectCmd.FromHand(choiceContext, Owner, prefs, null, this)).ToArray();
 
         foreach (var card in selected)

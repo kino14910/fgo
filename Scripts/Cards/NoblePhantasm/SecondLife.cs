@@ -32,22 +32,23 @@ public class SecondLife() : NobleCardModel(1, CardType.Skill, TargetType.Self)
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await GetExhaustedCard(cardPlay.Player);
+        await GetExhaustedCard(choiceContext, cardPlay.Player);
         await KillMinions(cardPlay.Player, DynamicVars["Np"].IntValue);
     }
-    
-    private static async Task GetExhaustedCard(Player player){
+
+    private static async Task GetExhaustedCard(PlayerChoiceContext choiceContext, Player player)
+    {
         var exhaustCards = player.PlayerCombatState?.ExhaustPile.Cards.ToList() ?? [];
-        if (exhaustCards.Count > 0)
-        {
-            var card = player.RunState.Rng.CombatCardSelection.NextItem(exhaustCards);
-            if (card is not null)
-            {
-                var copy = card.CreateClone();
-                CardCmd.Upgrade(copy, CardPreviewStyle.None);
-                await FgoCardActions.AddToHand(copy);
-            }
-        }
+        if (exhaustCards.Count == 0)
+            return;
+
+        var selected = await FgoCardActions.FromChooseACardScreenUncapped(choiceContext, exhaustCards, player);
+        if (selected == null)
+            return;
+
+        var copy = selected.CreateClone();
+        CardCmd.Upgrade(copy, CardPreviewStyle.None);
+        await FgoCardActions.AddToHand(copy);
     }
 
     private static async Task KillMinions(Player player, int npPerMinion)
