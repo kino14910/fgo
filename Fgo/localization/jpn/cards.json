@@ -46,7 +46,7 @@
   "FGO_CARD_YIN_YANG_FISH.title": "陰陽魚",
   "FGO_CARD_YIN_YANG_FISH.description": "{IfUpgraded:show:30%の[gold]NP[/gold]を得る。\n|}{Heal:diff()}HPを回復する。\n10%の[gold]NP[/gold]を失う。",
   "FGO_CARD_WARRIORS_BLADE.title": "撃剣矯捷なること隼の如し",
-  "FGO_CARD_WARRIORS_BLADE.description": "{Damage:diff()}ダメージを{Hits:diff()}回与える。\n{Star:diff()}[gold]スター[/gold]を得る。\nこのカードのダメージは能力によって変化しない。",
+  "FGO_CARD_WARRIORS_BLADE.description": "{Damage:diff()}ダメージを{Hits:diff()}回与える。\n{Star:diff()}[gold]スター[/gold]を得る。\nこのカードのダメージは能力によって変化せず、クリティカルしない。",
   "FGO_CARD_STAR_HUNTER.title": "星の狩人",
   "FGO_CARD_STAR_HUNTER.description": "{Star:diff()}[gold]スター[/gold]を得る。\n次の3回の[gold]クリティカル[/gold]で、[gold]クリティカルダメージ[/gold]を{CriticalDamageOncePower:diff()}%増加する。",
   "FGO_CARD_BLESSING_OF_KUR.title": "冥界の加護",

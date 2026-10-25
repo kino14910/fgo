@@ -46,7 +46,7 @@
   "FGO_CARD_YIN_YANG_FISH.title": "阴阳鱼",
   "FGO_CARD_YIN_YANG_FISH.description": "{IfUpgraded:show:获得30%[gold]宝具值[/gold]。\n|}回复{Heal:diff()}点生命。\n失去10%[gold]宝具值[/gold]。",
   "FGO_CARD_WARRIORS_BLADE.title": "击剑矫捷如鹰隼",
-  "FGO_CARD_WARRIORS_BLADE.description": "造成{Damage:diff()}点伤害{Hits:diff()}次。\n获得{Star:diff()}颗[gold]暴击星[/gold]。\n这张卡的伤害不受能力影响。",
+  "FGO_CARD_WARRIORS_BLADE.description": "造成{Damage:diff()}点伤害{Hits:diff()}次。\n获得{Star:diff()}颗[gold]暴击星[/gold]。\n这张卡的伤害不受能力影响，不会暴击。",
   "FGO_CARD_STAR_HUNTER.title": "星之猎人",
   "FGO_CARD_STAR_HUNTER.description": "获得{Star:diff()}颗[gold]暴击星[/gold]。\n之后3次[gold]暴击[/gold]，提高{CriticalDamageOncePower:diff()}%[gold]暴击威力[/gold]。",
   "FGO_CARD_BLESSING_OF_KUR.title": "冥界佑护",

@@ -46,7 +46,7 @@
   "FGO_CARD_YIN_YANG_FISH.title": "Yin Yang Fish",
   "FGO_CARD_YIN_YANG_FISH.description": "{IfUpgraded:show:Gain 30% [gold]NP[/gold].\n|}Heal {Heal:diff()} HP.\nLose 10% [gold]NP[/gold].",
   "FGO_CARD_WARRIORS_BLADE.title": "Warriors Blade",
-  "FGO_CARD_WARRIORS_BLADE.description": "Deal {Damage:diff()} damage {Hits:diff()} times.\nGain {Star:diff()} [gold]Critical Stars[/gold].\nDamage of this card will not change by powers.",
+  "FGO_CARD_WARRIORS_BLADE.description": "Deal {Damage:diff()} damage {Hits:diff()} times.\nGain {Star:diff()} [gold]Critical Stars[/gold].\nDamage of this card will not change by powers and cannot crit.",
   "FGO_CARD_STAR_HUNTER.title": "Star Hunter",
   "FGO_CARD_STAR_HUNTER.description": "Gain {Star:diff()} [gold]Critical Stars[/gold].\nFor the next 3 [gold]Critical[/gold], increase {CriticalDamageOncePower:diff()}% [gold]Critical Damage[/gold].",
   "FGO_CARD_BLESSING_OF_KUR.title": "Blessing of Kur",
