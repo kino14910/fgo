@@ -37,6 +37,9 @@ public sealed class FgoPlayerState
     public bool CritActive => _crit.Active;
     public decimal CritDamageMultiplier => _crit.DamageMultiplier;
 
+    /// <summary>每次暴击激活自增，用于让「每次暴击只结算一次」的能力跨多段伤害去重。</summary>
+    public int CritActivationId => _crit.ActivationId;
+
     public int Np
     {
         get => _np;
@@ -240,10 +243,7 @@ public sealed class FgoPlayerState
         if (card is CharismaOfTheJade)
         {
             if (await TryConsumeCritStars(true, card.Owner) > 0)
-            {
-                _crit.Active = true;
-                _crit.DamageMultiplier = 3m;
-            }
+                ActivateCrit(3m);
 
             return;
         }
@@ -252,10 +252,14 @@ public sealed class FgoPlayerState
             return;
 
         if (await TryConsumeCritStars(false, card.Owner) > 0)
-        {
-            _crit.Active = true;
-            _crit.DamageMultiplier = 2m;
-        }
+            ActivateCrit(2m);
+    }
+
+    private void ActivateCrit(decimal multiplier)
+    {
+        _crit.Active = true;
+        _crit.DamageMultiplier = multiplier;
+        _crit.ActivationId++;
     }
 
     /// <summary>
@@ -344,6 +348,7 @@ public sealed class FgoPlayerState
         public bool Active;
         public decimal DamageMultiplier;
         public bool Triggered;
+        public int ActivationId;
 
         public Task Reset()
         {
