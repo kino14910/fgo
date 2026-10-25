@@ -130,6 +130,17 @@ public class Entry
             DisableMod,
             "Charisma cost patcher failed; Charisma cannot be played with insufficient energy.");
 
+        // 原版手牌输入护栏: 〔虚数空间〕进出时原版手牌被整体搬空并隐藏，拖动出牌期间
+        // NPlayerHand._draggedHolderIndex 与可见牌位数脱节，_UnhandledInput 里的
+        // list.Insert 会抛 IndexOutOfRange（打〔虚数大海战〕时必现那条 ERROR）。
+        // 索引越界时跳过本次输入即可，无其他副作用。
+        var handInputPatcher = RitsuLibFramework.CreatePatcher(ModId, "player_hand_input");
+        handInputPatcher.RegisterPatch<FgoPlayerHandInputPatch>();
+        RitsuLibFramework.ApplyRequiredPatcher(
+            handInputPatcher,
+            DisableMod,
+            "Player hand input guard patcher failed; card shortcut keys may crash during void space transitions.");
+
         // 领袖气质（Charisma）紫光: 只能靠该能力超能量额打出的卡，手牌描边改为紫色。
         // 原版 NCardHighlight 只有青(playable)/金/红三色，任意色必须走 RitsuLib 的
         // ModCardHandOutlineRegistry —— 它 postfix NHandCardHolder.UpdateCard 把

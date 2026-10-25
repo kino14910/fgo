@@ -12,6 +12,8 @@ using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Nodes.Combat;
 using MegaCrit.Sts2.Core.Nodes.HoverTips;
+using MegaCrit.Sts2.Core.Nodes.Rooms;
+using MegaCrit.Sts2.Core.Nodes.Screens.ScreenContext;
 using STS2RitsuLib.Scaffolding.Godot.NodeAttachments;
 
 namespace Fgo.Scripts.UI;
@@ -907,6 +909,9 @@ public sealed partial class FgoNpBar : Node
         if (_button == null || _player == null)
             return;
 
+        if (ShouldSuppressHoverTips())
+            return;
+
         var tip = LocalContext.IsMe(_player) && _player!.Creature.HasPower<SealNpPower>()
             ? FgoHoverTipFactory.FromNpSealed()
             : FgoHoverTipFactory.FromNpButton();
@@ -926,14 +931,34 @@ public sealed partial class FgoNpBar : Node
     ///     条区域的悬停提示：npBar 与 %Hitbox 矩形重叠且位于其下层，命中测试始终把鼠标判给 Hitbox，
     ///     因此这里每帧自行判定指针进出，并同步压制生物的悬停提示（两者 owner 不同，会并存）。
     /// </summary>
+    /// <remarks>
+    ///     与血条（hpContainer）表现保持一致：目标选择中、手牌打出中、或有界面压在战斗之上
+    ///     （牌组/牌堆浏览、宝具选牌等）时不弹提示，已弹出的立即撤下，见
+    ///     <see cref="ShouldSuppressHoverTips" />。
+    /// </remarks>
     private void UpdateHoverTip()
     {
         if (_npBarRoot == null)
             return;
 
         var mousePosition = GetViewport().GetMousePosition();
+        var inBar = _npBarRoot.GetGlobalRect().HasPoint(mousePosition);
 
-        if (_npBarRoot.GetGlobalRect().HasPoint(mousePosition))
+        if (!inBar && !_hoverTipShown)
+            return;
+
+        if (ShouldSuppressHoverTips())
+        {
+            if (_hoverTipShown)
+            {
+                _hoverTipShown = false;
+                NHoverTipSet.Remove(_npBarRoot);
+            }
+
+            return;
+        }
+
+        if (inBar)
         {
             // Hitbox 一直处于 mouse-over，指针移进 npBar 不会让它触发 MouseExited；
             // 又因 OnFocus 订阅了 CombatStateChanged，战斗中状态变化还会让生物重弹提示，
@@ -953,9 +978,6 @@ public sealed partial class FgoNpBar : Node
             return;
         }
 
-        if (!_hoverTipShown)
-            return;
-
         _hoverTipShown = false;
         NHoverTipSet.Remove(_npBarRoot);
 
@@ -964,6 +986,25 @@ public sealed partial class FgoNpBar : Node
         if (_creatureNode != null &&
             _creatureNode.Hitbox.GetGlobalRect().HasPoint(mousePosition))
             _creatureNode.ShowHoverTips(_creatureNode.Entity.HoverTips);
+    }
+
+    /// <summary>
+    ///     当前是否应抑制 NP 条悬停提示。复刻原版生物悬停提示（hpContainer 一侧）的抑制条件：
+    ///     选牌/药水目标选择中（<see cref="NHoverTipSet.shouldBlockHoverTips" />）、
+    ///     手牌打出中（<c>NPlayerHand.InCardPlay</c>）、
+    ///     以及有界面压在战斗之上时 <see cref="ActiveScreenContext.GetCurrentScreen" />
+    ///     不再是 <see cref="NCombatRoom" />（牌组/牌堆浏览、宝具选牌、令咒选牌、查看卡牌等）。
+    /// </summary>
+    private static bool ShouldSuppressHoverTips()
+    {
+        if (NHoverTipSet.shouldBlockHoverTips)
+            return true;
+
+        if (NCombatRoom.Instance?.Ui?.Hand?.InCardPlay == true)
+            return true;
+
+        return ActiveScreenContext.Instance.GetCurrentScreen() is { } screen &&
+               !ReferenceEquals(screen, NCombatRoom.Instance);
     }
 
     private void DoNpButtonPressed()
