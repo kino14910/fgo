@@ -85,7 +85,7 @@
   "FGO_CARD_TAMESHI_MONO.title": "様物",
   "FGO_CARD_TAMESHI_MONO.description": "捨て札から{IfUpgraded:show:任意の枚数の|最大{ExhaustCount:diff()}枚の}カードを[gold]廃棄[/gold]にする。廃棄したカード1枚につき3[gold]スター[/gold]を得る。",
   "FGO_CARD_SWAN_LAKE.title": "スワンレイク",
-  "FGO_CARD_SWAN_LAKE.description": "3ターンの間、[gold]水辺[/gold]のフィールドを得る。",
+  "FGO_CARD_SWAN_LAKE.description": "{Damage:diff()}ダメージを与える。\n3ターンの間、[gold]水辺[/gold]のフィールドを得る。",
   "FGO_CARD_LAMPLIGHT_OF_THE_SOUL.title": "魂の灯火",
   "FGO_CARD_LAMPLIGHT_OF_THE_SOUL.description": "{GutsPower:diff()}[gold]ガッツ[/gold]と{RegenPower:diff()}[gold]再生[/gold]を得る。",
   "FGO_CARD_ATH_N_GABLA.title": "アトゴウラ",
@@ -356,5 +356,7 @@
   "FGO_CARD_SNIPER_RIFLE.title": "狙撃銃",
   "FGO_CARD_SNIPER_RIFLE.description": "{SniperDamage:diff()}ダメージを与える。\n対象のHPがその最大HPの50%未満の場合、{LowHpBonus:diff()}の追加ダメージを与える。",
   "FGO_CARD_ROCKET_LAUNCHER.title": "ロケットランチャー",
-  "FGO_CARD_ROCKET_LAUNCHER.description": "{Damage:diff()}ダメージを与える。\n他の敵に{Splash:diff()}ダメージを与える。"
+  "FGO_CARD_ROCKET_LAUNCHER.description": "{Damage:diff()}ダメージを与える。\n他の敵に{Splash:diff()}ダメージを与える。",
+  "FGO_CARD_ZHANG_JIAO.title": "蒼天已死、黄天當立",
+  "FGO_CARD_ZHANG_JIAO.description": "すべての敵に{ZhangJiaoDamage:diff()}ダメージを与える。\n[gold]フィールド[/gold]1つにつき、追加で{DamagePerField:diff()}ダメージを与える。"
 }

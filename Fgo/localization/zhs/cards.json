@@ -85,7 +85,7 @@
   "FGO_CARD_TAMESHI_MONO.title": "试刀",
   "FGO_CARD_TAMESHI_MONO.description": "从弃牌堆[gold]消耗[/gold]{IfUpgraded:show:任意数量|最多{ExhaustCount:diff()}}张卡，每消耗一张获得3颗[gold]暴击星[/gold]。",
   "FGO_CARD_SWAN_LAKE.title": "天鹅湖",
-  "FGO_CARD_SWAN_LAKE.description": "场地获得[gold]水边[/gold]3回合。",
+  "FGO_CARD_SWAN_LAKE.description": "造成{Damage:diff()}点伤害。\n场地获得[gold]水边[/gold]3回合。",
   "FGO_CARD_LAMPLIGHT_OF_THE_SOUL.title": "魂之灯火",
   "FGO_CARD_LAMPLIGHT_OF_THE_SOUL.description": "获得{GutsPower:diff()}层[gold]毅力[/gold]与{RegenPower:diff()}层[gold]再生[/gold]。",
   "FGO_CARD_ATH_N_GABLA.title": "四枝之浅滩",
@@ -356,5 +356,7 @@
   "FGO_CARD_SNIPER_RIFLE.title": "狙击枪",
   "FGO_CARD_SNIPER_RIFLE.description": "造成{SniperDamage:diff()}点伤害。\n目标生命值低于其上限50%时，伤害额外提高{LowHpBonus:diff()}点。",
   "FGO_CARD_ROCKET_LAUNCHER.title": "火箭筒",
-  "FGO_CARD_ROCKET_LAUNCHER.description": "造成{Damage:diff()}点伤害。\n对其他敌人造成{Splash:diff()}点伤害。"
+  "FGO_CARD_ROCKET_LAUNCHER.description": "造成{Damage:diff()}点伤害。\n对其他敌人造成{Splash:diff()}点伤害。",
+  "FGO_CARD_ZHANG_JIAO.title": "苍天已死，黄天当立",
+  "FGO_CARD_ZHANG_JIAO.description": "对所有敌人造成{ZhangJiaoDamage:diff()}点伤害。\n每有一个[gold]场地[/gold]，额外造成{DamagePerField:diff()}点伤害。"
 }

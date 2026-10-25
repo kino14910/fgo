@@ -39,6 +39,9 @@
   "FGO_RELIC_ASTRAL_SWORD_EPITAPH.title": "Astral Sword Epitaph",
   "FGO_RELIC_ASTRAL_SWORD_EPITAPH.description": "The default [gold]Affection[/gold] of [gold]II[/gold] becomes [blue]10[/blue] (the start of combat sets it to [blue]10[/blue] instead of clearing it).",
   "FGO_RELIC_ASTRAL_SWORD_EPITAPH.flavor": "A Star Sword buried at the edge of the universe.",
+  "FGO_RELIC_PHOENIX_FEATHER.title": "Phoenix Feather",
+  "FGO_RELIC_PHOENIX_FEATHER.description": "When [gold]Guts[/gold] triggers, restore an additional [blue]10%[/blue] of your Max HP.",
+  "FGO_RELIC_PHOENIX_FEATHER.flavor": "A feather shed by the immortal bird, able to call life back from the edge of death.",
   "FGO_RELIC_FGO_RELIC.description": "Feedback to author if you see this",
   "FGO_RELIC_FGO_RELIC.flavor": "Feedback to author if you see this",
   "FGO_RELIC_FGO_RELIC.title": "Feedback to author if you see this"

@@ -85,7 +85,7 @@
   "FGO_CARD_TAMESHI_MONO.title": "Tameshi Mono",
   "FGO_CARD_TAMESHI_MONO.description": "[gold]Exhaust[/gold] {IfUpgraded:show:any number of|up to {ExhaustCount:diff()}} cards from the discard pile. Gain 3 [gold]Critical Stars[/gold] for each card exhausted.",
   "FGO_CARD_SWAN_LAKE.title": "Swan Lake",
-  "FGO_CARD_SWAN_LAKE.description": "Gain the [gold]Waterside[/gold] field for 3 turns.",
+  "FGO_CARD_SWAN_LAKE.description": "Deal {Damage:diff()} damage.\nGain the [gold]Waterside[/gold] field for 3 turns.",
   "FGO_CARD_LAMPLIGHT_OF_THE_SOUL.title": "Lamplight of the Soul",
   "FGO_CARD_LAMPLIGHT_OF_THE_SOUL.description": "Gain {GutsPower:diff()} [gold]Guts[/gold] and {RegenPower:diff()} [gold]Regen[/gold].",
   "FGO_CARD_ATH_N_GABLA.title": "Ath nGabla",
@@ -356,5 +356,7 @@
   "FGO_CARD_SNIPER_RIFLE.title": "Sniper Rifle",
   "FGO_CARD_SNIPER_RIFLE.description": "Deal {SniperDamage:diff()} damage.\nIf the target's HP is below 50% of its Max HP, deal {LowHpBonus:diff()} additional damage.",
   "FGO_CARD_ROCKET_LAUNCHER.title": "Rocket Launcher",
-  "FGO_CARD_ROCKET_LAUNCHER.description": "Deal {Damage:diff()} damage.\nDeal {Splash:diff()} damage to the other enemies."
+  "FGO_CARD_ROCKET_LAUNCHER.description": "Deal {Damage:diff()} damage.\nDeal {Splash:diff()} damage to the other enemies.",
+  "FGO_CARD_ZHANG_JIAO.title": "Soutensudenishisu, Koutenmasanitatsubeshi",
+  "FGO_CARD_ZHANG_JIAO.description": "Deal {ZhangJiaoDamage:diff()} damage to ALL enemies.\nDeal {DamagePerField:diff()} additional damage for each [gold]Field[/gold]."
 }

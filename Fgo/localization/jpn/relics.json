@@ -39,6 +39,9 @@
   "FGO_RELIC_ASTRAL_SWORD_EPITAPH.title": "星剣のエピタフ",
   "FGO_RELIC_ASTRAL_SWORD_EPITAPH.description": "[gold]II[/gold]の[gold]好感度[/gold]の初期値が[blue]10[/blue]になる（戦闘開始時にクリアされる代わりに[blue]10[/blue]にセットされる）。",
   "FGO_RELIC_ASTRAL_SWORD_EPITAPH.flavor": "宇宙の果てに埋もれた星の剣。",
+  "FGO_RELIC_PHOENIX_FEATHER.title": "鳳凰の羽根",
+  "FGO_RELIC_PHOENIX_FEATHER.description": "[gold]ガッツ[/gold]が発動した後、最大HPの[blue]10%[/blue]を追加で回復する。",
+  "FGO_RELIC_PHOENIX_FEATHER.flavor": "不死鳥の落とした羽根。死の淵から生命を呼び戻す。",
   "FGO_RELIC_FGO_RELIC.description": "作者に見えたら報告してください",
   "FGO_RELIC_FGO_RELIC.flavor": "作者に見えたら報告してください",
   "FGO_RELIC_FGO_RELIC.title": "作者に見えたら報告してください"

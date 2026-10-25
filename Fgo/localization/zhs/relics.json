@@ -41,5 +41,8 @@
   "FGO_RELIC_II.flavor": "她递来的第二份礼物。",
   "FGO_RELIC_ASTRAL_SWORD_EPITAPH.title": "星剑的墓志铭",
   "FGO_RELIC_ASTRAL_SWORD_EPITAPH.description": "[gold]II[/gold]的好感度默认值变为 10（战斗开始时不清空，而是变为 10）。",
-  "FGO_RELIC_ASTRAL_SWORD_EPITAPH.flavor": "埋葬于宇宙尽头的星之剑。"
+  "FGO_RELIC_ASTRAL_SWORD_EPITAPH.flavor": "埋葬于宇宙尽头的星之剑。",
+  "FGO_RELIC_PHOENIX_FEATHER.title": "凤凰羽毛",
+  "FGO_RELIC_PHOENIX_FEATHER.description": "[gold]毅力[/gold]发动后，额外恢复最大生命值的10%。",
+  "FGO_RELIC_PHOENIX_FEATHER.flavor": "不死鸟飘落的羽毛，能在生死边缘唤回生命的余温。"
 }
