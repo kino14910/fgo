@@ -1,4 +1,5 @@
 using Fgo.Scripts.Commands;
+using Fgo.Scripts.Relics;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
@@ -32,5 +33,13 @@ public class GutsPower : FgoPowerModel
         // 必须移除 this 而非 Remove<GutsPower>：
         // GetPower<GutsPower> 匹配的是 p is GutsPower，会误删 NonStackableGutsPower 实例。
         await PowerCmd.Remove(this);
+        await NotifyGutsRelics(creature);
+    }
+
+    // 毅力发动广播: 凤凰羽毛在免死回血之后追加效果（仅玩家本人持有该遗物时）。
+    internal static async Task NotifyGutsRelics(Creature creature)
+    {
+        if (creature.Player?.GetRelic<PhoenixFeather>() is { } feather)
+            await feather.OnGutsTriggered(creature);
     }
 }

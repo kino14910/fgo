@@ -1,3 +1,4 @@
+using Fgo.Scripts.Relics;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
@@ -93,5 +94,6 @@ public abstract class NonStackableGutsPower : GutsPower, IPowerExtraIconAmountLa
         Times--;
         if (Times <= 0)
             await PowerCmd.Remove(this);
+        await NotifyGutsRelics(creature);
     }
 }
