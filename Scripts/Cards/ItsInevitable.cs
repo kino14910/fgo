@@ -16,7 +16,9 @@ public class ItsInevitable() : FgoCardModel(1, CardType.Attack,
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
-        HoverTipFactory.FromPower<ItsInevitablePower>()
+        HoverTipFactory.FromPower<ItsInevitablePower>(),
+        HoverTipFactory.FromCard<Burn>(),
+        FgoFieldId.Burning.ToHoverTip()
     ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>

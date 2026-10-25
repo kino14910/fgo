@@ -35,7 +35,7 @@ public class AnimalDialogue() : FgoCardModel(1, CardType.Skill,
 
     protected override void OnUpgrade()
     {
-        DynamicVars["Threshold"].UpgradeValueBy(-5);
+        EnergyCost.UpgradeBy(-1);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
