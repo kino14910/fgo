@@ -18,7 +18,8 @@ public class ZhangJiao() : NobleCardModel(1, CardType.Attack, TargetType.AllEnem
 
     protected override void OnUpgrade()
     {
-        DynamicVars["ZhangJiaoDamage"].UpgradeValueBy(8);
+        DynamicVars["ZhangJiaoDamage"].UpgradeValueBy(4);
+        DynamicVars["DamagePerField"].UpgradeValueBy(1);
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
