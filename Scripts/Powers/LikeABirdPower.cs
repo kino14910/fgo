@@ -28,7 +28,7 @@ public class LikeABirdPower : FgoPowerModel
         "res://Fgo/images/powers/AtkUpPower.png",
         "res://Fgo/images/powers/big/AtkUpPower.png"
     );
-    
+
     public override decimal ModifyDamageMultiplicative(Creature? target, decimal amount, ValueProp props,
         Creature? dealer, CardModel? cardSource, CardPlay? cardPlay)
     {

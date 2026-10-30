@@ -59,7 +59,8 @@ public class WildRulePower : FgoPowerModel
             DynamicVars[nameof(VulnerablePower)].BaseValue, Owner, cardPlay.Card);
     }
 
-    public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side, IEnumerable<Creature> participants)
+    public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side,
+        IEnumerable<Creature> participants)
     {
         if (!participants.Contains(Owner)) return;
         if (side != Owner.Side) return;

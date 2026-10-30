@@ -3,7 +3,6 @@ using MegaCrit.Sts2.Core.ControllerInput;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Nodes.GodotExtensions;
-using MegaCrit.Sts2.addons.mega_text;
 
 namespace Fgo.Scripts.UI;
 
@@ -32,8 +31,6 @@ namespace Fgo.Scripts.UI;
 /// </remarks>
 public sealed partial class FgoFtueConfirmButton : NButton
 {
-    private static readonly StringName VParam = "v";
-
     /// <summary>
     ///     按钮文字的字号上下限。
     /// </summary>
@@ -46,9 +43,10 @@ public sealed partial class FgoFtueConfirmButton : NButton
     private const int FontMinSize = 12;
 
     private const int FontMaxSize = 20;
+    private static readonly StringName VParam = "v";
+    private ShaderMaterial? _hsv;
 
     private TextureRect? _outline;
-    private ShaderMaterial? _hsv;
     private Tween? _outlineTween;
     private Tween? _scaleTween;
 

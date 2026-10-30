@@ -10,7 +10,7 @@ namespace Fgo.Scripts.Cards.Colorless.Weapons;
 
 /// <summary>手枪: 造成 4 点伤害，抽 1 张牌。</summary>
 [RegisterCard(typeof(TokenCardPool))]
-public class Pistol() : FgoBaseCardModel(0, CardType.Attack, 
+public class Pistol() : FgoBaseCardModel(0, CardType.Attack,
     CardRarity.Token, TargetType.AnyEnemy)
 {
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];

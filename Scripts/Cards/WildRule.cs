@@ -39,7 +39,7 @@ public class WildRule() : FgoCardModel(1, CardType.Attack,
             .Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_bite")
             .Execute(choiceContext);
-        
+
         await PowerCmd.Apply<WildRulePower>(choiceContext, Owner.Creature,
             DynamicVars[nameof(WildRulePower)].BaseValue, Owner.Creature, this);
     }

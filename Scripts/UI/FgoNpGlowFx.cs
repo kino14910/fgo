@@ -59,12 +59,11 @@ public sealed partial class FgoNpGlowFx : Control
     /// <summary>场景缓存。mod 自带场景不在房间预加载集里，自己缓存避免重复查盘与告警。</summary>
     private static PackedScene? _scene;
 
-    private ShaderMaterial? _rayMaterial;
     private ColorRect? _rays;
     private GpuParticles2D? _sparks;
 
     /// <summary>解析光效的着色器材质，供 <see cref="FgoNpBar.ApplyGlowTuning" /> 写 uniform。</summary>
-    public ShaderMaterial? RayMaterial => _rayMaterial;
+    public ShaderMaterial? RayMaterial { get; private set; }
 
     /// <summary>
     ///     实例化光效层场景。调用方负责 <c>AddChild</c> 与层级设置。
@@ -97,20 +96,20 @@ public sealed partial class FgoNpGlowFx : Control
 
         _rays = GetNodeOrNull<ColorRect>("%Rays");
         _sparks = GetNodeOrNull<GpuParticles2D>("%Sparks");
-        _rayMaterial = _rays?.Material as ShaderMaterial;
+        RayMaterial = _rays?.Material as ShaderMaterial;
 
         if (_rays != null)
             _rays.MouseFilter = MouseFilterEnum.Ignore;
 
-        if (_rayMaterial == null)
+        if (RayMaterial == null)
             Entry.Logger.ErrorNoTrace("[Fgo] NpGlowFx: %Rays node or its ShaderMaterial is missing.");
 
         if (_sparks == null)
             Entry.Logger.ErrorNoTrace("[Fgo] NpGlowFx: %Sparks node missing.");
 
         // 光心与 aspect 属于几何量，场景加载即可确定，不随调参变化。
-        _rayMaterial?.SetShaderParameter("origin", OriginUv);
-        _rayMaterial?.SetShaderParameter("aspect", FxSize.X / FxSize.Y);
+        RayMaterial?.SetShaderParameter("origin", OriginUv);
+        RayMaterial?.SetShaderParameter("aspect", FxSize.X / FxSize.Y);
     }
 
     /// <summary>把光心对准父节点局部坐标里的某一点（调用方传按钮中心）。</summary>
@@ -157,7 +156,7 @@ public sealed partial class FgoNpGlowFx : Control
     {
         var v = Mathf.Max(value, 0f);
 
-        _rayMaterial?.SetShaderParameter(IntensityParam, v);
+        RayMaterial?.SetShaderParameter(IntensityParam, v);
 
         if (_sparks == null)
             return;
@@ -210,8 +209,8 @@ public sealed partial class FgoNpGlowFx : Control
         if (_rays != null)
             Entry.Logger.Info(
                 $"[Fgo] NpGlowFx[{tag}]: rays size={_rays.Size} visible={_rays.Visible} " +
-                $"shader={_rayMaterial?.Shader != null} " +
-                $"intensity={_rayMaterial?.GetShaderParameter("intensity")}");
+                $"shader={RayMaterial?.Shader != null} " +
+                $"intensity={RayMaterial?.GetShaderParameter("intensity")}");
 
         if (_sparks == null)
         {

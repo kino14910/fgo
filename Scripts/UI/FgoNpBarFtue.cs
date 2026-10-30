@@ -20,7 +20,10 @@ namespace Fgo.Scripts.UI;
 ///         <b>固定节点路径</b>（与原版一致，便于对照）：
 ///         <list type="bullet">
 ///             <item><c>FtuePopup/Header</c> —— 原版是 MegaLabel，这里是引擎 Label + <see cref="FgoFtueText" /> 复刻 auto-size</item>
-///             <item><c>FtuePopup/DescriptionContainer/Description</c> —— 原版是 MegaRichTextLabel，这里是 RichTextLabel + 手动装 <c>[gold]</c> 等效果</item>
+///             <item>
+///                 <c>FtuePopup/DescriptionContainer/Description</c> —— 原版是 MegaRichTextLabel，这里是 RichTextLabel + 手动装
+///                 <c>[gold]</c> 等效果
+///             </item>
 ///             <item><c>FtuePopup/FtueConfirmButton</c> —— <see cref="FgoFtueConfirmButton" />（NButton 子类）</item>
 ///         </list>
 ///     </para>
@@ -50,6 +53,15 @@ public sealed partial class FgoNpBarFtue : NFtue
     private const float ArrowScale = 0.5f;
 
     /// <summary>
+    ///     箭头未旋转时尖端的朝向（y-down 坐标，+X 为 0°、+Y 为 90°）。
+    /// </summary>
+    /// <remarks>
+    ///     由 <see cref="ArrowTipOffset" /> 反推：<c>atan2(96, -106) ≈ 137.83°</c>。
+    ///     贴图默认朝向左下，指向性旋转就是「目标方位角 - 这个值」。
+    /// </remarks>
+    private const float ArrowDefaultBearingDeg = 137.83f;
+
+    /// <summary>
     ///     箭头贴图尖端相对 <c>PivotOffset</c> 的偏移。
     /// </summary>
     /// <remarks>
@@ -60,20 +72,12 @@ public sealed partial class FgoNpBarFtue : NFtue
     /// </remarks>
     private static readonly Vector2 ArrowTipOffset = new(-106f, 96f);
 
-    /// <summary>
-    ///     箭头未旋转时尖端的朝向（y-down 坐标，+X 为 0°、+Y 为 90°）。
-    /// </summary>
-    /// <remarks>
-    ///     由 <see cref="ArrowTipOffset" /> 反推：<c>atan2(96, -106) ≈ 137.83°</c>。
-    ///     贴图默认朝向左下，指向性旋转就是「目标方位角 - 这个值」。
-    /// </remarks>
-    private const float ArrowDefaultBearingDeg = 137.83f;
+    private TextureRect? _arrow;
+    private NButton? _confirmButton;
+    private RichTextLabel? _description;
 
     private Label? _header;
-    private RichTextLabel? _description;
-    private NButton? _confirmButton;
     private Control? _popup;
-    private TextureRect? _arrow;
 
     /// <summary>
     ///     NP 按钮在屏幕坐标系里的矩形，由 <see cref="Create" /> 注入。
@@ -84,6 +88,8 @@ public sealed partial class FgoNpBarFtue : NFtue
     ///     场景里写死的 offset 一定对不上，只能运行时算。
     /// </remarks>
     private Rect2 _targetRect;
+
+    private static string ScenePath => $"{Entry.ResPath}/scenes/fgo_np_bar_ftue.tscn";
 
     /// <summary>
     ///     用预加载场景创建实例。
@@ -102,13 +108,11 @@ public sealed partial class FgoNpBarFtue : NFtue
             return null;
 
         var ftue = GD.Load<PackedScene>(ScenePath)
-            .Instantiate<FgoNpBarFtue>(PackedScene.GenEditState.Disabled);
+            .Instantiate<FgoNpBarFtue>();
 
         ftue._targetRect = targetRect;
         return ftue;
     }
-
-    private static string ScenePath => $"{Entry.ResPath}/scenes/fgo_np_bar_ftue.tscn";
 
     public override void _Ready()
     {

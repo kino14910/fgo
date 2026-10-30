@@ -18,9 +18,9 @@ namespace Fgo.Scripts.Cards.DerivativeNemo;
 ///     加入和移除逻辑由 <see cref="FgoVoidHand" /> 管理。
 /// </remarks>
 [RegisterCard(typeof(TokenCardPool))]
-public class LikeABird() : FgoBaseCardModel(0, CardType.Power, 
+public class LikeABird() : FgoBaseCardModel(0, CardType.Power,
     CardRarity.Token, TargetType.Self,
-    shouldShowInCardLibrary: false)
+    false)
 {
     public override bool CanBeGeneratedInCombat => false;
 

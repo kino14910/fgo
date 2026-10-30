@@ -10,7 +10,6 @@ using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Models;
-using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.Nodes.Cards.Holders;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
 using STS2RitsuLib.CardPiles.Nodes;
@@ -57,10 +56,16 @@ public static class FgoVoidHand
     private static readonly AttachedState<ICombatState, FgoVoidSpaceState> States = new(() => new FgoVoidSpaceState());
 
     /// <summary>该战斗当前是否处于〔虚数空间〕中。</summary>
-    public static bool IsActive(ICombatState? combat) => Of(combat) is { Active: true };
+    public static bool IsActive(ICombatState? combat)
+    {
+        return Of(combat) is { Active: true };
+    }
 
     /// <summary>该玩家当前是否身处〔虚数空间〕（= 已完成手牌替换）。</summary>
-    public static bool IsInside(ICombatState? combat, Player player) => Of(combat)?.IsMember(player) == true;
+    public static bool IsInside(ICombatState? combat, Player player)
+    {
+        return Of(combat)?.IsMember(player) == true;
+    }
 
     /// <summary>
     ///     进入虚数空间（幂等）: 把该玩家当前手牌搬进暂存牌堆，并补齐三张虚数空间专用牌。
@@ -202,14 +207,20 @@ public static class FgoVoidHand
             await AddToVoidHand(player, combat.CreateCard<LikeABird>(player));
     }
 
-    private static FgoVoidSpaceState? Of(ICombatState? combat) =>
-        combat == null ? null : States.GetValueOrDefault(combat);
+    private static FgoVoidSpaceState? Of(ICombatState? combat)
+    {
+        return combat == null ? null : States.GetValueOrDefault(combat);
+    }
 
-    private static bool Contains<T>(CardPile pile) where T : CardModel =>
-        pile.Cards.Any(static card => card is T);
+    private static bool Contains<T>(CardPile pile) where T : CardModel
+    {
+        return pile.Cards.Any(static card => card is T);
+    }
 
-    private static Task AddToVoidHand(Player player, CardModel card) =>
-        CardPileCmd.AddGeneratedCardToCombat(card, FgoEnums.VoidHand, player);
+    private static Task AddToVoidHand(Player player, CardModel card)
+    {
+        return CardPileCmd.AddGeneratedCardToCombat(card, FgoEnums.VoidHand, player);
+    }
 
     /// <summary>
     ///     清掉〔虚数空间〕额外手牌区里"模型已不在牌堆"的残留牌位（holder）。
@@ -265,12 +276,10 @@ public static class FgoVoidHand
         void Collect(Node node)
         {
             foreach (var child in node.GetChildren())
-            {
                 if (child is NHandCardHolder holder)
                     holders.Add(holder);
                 else
                     Collect(child);
-            }
         }
     }
 

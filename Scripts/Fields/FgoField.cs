@@ -37,31 +37,48 @@ public static class FgoField
         new(() => new FgoFieldState());
 
     /// <summary>取该战斗的场地表；战斗为空或尚无任何场地改动时返回 null。</summary>
-    public static FgoFieldState? Of(ICombatState? combat) =>
-        combat == null ? null : States.GetValueOrDefault(combat);
+    public static FgoFieldState? Of(ICombatState? combat)
+    {
+        return combat == null ? null : States.GetValueOrDefault(combat);
+    }
 
-    public static bool Has(ICombatState? combat, FgoFieldId id) => Of(combat)?.Has(id) == true;
+    public static bool Has(ICombatState? combat, FgoFieldId id)
+    {
+        return Of(combat)?.Has(id) == true;
+    }
 
     /// <summary>该场地的层数；不存在时返回 0。</summary>
-    public static int StacksOf(ICombatState? combat, FgoFieldId id) => Of(combat)?.StacksOf(id) ?? 0;
+    public static int StacksOf(ICombatState? combat, FgoFieldId id)
+    {
+        return Of(combat)?.StacksOf(id) ?? 0;
+    }
 
-    public static IReadOnlyCollection<FgoFieldId> ActiveOf(ICombatState? combat) =>
-        Of(combat)?.Active ?? [];
+    public static IReadOnlyCollection<FgoFieldId> ActiveOf(ICombatState? combat)
+    {
+        return Of(combat)?.Active ?? [];
+    }
 
     /// <summary>场地集合版本号；UI 用它与上次渲染的版本比对做脏检查。</summary>
-    public static int VersionOf(ICombatState? combat) => Of(combat)?.Version ?? 0;
+    public static int VersionOf(ICombatState? combat)
+    {
+        return Of(combat)?.Version ?? 0;
+    }
 
     /// <summary>
     ///     叠加场地层数（= 持续回合数）。已存在则累加，因此重复施加可以延长同一个场地。
     ///     回合数由施加方（各张卡牌）自行给出，这里不做统一。
     /// </summary>
     /// <returns>是否发生了实际变化。返回的 Task 恒为已完成，见类型 remarks。</returns>
-    public static Task<bool> Add(ICombatState? combat, FgoFieldId id, int stacks = 1) =>
-        Task.FromResult(combat != null && States.GetOrCreate(combat).Add(id, stacks));
+    public static Task<bool> Add(ICombatState? combat, FgoFieldId id, int stacks = 1)
+    {
+        return Task.FromResult(combat != null && States.GetOrCreate(combat).Add(id, stacks));
+    }
 
     /// <summary>移除场地。原本不存在时返回 false。</summary>
-    public static Task<bool> Remove(ICombatState? combat, FgoFieldId id) =>
-        Task.FromResult(combat != null && States.GetValueOrDefault(combat) is { } state && state.Remove(id));
+    public static Task<bool> Remove(ICombatState? combat, FgoFieldId id)
+    {
+        return Task.FromResult(combat != null && States.GetValueOrDefault(combat) is { } state && state.Remove(id));
+    }
 
     /// <summary>每回合开始时调用: 对所有「有时限」的场地各 -1 层，归零即移除。</summary>
     public static Task TickDown(ICombatState? combat)

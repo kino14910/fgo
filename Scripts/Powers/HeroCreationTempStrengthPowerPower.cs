@@ -1,5 +1,4 @@
 using Fgo.Scripts.Cards;
-using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Scaffolding.Content;
 
 namespace Fgo.Scripts.Powers;

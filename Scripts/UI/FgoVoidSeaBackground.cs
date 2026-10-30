@@ -69,14 +69,19 @@ public sealed partial class FgoVoidSeaBackground : Node
     /// <summary>「实例未绑定」的告警只发一次，避免每帧刷屏。</summary>
     private static bool _reportedMissingInstance;
 
-    /// <summary>当前插入的背景节点。淡出过程中仍持有它，直到收尾回调真正移除，期间重复进入不会叠出第二份。</summary>
-    private NCombatBackground? _voidSea;
+    /// <summary>背景场景与图层场景各缓存一份（mod 自带的场景不在房间预加载集里，自己缓存避免重复查盘与告警）。</summary>
+    private static PackedScene? _backgroundScene;
+
+    private static PackedScene? _layerScene;
+
+    /// <summary>当前补间；切换方向时先杀掉，避免两条补间互相抢 alpha。</summary>
+    private Tween? _fade;
 
     /// <summary>上一次观察到的「是否处于虚数空间」，用于做边沿检测。</summary>
     private bool _lastInVoidSpace;
 
-    /// <summary>当前补间；切换方向时先杀掉，避免两条补间互相抢 alpha。</summary>
-    private Tween? _fade;
+    /// <summary>当前插入的背景节点。淡出过程中仍持有它，直到收尾回调真正移除，期间重复进入不会叠出第二份。</summary>
+    private NCombatBackground? _voidSea;
 
     public static void Initialize()
     {
@@ -259,11 +264,6 @@ public sealed partial class FgoVoidSeaBackground : Node
         fade.TweenCallback(Callable.From(Finish));
     }
 
-    /// <summary>背景场景与图层场景各缓存一份（mod 自带的场景不在房间预加载集里，自己缓存避免重复查盘与告警）。</summary>
-    private static PackedScene? _backgroundScene;
-
-    private static PackedScene? _layerScene;
-
     /// <summary>
     ///     取 mod 自带场景。用 <c>ResourceLoader.Load</c> 而非 <c>PreloadManager.Cache.GetScene</c>:
     ///     后者对本 mod 的场景永远未命中，会 fallback 并**每次**打一条
@@ -315,7 +315,7 @@ public sealed partial class FgoVoidSeaBackground : Node
                 return null;
             }
 
-            var root = scene.Instantiate<NCombatBackground>(PackedScene.GenEditState.Disabled);
+            var root = scene.Instantiate<NCombatBackground>();
             if (root == null)
             {
                 Entry.Logger.ErrorNoTrace($"[Fgo] VoidSea: Instantiate<{nameof(NCombatBackground)}> returned null " +
@@ -367,7 +367,7 @@ public sealed partial class FgoVoidSeaBackground : Node
             return false;
         }
 
-        var layer = layerScene.Instantiate<Control>(PackedScene.GenEditState.Disabled);
+        var layer = layerScene.Instantiate<Control>();
         layer.Visible = true;
         RitsuGodotTreeCompat.AddChildSafely(container, layer);
         return true;

@@ -40,7 +40,7 @@ public class SongOfLove() : FgoCardModel(1, CardType.Skill,
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        ArgumentNullException.ThrowIfNull(cardPlay.Target, "cardPlay.Target");
+        ArgumentNullException.ThrowIfNull(cardPlay.Target);
 
         await PlayerCmd.GainEnergy(2, Owner);
         await FgoResCmd.ModifyNp(DynamicVars["Np"].BaseValue, Owner);

@@ -168,10 +168,14 @@ public static class FgoFieldEffects
     }
 
     /// <summary>战场上的所有存活单位（敌我双方）。</summary>
-    private static List<Creature> LivingUnits(ICombatState combat) =>
-        combat.Creatures.Where(static c => c.IsAlive).ToList();
+    private static List<Creature> LivingUnits(ICombatState combat)
+    {
+        return combat.Creatures.Where(static c => c.IsAlive).ToList();
+    }
 
     /// <summary>己方（玩家方）的存活单位，含随从。</summary>
-    private static List<Creature> LivingAllies(ICombatState combat) =>
-        combat.Allies.Where(static c => c.IsAlive).ToList();
+    private static List<Creature> LivingAllies(ICombatState combat)
+    {
+        return combat.Allies.Where(static c => c.IsAlive).ToList();
+    }
 }

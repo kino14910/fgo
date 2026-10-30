@@ -8,11 +8,11 @@ using Fgo.Scripts.Relics;
 using Fgo.Scripts.Singletons;
 using Fgo.Scripts.UI;
 using Fgo.Scripts.Utils;
-using GodotColor = Godot.Color;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.AutoSlay;
 using MegaCrit.Sts2.Core.Logging;
 using MegaCrit.Sts2.Core.Modding;
+using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Nodes;
 using MegaCrit.Sts2.Core.Nodes.Screens.CharacterSelect;
 using MegaCrit.Sts2.Core.Runs;
@@ -151,8 +151,8 @@ public class Entry
         // 须在 ModelDb 冻结内容注册前调用（与上面的 RegisterCardLibraryCompendiumSharedPoolFilter 同）。
         ModContentRegistry
             .For(ModId)
-            .RegisterCardHandOutline<MegaCrit.Sts2.Core.Models.CardModel>(
-                card => CharismaPower.ShouldGlowPurple(card) ? CharismaPower.GlowColor : (GodotColor?)null);
+            .RegisterCardHandOutline<CardModel>(card =>
+                CharismaPower.ShouldGlowPurple(card) ? CharismaPower.GlowColor : null);
 
         // 订阅 run 开始/加载事件，从 RunSavedData 恢复令咒数量
         _runStartedSubscription = RitsuLibFramework.SubscribeLifecycle<RunStartedEvent>(OnRunStarted);

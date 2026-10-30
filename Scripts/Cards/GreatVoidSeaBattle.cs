@@ -61,14 +61,19 @@ public class GreatVoidSeaBattle() : FgoCardModel(1, CardType.Skill,
     }
 
     /// <summary>该玩家当前的基础宝具值（含探索点数换来的永久加成）。</summary>
-    private static int BaseNpOf(Player? player) => BaseNp + BonusNpOf(player);
+    private static int BaseNpOf(Player? player)
+    {
+        return BaseNp + BonusNpOf(player);
+    }
 
     /// <summary>
     ///     该玩家是否已解锁〔好似飞鸟〕。解锁之后，每次进入〔虚数空间〕时额外手牌里都会多一张
     ///     <c>LikeABird</c>（好似飞鸟）——它是解锁的唯一用途。
     /// </summary>
-    public static bool IsLikeABirdUnlocked(Player? player) =>
-        player != null && Entry.RunState.Get(player).LikeABirdUnlocked;
+    public static bool IsLikeABirdUnlocked(Player? player)
+    {
+        return player != null && Entry.RunState.Get(player).LikeABirdUnlocked;
+    }
 
     /// <summary>
     ///     消耗该玩家全部探索点数: 每 1 点永久 +1 基础宝具值；
@@ -93,9 +98,13 @@ public class GreatVoidSeaBattle() : FgoCardModel(1, CardType.Skill,
         AddBonusNp(player, -BonusNpOf(player));
     }
 
-    private static int BonusNpOf(Player? player) =>
-        player == null ? 0 : Entry.RunState.Get(player).GreatVoidSeaBattleBonusNp;
+    private static int BonusNpOf(Player? player)
+    {
+        return player == null ? 0 : Entry.RunState.Get(player).GreatVoidSeaBattleBonusNp;
+    }
 
-    private static void AddBonusNp(Player player, int delta) =>
+    private static void AddBonusNp(Player player, int delta)
+    {
         Entry.RunState.Modify(player, data => data.GreatVoidSeaBattleBonusNp += delta);
+    }
 }

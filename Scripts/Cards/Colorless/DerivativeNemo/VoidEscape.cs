@@ -19,9 +19,9 @@ namespace Fgo.Scripts.Cards.DerivativeNemo;
 ///     本卡是 <c>TargetType.Self</c> ⇒ <c>cardPlay.Target</c> 恒为 null，不要对它做非空断言。
 /// </remarks>
 [RegisterCard(typeof(TokenCardPool))]
-public class VoidEscape() : FgoBaseCardModel(0, CardType.Skill, 
+public class VoidEscape() : FgoBaseCardModel(0, CardType.Skill,
     CardRarity.Token, TargetType.Self,
-    shouldShowInCardLibrary: false)
+    false)
 {
     public override bool CanBeGeneratedInCombat => false;
 

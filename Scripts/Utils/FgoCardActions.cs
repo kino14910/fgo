@@ -123,7 +123,7 @@ public static class FgoCardActions
     ///     正确做法是从 <c>CombatState</c> 的卡表摘除，并标记 <c>HasBeenRemovedFromState</c>，
     ///     否则每次选牌都会在 <c>_allCards</c> 里留下废卡。
     ///     <para />
-    ///     不传 <paramref name="keep"/> 时全部清理（用于选牌被取消的场景）。
+    ///     不传 <paramref name="keep" /> 时全部清理（用于选牌被取消的场景）。
     /// </summary>
     public static void DiscardUnpiledCandidates(
         ICombatState combat, IEnumerable<CardModel> candidates, CardModel? keep = null)
@@ -151,8 +151,10 @@ public static class FgoCardActions
     ///         行为与原方法完全一致：
     ///         <list type="bullet">
     ///             <item>测试用 <c>CardSelectCmd.Selector</c> / <c>LocalSelector</c> 优先，直接自动选牌，不弹 UI；</item>
-    ///             <item>本地玩家：弹 <c>NChooseACardSelectionScreen</c>，结果按 **index** 经
-    ///                 <c>PlayerChoiceSynchronizer.SyncLocalChoice</c> 同步给其它端；</item>
+    ///             <item>
+    ///                 本地玩家：弹 <c>NChooseACardSelectionScreen</c>，结果按 **index** 经
+    ///                 <c>PlayerChoiceSynchronizer.SyncLocalChoice</c> 同步给其它端；
+    ///             </item>
     ///             <item>远端玩家：<c>WaitForRemoteChoice</c> 等该玩家的 index，再解析回本地候选。</item>
     ///         </list>
     ///         因此候选必须**各端数量与顺序完全一致**（用 <c>CombatState.CreateCard</c> 从 canonical 生成即可满足）。

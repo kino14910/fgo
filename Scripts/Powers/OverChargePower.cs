@@ -9,12 +9,12 @@ using STS2RitsuLib.Scaffolding.Content;
 namespace Fgo.Scripts.Powers;
 
 /// <summary>
-/// 打出任意宝具牌后获得层数，
-/// 选择宝具页面按本power层数强化被选中的宝具副本。
+///     打出任意宝具牌后获得层数，
+///     选择宝具页面按本power层数强化被选中的宝具副本。
 /// </summary>
 /// <remarks>
-/// 层数范围为 0 ~ <see cref="OverchargePower.MaxOvercharge"/>，
-/// 上限由 <see cref="FgoBattleHooks.TryModifyPowerAmountReceived"/> 保证。
+///     层数范围为 0 ~ <see cref="OverchargePower.MaxOvercharge" />，
+///     上限由 <see cref="FgoBattleHooks.TryModifyPowerAmountReceived" /> 保证。
 /// </remarks>
 public class OverchargePower : FgoPowerModel
 {

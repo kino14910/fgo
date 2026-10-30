@@ -29,11 +29,6 @@ public sealed partial class FgoVoidSeaLayer : NCombatBackgroundLayer
     /// <summary>进入转场遮罩节点名。缺节点时安静跳过，不影响背景本体。</summary>
     private const string MaskNodePath = "TransitionMask";
 
-    /// <summary>补间属性路径（<c>ShaderMaterial.shader_parameter/&lt;name&gt;</c>）。</summary>
-    private static readonly NodePath ThresholdParamPath = new("shader_parameter/threshold");
-
-    private static readonly StringName ThresholdParamName = new("threshold");
-
     /// <summary>
     ///     起手保持完全覆盖的时长（秒）。
     ///     <para>
@@ -54,6 +49,11 @@ public sealed partial class FgoVoidSeaLayer : NCombatBackgroundLayer
     ///     </para>
     /// </summary>
     private const float DissolveSeconds = 1.5f;
+
+    /// <summary>补间属性路径（<c>ShaderMaterial.shader_parameter/&lt;name&gt;</c>）。</summary>
+    private static readonly NodePath ThresholdParamPath = new("shader_parameter/threshold");
+
+    private static readonly StringName ThresholdParamName = new("threshold");
 
     public override void _Ready()
     {

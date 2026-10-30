@@ -22,15 +22,6 @@ public class CursePower : FgoPowerModel, IHealthBarForecastSource
     public override PowerType Type => PowerType.Debuff;
     public override PowerStackType StackType => PowerStackType.Counter;
 
-    public override async Task AfterSideTurnStart(CombatSide side, IReadOnlyList<Creature> participants,
-        ICombatState combatState)
-    {
-        if (!participants.Contains(Owner)) return;
-        Flash();
-        await CreatureCmd.Damage(new BlockingPlayerChoiceContext(), Owner, Amount,
-            ValueProp.Unblockable | ValueProp.Unpowered, null, null);
-    }
-
     /// <summary>
     ///     生命条上「本回合将因诅呪失去的生命」。与原版中毒一致地过一遍
     ///     <see cref="Hook.ModifyDamage" />，使虚弱/易伤等修正体现在预测里。
@@ -48,5 +39,14 @@ public class CursePower : FgoPowerModel, IHealthBarForecastSource
         var order = HealthBarForecastOrder.ForSideTurnStart(context.Creature, context.Creature.Side);
         return HealthBarForecasts.Single((int)damage, ForecastColor,
             HealthBarForecastGrowthDirection.FromRight, order);
+    }
+
+    public override async Task AfterSideTurnStart(CombatSide side, IReadOnlyList<Creature> participants,
+        ICombatState combatState)
+    {
+        if (!participants.Contains(Owner)) return;
+        Flash();
+        await CreatureCmd.Damage(new BlockingPlayerChoiceContext(), Owner, Amount,
+            ValueProp.Unblockable | ValueProp.Unpowered, null, null);
     }
 }

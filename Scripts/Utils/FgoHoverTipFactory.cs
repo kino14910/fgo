@@ -145,5 +145,8 @@ public static class FgoHoverTipFactory
         return new HoverTip(title, desc);
     }
 
-    public static HoverTip FromField(FgoFieldId id) => id.ToHoverTip();
+    public static HoverTip FromField(FgoFieldId id)
+    {
+        return id.ToHoverTip();
+    }
 }

@@ -58,6 +58,17 @@ public class FullnessPower : FgoPowerModel, IPowerExtraIconAmountLabelSpecsProvi
     /// <summary>满腹槽上限（右上角标）。</summary>
     public int Capacity => Amount;
 
+    public IReadOnlyList<ExtraIconAmountLabelSpec> GetPowerExtraIconAmountLabelSpecs()
+    {
+        return
+        [
+            // 右上: 满腹槽上限
+            ExtraIconAmountLabelSpec.Plain(ExtraIconAmountLabelCorner.TopRight, Capacity.ToString()),
+            // 右下: 当前饱腹
+            ExtraIconAmountLabelSpec.Plain(ExtraIconAmountLabelCorner.BottomRight, Fullness.ToString())
+        ];
+    }
+
     /// <summary>目标当前的上限；没有饱腹能力时回落到基础上限。</summary>
     public static int CapacityOf(Creature creature)
     {
@@ -104,17 +115,6 @@ public class FullnessPower : FgoPowerModel, IPowerExtraIconAmountLabelSpecsProvi
         DynamicVars["Fullness"].BaseValue = clamped;
         // 角标由本类自己画，不经过 SetAmount 那条 DisplayAmountChanged 通路，必须手动通知刷新。
         InvokeDisplayAmountChanged();
-    }
-
-    public IReadOnlyList<ExtraIconAmountLabelSpec> GetPowerExtraIconAmountLabelSpecs()
-    {
-        return
-        [
-            // 右上: 满腹槽上限
-            ExtraIconAmountLabelSpec.Plain(ExtraIconAmountLabelCorner.TopRight, Capacity.ToString()),
-            // 右下: 当前饱腹
-            ExtraIconAmountLabelSpec.Plain(ExtraIconAmountLabelCorner.BottomRight, Fullness.ToString())
-        ];
     }
 
     public override async Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)

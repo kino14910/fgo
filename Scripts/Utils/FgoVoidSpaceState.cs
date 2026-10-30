@@ -34,7 +34,10 @@ public sealed class FgoVoidSpaceState
     public int SessionCount { get; private set; }
 
     /// <summary>该玩家是否已完成手牌替换、正在虚数空间里。</summary>
-    public bool IsMember(Player player) => _members.Contains(player);
+    public bool IsMember(Player player)
+    {
+        return _members.Contains(player);
+    }
 
     /// <summary>
     ///     标记玩家进入。返回 true 表示这次是「本场战斗的首次进入」，
@@ -50,7 +53,10 @@ public sealed class FgoVoidSpaceState
         return firstTime;
     }
 
-    public void Leave(Player player) => _members.Remove(player);
+    public void Leave(Player player)
+    {
+        _members.Remove(player);
+    }
 
     /// <summary>退出全体：清空成员名单并结束本场次（战斗结束或场地被清时也会走到这里）。</summary>
     public void Reset()

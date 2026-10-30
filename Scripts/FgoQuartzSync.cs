@@ -24,8 +24,7 @@ public static class FgoQuartzSync
         Entry.ModId,
         "fgo_quartz_sync_v1",
         static msg => JsonSerializer.SerializeToUtf8Bytes(msg),
-        static bytes => JsonSerializer.Deserialize<QuartzSyncMessage>(bytes)!,
-        RitsuLibSidecarDeliverySemantics.StableSync);
+        static bytes => JsonSerializer.Deserialize<QuartzSyncMessage>(bytes)!);
 
     private static IDisposable? _subscription;
     private static bool _handshakeSubscribed;

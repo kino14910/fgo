@@ -1,6 +1,8 @@
 using Godot;
-using MegaCrit.Sts2.Core.RichTextTags;
 using MegaCrit.Sts2.addons.mega_text;
+using MegaCrit.Sts2.Core.Entities.Text;
+using MegaCrit.Sts2.Core.RichTextTags;
+using Array = Godot.Collections.Array;
 
 namespace Fgo.Scripts.UI;
 
@@ -57,7 +59,7 @@ public static class FgoFtueText
         if (label.CustomEffects.Count > 0)
             return;
 
-        var array = new Godot.Collections.Array();
+        var array = new Array();
         foreach (var effect in Effects) array.Add(effect);
 
         label.CustomEffects = array;
@@ -172,7 +174,7 @@ public static class FgoFtueText
     }
 
     private static int FitRichSize(
-        System.Collections.Generic.List<MegaCrit.Sts2.Core.Entities.Text.BbcodeObject> objs,
+        List<BbcodeObject> objs,
         Font font,
         int maxSize,
         int minSize,

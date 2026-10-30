@@ -21,14 +21,14 @@ namespace Fgo.Scripts.Cards.DerivativeNemo;
 ///     比 <c>WasTargetKilled</c> 的"血量触底"更贴合「斩杀」含义）。
 /// </remarks>
 [RegisterCard(typeof(TokenCardPool))]
-public class ToTheSurfaceNautilus() : FgoBaseCardModel(0, CardType.Power, 
+public class ToTheSurfaceNautilus() : FgoBaseCardModel(0, CardType.Power,
     CardRarity.Token, TargetType.AnyEnemy,
-    shouldShowInCardLibrary: false)
+    false)
 {
-    public override bool CanBeGeneratedInCombat => false;
-
     /// <summary>斩杀时获得的探索点数。</summary>
     private const decimal FatalExplorePoints = 2m;
+
+    public override bool CanBeGeneratedInCombat => false;
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
@@ -36,7 +36,7 @@ public class ToTheSurfaceNautilus() : FgoBaseCardModel(0, CardType.Power,
         HoverTipFactory.Static(StaticHoverTip.Fatal),
         FgoHoverTipFactory.FromExploration()
     ];
-    
+
     protected override bool ShouldGlowGoldInternal => IsPlayable;
 
     protected override bool IsPlayable => FgoBattleHooks.Get(Owner).Np >= 100;

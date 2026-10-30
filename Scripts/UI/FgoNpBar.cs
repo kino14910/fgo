@@ -1,3 +1,4 @@
+using System.Text;
 using Fgo.Scripts.Character;
 using Fgo.Scripts.Commands;
 using Fgo.Scripts.Powers;
@@ -256,6 +257,14 @@ public sealed partial class FgoNpBar : Node
 
     private TextureButton? _button;
 
+    private NCreature? _creatureNode;
+
+    /// <summary>点击瞬间的爆发余量，按 <see cref="NpGlowTuning.BurstDecay" /> 指数衰减。</summary>
+    private float _glowBurst;
+
+    /// <summary>NP 满且可释放时是否点亮光效。由 <see cref="OnNpChanged" /> 维护。</summary>
+    private bool _glowEnabled;
+
     /// <summary>
     ///     金色发光粒子层，绘制在 <see cref="_button" /> 及其所有子节点<b>之下</b>（按钮保持在最前）。
     /// </summary>
@@ -264,33 +273,19 @@ public sealed partial class FgoNpBar : Node
     /// </remarks>
     private FgoNpGlowFx? _glowFx;
 
-    /// <summary>上一次写进光效层的光心位置（按钮中心，npBar 局部坐标）。</summary>
-    private Vector2? _glowOrigin;
-
-    /// <summary>上一次的光效点亮状态，用于只在边沿打一条诊断日志。</summary>
-    private bool _lastGlowOn;
+    /// <summary>悬停按钮时的强度加成，缓动跟随。</summary>
+    private float _glowHover;
 
     /// <summary>光效的实时强度（已做缓动），最终写进着色器的 <c>intensity</c>。</summary>
     private float _glowIntensity;
 
-    /// <summary>悬停按钮时的强度加成，缓动跟随。</summary>
-    private float _glowHover;
+    /// <summary>上一次写进光效层的光心位置（按钮中心，npBar 局部坐标）。</summary>
+    private Vector2? _glowOrigin;
 
-    /// <summary>点击瞬间的爆发余量，按 <see cref="NpGlowTuning.BurstDecay" /> 指数衰减。</summary>
-    private float _glowBurst;
-
-    private NCreature? _creatureNode;
     private bool _hoverTipShown;
     private Control? _hpBarContainer;
     private MegaLabel? _hpLabel;
     private Label? _label;
-
-    private Vector2 _lastHpBarPosition;
-    private Vector2 _lastHpBarSize;
-    private Vector2 _lastHpLabelPosition;
-
-    private int _lastNp = -1;
-    private bool _lastSealed;
 
     /// <summary>
     ///     上一次的 <c>canUse</c>（NP 满且未封印）状态。
@@ -301,6 +296,16 @@ public sealed partial class FgoNpBar : Node
     ///     两者恰好同值，但用途与生命周期不同，合并会让「光效诊断日志」被 FTUE 逻辑污染。
     /// </remarks>
     private bool _lastCanUse;
+
+    /// <summary>上一次的光效点亮状态，用于只在边沿打一条诊断日志。</summary>
+    private bool _lastGlowOn;
+
+    private Vector2 _lastHpBarPosition;
+    private Vector2 _lastHpBarSize;
+    private Vector2 _lastHpLabelPosition;
+
+    private int _lastNp = -1;
+    private bool _lastSealed;
     private Control? _npBarRoot;
     private Player? _player;
     private FgoPlayerState? _subscribed;
@@ -309,9 +314,6 @@ public sealed partial class FgoNpBar : Node
     ///     发光粒子效果的全部可调参数。改完字段后调用 <see cref="ApplyGlowTuning" /> 生效。
     /// </summary>
     public NpGlowTuning NpGlowTuning { get; } = new();
-
-    /// <summary>NP 满且可释放时是否点亮光效。由 <see cref="OnNpChanged" /> 维护。</summary>
-    private bool _glowEnabled;
 
     public static void Initialize()
     {
@@ -559,11 +561,11 @@ public sealed partial class FgoNpBar : Node
         SetGlowActive(false);
 
         // 诊断：确认绘制次序（父节点名 / 子节点索引 / 相对 z），用于排查粒子层被遮挡。
-        var order = new System.Text.StringBuilder();
+        var order = new StringBuilder();
         for (var i = 0; i < _npBarRoot.GetChildCount(); i++)
         {
             var child = _npBarRoot.GetChild(i);
-            order.Append($"[{i}]{child.Name}(z={((child as CanvasItem)?.ZIndex ?? 0)}) ");
+            order.Append($"[{i}]{child.Name}(z={(child as CanvasItem)?.ZIndex ?? 0}) ");
         }
 
         Entry.Logger.Info($"[Fgo] NpGlowFx tree after insert: {order}");
@@ -573,16 +575,14 @@ public sealed partial class FgoNpBar : Node
         // 本层若有效 z < 0 就会掉到它下面被整个盖住，而画面上完全看不出原因。
         var parent = GetParent();
         var parentZ = (parent as CanvasItem)?.ZIndex ?? 0;
-        var siblings = new System.Text.StringBuilder();
+        var siblings = new StringBuilder();
 
         if (parent != null)
-        {
             for (var i = 0; i < parent.GetChildCount(); i++)
             {
                 var child = parent.GetChild(i);
                 siblings.Append($"{i}:{child.Name}(z={(child as CanvasItem)?.ZIndex ?? 0}) ");
             }
-        }
 
         // fx 的有效 z = 沿链累加；这里只关心「相对 parent 的 z」是否与立绘同级。
         Entry.Logger.Info(

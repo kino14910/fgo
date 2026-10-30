@@ -3,9 +3,7 @@ using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
-using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models.Powers;
-using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
 
@@ -34,13 +32,13 @@ public class EightKindness() : FgoCardModel(2, CardType.Power,
         var self = Owner.Creature;
         const int amount = 1;
 
-        await PowerCmd.Apply<StrengthPower>(choiceContext, self, amount, Owner.Creature, this);
-        await PowerCmd.Apply<DexterityPower>(choiceContext, self, amount, Owner.Creature, this);
-        await PowerCmd.Apply<PlatingPower>(choiceContext, self, amount, Owner.Creature, this);
-        await PowerCmd.Apply<RegenPower>(choiceContext, self, amount, Owner.Creature, this);
-        await PowerCmd.Apply<ThornsPower>(choiceContext, self, amount, Owner.Creature, this);
-        await PowerCmd.Apply<VigorPower>(choiceContext, self, amount, Owner.Creature, this);
-        await PowerCmd.Apply<IntangiblePower>(choiceContext, self, amount, Owner.Creature, this);
-        await PowerCmd.Apply<NpRatePower>(choiceContext, self, amount, Owner.Creature, this);
+        await PowerCmd.Apply<StrengthPower>(choiceContext, self, amount, self, this);
+        await PowerCmd.Apply<DexterityPower>(choiceContext, self, amount, self, this);
+        await PowerCmd.Apply<PlatingPower>(choiceContext, self, amount, self, this);
+        await PowerCmd.Apply<RegenPower>(choiceContext, self, amount, self, this);
+        await PowerCmd.Apply<ThornsPower>(choiceContext, self, amount, self, this);
+        await PowerCmd.Apply<VigorPower>(choiceContext, self, amount, self, this);
+        await PowerCmd.Apply<IntangiblePower>(choiceContext, self, amount, self, this);
+        await PowerCmd.Apply<NpRatePower>(choiceContext, self, amount, self, this);
     }
 }

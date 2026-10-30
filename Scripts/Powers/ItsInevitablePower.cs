@@ -22,7 +22,7 @@ public class ItsInevitablePower : FgoPowerModel
         "res://Fgo/images/powers/EveryTurnPower.png",
         "res://Fgo/images/powers/big/EveryTurnPower.png"
     );
-    
+
     private decimal Boost
     {
         get => DynamicVars["Boost"].BaseValue;
@@ -33,10 +33,11 @@ public class ItsInevitablePower : FgoPowerModel
         }
     }
 
-    protected override IEnumerable<DynamicVar> CanonicalVars => [
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
         ModCardVars.Int("Boost", 0)
     ];
-    
+
     public IReadOnlyList<ExtraIconAmountLabelSpec> GetPowerExtraIconAmountLabelSpecs()
     {
         return
@@ -50,10 +51,7 @@ public class ItsInevitablePower : FgoPowerModel
 
     public override Task BeforeApplied(Creature target, decimal amount, Creature? applier, CardModel? cardSource)
     {
-        if (cardSource is ItsInevitable)
-        {
-            Boost += amount;
-        }
+        if (cardSource is ItsInevitable) Boost += amount;
 
         return base.BeforeApplied(target, amount, applier, cardSource);
     }

@@ -19,9 +19,9 @@ namespace Fgo.Scripts.Cards.DerivativeNemo;
 ///     那时卡还在 Play 牌堆，出牌流程末尾会按 <c>Pile.Type == PileType.Play</c> 再搬一次。
 /// </remarks>
 [RegisterCard(typeof(TokenCardPool))]
-public class RoutePlanning() : FgoBaseCardModel(0, CardType.Skill, 
+public class RoutePlanning() : FgoBaseCardModel(0, CardType.Skill,
     CardRarity.Token, TargetType.Self,
-    shouldShowInCardLibrary: false)
+    false)
 {
     public override bool CanBeGeneratedInCombat => false;
 

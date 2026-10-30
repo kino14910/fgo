@@ -77,7 +77,7 @@ public class JyuuouManpukuTsuzuraNoEnkai() : NobleCardModel(1, CardType.Attack, 
 
         // 净化: 中毒与诅呪是两种不同的 Power，逐个实例移除。
         foreach (var ally in allies)
-            foreach (var ailment in ally.Powers.Where(power => power is PoisonPower or CursePower).ToList())
-                await PowerCmd.Remove(ailment);
+        foreach (var ailment in ally.Powers.Where(power => power is PoisonPower or CursePower).ToList())
+            await PowerCmd.Remove(ailment);
     }
 }

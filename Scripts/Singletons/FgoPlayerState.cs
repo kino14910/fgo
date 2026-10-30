@@ -345,10 +345,10 @@ public sealed class FgoPlayerState
 
     private sealed class CritContext
     {
+        public int ActivationId;
         public bool Active;
         public decimal DamageMultiplier;
         public bool Triggered;
-        public int ActivationId;
 
         public Task Reset()
         {

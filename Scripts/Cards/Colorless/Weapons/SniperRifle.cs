@@ -14,7 +14,7 @@ namespace Fgo.Scripts.Cards.Colorless.Weapons;
 ///     实际结算用同一个求值器（<c>EvaluateValueOrDefault(target:)</c>），显示与结算不会漂移。
 /// </remarks>
 [RegisterCard(typeof(TokenCardPool))]
-public class SniperRifle() : FgoBaseCardModel(0, CardType.Attack, 
+public class SniperRifle() : FgoBaseCardModel(0, CardType.Attack,
     CardRarity.Token, TargetType.AnyEnemy)
 {
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];

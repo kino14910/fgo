@@ -29,12 +29,11 @@ public class BattouKamui() : NobleCardModel(1, CardType.Attack, TargetType.AnyEn
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         ModCardVars.Power<BattouKamuiPower>(6),
-        // Unblockable = 失去生命（无视格挡）；不带 Unpowered ⇒ 仍然受能力与暴击倍率影响。
         ModCardVars.Damage(36m, ValueProp.Unblockable | ValueProp.Move)
     ];
 
     protected override bool ShouldGlowGoldInternal =>
-        IsMutable && Owner is not null && FgoBattleHooks.Get(Owner).CanCrit;
+        IsMutable && FgoBattleHooks.Get(Owner).CanCrit;
 
     protected override void OnUpgrade()
     {
@@ -45,7 +44,6 @@ public class BattouKamui() : NobleCardModel(1, CardType.Attack, TargetType.AnyEn
     {
         ArgumentNullException.ThrowIfNull(cardPlay.Target, nameof(cardPlay.Target));
 
-        // 先加临时力量：本次「失去生命」当回合就吃到这 6 点加成。
         await PowerCmd.Apply<BattouKamuiPower>(choiceContext, Owner.Creature,
             DynamicVars[nameof(BattouKamuiPower)].BaseValue,
             Owner.Creature, this);

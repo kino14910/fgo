@@ -1,6 +1,5 @@
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
-using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Hooks;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
@@ -20,7 +19,7 @@ public class TrueClash() : FgoCardModel(1, CardType.Attack,
         ModCardVars.Block(8)
     ];
 
-    protected override bool ShouldGlowGoldInternal => 
+    protected override bool ShouldGlowGoldInternal =>
         CombatState != null &&
         CombatState.HittableEnemies.Any(e =>
             e.Monster?.IntendsToAttack ?? false);
@@ -29,23 +28,26 @@ public class TrueClash() : FgoCardModel(1, CardType.Attack,
     {
         DynamicVars.Block.UpgradeValueBy(3);
     }
-    
+
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         ArgumentNullException.ThrowIfNull(cardPlay.Target, nameof(cardPlay.Target));
 
-        if (!cardPlay.Target.Monster!.IntendsToAttack)
+        if (cardPlay.Target.Monster is not { IntendsToAttack: true } monster)
             return;
-        var monster = cardPlay.Target.Monster;
-        var intents = monster?.NextMove.Intents ?? [];
 
-        var attackIntents = intents.OfType<AttackIntent>().ToList();
-        var total = attackIntents.Sum(a => a.GetTotalDamage(monster!.CombatState.Allies, monster.Creature));
-
+        var total = monster.NextMove.Intents.OfType<AttackIntent>()
+            .Sum(a =>
+            {
+                var raw = a.DamageCalc?.Invoke() ?? 0m;
+                var hit = Hook.ModifyDamage(cardPlay.Player.RunState, cardPlay.Player.Creature.CombatState,
+                    cardPlay.Player.Creature, monster.Creature, raw, ValueProp.Move,
+                    null, null, ModifyDamageHookType.All, CardPreviewMode.None, out _);
+                return Math.Max(0m, hit) * Math.Max(1, a.Repeats);
+            });
         await DamageCmd.Attack(total)
             .FromCard(this, cardPlay)
             .Targeting(cardPlay.Target)
-            .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
         await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, cardPlay);
     }

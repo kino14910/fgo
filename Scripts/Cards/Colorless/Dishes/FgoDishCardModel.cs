@@ -34,7 +34,7 @@ public abstract class FgoDishCardModel()
             CardType.Power => "res://Fgo/images/card_frames/card_frame_power.png",
             _ => "res://Fgo/images/card_frames/card_frame_skill.png"
         }
-        );
+    );
 
     /// <summary>菜品卡的作用范围: 玩家方全队（含自己）。</summary>
     protected IReadOnlyList<Creature> Allies => CombatState!.GetTeammatesOf(Owner.Creature);

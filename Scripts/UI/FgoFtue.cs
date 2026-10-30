@@ -128,7 +128,7 @@ public static class FgoFtue
     ///     宝具条充满且可释放时调用：首次触发本局教学提示。
     /// </summary>
     /// <remarks>
-    /// <para>
+    ///     <para>
     ///         会自行跳过以下情况，避免打断玩家或与其他 modal 抢屏：
     ///     </para>
     ///     <list type="bullet">

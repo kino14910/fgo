@@ -1,8 +1,7 @@
 using Fgo.Scripts.Cards;
 using Godot;
-using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Combat;
-using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
@@ -14,8 +13,10 @@ namespace Fgo.Scripts.Powers;
 ///     领袖气质（Charisma）所授予的能力。
 ///     <list type="bullet">
 ///         <item>持有期间，你可以打出能量不足的卡牌 —— 门槛由 <c>FgoCharismaCostPatch</c> 解除；</item>
-///         <item>手牌中只能靠本能力超能量额打出的卡发紫光描边（<see cref="ShouldGlowPurple" />，
-///         经 RitsuLib <c>ModCardHandOutlineRegistry</c> 渲染 —— 原版描边只有青/金/红三色）；</item>
+///         <item>
+///             手牌中只能靠本能力超能量额打出的卡发紫光描边（<see cref="ShouldGlowPurple" />，
+///             经 RitsuLib <c>ModCardHandOutlineRegistry</c> 渲染 —— 原版描边只有青/金/红三色）；
+///         </item>
 ///         <item>每缺少 1 点能量，失去 1 点生命并获得 1 层[gold]疲劳[/gold]；</item>
 ///         <item>生命损失不受升级影响。</item>
 ///     </list>
@@ -30,15 +31,15 @@ namespace Fgo.Scripts.Powers;
 /// </remarks>
 public class CharismaPower : FgoPowerModel
 {
-    public override PowerType Type => PowerType.Buff;
-
-    public override PowerStackType StackType => PowerStackType.Single;
-
     /// <summary>
     ///     [gold]超能量击[/gold]紫光描边色。亮度/透明度对齐原版 <c>NCardHighlight.gold</c>（金）、
     ///     <c>NCardHighlight.red</c>（红）的取值语法（alpha 0.98）。
     /// </summary>
     public static readonly Color GlowColor = new(0.68f, 0.42f, 0.98f, 0.98f);
+
+    public override PowerType Type => PowerType.Buff;
+
+    public override PowerStackType StackType => PowerStackType.Single;
 
     /// <summary>
     ///     判定卡牌是否应显示[gold]超能量击[/gold]紫光：拥有者持有本能力、当前处于出牌阶段、

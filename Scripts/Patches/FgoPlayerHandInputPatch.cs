@@ -35,8 +35,10 @@ public sealed class FgoPlayerHandInputPatch : IPatchMethod
 
     public static bool IsCritical => false;
 
-    public static ModPatchTarget[] GetTargets() =>
-        [PatchTarget.Method<NPlayerHand>(nameof(NPlayerHand._UnhandledInput))];
+    public static ModPatchTarget[] GetTargets()
+    {
+        return [PatchTarget.Method<NPlayerHand>(nameof(NPlayerHand._UnhandledInput))];
+    }
 
     [HarmonyPrefix]
     private static bool Prefix(NPlayerHand __instance)

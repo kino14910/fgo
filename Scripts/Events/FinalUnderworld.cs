@@ -107,7 +107,7 @@ public sealed class FinalUnderworld : ModEventTemplate
     {
         SetEventState(PageDescription("GIFT"), [
             new EventOption(this, RefuseGift, ModOptionKey("GIFT", "REFUSE")),
-            (Owner != null && Entry.RunState.Get(Owner).QuartzCount < QuartzCost)
+            Owner != null && Entry.RunState.Get(Owner).QuartzCount < QuartzCost
                 ? new EventOption(this, null, ModOptionKey("GIFT", "LOCKED"))
                 : new EventOption(this, OfferQuartz, ModOptionKey("GIFT", "OFFER_QUARTZ"))
         ]);

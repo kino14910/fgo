@@ -12,11 +12,12 @@ public class MagicBulletCharging() : FgoCardModel(0, CardType.Skill,
     CardRarity.Uncommon, TargetType.Self)
 {
     protected override bool HasEnergyCostX => true;
+
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
         FgoHoverTipFactory.FromForeigner()
     ];
-    
+
     protected override HashSet<CardTag> CanonicalTags => [FgoTags.Foreigner];
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];

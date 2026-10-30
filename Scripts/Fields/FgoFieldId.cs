@@ -62,15 +62,22 @@ public static class FgoFieldIdExtensions
 {
     private const string LocTable = "static_hover_tips";
 
+    private static readonly Dictionary<FgoFieldId, Texture2D?> IconCache = [];
+
     /// <summary>
     ///     场地本地化键前缀，形如 <c>FGO_STATIC_HOVER_TIPS_FIELD_SUNLIGHT</c>；
     ///     实际词条为 <c>{前缀}.title</c> / <c>{前缀}.description</c>。
     /// </summary>
-    public static string LocKey(this FgoFieldId id) =>
-        $"FGO_STATIC_HOVER_TIPS_FIELD_{id.ToString().ToUpperInvariant()}";
+    public static string LocKey(this FgoFieldId id)
+    {
+        return $"FGO_STATIC_HOVER_TIPS_FIELD_{id.ToString().ToUpperInvariant()}";
+    }
 
     /// <summary>场地图标资源路径，约定为 <c>res://Fgo/images/fields/{Id}.png</c>。</summary>
-    public static string IconPath(this FgoFieldId id) => $"res://Fgo/images/fields/{id}.png";
+    public static string IconPath(this FgoFieldId id)
+    {
+        return $"res://Fgo/images/fields/{id}.png";
+    }
 
     /// <summary>
     ///     场地是否「有时限」: 每回合开始时 -1 层，归零即消失。
@@ -79,7 +86,10 @@ public static class FgoFieldIdExtensions
     ///     目前**所有场地**都由施加方给出回合数（层数 = 剩余回合数，见各卡牌的 <c>FgoField.Add</c> 调用），
     ///     因此一律递减。若将来出现「存在即持续」的场地，在这里排除它即可。
     /// </remarks>
-    public static bool TicksDownEachTurn(this FgoFieldId id) => true;
+    public static bool TicksDownEachTurn(this FgoFieldId id)
+    {
+        return true;
+    }
 
     /// <summary>
     ///     加载场地图标（按需缓存）。资源尚未被 Godot 导入或缺失时返回 null，
@@ -96,14 +106,16 @@ public static class FgoFieldIdExtensions
     }
 
     /// <summary>构造该场地的悬停提示（带图标），用于卡牌的 <c>AdditionalHoverTips</c> 与 HUD。</summary>
-    public static HoverTip ToHoverTip(this FgoFieldId id) =>
-        new(new LocString(LocTable, $"{id.LocKey()}.title"),
+    public static HoverTip ToHoverTip(this FgoFieldId id)
+    {
+        return new HoverTip(new LocString(LocTable, $"{id.LocKey()}.title"),
             new LocString(LocTable, $"{id.LocKey()}.description"),
             id.Icon());
+    }
 
     /// <summary>卡面与 HUD 上显示的场地名称。</summary>
-    public static string ToTitle(this FgoFieldId id) =>
-        new LocString(LocTable, $"{id.LocKey()}.title").GetFormattedText();
-
-    private static readonly Dictionary<FgoFieldId, Texture2D?> IconCache = [];
+    public static string ToTitle(this FgoFieldId id)
+    {
+        return new LocString(LocTable, $"{id.LocKey()}.title").GetFormattedText();
+    }
 }

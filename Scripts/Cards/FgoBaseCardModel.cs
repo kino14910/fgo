@@ -34,6 +34,11 @@ public abstract class FgoBaseCardModel(
         }
     );
 
+    protected override bool ShouldGlowGoldInternal =>
+        Tags.Contains(CardTag.Strike)
+        && Owner.Creature.HasPower<WildRulePower>()
+        && (CombatState?.Enemies.Any(e => e.HasPower<StrengthPower>()) ?? false);
+
     /// <summary>
     ///     无敌贯通效果：仅当卡牌自身带有 [gold]无敌贯通[/gold] 关键词时生效，
     ///     去除目标的格挡、[gold]硬化外壳[/gold] 和 [gold]难以杀灭[/gold]。
@@ -80,9 +85,4 @@ public abstract class FgoBaseCardModel(
 
         return amount;
     }
-
-    protected override bool ShouldGlowGoldInternal =>
-        Tags.Contains(CardTag.Strike)
-        && Owner.Creature.HasPower<WildRulePower>()
-        && (CombatState?.Enemies.Any(e => e.HasPower<StrengthPower>()) ?? false);
 }

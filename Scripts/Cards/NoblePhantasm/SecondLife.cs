@@ -2,13 +2,11 @@ using Fgo.Scripts.Commands;
 using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
-using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Nodes.CommonUi;
-using STS2RitsuLib;
 using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards.NoblePhantasm;
@@ -61,7 +59,7 @@ public class SecondLife() : NobleCardModel(1, CardType.Skill, TargetType.Self)
         var minions = combatState.Enemies
             .Where(static e => e is { IsAlive: true, IsSecondaryEnemy: true })
             .ToList();
-        
+
         if (minions.Count == 0)
             return;
 

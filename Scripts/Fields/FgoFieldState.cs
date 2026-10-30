@@ -25,9 +25,15 @@ public sealed class FgoFieldState
     /// </summary>
     public bool SunlightAttackPlayedThisTurn { get; set; }
 
-    public bool Has(FgoFieldId id) => _stacks.GetValueOrDefault(id) > 0;
+    public bool Has(FgoFieldId id)
+    {
+        return _stacks.GetValueOrDefault(id) > 0;
+    }
 
-    public int StacksOf(FgoFieldId id) => _stacks.GetValueOrDefault(id);
+    public int StacksOf(FgoFieldId id)
+    {
+        return _stacks.GetValueOrDefault(id);
+    }
 
     /// <summary>叠加层数。已存在则累加；累加到 0 或负数等价于移除。</summary>
     public bool Add(FgoFieldId id, int stacks)

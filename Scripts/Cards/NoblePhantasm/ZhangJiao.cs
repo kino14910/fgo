@@ -13,7 +13,8 @@ public class ZhangJiao() : NobleCardModel(1, CardType.Attack, TargetType.AllEnem
     [
         ModCardVars.Int("DamagePerField", 4),
         ModCardVars.ComputedDamage("ZhangJiaoDamage",
-            static ctx => ctx.BaseValue + ctx.GetCardBaseValueOrDefault("DamagePerField") * FgoField.ActiveOf(ctx.CombatState).Count, 20)
+            static ctx => ctx.BaseValue + ctx.GetCardBaseValueOrDefault("DamagePerField") *
+                FgoField.ActiveOf(ctx.CombatState).Count, 20)
     ];
 
     protected override void OnUpgrade()

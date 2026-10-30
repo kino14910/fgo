@@ -106,7 +106,8 @@ public sealed class NobleCardHideBannerPatch : IPatchMethod
 
     public static ModPatchTarget[] GetTargets()
     {
-        return [
+        return
+        [
             PatchTarget.Method<NCard>("Reload"),
             PatchTarget.Method<NCard>("UpdateVisuals"),
             PatchTarget.Method<NCard>("ReloadOverlay")

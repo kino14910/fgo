@@ -1,7 +1,6 @@
 using Fgo.Scripts.Commands;
 using Fgo.Scripts.Fields;
 using Fgo.Scripts.Utils;
-using MegaCrit.Sts2.Core.DevConsole.ConsoleCommands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;

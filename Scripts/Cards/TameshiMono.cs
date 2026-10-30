@@ -22,7 +22,7 @@ public class TameshiMono() : FgoCardModel(1, CardType.Skill,
     [
         ModCardVars.Int("ExhaustCount", 3)
     ];
-    
+
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         var prefs = new CardSelectorPrefs(CardSelectorPrefs.ExhaustSelectionPrompt,

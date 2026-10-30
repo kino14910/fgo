@@ -36,31 +36,29 @@ namespace Fgo.Scripts;
 public static class FgoSkinSync
 {
     /// <summary>
+    ///     远端玩家皮肤未知时的确定默认值（迦勒底）。取"全新安装、从未改过设置"时会有的值，
+    ///     因此各端对同一个未知玩家的显示一致，不会出现"我看他是我的皮肤、你看他是你的皮肤"。
+    /// </summary>
+    public const int NeutralDefaultSkin = (int)CharacterSkinId.Chaldea;
+
+    /// <summary>
     ///     NetId -> 该玩家选择的皮肤（<see cref="FgoReflectedSettings.CharacterSkin" /> 的整数值）。
     ///     含本机玩家自身（SendSkinSync 时写入自身 NetId），因此单机 / 联机中的自己同样走这条缓存，
     ///     不再依赖 TryCreateCreatureVisuals 的兜底值，避免单机皮肤消失的回归。
     /// </summary>
     public static readonly Dictionary<ulong, int> RemoteSkins = new();
 
-    /// <summary>
-    ///     远端玩家皮肤未知时的确定默认值（迦勒底）。取"全新安装、从未改过设置"时会有的值，
-    ///     因此各端对同一个未知玩家的显示一致，不会出现"我看他是我的皮肤、你看他是你的皮肤"。
-    /// </summary>
-    public const int NeutralDefaultSkin = (int)CharacterSkinId.Chaldea;
-
     private static readonly RitsuLibSidecarMessageDescriptor<SkinSyncMessage> SkinSyncDescriptor = new(
         Entry.ModId,
         "fgo_skin_sync_v1",
         static msg => JsonSerializer.SerializeToUtf8Bytes(msg),
-        static bytes => JsonSerializer.Deserialize<SkinSyncMessage>(bytes)!,
-        RitsuLibSidecarDeliverySemantics.StableSync);
+        static bytes => JsonSerializer.Deserialize<SkinSyncMessage>(bytes)!);
 
     private static readonly RitsuLibSidecarMessageDescriptor<SkinResyncRequest> SkinResyncDescriptor = new(
         Entry.ModId,
         "fgo_skin_resync_v1",
         static _ => Array.Empty<byte>(),
-        static _ => new SkinResyncRequest(),
-        RitsuLibSidecarDeliverySemantics.StableSync);
+        static _ => new SkinResyncRequest());
 
     private static IDisposable? _subscription;
     private static IDisposable? _resyncSubscription;

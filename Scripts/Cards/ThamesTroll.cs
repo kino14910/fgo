@@ -19,7 +19,7 @@ namespace Fgo.Scripts.Cards;
 ///     追加效果是**独立的第二段**伤害与格挡，不是把数值合并进第一段——
 ///     因此会各触发一次「受到伤害/造成伤害」类效果（反伤、暴击星等也会分别结算）。
 /// </remarks>
-public class ThamesTroll() : FgoCardModel(3, CardType.Attack, 
+public class ThamesTroll() : FgoCardModel(3, CardType.Attack,
     CardRarity.Rare, TargetType.AnyEnemy)
 {
     /// <summary>触发追加段的场地（任一存在即可）。</summary>

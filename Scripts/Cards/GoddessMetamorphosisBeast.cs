@@ -15,7 +15,7 @@ public class GoddessMetamorphosisBeast() : FgoCardModel(2, CardType.Power,
         HoverTipFactory.FromPower<GoddessMetamorphosisBeastPower>(),
         FgoHoverTipFactory.FromForeigner()
     ];
-    
+
     protected override HashSet<CardTag> CanonicalTags => [FgoTags.Foreigner];
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Ethereal];

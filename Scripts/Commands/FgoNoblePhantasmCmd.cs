@@ -1,4 +1,3 @@
-using Fgo.Scripts.Cards.DerivativeNemo;
 using Fgo.Scripts.Cards.NoblePhantasm;
 using Fgo.Scripts.Powers;
 using Fgo.Scripts.Singletons;

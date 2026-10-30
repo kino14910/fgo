@@ -27,7 +27,7 @@ namespace Fgo.Scripts.Cards.Colorless.Weapons;
 ///     <c>HasBeenRemovedFromState</c>，免得每次打出都留下 3 张废卡。
 /// </remarks>
 [RegisterCard(typeof(TokenCardPool))]
-public class GunDealer() : FgoBaseCardModel(0, CardType.Skill, 
+public class GunDealer() : FgoBaseCardModel(0, CardType.Skill,
     CardRarity.Token, TargetType.Self)
 {
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Retain, CardKeyword.Exhaust];

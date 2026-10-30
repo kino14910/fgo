@@ -2,12 +2,11 @@ using System.Text;
 using Fgo.Scripts.Cards.NoblePhantasm;
 using Fgo.Scripts.Relics;
 using Fgo.Scripts.Utils;
-using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Combat;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Multiplayer;
 using MegaCrit.Sts2.Core.Entities.Players;
-using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Runs;
 using STS2RitsuLib.Networking.ManagedActions;
@@ -103,7 +102,8 @@ public static class FgoQuartzSummonCmd
         // 重复提交（连点 / 重发）守卫：已拥有该宝具则整段跳过，避免重复加卡与重复扣费。
         if (pile.Cards.Any(c => c.Id == canonical.Id))
         {
-            Entry.Logger.Warn($"[Fgo] quartz summon skipped: {canonical.Id.Entry} already in NobleDeck of netId={player.NetId}.");
+            Entry.Logger.Warn(
+                $"[Fgo] quartz summon skipped: {canonical.Id.Entry} already in NobleDeck of netId={player.NetId}.");
             return;
         }
 
@@ -128,7 +128,8 @@ public static class FgoQuartzSummonCmd
         var result = await CardPileCmd.Add(card, pile);
         if (result is not { success: true })
         {
-            Entry.Logger.Warn($"[Fgo] quartz summon failed: could not add {canonical.Id.Entry} for netId={player.NetId}.");
+            Entry.Logger.Warn(
+                $"[Fgo] quartz summon failed: could not add {canonical.Id.Entry} for netId={player.NetId}.");
             return;
         }
 
