@@ -95,7 +95,7 @@
   "FGO_POWER_NP_CARD_POWER.description": "选择[gold]宝具[/gold]时，将一张特定的[gold]宝具[/gold]加入候选；选择它后移除。",
   "FGO_POWER_NP_CARD_POWER.smartDescription": "选择[gold]宝具[/gold]时，将一张[gold]{NobleCardName}[/gold]加入候选；选择它后移除。",
   "FGO_POWER_NP_RATE_POWER.title": "黄金律",
-  "FGO_POWER_NP_RATE_POWER.description": "在这个回合，打出手牌和受到攻击时，获得的宝具值提高100%。",
+  "FGO_POWER_NP_RATE_POWER.description": "打出手牌和受到攻击时，获得的宝具值提高100%。[gold]黄金律[/gold]会在你的回合开始时减少[blue]1[/blue]层。",
   "FGO_POWER_NP_RATE_POWER.smartDescription": "打出手牌和受到攻击时，获得的宝具值提高100%，持续[blue]{Amount}[/blue]回合。",
   "FGO_POWER_STAR_RATE_POWER.title": "出星率提升",
   "FGO_POWER_STAR_RATE_POWER.description": "在这个回合每当你造成一次伤害，额外获得一次[gold]暴击星[/gold]。",
@@ -183,5 +183,5 @@
   "FGO_POWER_SWORD_SHEATHING_POWER.smartDescription": "直到打出[gold]拔刀·神威[/gold]前，你不能打出其他[gold]攻击牌[/gold]。",
   "FGO_POWER_CHARISMA_POWER.title": "领袖气质",
   "FGO_POWER_CHARISMA_POWER.description": "你可以在能量不足时打出卡牌。每缺少1点能量，失去1点生命并获得1层[gold]疲劳[/gold]。",
-  "FGO_POWER_CHARISMA_POWER.smartDescription": "你可以在能量不足时打出卡牌。每缺少1点能量，失去1点生命并获得1层[gold]疲劳[/gold]（[gold]领袖气质[/gold]已升级时免除生命损失）。"
+  "FGO_POWER_CHARISMA_POWER.smartDescription": "你可以在能量不足时打出卡牌。每缺少1点能量，失去1点生命并获得1层[gold]疲劳[/gold]。"
 }
