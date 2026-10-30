@@ -69,7 +69,10 @@ def run_query(sql, truncate=True):
     if r.returncode != 0:
         raise RuntimeError("STDOUT:\n%s\nSTDERR:\n%s" % (r.stdout, r.stderr))
     out = json.loads(r.stdout.strip())
-    # CLI 多数返回 JSON 字符串；个别版本包一层 {"result": "..."}，解包保持与旧脚本一致
-    if isinstance(out, dict) and isinstance(out.get("result"), str):
-        out = out["result"]
+    # CLI 直接返回表格字符串；新版包一层 {"results": "..."}（旧版为 {"result": "..."}），统一解包
+    if isinstance(out, dict):
+        for key in ("results", "result"):
+            if isinstance(out.get(key), str):
+                out = out[key]
+                break
     return out

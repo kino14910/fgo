@@ -59,7 +59,7 @@ stats = collections.defaultdict(lambda: {"offered": 0, "picked": 0,
                                          "runs_picked_all": 0, "runs_picked_all_won": 0,
                                          "runs_picked_active": 0, "runs_picked_active_won": 0})
 run_count = 0
-for line in rows[1:]:
+for line in rows:
     if not line.strip():
         continue
     parts = line.split("|", 3)
