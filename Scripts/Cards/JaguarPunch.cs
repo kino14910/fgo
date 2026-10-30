@@ -9,7 +9,7 @@ using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
 
-public class JaguarPunch() : FgoCardModel(1, CardType.Power,
+public class JaguarPunch() : FgoCardModel(1, CardType.Skill,
     CardRarity.Uncommon, TargetType.Self)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
@@ -17,6 +17,8 @@ public class JaguarPunch() : FgoCardModel(1, CardType.Power,
         FgoHoverTipFactory.FromStar(),
         FgoHoverTipFactory.FromField(FgoFieldId.Forest)
     ];
+
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [

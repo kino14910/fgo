@@ -24,12 +24,15 @@ public class GreatVoidSeaBattle() : FgoCardModel(1, CardType.Skill,
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
+        FgoHoverTipFactory.FromForeigner(),
         FgoFieldId.ImaginarySpace.ToHoverTip(),
         FgoFieldId.Waterside.ToHoverTip(),
         HoverTipFactory.FromCard<RoutePlanning>(),
         HoverTipFactory.FromCard<ToTheSurfaceNautilus>(),
         HoverTipFactory.FromCard<VoidEscape>()
     ];
+
+    protected override HashSet<CardTag> CanonicalTags => [FgoTags.Foreigner];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [

@@ -65,7 +65,6 @@ public class Charisma() : FgoCardModel(2, CardType.Power,
 
     protected override void OnUpgrade()
     {
-        // 升级只降低费用；能力与生命损失不受升级影响。
         EnergyCost.UpgradeBy(-1);
     }
 

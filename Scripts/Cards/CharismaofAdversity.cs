@@ -14,13 +14,13 @@ public class CharismaOfAdversity() : FgoCardModel(1, CardType.Attack,
         ModCardVars.Damage(6),
         // 计算命中次数: 基础 1 次，每失去 6 点生命额外 +1 次。
         ModCardVars.Computed("CalculatedHits", 0, (card, _) =>
-            card.Owner?.Creature is { } c
+            card?.Owner.Creature is { } c
                 ? 1 + Math.Max(0, (c.MaxHp - c.CurrentHp) / 6)
                 : 0)
     ];
 
     protected override bool ShouldGlowGoldInternal =>
-        Owner.Creature.MaxHp - Owner.Creature.CurrentHp >= 12;
+        Owner.Creature.MaxHp - Owner.Creature.CurrentHp >= 6;
 
     protected override void OnUpgrade()
     {

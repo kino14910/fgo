@@ -6,12 +6,17 @@ using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
 
-public class MaraPapiyas() : FgoCardModel(0, CardType.Skill,
+public class MaraPapiyas() : FgoCardModel(1, CardType.Skill,
     CardRarity.Rare, TargetType.Self)
 {
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         ModCardVars.Heal(12)
+    ];
+
+    public override IEnumerable<CardKeyword> CanonicalKeywords =>
+    [
+        CardKeyword.Exhaust
     ];
 
     protected override void OnUpgrade()
@@ -21,7 +26,7 @@ public class MaraPapiyas() : FgoCardModel(0, CardType.Skill,
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await CreatureCmd.LoseMaxHp(choiceContext, Owner.Creature, 2m, true);
+        await CreatureCmd.LoseMaxHp(choiceContext, Owner.Creature, 1m, true);
         await CreatureCmd.Heal(Owner.Creature, DynamicVars.Heal.BaseValue, false);
     }
 }
