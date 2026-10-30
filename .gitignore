@@ -15,3 +15,7 @@ Fgo.sln.DotSettings.user
 
 # Agent
 .workbuddy/
+.claude/
+
+*.md
+telemetry/
