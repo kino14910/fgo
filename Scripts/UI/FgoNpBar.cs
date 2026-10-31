@@ -1019,7 +1019,8 @@ public sealed partial class FgoNpBar : Node
         // 选牌作为托管网络动作走官方动作队列（药水 UsePotionAction 模式），
         // 在所有 peer 上执行；此前直接在 UI 事件里跑选牌会让 host 侧
         // 永远等不到 SetChoiceContext，动作队列死锁、全游戏卡死。
-        FgoNoblePhantasmCmd.Request();
+        // 候选在这里（本机拥有者）定稿后随动作 payload 下发，各端按同一列表解析 index。
+        FgoNoblePhantasmCmd.Request(_player);
     }
 
     private T? FindParentOfType<T>()

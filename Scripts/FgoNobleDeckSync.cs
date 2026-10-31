@@ -151,12 +151,20 @@ public static class FgoNobleDeckSync
     /// <summary>
     ///     拥有者在本地把宝具卡加入 NobleDeck 后调用：自增版本并广播整堆快照。
     ///     拥有者本机已通过 <c>CardPileCmd.Add</c> 完成加入，收到的自己的快照会按版本跳过，不重复。
+    ///     非拥有者端执行同一动作时本地也会加卡，但那份只是副本：若它也以拥有者身份广播，
+    ///     会带着本机的 Epoch/Version 冒充权威内容，覆盖真正的拥有者牌堆（Epoch 最大的端胜出），
+    ///     且抬高 AppliedEpoch 后让拥有者的后续快照被永久丢弃 → 各端候选列表错位 → np_button 分歧。
     /// </summary>
     public static void NotifyAdd(Player? player, ModelId? cardId)
     {
         try
         {
             if (player == null) return;
+
+            // 只有牌堆拥有者才有权威内容可播，其余端一律不发快照。
+            if (RunManager.Instance?.NetService is { } netService && netService.NetId != player.NetId)
+                return;
+
             BroadcastOwnDeck(player);
         }
         catch (Exception ex)

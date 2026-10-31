@@ -1,3 +1,5 @@
+using System.Text;
+using System.Text.Json;
 using Fgo.Scripts.Cards.NoblePhantasm;
 using Fgo.Scripts.Powers;
 using Fgo.Scripts.Singletons;
@@ -25,56 +27,55 @@ public static class FgoNoblePhantasmCmd
     ///     SignalPlayerChoiceBegun，hook action 永远等不到 SetChoiceContext，队列死锁卡死。
     ///     必须在 Entry.Init 注册，保证任何 peer 发起前本端已注册（ExecuteAction 按 opcode 查找）。
     /// </summary>
-    internal static readonly RitsuLibManagedNetActionDescriptor<byte> SyncDescriptor = new(
+    internal static readonly RitsuLibManagedNetActionDescriptor<string> SyncDescriptor = new(
         Entry.ModId,
         "np_button",
-        static _ => [],
-        static _ => 0,
+        static ids => Encoding.UTF8.GetBytes(ids),
+        static bytes => Encoding.UTF8.GetString(bytes),
         ExecuteManaged,
         GameActionType.CombatPlayPhaseOnly);
 
-    private static async Task ExecuteManaged(RitsuLibManagedNetActionContext<byte> context)
+    private static async Task ExecuteManaged(RitsuLibManagedNetActionContext<string> context)
     {
-        await TryChooseNoblePhantasm(context.PlayerChoiceContext, context.Player);
+        // 候选由发起端随 payload 下发，各端不再各自读本地 NobleDeck。
+        var candidates = DeserializeCandidates(context.Message);
+        await TryChooseNoblePhantasm(context.PlayerChoiceContext, context.Player, candidates);
     }
 
     /// <summary>
     ///     UI 按钮入口: 仅本机玩家调用（调用方需保证 LocalContext.IsMe）。
+    ///     候选列表在本机（拥有者）定稿后随动作 payload 下发 —— 选牌结果按 index 同步，
+    ///     只要各端候选相同，任何 NobleDeck 副本差异都不会再解析出不同的宝具。
     /// </summary>
-    public static bool Request()
+    public static bool Request(Player player)
     {
         if (CombatManager.Instance.IsInProgress &&
             RunManager.Instance.ActionQueueSynchronizer.CombatState != ActionSynchronizerCombatState.PlayPhase)
             return false;
 
-        return RitsuLibManagedNetActions.Request<byte>(RunManager.Instance, SyncDescriptor, 0);
+        var cards = BuildCandidates(player);
+        if (cards.Count == 0) return false;
+
+        Entry.Logger.Info(
+            $"[Fgo] np_button candidates for netId={player.NetId}: [{string.Join(", ", cards.Select(c => c.Id.Entry))}]");
+
+        var payload = JsonSerializer.Serialize(cards.Select(c => c.Id.ToString()).ToList());
+        return RitsuLibManagedNetActions.Request<string>(RunManager.Instance, SyncDescriptor, payload);
     }
 
-    public static async Task<bool> TryChooseNoblePhantasm(PlayerChoiceContext choiceContext, Player player)
+    /// <summary>
+    ///     发起端生成候选：NobleDeck 现有宝具 + NpCardPower 追加的宝具。
+    ///     顺序即 payload 顺序，也是各端选牌界面的顺序。
+    /// </summary>
+    private static List<NobleCardModel> BuildCandidates(Player player)
     {
-        var playerState = FgoBattleHooks.Get(player);
-        if (!playerState.CanUseNp)
-        {
-            Entry.Logger.Warn($"[Fgo] np_button skipped for netId={player.NetId}: NP={playerState.Np} < 100.");
-            return false;
-        }
-
-        if (player.Creature.HasPower<SealNpPower>())
-        {
-            Entry.Logger.Warn($"[Fgo] np_button skipped for netId={player.NetId}: SealNpPower present.");
-            return false;
-        }
-
-        var overCharge = player.Creature.GetPower<OverchargePower>()?.Amount ?? 0;
-
         // 候选来自 NobleDeck pile（由 SaintQuartz 遗物管理初始卡 + 右键加入的卡）。
         var noblePile = CardPile.Get(FgoEnums.NobleDeck, player);
         if (noblePile == null || noblePile.IsEmpty)
         {
-            // 到这里说明该端的 NobleDeck 与拥有者不同步：本端会跳过整段选牌，而拥有者照常选牌加卡 → 手牌分歧。
             Entry.Logger.Warn(
                 $"[Fgo] np_button skipped for netId={player.NetId}: NobleDeck {(noblePile == null ? "missing" : "empty")} on this peer!");
-            return false;
+            return [];
         }
 
         // pile 里的卡是注册到战斗的 mutable 实例；其顺序即选牌界面的候选顺序。
@@ -93,12 +94,71 @@ public static class FgoNoblePhantasmCmd
         {
             Entry.Logger.Warn(
                 $"[Fgo] np_button skipped for netId={player.NetId}: NobleDeck has {noblePile.Cards.Count} card(s) but no noble card.");
+        }
+
+        return cards;
+    }
+
+    /// <summary>
+    ///     各端按 payload 重建候选：严格按发起端下发的 Id 顺序，不读本地 NobleDeck，
+    ///     因此各端候选数量与顺序必然一致（index 同步的选牌结果才能解析到同一张卡）。
+    ///     任一 Id 解析失败就整段放弃 —— 各端收到的是同一 payload，放弃同样是确定性的。
+    /// </summary>
+    private static List<NobleCardModel> DeserializeCandidates(string payload)
+    {
+        try
+        {
+            var ids = JsonSerializer.Deserialize<List<string>>(payload) ?? [];
+            var cards = new List<NobleCardModel>(ids.Count);
+            foreach (var idText in ids)
+            {
+                var id = ModelId.Deserialize(idText);
+                var canonical = ModelDb.GetByIdOrNull<NobleCardModel>(id);
+                if (canonical == null)
+                {
+                    Entry.Logger.Warn(
+                        $"[Fgo] np_button skipped: payload contains unknown noble card '{idText}'.");
+                    return [];
+                }
+
+                cards.Add(canonical);
+            }
+
+            return cards;
+        }
+        catch (Exception ex)
+        {
+            Entry.Logger.Warn($"[Fgo] np_button skipped: malformed candidate payload: {ex.Message}");
+            return [];
+        }
+    }
+
+    public static async Task<bool> TryChooseNoblePhantasm(PlayerChoiceContext choiceContext, Player player,
+        IReadOnlyList<NobleCardModel> candidates)
+    {
+        var playerState = FgoBattleHooks.Get(player);
+        if (!playerState.CanUseNp)
+        {
+            Entry.Logger.Warn($"[Fgo] np_button skipped for netId={player.NetId}: NP={playerState.Np} < 100.");
             return false;
         }
 
-        // 选牌是按 index 同步的：候选的数量与顺序在所有端必须完全一致，否则各端会解析出不同的卡。
-        Entry.Logger.Info(
-            $"[Fgo] np_button candidates for netId={player.NetId}: [{string.Join(", ", cards.Select(c => c.Id.Entry))}]");
+        if (player.Creature.HasPower<SealNpPower>())
+        {
+            Entry.Logger.Warn($"[Fgo] np_button skipped for netId={player.NetId}: SealNpPower present.");
+            return false;
+        }
+
+        if (candidates.Count == 0)
+        {
+            Entry.Logger.Warn($"[Fgo] np_button skipped for netId={player.NetId}: no candidates in payload.");
+            return false;
+        }
+
+        var overCharge = player.Creature.GetPower<OverchargePower>()?.Amount ?? 0;
+
+        // 候选顺序来自动作 payload（发起端 NobleDeck 的顺序），各端必须严格按它渲染与解析 index。
+        var cards = candidates.ToList();
 
         // 选宝具页按当前 OC 预览强化后的数值：候选换成「已按 OC 逐级强化」的展示副本。
         // 副本只用于渲染与选择（从 canonical 拷贝、不注册进战斗、不属于任何牌堆），
@@ -112,6 +172,7 @@ public static class FgoNoblePhantasmCmd
 
         // selected 可能是展示副本（BuildPreview），其 Id 与 canonical 一致，故按 Id 而非引用比对。
         // NobleCard 未赋值时照旧移除，避免 power 永久残留在角色身上。
+        var npCardPower = player.Creature.GetPower<NpCardPower>();
         var grantedCard = npCardPower?.NobleCard;
         if (npCardPower != null && (grantedCard == null || selected.Id == grantedCard.Id))
             await PowerCmd.Remove(npCardPower);
