@@ -175,6 +175,7 @@
   "FGO_POWER_KURAKURAS_MEALS_POWER.title": "クラクラの食事",
   "FGO_POWER_KURAKURAS_MEALS_POWER.description": "毎ターンの開始時に、[gold]料理[/gold]のカードを1枚順番に得る。",
   "FGO_POWER_KURAKURAS_MEALS_POWER.smartDescription": "毎ターンの開始時に、[gold]料理[/gold]のカードを1枚順番に得る。[gold]料理[/gold]1枚につき[blue]{Star}[/blue][gold]スター[/gold]と2[gold]満腹[/gold]を得る。",
+  "FGO_POWER_KURAKURAS_MEALS_POWER.smartDescriptionUpgraded": "毎ターンの開始時に、アップグレードされた[gold]料理[/gold]のカードを1枚順番に得る。[gold]料理[/gold]1枚につき[blue]{Star}[/blue][gold]スター[/gold]と2[gold]満腹[/gold]を得る。",
   "FGO_POWER_ROAD_OF_FALLING_FLOWERS_POWER.title": "落花の道",
   "FGO_POWER_ROAD_OF_FALLING_FLOWERS_POWER.description": "HPを回復するたび、その量の[blue]50%[/blue]を追加で回復する。",
   "FGO_POWER_ROAD_OF_FALLING_FLOWERS_POWER.smartDescription": "HPを回復するたび、その量の[blue]{HealPercent}%[/blue]を追加で回復する。",

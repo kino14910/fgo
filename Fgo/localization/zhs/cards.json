@@ -41,7 +41,7 @@
   "FGO_CARD_ITS_INEVITABLE.title": "无可奈何",
   "FGO_CARD_ITS_INEVITABLE.description": "对所有敌人造成{Damage:diff()}点伤害。获得{ItsInevitablePower:diff()}层[gold]无可奈何[/gold]。\n场地获得[gold]燃烧[/gold]3回合。\n在你的[gold]手牌[/gold]中加入一张[gold]灼伤[/gold]。",
   "FGO_CARD_BLESSED_SCION.title": "继承者",
-  "FGO_CARD_BLESSED_SCION.description": "选择一张牌。\n将这张牌的一张复制品放入你的[gold]手牌[/gold]。{IfUpgraded:show:|该复制品会获得[gold]消耗[/gold]。}",
+  "FGO_CARD_BLESSED_SCION.description": "选择一张牌。\n将{IfUpgraded:show:{Cards}张此牌的复制品|一张此牌的复制品}加入你的[gold]手牌[/gold]。",
   "FGO_CARD_BLESSED_SCION.selectionScreenPrompt": "选择一张牌。",
   "FGO_CARD_YIN_YANG_FISH.title": "阴阳鱼",
   "FGO_CARD_YIN_YANG_FISH.description": "{IfUpgraded:show:获得30%[gold]宝具值[/gold]。\n|}回复{Heal:diff()}点生命。\n失去10%[gold]宝具值[/gold]。",

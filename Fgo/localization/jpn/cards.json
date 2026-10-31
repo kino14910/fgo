@@ -41,7 +41,7 @@
   "FGO_CARD_ITS_INEVITABLE.title": "是非もなし",
   "FGO_CARD_ITS_INEVITABLE.description": "すべての敵に{Damage:diff()}ダメージを与える。{ItsInevitablePower:diff()}[gold]已むを得ぬもの[/gold]を得る。\n3ターンの間、[gold]燃焼[/gold]のフィールドを得る。\n手札に[gold]火傷[/gold]のカードを1枚加える。",
   "FGO_CARD_BLESSED_SCION.title": "後継",
-  "FGO_CARD_BLESSED_SCION.description": "カードを1枚選ぶ。\nそのカードのコピーを[gold]手札[/gold]に加える。{IfUpgraded:show:|そのコピーは[gold]廃棄[/gold]を得る。}",
+  "FGO_CARD_BLESSED_SCION.description": "カードを1枚選ぶ。\n{IfUpgraded:show:そのカードのコピーを{Cards}枚|そのカードのコピーを1枚}[gold]手札[/gold]に加える。",
   "FGO_CARD_BLESSED_SCION.selectionScreenPrompt": "コピーするカードを選ぶ。",
   "FGO_CARD_YIN_YANG_FISH.title": "陰陽魚",
   "FGO_CARD_YIN_YANG_FISH.description": "{IfUpgraded:show:30%の[gold]NP[/gold]を得る。\n|}{Heal:diff()}HPを回復する。\n10%の[gold]NP[/gold]を失う。",

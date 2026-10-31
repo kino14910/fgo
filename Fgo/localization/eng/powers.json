@@ -175,6 +175,7 @@
   "FGO_POWER_KURAKURAS_MEALS_POWER.title": "Kurakura's Meals",
   "FGO_POWER_KURAKURAS_MEALS_POWER.description": "At the start of each turn, gain a [gold]dish[/gold] card in rotation.",
   "FGO_POWER_KURAKURAS_MEALS_POWER.smartDescription": "At the start of each turn, gain a [gold]dish[/gold] card in rotation; each [gold]dish[/gold] grants [blue]{Star}[/blue] [gold]Critical Stars[/gold] and 2 [gold]Fullness[/gold].",
+  "FGO_POWER_KURAKURAS_MEALS_POWER.smartDescriptionUpgraded": "At the start of each turn, gain an upgraded [gold]dish[/gold] card in rotation; each [gold]dish[/gold] grants [blue]{Star}[/blue] [gold]Critical Stars[/gold] and 2 [gold]Fullness[/gold].",
   "FGO_POWER_ROAD_OF_FALLING_FLOWERS_POWER.title": "Road of Falling Flowers",
   "FGO_POWER_ROAD_OF_FALLING_FLOWERS_POWER.description": "Whenever you recover HP, recover an additional [blue]50%[/blue] of that amount.",
   "FGO_POWER_ROAD_OF_FALLING_FLOWERS_POWER.smartDescription": "Whenever you recover HP, recover an additional [blue]{HealPercent}%[/blue] of that amount.",
