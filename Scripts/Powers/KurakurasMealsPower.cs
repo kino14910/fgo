@@ -16,6 +16,7 @@ namespace Fgo.Scripts.Powers;
 ///     回转膳食（Kurakura's Meals）: 每回合轮流发放一张菜品卡，并结算菜品卡打出时的附带收益。
 /// </summary>
 /// <remarks>
+///     每张〔回转膳食〕各持一个实例：各自轮换、各自发放，菜品卡增益按实例叠加。
 ///     轮换状态（已发放数 / 下一个位置）保存在能力实例的字段里，跨回合持续，战斗结束随能力消失。
 ///     发放与掷骰都发生在 <see cref="AfterPlayerTurnStart" /> —— 该钩子在复制的回合开始流程里
 ///     于各端各执行一次，条件（发放数、轮换位）全是同步状态，因此各端消耗同一随机序列；
@@ -48,7 +49,11 @@ public class KurakurasMealsPower : FgoPowerModel
 
     public override PowerType Type => PowerType.Buff;
 
-    public override PowerStackType StackType => PowerStackType.Single;
+    // 每张〔回转膳食〕各自一个实例（各自轮换、各自升级）；角标显示本实例的暴击星数，
+    // 因此 Amount 始终与 Star 同步（见 Configure）。
+    public override PowerStackType StackType => PowerStackType.Counter;
+
+    public override PowerInstanceType InstanceType => PowerInstanceType.Instanced;
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
@@ -57,6 +62,11 @@ public class KurakurasMealsPower : FgoPowerModel
 
     /// <summary>发放的菜品卡是否使用升级形态（由主卡的升级状态决定）。</summary>
     public bool UpgradedDishes { get; private set; }
+
+    // 能力描述随发放形态切换，升级后显示「获得升级的菜品卡」。
+    protected override string SmartDescriptionLocKey => UpgradedDishes
+        ? "FGO_POWER_KURAKURAS_MEALS_POWER.smartDescriptionUpgraded"
+        : "FGO_POWER_KURAKURAS_MEALS_POWER.smartDescription";
 
     protected override void AfterCloned()
     {
@@ -67,12 +77,14 @@ public class KurakurasMealsPower : FgoPowerModel
     }
 
     /// <summary>
-    ///     由〔回转膳食〕打出时写入: 菜品卡附带的暴击星数，以及发放的菜品卡是否升级。
-    ///     重复打出只刷新这两项，不重置轮换进度。
+    ///     由〔回转膳食〕打出时写入: 本实例菜品卡附带的暴击星数，以及发放的菜品卡是否升级。
+    ///     每张主卡各建一个实例，重复打出会新增实例并叠加效果。
     /// </summary>
     public void Configure(decimal stars, bool upgradedDishes)
     {
         DynamicVars["Star"].BaseValue = stars;
+        // 角标只是数值展示，静默同步，避免弹出 +N 的能力增减特效。
+        SetAmount((int)stars, true);
         UpgradedDishes = upgradedDishes;
     }
 
@@ -114,14 +126,17 @@ public class KurakurasMealsPower : FgoPowerModel
 
     /// <summary>
     ///     菜品卡打出后的附带收益: <c>20(30)</c> 颗暴击星 + 2 层饱腹。
+    ///     多张〔回转膳食〕的暴击星相加（如未升级 20 + 升级 30 = 50）。
     ///     饱腹已达上限时两者都不给（主卡描述里的「满腹后不再获得饱腹与菜品卡增益」）。
     /// </summary>
     public static async Task OnDishPlayed(PlayerChoiceContext choiceContext, Player player, CardModel dish)
     {
         if (!FullnessPower.CanEat(player)) return;
-        if (player.Creature.GetPower<KurakurasMealsPower>() is not { } power) return;
 
-        await FgoResCmd.ModifyStars(power.DynamicVars["Star"].IntValue, player);
+        var powers = player.Creature.GetPowerInstances<KurakurasMealsPower>().ToList();
+        if (powers.Count == 0) return;
+
+        await FgoResCmd.ModifyStars(powers.Sum(p => p.DynamicVars["Star"].IntValue), player);
 
         // 满腹槽上限与当前饱腹合并挂在同一个能力上；首次施加用基础上限做 amount（Apply 对 0 会早退）。
         var fullness = await FullnessPower.Ensure(choiceContext, player.Creature, player.Creature, dish);

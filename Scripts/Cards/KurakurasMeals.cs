@@ -21,7 +21,7 @@ public class KurakurasMeals() : FgoCardModel(0, CardType.Power,
         CardMultiplayerConstraint.MultiplayerOnly;
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
-    [
+    [ 
         HoverTipFactory.FromPower<KurakurasMealsPower>(),
         HoverTipFactory.FromPower<FullnessPower>(),
         FgoHoverTipFactory.FromStar()
