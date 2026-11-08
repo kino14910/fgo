@@ -52,7 +52,6 @@ public sealed class FinalUnderworld : ModEventTemplate
         base.OnEventFinished();
     }
 
-    /// <summary>接受她的招待: 获得女神的砂糖卡，进入下一页。</summary>
     private async Task Accept()
     {
         if (Owner == null) return;
@@ -114,7 +113,6 @@ public sealed class FinalUnderworld : ModEventTemplate
         return Task.CompletedTask;
     }
 
-    /// <summary>献上 3 层圣晶石: 消耗计数，获得星剑的墓志铭。</summary>
     private async Task OfferQuartz()
     {
         if (Owner == null) return;

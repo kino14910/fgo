@@ -90,7 +90,6 @@ public class SummonTicket : FgoRelic, IModRightClickableRelic
         }
         catch (TaskCanceledException)
         {
-            // 未选择就关闭界面：不扣费、不加卡。
             return;
         }
 

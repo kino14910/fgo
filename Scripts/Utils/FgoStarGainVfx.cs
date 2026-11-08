@@ -25,7 +25,6 @@ public partial class FgoStarGainVfx : Label
 
     public override void _Ready()
     {
-        // 文本外观
         AddThemeFontSizeOverride("font_size", 28);
         AddThemeColorOverride("font_color", StarColor);
         AddThemeColorOverride("font_outline_color", Colors.Black);
@@ -33,12 +32,10 @@ public partial class FgoStarGainVfx : Label
         HorizontalAlignment = HorizontalAlignment.Center;
         VerticalAlignment = VerticalAlignment.Center;
 
-        // 定位
         GlobalPosition = _globalSpawnPosition;
         Scale = Vector2.One * 1.25f;
         RotationDegrees = Rng.Chaotic.NextFloat(-5f, 5f);
 
-        // 初始向上飞出的速度
         _velocity = new Vector2(Rng.Chaotic.NextFloat(-100f, 100f), Rng.Chaotic.NextFloat(-800f, -700f));
 
         // 动画：淡入后淡出 + 缩放回归
@@ -94,7 +91,6 @@ public partial class FgoStarGainVfx : Label
         }
         else
         {
-            // 玩家角色节点不可用时，回退到屏幕左侧中部
             var size = ((SceneTree)Engine.GetMainLoop()).Root.GetViewport().GetVisibleRect().Size;
             globalPosition = size * new Vector2(0.25f, 0.5f);
         }

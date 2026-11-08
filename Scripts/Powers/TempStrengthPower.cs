@@ -10,7 +10,6 @@ namespace Fgo.Scripts.Powers;
 [RegisterPower(Inherit = true)]
 public abstract class TempStrengthPower<T> : ModTemporaryAppliedPowerTemplate<T, StrengthPower> where T : AbstractModel
 {
-    // 自定义图标路径。
 
     public override PowerAssetProfile AssetProfile => IsPositive
         ? new PowerAssetProfile(

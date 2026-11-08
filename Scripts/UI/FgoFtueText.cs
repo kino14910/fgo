@@ -10,21 +10,8 @@ namespace Fgo.Scripts.UI;
 ///     FTUE 弹窗文字的辅助工具：字号自适应 + 原版 <c>[gold]</c>/<c>[red]</c> 等自定义 bbcode 效果安装。
 /// </summary>
 /// <remarks>
-///     <para>
-///         为什么需要它：FTUE 场景里的文字节点用引擎原生 <see cref="Label" /> /
-///         <see cref="RichTextLabel" />，而不是原版的 <c>MegaLabel</c> / <c>MegaRichTextLabel</c>。
-///         后者的 C# 脚本位于 <c>res://addons/mega_text/</c>，那是主程序集的路径；
-///         mod 的 pck 只打包 <c>res://Fgo/**</c> 与 <c>res://Scripts/**</c>，
-///         场景里引用 <c>res://addons/...</c> 会让 Godot 在导出时找不到文件、
-///         <c>script</c> 静默变 null，节点退化成普通 Label（失去 auto-size 与 <c>[gold]</c>）。
-///     </para>
-///     <para>
-///         但 <b>算法本身可以照搬</b>：<c>MegaLabelHelper</c> 是主程序集里的
-///         <c>public static class</c>，mod 直接引用即可，无需复制源码；
-///         <see cref="RichTextGold" /> 等 <c>RichTextEffect</c> 子类同理，
-///         <c>new</c> 出来塞进 <c>CustomEffects</c> 即可。
-///         语义与原版 <c>MegaRichTextLabel.InstallEffectsIfNeeded</c> 完全一致。
-///     </para>
+///     <b>为什么需要它</b>：FTUE 文字节点用引擎原生 <see cref="Label" />/<see cref="RichTextLabel" /> 而非原版 <c>MegaLabel</c>/<c>MegaRichTextLabel</c>——后者的 C# 脚本在 <c>res://addons/mega_text/</c>（主程序集路径），mod pck 只打包 <c>res://Fgo/**</c> 与 <c>res://Scripts/**</c>，引用 <c>res://addons/...</c> 会让 Godot 导出时找不到、<c>script</c> 静默变 null、节点退化成普通 Label。
+///     <b>算法可照搬</b>：<c>MegaLabelHelper</c> 是主程序集的 <c>public static class</c>，mod 直接引用即可；<see cref="RichTextGold" /> 等 <c>RichTextEffect</c> 同理 <c>new</c> 后塞进 <c>CustomEffects</c>，语义与原版 <c>MegaRichTextLabel.InstallEffectsIfNeeded</c> 一致。
 /// </remarks>
 public static class FgoFtueText
 {

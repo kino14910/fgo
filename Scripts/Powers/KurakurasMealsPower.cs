@@ -24,10 +24,8 @@ namespace Fgo.Scripts.Powers;
 /// </remarks>
 public class KurakurasMealsPower : FgoPowerModel
 {
-    /// <summary>自第 N 张菜品卡起，轮到炒荞麦面时开始判定变异。</summary>
     public const int MutationStartCount = 7;
 
-    /// <summary>变异概率（百分比）。</summary>
     public const int MutationChancePercent = 5;
 
     /// <summary>
@@ -60,7 +58,6 @@ public class KurakurasMealsPower : FgoPowerModel
         ModCardVars.Int("Star", 20)
     ];
 
-    /// <summary>发放的菜品卡是否使用升级形态（由主卡的升级状态决定）。</summary>
     public bool UpgradedDishes { get; private set; }
 
     // 能力描述随发放形态切换，升级后显示「获得升级的菜品卡」。

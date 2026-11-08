@@ -7,7 +7,6 @@ using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards.Colorless.Dishes;
 
-/// <summary>烤串 / Skewers: 所有友方获得 30(50)% 暴击威力。</summary>
 public class Skewers : FgoDishCardModel
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>

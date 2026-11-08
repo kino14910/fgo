@@ -20,10 +20,8 @@ namespace Fgo.Scripts.Cards.NoblePhantasm;
 /// </remarks>
 public class CafeterrasBijNacht() : NobleCardModel(2, CardType.Attack, TargetType.AllEnemies)
 {
-    /// <summary>〔眩晕〕的付与概率（百分比）。</summary>
     public const int StunChancePercent = 40;
 
-    /// <summary>施加的〔都市〕持续回合数。</summary>
     public const int CityTurns = 3;
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>

@@ -37,7 +37,6 @@ public sealed class FgoPlayerState
     public bool CritActive => _crit.Active;
     public decimal CritDamageMultiplier => _crit.DamageMultiplier;
 
-    /// <summary>每次暴击激活自增，用于让「每次暴击只结算一次」的能力跨多段伤害去重。</summary>
     public int CritActivationId => _crit.ActivationId;
 
     public int Np

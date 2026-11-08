@@ -20,7 +20,6 @@ public abstract class FgoCooldownCardModel(
     TargetType targetType)
     : FgoCardModel(energyCost, type, rarity, targetType)
 {
-    /// <summary>基础冷却值。打出后冷却重置回此值。</summary>
     public abstract int CooldownMax { get; }
 
     /// <summary>
@@ -42,23 +41,19 @@ public abstract class FgoCooldownCardModel(
     /// </summary>
     protected virtual IEnumerable<DynamicVar> AdditionalCanonicalVars => [];
 
-    /// <summary>当前剩余冷却。</summary>
     public int CurrentCooldown => DynamicVars["Cooldown"].IntValue;
 
-    /// <summary>当前冷却是否为 0（即可打出）。</summary>
     public bool IsReady => CurrentCooldown <= 0;
 
     protected override bool ShouldGlowGoldInternal => IsReady;
 
     protected override bool IsPlayable => base.IsPlayable && IsReady;
 
-    /// <summary>将当前冷却重置为 <see cref="CooldownMax" />（打出后重新进入冷却）。</summary>
     public void ResetCooldown()
     {
         SetCooldown(DynamicVars["CooldownMax"].IntValue);
     }
 
-    /// <summary>将当前冷却重置为战斗开始时的初始值（<see cref="CombatStartCooldown" />）。</summary>
     public void ReadyCooldown()
     {
         SetCooldown(CombatStartCooldown);

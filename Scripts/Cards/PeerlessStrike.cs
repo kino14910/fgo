@@ -46,7 +46,6 @@ public class PeerlessStrike() : FgoCardModel(0, CardType.Attack,
             .Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_heavy_blunt")
             .Execute(choiceContext);
-        // 升级前立即死亡，升级后回合结束时死亡
         if (IsUpgraded)
             await PowerCmd.Apply<PeerlessStrikePower>(choiceContext, Owner.Creature, 9999m, Owner.Creature, this);
         else

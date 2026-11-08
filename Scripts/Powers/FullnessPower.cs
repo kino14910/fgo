@@ -37,10 +37,8 @@ namespace Fgo.Scripts.Powers;
 /// </remarks>
 public class FullnessPower : FgoPowerModel, IPowerExtraIconAmountLabelSpecsProvider
 {
-    /// <summary>基础上限。首次施加时就是这个值。</summary>
     public const int BaseCapacity = 4;
 
-    /// <summary>每张菜品卡累积的层数。</summary>
     public const int PerDish = 2;
 
     public override PowerType Type => PowerType.Buff;
@@ -52,24 +50,19 @@ public class FullnessPower : FgoPowerModel, IPowerExtraIconAmountLabelSpecsProvi
         ModCardVars.Int("Fullness", 0)
     ];
 
-    /// <summary>当前饱腹（右下角标）。</summary>
     public int Fullness => DynamicVars["Fullness"].IntValue;
 
-    /// <summary>满腹槽上限（右上角标）。</summary>
     public int Capacity => Amount;
 
     public IReadOnlyList<ExtraIconAmountLabelSpec> GetPowerExtraIconAmountLabelSpecs()
     {
         return
         [
-            // 右上: 满腹槽上限
             ExtraIconAmountLabelSpec.Plain(ExtraIconAmountLabelCorner.TopRight, Capacity.ToString()),
-            // 右下: 当前饱腹
             ExtraIconAmountLabelSpec.Plain(ExtraIconAmountLabelCorner.BottomRight, Fullness.ToString())
         ];
     }
 
-    /// <summary>目标当前的上限；没有饱腹能力时回落到基础上限。</summary>
     public static int CapacityOf(Creature creature)
     {
         return creature.GetPower<FullnessPower>()?.Capacity ?? BaseCapacity;
@@ -95,13 +88,11 @@ public class FullnessPower : FgoPowerModel, IPowerExtraIconAmountLabelSpecsProvi
         return await PowerCmd.Apply<FullnessPower>(choiceContext, creature, BaseCapacity, applier, cardSource);
     }
 
-    /// <summary>累积饱腹，钳到上限。</summary>
     public void Gain(int amount)
     {
         SetFullness(Fullness + amount);
     }
 
-    /// <summary>消耗饱腹（消化/重置用），不会低于 0。</summary>
     public void Lose(int amount)
     {
         SetFullness(Fullness - amount);

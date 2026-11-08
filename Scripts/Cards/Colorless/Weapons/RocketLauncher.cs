@@ -9,7 +9,6 @@ using STS2RitsuLib.Interop.AutoRegistration;
 
 namespace Fgo.Scripts.Cards.Colorless.Weapons;
 
-/// <summary>火箭筒: 对主目标造成 12 点伤害，对**其他**敌人各造成 6 点溅射伤害。</summary>
 [RegisterCard(typeof(TokenCardPool))]
 public class RocketLauncher() : FgoBaseCardModel(0, CardType.Attack,
     CardRarity.Token, TargetType.AnyEnemy)
@@ -38,7 +37,6 @@ public class RocketLauncher() : FgoBaseCardModel(0, CardType.Attack,
 
         // 溅射目标在主体伤害落地后再取一次: 已被打死的敌人不该再吃溅射。
         // 溅射走 CreatureCmd.Damage 而不是再开一条 AttackCommand —— "对其他敌人各 6 点"是固定值，
-        // 不该再被暴击/攻击钩子二次放大。
         var others = combat.HittableEnemies.Where(enemy => enemy != target && enemy.IsAlive).ToList();
         if (others.Count == 0) return;
 

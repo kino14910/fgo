@@ -8,7 +8,6 @@ using STS2RitsuLib.Interop.AutoRegistration;
 
 namespace Fgo.Scripts.Cards.Colorless.Weapons;
 
-/// <summary>狙击枪: 造成 8 点伤害；目标生命值低于其上限 50% 时再 +8。</summary>
 /// <remarks>
 ///     <c>SniperDamage</c> 是**目标感知**的计算变量: 卡面拖到哪个敌人身上就按那个敌人的当前生命值换算，
 ///     实际结算用同一个求值器（<c>EvaluateValueOrDefault(target:)</c>），显示与结算不会漂移。
@@ -26,7 +25,6 @@ public class SniperRifle() : FgoBaseCardModel(0, CardType.Attack,
         {
             var baseDamage = card?.DynamicVars["SniperDamage"].BaseValue ?? 6m;
             var bonus = card?.DynamicVars["LowHpBonus"].BaseValue ?? 0m;
-            // 目标生命值低于上限的一半才加成。
             return target != null && target.CurrentHp * 2m <= target.MaxHp ? baseDamage + bonus : baseDamage;
         })
     ];

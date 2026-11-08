@@ -36,8 +36,8 @@ public enum FgoFieldId
     Forest,
 
     /// <summary>
-    ///     〔都市〕<b>效果尚未确定（TODO）</b>——见 <see cref="FgoFieldEffects" /> 的说明。
-    ///     当前只有「被施加 / 被查询」这条链路可用（如 <c>ThamesTroll</c> 的场地判定）。
+    ///     〔都市〕我方回合开始时，每名玩家获得 <see cref="FgoFieldEffects.CityEnergy" /> 点能量；
+    ///     没有「人工制品」的敌人获得 <see cref="FgoFieldEffects.CityArtifactStacks" /> 层「人工制品」。
     /// </summary>
     City,
 
@@ -83,8 +83,8 @@ public static class FgoFieldIdExtensions
     ///     场地是否「有时限」: 每回合开始时 -1 层，归零即消失。
     /// </summary>
     /// <remarks>
-    ///     目前**所有场地**都由施加方给出回合数（层数 = 剩余回合数，见各卡牌的 <c>FgoField.Add</c> 调用），
-    ///     因此一律递减。若将来出现「存在即持续」的场地，在这里排除它即可。
+///     目前**所有场地**都由施加方给出回合数（层数 = 剩余回合数，见各卡牌的 <c>FgoField.Add</c> 调用），
+///     因此一律递减。若将来出现「存在即持续」的场地，在这里排除它即可。
     /// </remarks>
     public static bool TicksDownEachTurn(this FgoFieldId id)
     {

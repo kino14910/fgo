@@ -34,7 +34,6 @@ public class SongOfLovePower : FgoPowerModel
         return null;
     }
 
-    /// <summary>本回合结束（我方回合结束阶段）即失效。</summary>
     public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side,
         IEnumerable<Creature> participants)
     {

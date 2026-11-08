@@ -35,7 +35,6 @@ public static class FgoQuartzSummonCmd
         ExecuteManaged,
         GameActionType.NonCombat);
 
-    /// <summary>战斗中（出牌阶段）使用。</summary>
     internal static readonly RitsuLibManagedNetActionDescriptor<string> CombatDescriptor = new(
         Entry.ModId,
         "quartz_summon_combat",
@@ -134,7 +133,6 @@ public static class FgoQuartzSummonCmd
         }
 
         // 扣费放在加卡成功之后：各端都执行（主机侧的写入是权威值，客户端的写入会被主机的广播覆盖），
-        // 因此不存在「客户端扣了主机没扣」的偏差。
         relic.SpendQuartz(SaintQuartz.CostPerChoice);
 
         // NobleDeck 是 RunPersistent 牌堆，运行期改动不会自动传播 → 显式广播补记。

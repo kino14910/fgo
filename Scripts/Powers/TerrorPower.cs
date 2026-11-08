@@ -48,9 +48,7 @@ public class TerrorPower : FgoPowerModel, IPowerExtraIconAmountLabelSpecsProvide
     {
         return
         [
-            // 右上角: 眩晕概率 %
             ExtraIconAmountLabelSpec.Plain(ExtraIconAmountLabelCorner.TopRight, $"{TerrorChance}%"),
-            // 左上角: 层数
             ExtraIconAmountLabelSpec.Plain(ExtraIconAmountLabelCorner.BottomRight, Amount.ToString())
         ];
     }

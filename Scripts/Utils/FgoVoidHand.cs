@@ -223,25 +223,13 @@ public static class FgoVoidHand
     }
 
     /// <summary>
-    ///     清掉〔虚数空间〕额外手牌区里"模型已不在牌堆"的残留牌位（holder）。
+    ///     清掉额外手牌区里「模型已不在牌堆」的残留牌位（holder）。
     /// </summary>
     /// <remarks>
-    ///     <para>
-    ///         RitsuLib 的额外手牌容器（<see cref="NModExtraHand" />）只在两种情况下摘牌位:
-    ///         ① 牌堆移动的视觉流程（<see cref="CardPileCmd" /> 里
-    ///         <c>MoveCardNodeToNewPileBeforeTween</c> 被补丁转交容器处理）;
-    ///         ② 出牌结束（<c>ReleaseHolderForQueuedPlay</c>）。
-    ///         而 <see cref="CardPileCmd.RemoveFromCombat(CardModel, bool)" /> 的
-    ///         <c>skipVisuals</c> 分支直接 <c>card.RemoveFromCurrentPile()</c>，两条都不走
-    ///         ⇒ 退出时模型被清掉之后，牌位还挂在容器的 Cards 层上。容器跨场次存活
-    ///         （同一场战斗可以反复进出虚数空间），于是再次进入时旧牌位和新补的牌一起显示——
-    ///         即"第二次打出〔虚数大海战〕，手里残留上次的好似飞鸟/航线规划/上浮吧鹦鹉螺号"。
-    ///     </para>
-    ///     <para>
-    ///         判定条件是"模型当前的牌堆不是 VoidHand"而不是比较牌堆实例: 出牌途中模型会
-    ///         短暂位于 Play 牌堆，但那时 holder 已被出牌流程 reparent 到原版手牌容器、
-    ///         不在额外手牌区里，不会被误伤。没有模型（CardNode 已被摘）的牌位一律清除。
-    ///     </para>
+    ///     RitsuLib 额外手牌容器只在牌堆移动视觉流程或出牌结束时摘牌位；
+    ///     <see cref="CardPileCmd.RemoveFromCombat(CardModel, bool)" /> 的 <c>skipVisuals</c> 分支直接
+    ///     <c>card.RemoveFromCurrentPile()</c>，两条都不走 ⇒ 退出时模型清掉但牌位还在容器上。
+    ///     判定用「模型当前牌堆≠VoidHand」而非比较实例：出牌途中模型短暂在 Play 牌堆，但 holder 已被 reparent 走、不在区内，不会误伤。
     /// </remarks>
     private static void PurgeVoidHandViews()
     {
@@ -256,8 +244,7 @@ public static class FgoVoidHand
                 if (holder.CardNode?.Model is { } model && model.Pile?.Type.Equals(FgoEnums.VoidHand) == true)
                     continue;
 
-                // 与 RitsuLib RemoveHolderForPileMove 同款收尾: 先摘焦点再拆节点，
-                // Clear 把 NCard 从 holder 上摘下来，避免 QueueFree 前被别的逻辑摸到。
+                // 与 RitsuLib RemoveHolderForPileMove 同款收尾：先摘焦点再拆节点。
                 if (holder.HasFocus()) holder.ReleaseFocus();
                 holder.GetParent()?.RemoveChildSafely(holder);
                 holder.Clear();
@@ -299,9 +286,7 @@ public static class FgoVoidHand
                 await CardPileCmd.RemoveFromCombat(card, true);
             voidHand.Clear(true);
 
-            // 模型清完了，还要把额外手牌区里对应的牌位（holder）收掉——
-            // RemoveFromCombat 的 skipVisuals 分支不走牌堆移动的视觉流程，
-            // RitsuLib 的额外手牌容器不会自己摘牌位，不清下次进入就会集体复活。
+            // 模型清完还要收掉额外手牌区牌位：RemoveFromCombat 的 skipVisuals 不走视觉流程，容器不自己摘牌位。
             PurgeVoidHandViews();
         }
 

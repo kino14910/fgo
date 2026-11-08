@@ -15,14 +15,7 @@ namespace Fgo.Scripts.Fields;
 ///     场地效果的结算实现。由 <c>FgoBattleHooks</c> 在战斗钩子上调用。
 /// </summary>
 /// <remarks>
-///     结算原则: 在「结算点」查询场地，而不是在施加场地时把数值烧死到单位身上。
-///     这样中途召唤、复活的单位天然被覆盖，不必额外挂生成钩子；
-///     反之若在施加时枚举单位逐个挂状态，漏掉未出场的敌人几乎无法避免。
-///     <para>
-///         //TODO 〔都市〕(<see cref="FgoFieldId.City" />) 的战场效果尚未确定:
-///         目前只支持被施加与被查询，两个结算点都没有它的分支。
-///         补效果时在 <see cref="OnPlayerSideTurnStart" /> / <see cref="OnPlayerSideTurnEnd" /> 里各加一段即可。
-///     </para>
+///     结算原则：在「结算点」查询场地，而非施加时把数值烧死到单位身上——中途召唤/复活的单位天然被覆盖，不必额外挂生成钩子。
 /// </remarks>
 public static class FgoFieldEffects
 {
@@ -130,10 +123,8 @@ public static class FgoFieldEffects
     ///     任意玩家打出一张牌时: 〔阳光照射〕下，本回合**第一次**打出攻击牌的玩家获得等同于剩余层数的「活力」。
     /// </summary>
     /// <remarks>
-    ///     这一段天然只作用于玩家方——怪物攻击不走 <c>CardPlay</c>。
-    ///     <para />
-    ///     「本回合第一次」由 <see cref="FgoFieldState.SunlightAttackPlayedThisTurn" /> 标记，
-    ///     在 <see cref="OnPlayerSideTurnStart" /> 每回合重置；命中后立即置位，同回合后续攻击牌不再触发。
+    ///     仅作用于玩家方——怪物攻击不走 <c>CardPlay</c>。
+    ///     「本回合第一次」由 <see cref="FgoFieldState.SunlightAttackPlayedThisTurn" /> 标记，<see cref="OnPlayerSideTurnStart" /> 每回合重置、命中置位，同回合后续攻击牌不再触发。
     /// </remarks>
     public static async Task OnCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {

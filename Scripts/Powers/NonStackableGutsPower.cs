@@ -67,11 +67,9 @@ public abstract class NonStackableGutsPower : GutsPower, IPowerExtraIconAmountLa
     {
         return
         [
-            // 右下角: 每次回血量
             ExtraIconAmountLabelSpec.RichText(
                 ExtraIconAmountLabelCorner.BottomRight,
                 $"[green]{Amount.ToString()}[/green]"),
-            // 右上角: 剩余次数
             ExtraIconAmountLabelSpec.Plain(
                 ExtraIconAmountLabelCorner.TopRight,
                 $"×{Times}")

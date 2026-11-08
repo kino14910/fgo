@@ -10,54 +10,30 @@ namespace Fgo.Scripts.UI;
 ///     「宝具条已满」的 FTUE 教学弹窗，等价于原版 <c>NCombatRewardFtue</c> 的单页结构。
 /// </summary>
 /// <remarks>
-///     <para>
-///         场景 <c>res://Fgo/scenes/fgo_np_bar_ftue.tscn</c> 直接照搬原版
-///         <c>scenes/ftue/combat_reward_ftue.tscn</c> 的节点结构，
-///         只把 <c>res://images|themes|shaders|addons|src</c> 换成了 <c>res://Fgo/**</c> 与
-///         <c>res://Scripts/**</c>（mod pck 只打包这两个前缀）。
-///     </para>
-///     <para>
-///         <b>固定节点路径</b>（与原版一致，便于对照）：
-///         <list type="bullet">
-///             <item><c>FtuePopup/Header</c> —— 原版是 MegaLabel，这里是引擎 Label + <see cref="FgoFtueText" /> 复刻 auto-size</item>
-///             <item>
-///                 <c>FtuePopup/DescriptionContainer/Description</c> —— 原版是 MegaRichTextLabel，这里是 RichTextLabel + 手动装
-///                 <c>[gold]</c> 等效果
-///             </item>
-///             <item><c>FtuePopup/FtueConfirmButton</c> —— <see cref="FgoFtueConfirmButton" />（NButton 子类）</item>
-///         </list>
-///     </para>
-///     <para>
-///         <b>位置与原版不同</b>：原版把弹窗固定在屏幕右下角（那是战斗奖励的位置），
-///         本弹窗必须贴着 NP 按钮弹，所以由 <see cref="Create" /> 传入按钮的屏幕矩形，
-///         <see cref="LayoutTowards" /> 在运行时重摆 <c>FtuePopup</c> 与 <c>Arrow</c>。
-///     </para>
-///     <para>
-///         <b>焦点与热键屏蔽</b>：基类 <see cref="NFtue._EnterTree" /> 已
-///         <c>AddBlockingScreen(this)</c> 并把四个 <c>FocusNeighbor*</c> 指向自身，无需重复处理。
-///         <c>CloseFtue()</c> 是 <c>protected</c>，本类直接调用即可。
-///     </para>
+///     场景照搬原版 <c>combat_reward_ftue.tscn</c> 结构，只把 <c>res://images|themes|shaders|addons|src</c> 换成
+///     <c>res://Fgo/**</c> 与 <c>res://Scripts/**</c>（mod pck 仅打包这两前缀）。
+///     固定节点路径（对照原版）：<c>FtuePopup/Header</c>=Label+<see cref="FgoFtueText" />、
+///     <c>FtuePopup/DescriptionContainer/Description</c>=RichTextLabel+手动装 <c>[gold]</c>、
+///     <c>FtuePopup/FtueConfirmButton</c>=<see cref="FgoFtueConfirmButton" />。
+///     位置不同于原版（右下角）：本弹窗贴着 NP 按钮，由 <see cref="Create" /> 传入按钮屏幕矩形、<see cref="LayoutTowards" /> 运行时重摆。
+///     焦点与热键屏蔽由基类 <see cref="NFtue._EnterTree" /> 的 <c>AddBlockingScreen(this)</c> 处理；<c>CloseFtue()</c> 为 protected 可直接调。
 /// </remarks>
 public sealed partial class FgoNpBarFtue : NFtue
 {
     private const string TitleKey = "FGO_NP_FTUE_TITLE";
     private const string DescriptionKey = "FGO_NP_FTUE_DESCRIPTION";
 
-    /// <summary>弹窗与目标之间的水平间距（目标在左、弹窗在右时用）。</summary>
     private const float GapHorizontal = 110f;
 
-    /// <summary>弹窗距离屏幕边缘的最小留白。</summary>
     private const float ScreenMargin = 24f;
 
-    /// <summary>箭头缩放。1 是贴图原始尺寸，对 244×204 的原图来说太大。</summary>
     private const float ArrowScale = 0.5f;
 
     /// <summary>
     ///     箭头未旋转时尖端的朝向（y-down 坐标，+X 为 0°、+Y 为 90°）。
     /// </summary>
     /// <remarks>
-    ///     由 <see cref="ArrowTipOffset" /> 反推：<c>atan2(96, -106) ≈ 137.83°</c>。
-    ///     贴图默认朝向左下，指向性旋转就是「目标方位角 - 这个值」。
+    ///     由 <see cref="ArrowTipOffset" /> 反推：<c>atan2(96, -106) ≈ 137.83°</c>；贴图默认朝左下，指向性旋转即「目标方位角 - 此值」。
     /// </remarks>
     private const float ArrowDefaultBearingDeg = 137.83f;
 
@@ -65,10 +41,8 @@ public sealed partial class FgoNpBarFtue : NFtue
     ///     箭头贴图尖端相对 <c>PivotOffset</c> 的偏移。
     /// </summary>
     /// <remarks>
-    ///     由贴图像素扫出来的：244×204 的图里红色最左下的像素在 (16, 198)，
-    ///     而 <c>pivot_offset</c> 是 (122, 102)（贴图中心），差值即此。
-    ///     <b>必须瞄尖端而不是 pivot</b>：尖端离 pivot 有 143px，
-    ///     瞄 pivot 会让箭头实际指到目标前方 143px 的地方，只是碰巧看着还行。
+    ///     贴图像素扫出：244×204 图里红点最左下像素 (16,198)，pivot (122,102)，差值即此。
+    ///     <b>必须瞄尖端而非 pivot</b>：尖端离 pivot 143px，瞄 pivot 会让箭头指到目标前方 143px 处。
     /// </remarks>
     private static readonly Vector2 ArrowTipOffset = new(-106f, 96f);
 
@@ -83,9 +57,8 @@ public sealed partial class FgoNpBarFtue : NFtue
     ///     NP 按钮在屏幕坐标系里的矩形，由 <see cref="Create" /> 注入。
     /// </summary>
     /// <remarks>
-    ///     NP 条挂在 <c>NCreatureStateDisplay</c> 下、跟着 HP 条走
-    ///     （见 <c>FgoNpBar.SyncWithHealthBar</c>），运行期位置随分辨率与玩家位置变化，
-    ///     场景里写死的 offset 一定对不上，只能运行时算。
+    ///     NP 条挂在 <c>NCreatureStateDisplay</c> 下、跟着 HP 条走（见 <c>FgoNpBar.SyncWithHealthBar</c>），
+    ///     运行期位置随分辨率与玩家变化，场景写死 offset 一定对不上，只能运行时算。
     /// </remarks>
     private Rect2 _targetRect;
 
@@ -146,31 +119,9 @@ public sealed partial class FgoNpBarFtue : NFtue
     ///     把弹窗摆到 NP 按钮旁边，并让箭头从弹窗指向按钮。
     /// </summary>
     /// <remarks>
-    ///     <para>
-    ///         布局规则（按优先级）：
-    ///     </para>
-    ///     <list type="number">
-    ///         <item>
-    ///             <b>默认在按钮右侧</b>。NP 条在屏幕左侧（HP 条下方），
-    ///             右侧空间充足，且不会遮住玩家正在看的血条与手牌。
-    ///         </item>
-    ///         <item>
-    ///             <b>右侧放不下就翻到左侧</b>（按钮靠近屏幕右缘时）。
-    ///         </item>
-    ///         <item>
-    ///             弹窗<b>垂直居中对齐按钮</b>，并夹进屏幕内（留 <see cref="ScreenMargin" /> 边距）。
-    ///         </item>
-    ///     </list>
-    ///     <para>
-    ///         箭头用<b>指向性旋转</b>而不是写死角度：贴图默认朝向左下
-    ///         （bearing ≈ 137.8°），这里按「弹窗侧边 → 按钮中心」的实际方位角求差值。
-    ///         写死角度会在按钮上下移动时立刻指偏。
-    ///     </para>
-    ///     <para>
-    ///         摆位<b>瞄箭头尖端而不是 pivot</b>：尖端离 pivot 有 143px，
-    ///         瞄 pivot 会让箭头指到目标前方 143px 处。缩放取 0.5，
-    ///         <see cref="GapHorizontal" /> 也据此放大，否则箭头会压在弹窗边框上。
-    ///     </para>
+    ///     布局：默认按钮右侧（NP 条在左、右侧空间足且不挡血条/手牌），放不下翻到左侧；垂直居中对齐并夹进屏幕（留 <see cref="ScreenMargin" />）。
+    ///     箭头用<b>指向性旋转</b>而非写死角度（贴图默认 bearing≈137.8°，按「弹窗侧边→按钮中心」方位角求差），否则按钮上下移动时立刻指偏。
+    ///     摆位<b>瞄箭头尖端而非 pivot</b>（差 143px）；缩放 0.5、<see cref="GapHorizontal" /> 据此放大，否则箭头压在弹窗边框上。
     /// </remarks>
     private void LayoutTowards(Rect2 targetRect)
     {
@@ -199,17 +150,13 @@ public sealed partial class FgoNpBarFtue : NFtue
 
         var targetCenter = targetRect.Position + targetRect.Size * 0.5f;
 
-        // ① 默认放在目标右侧
         var x = targetRect.End.X + GapHorizontal;
 
-        // ② 右侧越界就翻到左侧
         if (x + popupSize.X > screen.X - ScreenMargin)
             x = targetRect.Position.X - GapHorizontal - popupSize.X;
 
-        // ③ 左侧也放不下（极窄屏）就硬夹回屏内
         x = Mathf.Clamp(x, ScreenMargin, Mathf.Max(ScreenMargin, screen.X - popupSize.X - ScreenMargin));
 
-        // 垂直居中对齐目标，再夹进屏幕
         var y = targetCenter.Y - popupSize.Y * 0.5f;
         y = Mathf.Clamp(y, ScreenMargin, Mathf.Max(ScreenMargin, screen.Y - popupSize.Y - ScreenMargin));
 
@@ -272,10 +219,8 @@ public sealed partial class FgoNpBarFtue : NFtue
     ///     确认按钮被按下。
     /// </summary>
     /// <remarks>
-    ///     必须写成带 <c>NButton</c> 参数的私有重载来「遮蔽」基类的 <c>CloseFtue()</c>：
-    ///     信号回调签名是 <c>Action&lt;NButton&gt;</c>，而基类那个是无参 protected 方法，
-    ///     直接 <c>Callable.From((Action&lt;NButton&gt;)CloseFtue)</c> 会因为方法组转换找不到
-    ///     匹配重载而编译失败（CS0123）。原版 <c>NCombatRewardFtue</c> 用的是同一手法。
+    ///     必须写成带 <c>NButton</c> 参数的私有重载来「遮蔽」基类无参 protected <c>CloseFtue()</c>：信号回调签名是
+    ///     <c>Action&lt;NButton&gt;</c>，直接 <c>Callable.From((Action&lt;NButton&gt;)CloseFtue)</c> 会因方法组转换找不到匹配重载而编译失败（CS0123）。原版 <c>NCombatRewardFtue</c> 同手法。
     /// </remarks>
     private void OnConfirmReleased(NButton _)
     {

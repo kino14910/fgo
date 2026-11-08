@@ -32,7 +32,6 @@ public class SkeweredPlasmaBlade() : NobleCardModel(1, CardType.Attack, TargetTy
             .WithHitFx("vfx/vfx_attack_blunt")
             .Execute(choiceContext);
 
-        // 60%（升级 70%）概率给予眩晕。
         var roll = Owner.RunState.Rng.Niche.NextFloat() * 100f;
         if (roll < (float)DynamicVars["StunChance"].BaseValue)
             await CreatureCmd.Stun(cardPlay.Target);

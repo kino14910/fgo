@@ -23,7 +23,6 @@ public class ExplorationPointsPower : FgoPowerModel
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Counter;
 
-    /// <summary>取走并清空全部探索点数，返回被取走的值；没有该能力时为 0。</summary>
     public static async Task<int> TakeAll(Creature creature)
     {
         var points = creature.GetPower<ExplorationPointsPower>()?.Amount ?? 0;

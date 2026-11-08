@@ -18,7 +18,6 @@ namespace Fgo.Scripts.Cards.NoblePhantasm;
 /// </summary>
 public class JyuuouManpukuTsuzuraNoEnkai() : NobleCardModel(1, CardType.Attack, TargetType.AllEnemies)
 {
-    /// <summary>每次抬高满腹槽上限的点数。</summary>
     public const int FullnessCapacityPerPlay = 4;
 
     public override CardMultiplayerConstraint MultiplayerConstraint =>

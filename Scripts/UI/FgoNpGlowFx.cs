@@ -7,39 +7,14 @@ namespace Fgo.Scripts.UI;
 ///     NP 按钮的发光粒子层的场景宿主：只负责持有节点引用、定位光心、转发强度。
 /// </summary>
 /// <remarks>
-///     <para>
-///         <b>节点结构</b>（见 <c>res://Fgo/scenes/fgo_np_glow_fx.tscn</c>）：
-///     </para>
-///     <list type="number">
-///         <item>
-///             <b>Rays</b> —— <see cref="ColorRect" /> + <c>res://Fgo/shaders/np_gold_rays.gdshader</c>。
-///             光核 / 辉光 / 拉丝 / 径向光芒 / 星星粒子全部在片元里解析生成，无贴图。
-///         </item>
-///         <item>
-///             <b>Sparks</b> —— <see cref="GpuParticles2D" />，贴图 <c>res://Fgo/images/ui/np_spark.png</c>。
-///             纯粹为光效补充空气浮尘质感，参数同样由 <see cref="NpGlowTuning" /> 驱动。
-///         </item>
-///     </list>
-///     <para>
-///         <b>参数不在本类</b>：全部走 <see cref="FgoNpBar.NpGlowTuning" /> +
-///         <see cref="FgoNpBar.ApplyGlowTuning" />，本类不保存任何视觉默认值，
-///         以免出现「场景一套、Export 一套、代码又一套」的三重真相。
-///     </para>
-///     <para>
-///         <b>层级</b>：本层要绘制在 <c>NpButton</c> <i>之下</i>（按钮保持在最前，
-///         避免加色叠加把暖橙色的按钮贴图与 NP 数字泛白）。由调用方
-///         （<see cref="FgoNpBar.BuildGlowFx" />）设置 <see cref="CanvasItem.ZIndex" />
-///         与树序，本类不参与。
-///     </para>
-///     <para>
-///         <b>鼠标</b>：本层必须完全不参与命中测试，否则会吃掉点击。
-///         根节点与 <c>Rays</c> 在场景里已设 <c>mouse_filter = Ignore</c>，此处再兜底设一次；
-///         <c>Sparks</c> 是 Node2D，本身不参与 GUI 命中测试。
-///     </para>
+///     节点结构（见场景）：<b>Rays</b>=ColorRect+np_gold_rays.gdshader（光核/辉光/拉丝/光芒/星星全在片元生成，无贴图）；
+///     <b>Sparks</b>=GpuParticles2D（np_spark.png，补空气浮尘）。
+///     <b>参数不在本类</b>：全部走 <see cref="FgoNpBar.NpGlowTuning" />+<see cref="FgoNpBar.ApplyGlowTuning" />，本类不存任何视觉默认值，避免场景/Export/代码三重真相。
+///     <b>层级</b>：绘制在 <c>NpButton</c> 之下（按钮置前避免加色泛白），由 <see cref="FgoNpBar.BuildGlowFx" /> 设 z 与树序。
+///     <b>鼠标</b>：根节点与 <c>Rays</c> 场景里已设 <c>mouse_filter = Ignore</c> 并此处兜底；<c>Sparks</c> 是 Node2D 不参与 GUI 命中，否则会吃点击。
 /// </remarks>
 public sealed partial class FgoNpGlowFx : Control
 {
-    /// <summary>光效层场景路径。节点结构与美术默认值都在里面。</summary>
     public const string ScenePath = "res://Fgo/scenes/fgo_np_glow_fx.tscn";
 
     /// <summary>
@@ -48,8 +23,7 @@ public sealed partial class FgoNpGlowFx : Control
     public static readonly Vector2 FxSize = new(260f, 200f);
 
     /// <summary>
-    ///     光心在本层内的归一化位置。固定为正中，<see cref="FgoNpBar" /> 每帧把本层
-    ///     对齐到按钮中心，因此星星从按钮中心向四周发射。
+    ///     固定为正中，<see cref="FgoNpBar" /> 每帧把本层对齐，从按钮中心向四周发射。
     /// </summary>
     public static readonly Vector2 OriginUv = new(0.5f, 0.5f);
 
@@ -112,7 +86,6 @@ public sealed partial class FgoNpGlowFx : Control
         RayMaterial?.SetShaderParameter("aspect", FxSize.X / FxSize.Y);
     }
 
-    /// <summary>把光心对准父节点局部坐标里的某一点（调用方传按钮中心）。</summary>
     public void SetOriginLocal(Vector2 originLocal)
     {
         Position = originLocal - OriginUv * FxSize;
@@ -182,9 +155,7 @@ public sealed partial class FgoNpGlowFx : Control
         var lifetime = Mathf.Max(t.EmberLifetime, 0.01f);
 
         // 径向匀加速上界：s = v·t + ½·a·t²。取最大初速与最大加速度（忽略阻尼，偏保守）。
-        // 这里必须用 t.EmberAccelMax —— 早前把它硬编码成 40，与场景里的实际值脱节，
-        // 改小半径后矩形会算得过大（多绘制的空白区，浪费但不出错），
-        // 反向脱节则会「粒子飞出矩形被静默丢弃」，那才是真的看不见。
+        // 这里必须用 t.EmberAccelMax
         var reach = t.EmberSpeedMax * lifetime + 0.5f * t.EmberAccelMax * lifetime * lifetime;
 
         // 贴图是 64px，EmberScaleMax 是缩放系数，再留一点 turbulence 抖动余量。
@@ -194,34 +165,4 @@ public sealed partial class FgoNpGlowFx : Control
         return new Rect2(-half, -half, half * 2f, half * 2f);
     }
 
-    /// <summary>
-    ///     运行期诊断：把光效层与粒子层的实际矩形、可见性、裁剪链打出来。
-    ///     粒子的失效路径（贴图缺失、<c>visibility_rect</c> 错位、被遮挡）在 Godot 侧全是静默的，
-    ///     光看画面无法区分，只能靠这几个数值定位。
-    /// </summary>
-    public void DumpRuntimeState(string tag)
-    {
-        Entry.Logger.Info(
-            $"[Fgo] NpGlowFx[{tag}]: size={Size} pos={Position} globalPos={GlobalPosition} " +
-            $"rect={GetGlobalRect()} visible={Visible} zIndex={ZIndex} zRel={ZAsRelative} " +
-            $"clip={ClipContents} mouse={MouseFilter} parent={GetParent()?.GetType().Name ?? "<null>"}");
-
-        if (_rays != null)
-            Entry.Logger.Info(
-                $"[Fgo] NpGlowFx[{tag}]: rays size={_rays.Size} visible={_rays.Visible} " +
-                $"shader={RayMaterial?.Shader != null} " +
-                $"intensity={RayMaterial?.GetShaderParameter("intensity")}");
-
-        if (_sparks == null)
-        {
-            Entry.Logger.ErrorNoTrace($"[Fgo] NpGlowFx[{tag}]: sparks node missing.");
-            return;
-        }
-
-        Entry.Logger.Info(
-            $"[Fgo] NpGlowFx[{tag}]: sparks globalPos={_sparks.GlobalPosition} visible={_sparks.Visible} " +
-            $"emitting={_sparks.Emitting} ratio={_sparks.AmountRatio} texture={_sparks.Texture != null} " +
-            $"amount={_sparks.Amount} lifetime={_sparks.Lifetime} preprocess={_sparks.Preprocess} " +
-            $"localCoords={_sparks.LocalCoords} visibilityRect={_sparks.VisibilityRect}");
-    }
 }

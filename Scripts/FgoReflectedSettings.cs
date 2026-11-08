@@ -175,40 +175,33 @@ public class FgoReflectedSettings
     //     DescriptionLocKey = "FGO_SETTINGS_UI_ENABLE_ENEMIES.hover.desc")]
     // [ModSettingsBinding(Source = ModSettingsReflectionBindingSource.Global)]
     // public static bool EnableEnemies { get; set; } = true;
-    //
     // [ModSettingsToggle("enableEmiya", "enemies", LabelLocKey = "FGO_SETTINGS_UI_ENABLE_EMIYA.title",
     //     DescriptionLocKey = "FGO_SETTINGS_UI_ENABLE_EMIYA.hover.desc")]
     // [ModSettingsBinding(Source = ModSettingsReflectionBindingSource.Global)]
     // public static bool EnableEmiya { get; set; } = true;
-    //
     // [ModSettingsToggle("enableCalamityOfNorwich", "enemies",
     //     LabelLocKey = "FGO_SETTINGS_UI_ENABLE_CALAMITY_OF_NORWICH.title",
     //     DescriptionLocKey = "FGO_SETTINGS_UI_ENABLE_CALAMITY_OF_NORWICH.hover.desc")]
     // [ModSettingsBinding(Source = ModSettingsReflectionBindingSource.Global)]
     // public static bool EnableCalamityOfNorwich { get; set; } = true;
-    //
     // [ModSettingsToggle("enableCernunnos", "enemies", LabelLocKey = "FGO_SETTINGS_UI_ENABLE_CERNUNNOS.title",
     //     DescriptionLocKey = "FGO_SETTINGS_UI_ENABLE_CERNUNNOS.hover.desc")]
     // [ModSettingsBinding(Source = ModSettingsReflectionBindingSource.Global)]
     // public static bool EnableCernunnos { get; set; } = true;
-    //
     // [ModSettingsToggle("enableFaerieKnightGawain", "enemies",
     //     LabelLocKey = "FGO_SETTINGS_UI_ENABLE_FAERIE_KNIGHT_GAWAIN.title",
     //     DescriptionLocKey = "FGO_SETTINGS_UI_ENABLE_FAERIE_KNIGHT_GAWAIN.hover.desc")]
     // [ModSettingsBinding(Source = ModSettingsReflectionBindingSource.Global)]
     // public static bool EnableFaerieKnightGawain { get; set; } = true;
-    //
     // [ModSettingsToggle("enableFaerieKnightLancelot", "enemies",
     //     LabelLocKey = "FGO_SETTINGS_UI_ENABLE_FAERIE_KNIGHT_LANCELOT.title",
     //     DescriptionLocKey = "FGO_SETTINGS_UI_ENABLE_FAERIE_KNIGHT_LANCELOT.hover.desc")]
     // [ModSettingsBinding(Source = ModSettingsReflectionBindingSource.Global)]
     // public static bool EnableFaerieKnightLancelot { get; set; } = true;
-    //
     // [ModSettingsToggle("enableMoss", "enemies", LabelLocKey = "FGO_SETTINGS_UI_ENABLE_MOSS.title",
     //     DescriptionLocKey = "FGO_SETTINGS_UI_ENABLE_MOSS.hover.desc")]
     // [ModSettingsBinding(Source = ModSettingsReflectionBindingSource.Global)]
     // public static bool EnableMoss { get; set; } = true;
-    //
     // [ModSettingsToggle("enableQueenMorgan", "enemies", LabelLocKey = "FGO_SETTINGS_UI_ENABLE_QUEEN_MORGAN.title",
     //     DescriptionLocKey = "FGO_SETTINGS_UI_ENABLE_QUEEN_MORGAN.hover.desc")]
     // [ModSettingsBinding(Source = ModSettingsReflectionBindingSource.Global)]

@@ -262,7 +262,6 @@ public static class FgoCardActions
         if (NCard.Create(card) is not { } node)
             return;
 
-        // 屏幕中心预览容器，卡牌缩放出现。
         previewContainer.AddChildSafely(node);
         node.UpdateVisuals(card.Pile.Type, CardPreviewMode.Normal);
 
@@ -307,14 +306,12 @@ public static class FgoCardActions
     /// </summary>
     public static async Task TryUpgradeDerivativeMash(Player player)
     {
-        // 第一次进化
         if (HasUpgradeSource(player, FirstEvolution))
         {
             await ApplyUpgradeStage(player, FirstEvolution);
             return;
         }
 
-        // 第二次进化
         if (HasUpgradeSource(player, SecondEvolution)) await ApplyUpgradeStage(player, SecondEvolution);
     }
 

@@ -71,7 +71,6 @@ public class Entry
         RitsuLibManagedNetActions.Register(FgoNoblePhantasmCmd.SyncDescriptor);
         RitsuLibManagedNetActions.Register(FgoCommandSpellCmd.SyncDescriptor);
 
-        // 注册局内保存数据（令咒数量）
         using (RitsuLibFramework.BeginModDataRegistration(ModId))
         {
             var store = RitsuLibFramework.GetRunSavedDataStore(ModId);
@@ -365,7 +364,7 @@ public static class FgoCharacterSelectPatch
     private static bool Prefix(NCharacterSelectButton __instance)
     {
         if (!AutoSlayer.IsActive)
-            return true; // 非自动测试，照常
+            return true;
 
         // 已经是 FGO 按钮，放行（重定向时调用 fgoBtn.Select() 会再次进入此处并放行，不会递归）
         if (__instance.Character is FgoCharacter)
@@ -378,7 +377,7 @@ public static class FgoCharacterSelectPatch
             Entry.Logger.Info(
                 $"[Fgo] Autoslay: redirect Select() from {__instance.Character.Id} to FGO {fgoBtn.Character.Id}");
             fgoBtn.Select();
-            return false; // 跳过原 Select
+            return false;
         }
 
         // 找不到 FGO 按钮（mod 未加载/角色未解锁），放行避免卡死选角流程
@@ -390,7 +389,6 @@ public static class FgoCharacterSelectPatch
     private static NCharacterSelectButton? FindFgoButton(NCharacterSelectButton from)
     {
         // AutoSlayer 选角时所有按钮已在同一 ButtonContainer 下并已 Init（Character 已赋值）。
-        // 遍历父节点的子节点找 FGO 角色按钮。
         var parent = from.GetParent();
         if (parent == null) return null;
 

@@ -82,19 +82,15 @@ public sealed class NpGlowTuning
 
     // ── 强度与动效 ──────────────────────────────────────────────────────
 
-    /// <summary>NP 满且可释放时的基础强度。</summary>
     public float BaseIntensity { get; set; } = 1.0f;
 
-    /// <summary>强度缓动速度（每秒）。越大越"跟手"，越小越柔和。</summary>
     public float IntensitySmooth { get; set; } = 7f;
 
     /// <summary>悬停按钮时的强度加成。</summary>
     public float HoverBoost { get; set; } = 0.35f;
 
-    /// <summary>点击瞬间叠加的爆发强度。</summary>
     public float BurstStrength { get; set; } = 1.4f;
 
-    /// <summary>爆发余量的指数衰减速度（每秒）。</summary>
     public float BurstDecay { get; set; } = 2.6f;
 
     /// <summary>
@@ -108,10 +104,8 @@ public sealed class NpGlowTuning
 
     // ── 呼吸 ──────────────────────────────────────────────────────────
 
-    /// <summary>呼吸频率（Hz）。0.3 ≈ 3.3 秒一个周期。</summary>
     public float BreatheSpeed { get; set; } = 0.3f;
 
-    /// <summary>呼吸深度。0.18 = 亮度在 100%~82% 之间起伏。</summary>
     public float BreatheAmount { get; set; } = 0.18f;
 
     // ── 光核 / 辉光 / 拉丝 ────────────────────────────────────────────
@@ -119,65 +113,47 @@ public sealed class NpGlowTuning
     /// <summary>光核半径（等比空间，1.0 = 层高 200px）。0.07 ≈ 14px，略小于按钮半高 20px。</summary>
     public float CoreSize { get; set; } = 0.07f;
 
-    /// <summary>光核边缘锐度。</summary>
     public float CoreSoft { get; set; } = 2.2f;
 
-    /// <summary>光核亮度增益。</summary>
     public float CoreGain { get; set; } = 1f;
 
-    /// <summary>外层辉光半径（等比空间）。0.26 ≈ 52px，约 2.5 倍按钮半宽。</summary>
     public float HaloSize { get; set; } = 0.26f;
 
-    /// <summary>辉光衰减指数。</summary>
     public float HaloSoft { get; set; } = 2.8f;
 
-    /// <summary>辉光强度增益。</summary>
     public float HaloGain { get; set; } = 0.55f;
 
-    /// <summary>横向拉丝强度。0 = 关闭。</summary>
     public float StreakGain { get; set; } = 0.3f;
 
     // ── 径向光芒 ──────────────────────────────────────────────────────
 
-    /// <summary>光束数量。</summary>
     public float RayCount { get; set; } = 30f;
 
-    /// <summary>单束角宽（0..0.5）。</summary>
     public float RayWidth { get; set; } = 0.3f;
 
-    /// <summary>光束边缘硬度。</summary>
     public float RaySharp { get; set; } = 1.6f;
 
-    /// <summary>光芒长度（等比空间）。0.30 ≈ 60px，刚好探出按钮轮廓一点。</summary>
     public float RayReach { get; set; } = 0.3f;
 
-    /// <summary>沿半径的衰减指数。</summary>
     public float RayFalloff { get; set; } = 1.5f;
 
-    /// <summary>光束强度增益。</summary>
     public float RayGain { get; set; } = 0.42f;
 
-    /// <summary>每束光的独立闪烁幅度。</summary>
     public float RayShimmer { get; set; } = 0.2f;
 
     // ── 星星粒子 ──────────────────────────────────────────────────────
 
-    /// <summary>角向分格数。建议 16~28；越大星星越密、越小。</summary>
     public float StarSectors { get; set; } = 22f;
 
-    /// <summary>径向环数。建议 5~9；越大外扩层次越多。</summary>
     public float StarRings { get; set; } = 7f;
 
     /// <summary>槽位点亮比例 0..1，即"密度"主控。0.42 ≈ 22×7 格点亮 65 颗。</summary>
     public float StarDensity { get; set; } = 0.42f;
 
-    /// <summary>星星尺寸（占所在格子的比例）。</summary>
     public float StarSize { get; set; } = 0.34f;
 
-    /// <summary>星芒长度 / 星核半径。越大越"刺"，越小越"圆点"。</summary>
     public float StarArm { get; set; } = 2.6f;
 
-    /// <summary>星芒对比度。</summary>
     public float StarSharp { get; set; } = 1.5f;
 
     /// <summary>粒子活动半径（等比空间）。应略大于 <see cref="RayReach" /> 让星星跑到光芒之外。</summary>
@@ -186,13 +162,10 @@ public sealed class NpGlowTuning
     /// <summary>内圈淡出半径，避免中心糊成一坨白。</summary>
     public float StarInner { get; set; } = 0.05f;
 
-    /// <summary>向外扩散速度（格/秒）。这是"速度"主控。</summary>
     public float StarSpeed { get; set; } = 0.3f;
 
-    /// <summary>星星整体亮度增益。0.5 左右可让星星退居配角、不抢光核的白。</summary>
     public float StarGain { get; set; } = 0.55f;
 
-    /// <summary>闪烁幅度。0.45 = 每颗星亮度在 55%~100% 之间跳。</summary>
     public float StarTwinkle { get; set; } = 0.45f;
 
     /// <summary>
@@ -204,33 +177,24 @@ public sealed class NpGlowTuning
 
     // ── 颜色 ──────────────────────────────────────────────────────────
 
-    /// <summary>光芒 / 星星的外缘色（深金）。</summary>
     public Color RayColor { get; set; } = new(1f, 0.7f, 0.21f);
 
-    /// <summary>辉光 / 拉丝色（中金）。</summary>
     public Color GlowColor { get; set; } = new(1f, 0.78f, 0.3f);
 
-    /// <summary>光核色（近白）。</summary>
     public Color CoreColor { get; set; } = new(1f, 0.965f, 0.855f);
 
-    /// <summary>星星高光色（预留，当前由 heat 混合主导）。</summary>
     public Color SparkColor { get; set; } = new(1f, 0.93f, 0.7f);
 
     // ── 光尘粒子层（GPUParticles2D）────────────────────────────────────
 
-    /// <summary>光尘数量上限。</summary>
     public int EmberAmount { get; set; } = 28;
 
-    /// <summary>光尘亮度比例，参与最终强度计算。</summary>
     public float EmberGain { get; set; } = 1f;
 
-    /// <summary>光尘寿命（秒）。</summary>
     public float EmberLifetime { get; set; } = 2.2f;
 
-    /// <summary>光尘初速下限。</summary>
     public float EmberSpeedMin { get; set; } = 3f;
 
-    /// <summary>光尘初速上限。</summary>
     public float EmberSpeedMax { get; set; } = 12f;
 
     /// <summary>
@@ -259,10 +223,8 @@ public sealed partial class FgoNpBar : Node
 
     private NCreature? _creatureNode;
 
-    /// <summary>点击瞬间的爆发余量，按 <see cref="NpGlowTuning.BurstDecay" /> 指数衰减。</summary>
     private float _glowBurst;
 
-    /// <summary>NP 满且可释放时是否点亮光效。由 <see cref="OnNpChanged" /> 维护。</summary>
     private bool _glowEnabled;
 
     /// <summary>
@@ -279,7 +241,6 @@ public sealed partial class FgoNpBar : Node
     /// <summary>光效的实时强度（已做缓动），最终写进着色器的 <c>intensity</c>。</summary>
     private float _glowIntensity;
 
-    /// <summary>上一次写进光效层的光心位置（按钮中心，npBar 局部坐标）。</summary>
     private Vector2? _glowOrigin;
 
     private bool _hoverTipShown;
@@ -288,17 +249,9 @@ public sealed partial class FgoNpBar : Node
     private Label? _label;
 
     /// <summary>
-    ///     上一次的 <c>canUse</c>（NP 满且未封印）状态。
+    ///     上一次的 <c>canUse</c>（NP 满且未封印）状态，用于 FTUE 触发的 false→true 上升沿。
     /// </summary>
-    /// <remarks>
-    ///     与 <see cref="_lastGlowOn" /> 分开：那个只用于光效的边沿诊断日志，
-    ///     语义是「光效是否点亮」；这个用于 FTUE 触发的 false→true 上升沿。
-    ///     两者恰好同值，但用途与生命周期不同，合并会让「光效诊断日志」被 FTUE 逻辑污染。
-    /// </remarks>
     private bool _lastCanUse;
-
-    /// <summary>上一次的光效点亮状态，用于只在边沿打一条诊断日志。</summary>
-    private bool _lastGlowOn;
 
     private Vector2 _lastHpBarPosition;
     private Vector2 _lastHpBarSize;
@@ -485,53 +438,21 @@ public sealed partial class FgoNpBar : Node
     ///     挂上发光粒子层，使其绘制在 <c>NpButton</c> 之下（按钮保持最前），同时仍高于生物立绘。
     /// </summary>
     /// <remarks>
+    ///     CanvasItem 绘制顺序：有效 z 升序，同 z 再按树序；有效 z = 父有效 z + 自身 z_index。
     ///     <para>
-    ///         Godot 的 CanvasItem 绘制顺序是「先按有效 <c>z_index</c> 升序、同 z 再按树序」，
-    ///         有效 z = 父节点有效 z + 自身 <c>z_index</c>（<c>z_as_relative</c> 开启时）。
+    ///         不能简单取按钮 z±1：立绘 <c>NCreature.Visuals</c> 是 state display 的兄弟且 z=0
+    ///         （原版 <c>MoveChild(Visuals, 0)</c> 强制树序最前），本机 state display 有效 z 也为 0——
+    ///         +1 会盖住按钮，-1 掉到立绘之下看不见。故令本层与按钮<b>同 z（0）</b>，再
+    ///         <c>MoveChild</c> 到按钮之前，靠树序决胜（按钮后绘制、压住它）。
     ///     </para>
     ///     <para>
-    ///         <b>为什么不能简单取 <c>_button.ZIndex - 1</c>：</b>
-    ///         本层挂在 <c>NCreatureStateDisplay</c> 子树里，而立绘
-    ///         <c>NCreature.Visuals</c> 是 state display 的<b>兄弟</b>且
-    ///         <c>z_index = 0</c>（原版在 NCreature.cs 里用 <c>MoveChild(Visuals, 0)</c>
-    ///         把它强制到树序最前）。本机玩家 state display 的有效 z 也是 0，于是：
-    ///     </para>
-    ///     <list type="bullet">
-    ///         <item><c>fx.ZIndex = +1</c> → 有效 z = 1，<b>高于</b>立绘(0) ⇒ 可见（但会盖住按钮）</item>
-    ///         <item><c>fx.ZIndex = -1</c> → 有效 z = -1，<b>低于</b>立绘(0) ⇒ 被立绘整个盖住 ⇒ 看不见</item>
-    ///     </list>
-    ///     <para>
-    ///         所以正确做法是让本层与按钮<b>同 z（0），靠树序决胜</b>：本层仍是 state display
-    ///         子树内的一员，有效 z 与立绘同为 0，而它在树序上远后于立绘（Visuals 是 Creature 的
-    ///         第 0 个子节点），因此依旧画在立绘之上；同时在 npBar 内部把它 <c>MoveChild</c> 到
-    ///         按钮之前，按钮后绘制、稳稳压住它。
-    ///     </para>
-    ///     <list type="number">
-    ///         <item>
-    ///             <b>z_index</b> —— 与按钮取<b>相同</b>值（<c>_button.ZIndex</c>，通常 0）。
-    ///             不能 +1 也不能 -1：前者盖住按钮，后者掉到立绘之下。
-    ///         </item>
-    ///         <item>
-    ///             <b>树序</b> —— <c>MoveChild</c> 到按钮<b>之前</b>。同 z 时树序是唯一决胜条件，
-    ///             这是「按钮在前」真正生效的地方。
-    ///         </item>
-    ///         <item>
-    ///             <b>鼠标</b> —— 根节点与 <c>Rays</c> 都设了 <c>mouse_filter = Ignore</c>，
-    ///             <see cref="FgoNpGlowFx" /> 的 <c>_Ready</c> 再兜底设一次；
-    ///             <c>Sparks</c> 是 <c>GPUParticles2D</c>（Node2D），本身不参与 GUI 命中测试。
-    ///             本层整块覆盖按钮区域，必须 Ignore 才不会吃掉点击。
-    ///         </item>
-    ///     </list>
-    ///     <para>
-    ///         <b>为什么按钮要在前面</b>：按钮贴图 <c>np_max</c> 是暖橙色，与金色光效同色系。
-    ///         粒子层压在上面时，加色叠加会让贴图和 <c>NpLabel</c> 的数字一起泛白、读不清。
-    ///         让按钮处于最前，中心最亮的光核被按钮本体盖住，光芒与星星只从按钮轮廓外露出，
-    ///         既保留「从按钮中心向外发射」的观感，又保证按钮可读。
+    ///         根节点与 <c>Rays</c> 设 <c>mouse_filter = Ignore</c>（<see cref="FgoNpGlowFx" /> 的
+    ///         <c>_Ready</c> 兜底；<c>Sparks</c> 是 Node2D 不参与 GUI 命中），否则整块覆盖按钮区域会吃掉点击。
     ///     </para>
     ///     <para>
-    ///         粒子层尺寸（260×200）远大于 <c>_npBarRoot</c>，会溢出到兄弟节点之上。
-    ///         这是「向外发射」所必需的效果，故确认 <c>_npBarRoot</c> 未开启 <c>clip_children</c>
-    ///         （见 fgo_np_bar.tscn），不会被裁掉。
+    ///         按钮贴图 <c>np_max</c> 暖橙、与金色光效同色系，压在上层会让贴图与 <c>NpLabel</c> 数字加色泛白；
+    ///         按钮置前则光核被本体盖住、光芒只从轮廓外露出，既保留发射观感又保证可读。
+    ///         层尺寸（260×200）大于 <c>_npBarRoot</c> 是「向外发射」所需，故 <c>_npBarRoot</c> 不能开 <c>clip_children</c>。
     ///     </para>
     /// </remarks>
     private void BuildGlowFx()
@@ -559,35 +480,6 @@ public sealed partial class FgoNpBar : Node
         SyncGlowFxLayout();
         ApplyGlowTuning();
         SetGlowActive(false);
-
-        // 诊断：确认绘制次序（父节点名 / 子节点索引 / 相对 z），用于排查粒子层被遮挡。
-        var order = new StringBuilder();
-        for (var i = 0; i < _npBarRoot.GetChildCount(); i++)
-        {
-            var child = _npBarRoot.GetChild(i);
-            order.Append($"[{i}]{child.Name}(z={(child as CanvasItem)?.ZIndex ?? 0}) ");
-        }
-
-        Entry.Logger.Info($"[Fgo] NpGlowFx tree after insert: {order}");
-
-        // 诊断：打印【有效 z】与立绘的相对关系。遮挡问题只看相对 z 看不出来 ——
-        // 立绘 Visuals 是 state display 的兄弟（z=0，原版用 MoveChild(Visuals, 0) 强制到树序最前），
-        // 本层若有效 z < 0 就会掉到它下面被整个盖住，而画面上完全看不出原因。
-        var parent = GetParent();
-        var parentZ = (parent as CanvasItem)?.ZIndex ?? 0;
-        var siblings = new StringBuilder();
-
-        if (parent != null)
-            for (var i = 0; i < parent.GetChildCount(); i++)
-            {
-                var child = parent.GetChild(i);
-                siblings.Append($"{i}:{child.Name}(z={(child as CanvasItem)?.ZIndex ?? 0}) ");
-            }
-
-        // fx 的有效 z = 沿链累加；这里只关心「相对 parent 的 z」是否与立绘同级。
-        Entry.Logger.Info(
-            $"[Fgo] NpGlowFx z: fx={fx.ZIndex} npBar={_npBarRoot.ZIndex} button={_button.ZIndex} " +
-            $"parent={parent?.Name}(z={parentZ}) | parentChildren=[{siblings}]");
     }
 
     /// <summary>
@@ -633,11 +525,9 @@ public sealed partial class FgoNpBar : Node
         mat.SetShaderParameter(NpGlowTuning.OriginParam, new Vector2(0.5f, 0.5f));
         mat.SetShaderParameter(NpGlowTuning.AspectParam, FgoNpGlowFx.FxSize.X / FgoNpGlowFx.FxSize.Y);
 
-        // 呼吸
         mat.SetShaderParameter(NpGlowTuning.BreatheSpeedParam, t.BreatheSpeed);
         mat.SetShaderParameter(NpGlowTuning.BreatheAmountParam, t.BreatheAmount);
 
-        // 光核 / 辉光 / 拉丝
         mat.SetShaderParameter(NpGlowTuning.CoreSizeParam, t.CoreSize);
         mat.SetShaderParameter(NpGlowTuning.CoreSoftParam, t.CoreSoft);
         mat.SetShaderParameter(NpGlowTuning.CoreGainParam, t.CoreGain);
@@ -646,7 +536,6 @@ public sealed partial class FgoNpBar : Node
         mat.SetShaderParameter(NpGlowTuning.HaloGainParam, t.HaloGain);
         mat.SetShaderParameter(NpGlowTuning.StreakGainParam, t.StreakGain);
 
-        // 径向光芒
         mat.SetShaderParameter(NpGlowTuning.RayCountParam, t.RayCount);
         mat.SetShaderParameter(NpGlowTuning.RayWidthParam, t.RayWidth);
         mat.SetShaderParameter(NpGlowTuning.RaySharpParam, t.RaySharp);
@@ -669,7 +558,6 @@ public sealed partial class FgoNpBar : Node
         mat.SetShaderParameter(NpGlowTuning.StarTwinkleParam, t.StarTwinkle);
         mat.SetShaderParameter(NpGlowTuning.StarDimParam, t.StarDim);
 
-        // 颜色
         mat.SetShaderParameter(NpGlowTuning.RayColorParam, t.RayColor);
         mat.SetShaderParameter(NpGlowTuning.GlowColorParam, t.GlowColor);
         mat.SetShaderParameter(NpGlowTuning.CoreColorParam, t.CoreColor);
@@ -732,7 +620,6 @@ public sealed partial class FgoNpBar : Node
             target += t.HoverBoost * _glowHover + t.BurstStrength * _glowBurst;
         }
 
-        // 帧率无关的指数趋近。
         var k = 1f - Mathf.Exp(-Mathf.Max(t.IntensitySmooth, 0.01f) * dt);
         _glowIntensity = Mathf.Lerp(_glowIntensity, target, k);
 
@@ -824,19 +711,11 @@ public sealed partial class FgoNpBar : Node
 
             // 光效只在「NP 满且可释放」时点亮：未满与封印态（灰按钮）都保持熄灭，
             // 与按钮自身的可见性/置灰状态保持一致。强度本身由 TickGlow 每帧缓动，
-            // 这里只切目标开关，因此不会出现瞬间跳变。
             SetGlowActive(canUse);
-
-            if (canUse != _lastGlowOn)
-            {
-                _lastGlowOn = canUse;
-                _glowFx?.DumpRuntimeState($"canUse={canUse},np={np}");
-            }
 
             // FTUE：宝具条「刚变得可用」的那一刻弹一次教学。
             // 只认 false→true 上升沿，避免每次 NpChanged 变更都重复尝试弹窗。
             // 首见标记由 FgoFtue 用 Global 存档槽维护，弹过一次之后这里就是空转。
-            //
             // 传按钮的屏幕矩形：NP 条跟着 HP 条走，位置随分辨率/玩家位置变化，
             // 弹窗要贴着按钮弹、箭头要指着按钮，都得运行时算而不是场景里写死。
             if (canUse && !_lastCanUse)

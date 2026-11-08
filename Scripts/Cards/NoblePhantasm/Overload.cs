@@ -34,7 +34,6 @@ public class Overload() : NobleCardModel(1, CardType.Attack, TargetType.AnyEnemy
         // 宝具值获取提升
         await PowerCmd.Apply<NpRatePower>(choiceContext, Owner.Creature, 1m, Owner.Creature, this);
 
-        // 去除敌人的格挡值
         if (cardPlay.Target.Block > 0)
             await CreatureCmd.LoseBlock(choiceContext, cardPlay.Target, cardPlay.Target.Block, Owner.Creature);
 

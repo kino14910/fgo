@@ -34,7 +34,6 @@ public class BlackdogGalatine() : NobleCardModel(1, CardType.Attack, TargetType.
             .TargetingAllOpponents(CombatState!)
             .WithHitFx("vfx/vfx_fire_burning")
             .Execute(choiceContext);
-        // 获得再生
         await PowerCmd.Apply<MaxHpPower>(choiceContext, Owner.Creature, DynamicVars[nameof(MaxHpPower)].BaseValue,
             Owner.Creature, this);
         await PlayerCmd.GainEnergy(2, Owner);

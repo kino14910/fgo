@@ -5,7 +5,6 @@ using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards.Colorless.Dishes;
 
-/// <summary>芭菲: 所有友方回复 20(40) 点生命值。</summary>
 public class Parfait : FgoDishCardModel
 {
     protected override IEnumerable<DynamicVar> CanonicalVars =>

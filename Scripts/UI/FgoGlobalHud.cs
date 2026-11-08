@@ -20,22 +20,18 @@ namespace Fgo.Scripts.UI;
 
 public sealed partial class FgoGlobalHud : Control
 {
-    /// <summary>场地行里每个场地图标的显示边长（像素）。</summary>
     private const float FieldIconSize = 64f;
 
-    /// <summary>场地行距屏幕顶部边缘的偏移（像素）。</summary>
     private const float FieldRowTop = 120f;
 
     /// <summary>场地行所在横带的高度（像素）。CenterContainer 需要一条有高度的横带才能水平居中。</summary>
     private const float FieldRowHeight = 88f;
 
-    /// <summary>层数角标预留的方框边长（像素）；实际显示尺寸由字号决定，这个框只用于定位。</summary>
     private const float FieldBadgeSize = 30f;
 
     /// <summary>层数角标自图标右下角向内收缩的距离（像素），避免贴着边。</summary>
     private const float FieldBadgeInset = 2f;
 
-    /// <summary>层数角标的字号（比场地名称小一号，压在图标右下角）。</summary>
     private const int FieldBadgeFontSize = 22;
 
     private static readonly Color DisabledModulate = new(1, 1, 1, 0.35f);
@@ -135,7 +131,6 @@ public sealed partial class FgoGlobalHud : Control
         AddChild(vbox);
 
         //---------------------------------------
-        // Command Spell
         //---------------------------------------
 
         _commandSpellButton = new TextureButton();
@@ -153,7 +148,6 @@ public sealed partial class FgoGlobalHud : Control
         vbox.AddChild(_commandSpellButton);
 
         //---------------------------------------
-        // Fields
         //---------------------------------------
 
         // 场地是战场级属性（对所有单位生效），因此只在 HUD 上显示一次，不给每个生物各挂图标。
@@ -178,7 +172,6 @@ public sealed partial class FgoGlobalHud : Control
         _fieldRoot.AddChild(_fieldRow);
 
         //---------------------------------------
-        // Star
         //---------------------------------------
 
         var starRoot = new VBoxContainer();
@@ -408,7 +401,6 @@ public sealed partial class FgoGlobalHud : Control
             var entry = new Control();
             entry.CustomMinimumSize = new Vector2(FieldIconSize, FieldIconSize);
             // 用 Pass 而不是 Stop: 悬停提示照常触发，但鼠标事件继续往下传，
-            // 万一场地行压到可点区域也不会吞掉点击。
             entry.MouseFilter = MouseFilterEnum.Pass;
 
             if (id.Icon() is { } icon)

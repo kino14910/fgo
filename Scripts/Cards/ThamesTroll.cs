@@ -22,7 +22,6 @@ namespace Fgo.Scripts.Cards;
 public class ThamesTroll() : FgoCardModel(3, CardType.Attack,
     CardRarity.Rare, TargetType.AnyEnemy)
 {
-    /// <summary>触发追加段的场地（任一存在即可）。</summary>
     private static readonly FgoFieldId[] BonusFields =
         [FgoFieldId.Forest, FgoFieldId.City, FgoFieldId.Darkness];
 
@@ -65,7 +64,6 @@ public class ThamesTroll() : FgoCardModel(3, CardType.Attack,
             DynamicVars["FieldBlock"].BaseValue);
     }
 
-    /// <summary>「伤害 + 格挡」这一套结算，本卡会走一到两遍。</summary>
     private async Task Strike(PlayerChoiceContext choiceContext, CardPlay cardPlay, Creature target,
         decimal damage, decimal block)
     {

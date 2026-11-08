@@ -12,31 +12,15 @@ namespace Fgo.Scripts.UI;
 ///     〔虚数空间〕的战斗背景替换: 进入时把战场背景换成虚数之海，退出时淡回原背景。
 /// </summary>
 /// <remarks>
-///     <para>
-///         <b>不要动原版 <c>%BgContainer</c> 里原有的子节点。</b>
-///         它是 <c>combat_room.tscn</c> 里一个**所有战斗共用**的节点，除了本场战斗的背景
-///         （<c>room.Background</c>，由 <c>SetUpBackground</c> 挂进去）之外，场景本身还烘焙了
-///         <c>SpineSprite</c>、带 shader 的 <c>TextureRect</c>、<c>fire</c>、<c>square_specks</c> 等一堆特效节点。
-///         所以「清空 BgContainer 再把新背景塞进去」是错的——那会把这批共用的房间特效永久删掉。
-///         正确做法: 只把自己加进去的那个节点摘掉，原版背景节点只做显隐/透明度控制。
-///     </para>
-///     <para>
-///         <b>不要碰 <c>NCombatRoom.Background</c>，也绝不调 <c>SetUpBackground</c>。</b>
-///         它的 setter 是私有的；更要紧的是 <c>SetUpBackground</c> 见到 <c>Background != null</c>
-///         会打一条 "Tried to set up background twice!" 警告并重复 <c>AddChild</c>。
-///         游戏只在 <c>OnCombatSetUp</c> 里判空读它一次，战斗开始后无人再读，
-///         所以要「换背景」只需在 <c>%BgContainer</c> 上做视觉层面的叠加与显隐。
-///     </para>
-///     <para>
-///         <b>不要把节点挂在 <c>NCombatUi</c> 下。</b>
-///         <c>NCombatUi._Ready()</c> 末尾若静态字段 <c>_isDebugHidden</c> 为真，会把所有非 <c>Hand</c>
-///         的直属 <c>Control</c> 一律设成 <c>Modulate = Colors.Transparent</c>，而该字段**跨战斗残留**，
-///         一旦触发就会让之后每场战斗的背景永久不可见。这里挂在 <c>NCombatRoom</c> 自己身上，规避这条路径。
-///     </para>
+///     <b>不动 <c>%BgContainer</c> 原有子节点</b>：它所有战斗共用，除本场背景（<c>room.Background</c>）外还烘焙了
+///     SpineSprite / fire / square_specks 等房间特效，清空会永久删掉这批共用特效；只摘自己加的节点。
+///     <b>不碰 <c>NCombatRoom.Background</c> / 不调 <c>SetUpBackground</c></b>：setter 私有，且见非 null 会打
+///     "set up background twice" 并重复 AddChild；战斗开始后无人再读，换背景只需在 %BgContainer 上做视觉叠加与显隐。
+///     <b>不挂 <c>NCombatUi</c> 下</b>：其 <c>_Ready</c> 末尾若 <c>_isDebugHidden</c> 为真会把非 Hand 直属 Control 设透明，
+///     且该字段跨战斗残留，会让之后每场背景永久不可见；故挂在 <c>NCombatRoom</c> 自身规避。
 /// </remarks>
 public sealed partial class FgoVoidSeaBackground : Node
 {
-    /// <summary>背景场景路径。场景自带 <c>Layer_00</c> 图层容器。</summary>
     private const string BackgroundScenePath = "res://Fgo/scenes/fgo_void_sea_bg.tscn";
 
     /// <summary>虚数之海图层场景。必须内含 <c>Visual</c> 与 <c>PhobiaModeVisual</c> 两个直属子节点。</summary>
@@ -77,7 +61,6 @@ public sealed partial class FgoVoidSeaBackground : Node
     /// <summary>当前补间；切换方向时先杀掉，避免两条补间互相抢 alpha。</summary>
     private Tween? _fade;
 
-    /// <summary>上一次观察到的「是否处于虚数空间」，用于做边沿检测。</summary>
     private bool _lastInVoidSpace;
 
     /// <summary>当前插入的背景节点。淡出过程中仍持有它，直到收尾回调真正移除，期间重复进入不会叠出第二份。</summary>
@@ -107,14 +90,13 @@ public sealed partial class FgoVoidSeaBackground : Node
     }
 
     /// <summary>
-    ///     按当前场地状态推进入/出〔虚数空间〕的背景切换。每帧幂等，只在边沿处动作。
+    ///     按本地玩家的〔虚数空间〕状态推进入/出背景切换。每帧幂等，只在边沿处动作。
     /// </summary>
     /// <remarks>
-    ///     刻意做成轮询而不是只挂在 <c>GreatVoidSeaBattle.OnPlay</c> 上: 场地还可能被
-    ///     〔虚数脱出〕主动移除、或层数自然归零，那些路径都不会再走到大冲角的 OnPlay，
-    ///     只在那里触发就会留下永远换不回来、后续战斗还把背景压住的问题。
-    ///     轮询点与 <c>FgoGlobalHud.SyncVoidSpaceHand</c> 同源（同一帧、同一份 <c>ICombatState</c>），
-    ///     手牌与背景的进出时机因此天然一致。
+    ///     刻意轮询而非只挂 <c>GreatVoidSeaBattle.OnPlay</c>：状态只由〔虚数脱出〕解除，
+    ///     只在那触发会留下换不回、后续战斗压住背景的问题。
+    ///     轮询点与 <c>FgoGlobalHud.SyncVoidSpaceHand</c> 同源（同帧同 <c>ICombatState</c>），手牌与背景进出时机天然一致。
+    ///     联机时只认本地玩家：别人进入虚数空间不该换掉自己的战场背景。
     /// </remarks>
     public static void Update(ICombatState? combat)
     {
@@ -293,15 +275,10 @@ public sealed partial class FgoVoidSeaBackground : Node
     ///     组装虚数之海背景: 实例化背景场景并填入图层。
     /// </summary>
     /// <remarks>
-    ///     <para>
-    ///         走「实例化背景场景」而不是原版 <c>NCombatBackground.Create</c>，是因为需要自定义场景路径。
-    ///     </para>
-    ///     <para>
-    ///         <b>背景场景的根节点必须挂了 <see cref="FgoVoidSeaBackgroundRoot" />（继承 <c>NCombatBackground</c>）。</b>
-    ///         这里用的 <c>Instantiate&lt;NCombatBackground&gt;</c> 重载要求场景根本身就是
-    ///         <c>NCombatBackground</c> 的实例；根若是裸 <c>Control</c>，会抛 <c>InvalidCastException</c>。
-    ///         另外场景自带的 <c>Layer_00</c> 容器名必须与查找键一致，否则拿不到容器、图层挂不上去。
-    ///     </para>
+    ///     走「实例化背景场景」而非原版 <c>NCombatBackground.Create</c>（需自定义场景路径）。
+    ///     场景根必须挂 <see cref="FgoVoidSeaBackgroundRoot" />（继承 <c>NCombatBackground</c>），否则
+    ///     <c>Instantiate&lt;NCombatBackground&gt;</c> 抛 <c>InvalidCastException</c>；
+    ///     自带的 <c>Layer_00</c> 容器名也必须与查找键一致，否则拿不到容器、图层挂不上。
     /// </remarks>
     private NCombatBackground? TryCreateBackground()
     {
@@ -344,10 +321,9 @@ public sealed partial class FgoVoidSeaBackground : Node
     ///     把图层场景塞进背景场景自带的同名容器。返回是否成功。
     /// </summary>
     /// <remarks>
-    ///     等价于原版 <c>NCombatBackground.AddLayer</c>（同样"查同名子节点 → 实例化图层 → 挂上去"），
-    ///     区别是容器名由调用方与背景场景约定好，不必再走一次会抛异常的查找。
-    ///     容器缺失时原版会抛 <c>InvalidOperationException</c>；这里改为返回 false 并交调用方放弃，
-    ///     因为"挂了个没有任何图层的背景"只会静默地显示成空白，比直接失败更难查。
+    ///     等价原版 <c>NCombatBackground.AddLayer</c>（查同名子节点 → 实例化 → 挂上），但容器名由约定传入、不抛异常。
+    ///     容器缺失时原版抛 <c>InvalidOperationException</c>；这里返回 false 交调用方放弃——
+    ///     因为"挂了个无图层的背景"只会静默显示成空白，比直接失败更难查。
     /// </remarks>
     private static bool AddLayerInto(NCombatBackground root, string containerName, string layerPath)
     {
@@ -401,11 +377,9 @@ public sealed partial class FgoVoidSeaBackground : Node
         vanilla.Modulate = new Color(1, 1, 1, alpha);
     }
 
-    /// <summary>杀掉当前补间，不做别的。</summary>
     /// <remarks>
-    ///     只杀、不建。Godot 的 <c>CreateTween()</c> 会立刻开始跑那条补间，
-    ///     若建出来却没加任何 Tweener，引擎会报 "Tween ... started with no Tweeners."
-    ///     ⇒ 所以"只是取消旧补间"的路径（如 <see cref="DiscardVoidSea" />）只能走这里。
+    ///     只杀不建：<c>CreateTween()</c> 会立刻开跑，没加 Tweener 引擎会报 "started with no Tweeners"，
+    ///     故纯取消旧补间的路径（如 <see cref="DiscardVoidSea" />）只能走这里。
     /// </remarks>
     private void KillFade()
     {

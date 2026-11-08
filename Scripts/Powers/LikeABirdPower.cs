@@ -16,12 +16,10 @@ namespace Fgo.Scripts.Powers;
 /// </remarks>
 public class LikeABirdPower : FgoPowerModel
 {
-    /// <summary>伤害倍率: 200%。</summary>
     private const decimal DamageMultiplier = 2m;
 
     public override PowerType Type => PowerType.Buff;
 
-    /// <summary>层数无意义（效果是开关），用 <see cref="PowerStackType.Single" /> 隐藏角标。</summary>
     public override PowerStackType StackType => PowerStackType.Single;
 
     public override PowerAssetProfile AssetProfile => new(

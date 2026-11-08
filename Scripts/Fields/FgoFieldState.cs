@@ -35,7 +35,6 @@ public sealed class FgoFieldState
         return _stacks.GetValueOrDefault(id);
     }
 
-    /// <summary>叠加层数。已存在则累加；累加到 0 或负数等价于移除。</summary>
     public bool Add(FgoFieldId id, int stacks)
     {
         var target = _stacks.GetValueOrDefault(id) + stacks;
@@ -47,7 +46,6 @@ public sealed class FgoFieldState
         return true;
     }
 
-    /// <summary>移除场地。原本不存在时返回 false。</summary>
     public bool Remove(FgoFieldId id)
     {
         if (!_stacks.Remove(id)) return false;

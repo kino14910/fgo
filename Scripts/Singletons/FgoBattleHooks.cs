@@ -57,7 +57,6 @@ public sealed class FgoBattleHooks() : HookedSingletonModel(HookType.Combat)
         await Get(player).OnBeforeAttack(command);
     }
 
-    /// <summary>枚举指定玩家分布在各牌堆中的所有冷却卡实例，用于统一重置/遍历。</summary>
     private static IEnumerable<FgoCooldownCardModel> CooldownCards(Player player)
     {
         return Enum.GetValues<PileType>()
@@ -150,7 +149,6 @@ public sealed class FgoBattleHooks() : HookedSingletonModel(HookType.Combat)
 
         await Get(player).ResetCrit();
 
-        // 冷却机制：
         // 1) 打出一张冷却卡 → 其冷却重置为 CooldownMax（重新进入冷却）；
         // 2) 打出任意一张牌 → 玩家手牌中其余冷却卡冷却 -1（到时为 0 即可打出）。
         var playedCooldown = cardPlay.Card as FgoCooldownCardModel;

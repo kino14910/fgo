@@ -70,7 +70,6 @@ public class LordChaldeas() : NobleCardModel(1, CardType.Power, TargetType.Self)
         await PowerCmd.Apply<NpDamagePower>(choiceContext, fgoAllies,
             DynamicVars[nameof(NpDamagePower)].BaseValue, Owner.Creature, this);
 
-        // NpCard 只作用于打出者自己。
         var power = await PowerCmd.Apply<NpCardPower>(choiceContext, Owner.Creature, 1, Owner.Creature, this);
         if (power != null)
             power.NobleCard = ModelDb.Card<RayProofKyrielight>();

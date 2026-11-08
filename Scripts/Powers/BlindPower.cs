@@ -19,7 +19,6 @@ namespace Fgo.Scripts.Powers;
 /// </remarks>
 public class BlindPower : FgoPowerModel
 {
-    /// <summary>攻击伤害倍率: 降低 25%。</summary>
     private const decimal DamageMultiplier = 0.75m;
 
     public override PowerType Type => PowerType.Debuff;

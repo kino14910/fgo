@@ -112,7 +112,7 @@ public static class FgoNobleDeckSync
         BroadcastOwnDecks();
 
         if (netService is NetHostGameService)
-            BroadcastAllDecks(); // 顺带把已收到的其它玩家牌堆推给所有客户端
+            BroadcastAllDecks();
         else if (netService is NetClientGameService)
             RequestFullResync(); // 再向主机请求一次全量，覆盖中途加入前已存在的牌堆
     }

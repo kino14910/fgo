@@ -41,7 +41,6 @@ public class SparksRoute() : FgoCardModel(0, CardType.Skill,
             if (toMove.Count == 0) return;
         }
 
-        // 2. 升级（只对仍可升级的卡生效）。
         var upgraded = toMove.Where(card => card.IsUpgradable).ToList();
         foreach (var card in upgraded)
             CardCmd.Upgrade(card, CardPreviewStyle.None);

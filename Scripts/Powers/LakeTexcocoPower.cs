@@ -27,7 +27,6 @@ public class LakeTexcocoPower : FgoPowerModel, IPowerExtraIconAmountLabelSpecsPr
         ModCardVars.Int("turns", 3)
     ];
 
-    /// <summary>剩余生效回合数。</summary>
     public decimal Turns
     {
         get => DynamicVars["turns"].BaseValue;
@@ -57,7 +56,6 @@ public class LakeTexcocoPower : FgoPowerModel, IPowerExtraIconAmountLabelSpecsPr
             ExtraIconAmountLabelSpec.RichText(
                 ExtraIconAmountLabelCorner.BottomRight,
                 $"[green]{Amount}%[/green]"),
-            // 右上角: 剩余生效回合
             ExtraIconAmountLabelSpec.Plain(
                 ExtraIconAmountLabelCorner.TopRight,
                 $"×{Turns}")

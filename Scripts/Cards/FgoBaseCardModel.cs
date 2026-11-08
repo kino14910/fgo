@@ -68,10 +68,7 @@ public abstract class FgoBaseCardModel(
         }
 
         // if (target.HasPower<IntangiblePower>())
-        // {
         //     await PowerCmd.Remove<IntangiblePower>(target);
-        //     amount++;
-        // }
 
         return amount;
     }

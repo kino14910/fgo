@@ -25,7 +25,6 @@ public class ToTheSurfaceNautilus() : FgoBaseCardModel(0, CardType.Power,
     CardRarity.Token, TargetType.AnyEnemy,
     false)
 {
-    /// <summary>斩杀时获得的探索点数。</summary>
     private const decimal FatalExplorePoints = 2m;
 
     public override bool CanBeGeneratedInCombat => false;

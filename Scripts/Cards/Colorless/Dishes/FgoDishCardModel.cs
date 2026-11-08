@@ -36,7 +36,6 @@ public abstract class FgoDishCardModel()
         }
     );
 
-    /// <summary>菜品卡的作用范围: 玩家方全队（含自己）。</summary>
     protected IReadOnlyList<Creature> Allies => CombatState!.GetTeammatesOf(Owner.Creature);
 
     protected sealed override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -47,7 +46,6 @@ public abstract class FgoDishCardModel()
         await KurakurasMealsPower.OnDishPlayed(choiceContext, Owner, this);
     }
 
-    /// <summary>菜品自身效果（对 <see cref="Allies" /> 结算）。</summary>
     protected abstract Task ApplyDishEffect(PlayerChoiceContext choiceContext);
 
     /// <summary>

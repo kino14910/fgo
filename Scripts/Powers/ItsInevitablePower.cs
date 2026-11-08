@@ -42,9 +42,7 @@ public class ItsInevitablePower : FgoPowerModel
     {
         return
         [
-            // 右上角: 增长
             ExtraIconAmountLabelSpec.Plain(ExtraIconAmountLabelCorner.TopRight, $"{Boost}%"),
-            // 右下角: 层数
             ExtraIconAmountLabelSpec.Plain(ExtraIconAmountLabelCorner.BottomRight, Amount.ToString())
         ];
     }

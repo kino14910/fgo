@@ -11,22 +11,15 @@ namespace Fgo.Scripts.UI;
 /// </summary>
 /// <remarks>
 ///     <para>
-///         为什么要自己写而不能直接用原版 <c>ftue_confirm_button.tscn</c>：
-///         原版场景的根节点挂着 <c>res://src/Core/Nodes/Ftue/NFtueConfirmButton.cs</c>，
-///         那是主程序集里的 C# 类型，而 mod 的 pck 导出只打包 <c>res://Fgo/**</c> 与
-///         <c>res://Scripts/**</c>（csproj 里 <c>Content Include="Fgo\**"</c>），
-///         跨不过去（mod 项目 <c>D:\projects\fgo</c> 里根本没有 <c>src/</c> 目录）。
+///         不能复用原版 <c>ftue_confirm_button.tscn</c>：其根节点挂的是主程序集
+///         <c>NFtueConfirmButton.cs</c>，而 mod 的 pck 只导出 <c>res://Fgo/**</c> 与
+///         <c>res://Scripts/**</c>，跨不到 <c>src/</c>（mod 项目无此目录）。
 ///     </para>
 ///     <para>
-///         同理按钮里的文字节点也不能挂 <c>res://addons/mega_text/MegaLabel.cs</c>：
-///         导出时 Godot 找不到该路径，<c>script</c> 会静默变 null。
-///         场景里改用引擎原生 <see cref="Label" />，字号自适应在
-///         <see cref="FgoFtueText" /> 里用原版 <c>MegaLabelHelper</c> 的静态测量函数复刻。
-///     </para>
-///     <para>
-///         其余行为与原版保持一致：金色描边呼吸循环 + 聚焦时放大 1.05 倍并提亮
-///         （靠 <c>hsv.gdshader</c> 的 <c>v</c> 参数），手柄热键走
-///         <see cref="MegaInput.select" />。
+///         文字节点同理不能挂 <c>MegaLabel.cs</c>：导出时路径找不到，<c>script</c> 会静默变 null；
+///         改用原生 <see cref="Label" />，字号自适应在 <see cref="FgoFtueText" /> 里用
+///         <c>MegaLabelHelper</c> 的静态测量函数复刻。行为与原版一致：金色描边呼吸 +
+///         聚焦放大 1.05 并借 <c>hsv.gdshader</c> 的 <c>v</c> 提亮，热键 <see cref="MegaInput.select" />。
 ///     </para>
 /// </remarks>
 public sealed partial class FgoFtueConfirmButton : NButton
@@ -36,9 +29,8 @@ public sealed partial class FgoFtueConfirmButton : NButton
     /// </summary>
     /// <remarks>
     ///     <b>上限必须显式给，不能用 <see cref="FgoFtueText.SetAutoSizeText(Label,string,int,int)" /> 的默认值 100</b>：
-    ///     原版这个 Label 挂的是 <c>MegaLabel</c> 且 <c>MaxFontSize = 24</c>，场景里没有另行声明上限。
-    ///     换成原生 Label 后若沿用默认 100，auto-size 二分会在「按钮实际能放下」的范围内
-    ///     一直撑到最大，「Got it!」这种短文本会顶到 40+ px，视觉上明显过大。
+    ///     原版 Label 挂 <c>MegaLabel</c> 且 <c>MaxFontSize = 24</c>，无另行声明上限；换成原生 Label 后
+    ///     若沿用默认 100，短文本（如「Got it!」）会被 auto-size 撑到 40+ px，明显过大。
     /// </remarks>
     private const int FontMinSize = 12;
 

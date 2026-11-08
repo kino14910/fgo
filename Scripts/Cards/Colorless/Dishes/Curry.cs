@@ -7,7 +7,6 @@ using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards.Colorless.Dishes;
 
-/// <summary>咖喱: 所有友方获得 3(6) 点额外最大生命值。</summary>
 public class Curry : FgoDishCardModel
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>

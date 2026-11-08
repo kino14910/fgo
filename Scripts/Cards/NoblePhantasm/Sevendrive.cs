@@ -33,7 +33,6 @@ public class Sevendrive() : NobleCardModel(1, CardType.Attack, TargetType.AllEne
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        // 获得2临时力量（回合结束自动失去）
         await PowerCmd.Apply<SevendrivePower>(choiceContext, Owner.Creature,
             DynamicVars[nameof(SevendrivePower)].BaseValue,
             Owner.Creature, this);

@@ -24,8 +24,8 @@ namespace Fgo.Scripts.Fields;
 ///     读起来不会出现"别的都是 await、只有场地是裸调用"的割裂。
 ///     <b>但返回的 Task 恒为已完成，这些方法内部绝不能引入真正的 <c>await</c>。</b>
 ///     原因有二:
-///     ① 调用点普遍是「连续写入 → 紧接着读取」的模式（如 <c>GreatVoidSeaBattle</c> 连加两个场地后立刻
-///     <c>EnterAll</c>；<c>FgoFieldEffects.OnPlayerSideTurnStart</c> <c>TickDown</c> 之后马上按 <c>Has</c> 结算），
+///     ① 调用点普遍是「连续写入 → 紧接着读取」的模式（如 <c>GreatVoidSeaBattle</c> 加完场地后立刻进入虚数空间、
+///     <c>FgoFieldEffects.OnPlayerSideTurnStart</c> 在 <c>TickDown</c> 之后按 <c>Has</c> 结算），
 ///     一旦中间真的让出，游戏循环可能插进来跑一帧，逐帧轮询的 HUD / 背景就会观察到"只写了一半"的状态；
 ///     ② 这些写入发生在被复制的游戏动作内，各端各跑一遍，同步落地才能保证各端序列一致。
 ///     真正的异步（需要 <c>PlayerChoiceContext</c> 的引擎调用）请放在 <see cref="FgoFieldEffects" /> 里，
@@ -66,7 +66,7 @@ public static class FgoField
 
     /// <summary>
     ///     叠加场地层数（= 持续回合数）。已存在则累加，因此重复施加可以延长同一个场地。
-    ///     回合数由施加方（各张卡牌）自行给出，这里不做统一。
+    ///     回合数由施加方（各张卡牌、章节进场）自行给出，这里不做统一。
     /// </summary>
     /// <returns>是否发生了实际变化。返回的 Task 恒为已完成，见类型 remarks。</returns>
     public static Task<bool> Add(ICombatState? combat, FgoFieldId id, int stacks = 1)
@@ -74,13 +74,11 @@ public static class FgoField
         return Task.FromResult(combat != null && States.GetOrCreate(combat).Add(id, stacks));
     }
 
-    /// <summary>移除场地。原本不存在时返回 false。</summary>
     public static Task<bool> Remove(ICombatState? combat, FgoFieldId id)
     {
         return Task.FromResult(combat != null && States.GetValueOrDefault(combat) is { } state && state.Remove(id));
     }
 
-    /// <summary>每回合开始时调用: 对所有「有时限」的场地各 -1 层，归零即移除。</summary>
     public static Task TickDown(ICombatState? combat)
     {
         if (combat == null) return Task.CompletedTask;

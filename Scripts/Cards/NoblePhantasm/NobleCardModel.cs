@@ -62,7 +62,6 @@ public abstract class NobleCardModel(
     );
 
     // public PileType? GetResultPileTypeForCardPlay(CardModel card) => PileType.None;
-    //
     protected override CardLocation GetResultLocationForCardPlay()
     {
         return new CardLocation(Owner, PileType.None, CardPilePosition.Bottom);

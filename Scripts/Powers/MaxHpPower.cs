@@ -31,7 +31,7 @@ public class MaxHpPower : FgoPowerModel
 
     public override Task AfterApplied(Creature? applier, CardModel? cardSource)
     {
-        var delta = Amount - _lastAmount; // 相对于上次的增量
+        var delta = Amount - _lastAmount;
         if (delta != 0)
         {
             var hpChange = delta * DynamicVars["HpPerStack"].BaseValue;
