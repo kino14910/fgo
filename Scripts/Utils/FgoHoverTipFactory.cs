@@ -1,4 +1,5 @@
 using Fgo.Scripts.Fields;
+using Godot;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization;
 using STS2RitsuLib.Cards.DynamicVars;
@@ -7,6 +8,11 @@ namespace Fgo.Scripts.Utils;
 
 public static class FgoHoverTipFactory
 {
+    private const string VoidSpaceIconPath = "res://Fgo/images/fields/ImaginarySpace.png";
+
+    private static Texture2D? _voidSpaceIcon;
+    private static bool _voidSpaceIconLoaded;
+
     public static HoverTip FromNp()
     {
         var title = new LocString(
@@ -148,5 +154,22 @@ public static class FgoHoverTipFactory
     public static HoverTip FromField(FgoFieldId id)
     {
         return id.ToHoverTip();
+    }
+
+    /// <summary>〔虚数空间〕是按玩家持有的单人效果，不走场地表，故单独构造提示并复用原图标。</summary>
+    public static HoverTip FromVoidSpace()
+    {
+        if (!_voidSpaceIconLoaded)
+        {
+            _voidSpaceIconLoaded = true;
+            _voidSpaceIcon = ResourceLoader.Exists(VoidSpaceIconPath)
+                ? GD.Load<Texture2D>(VoidSpaceIconPath)
+                : null;
+        }
+
+        return new HoverTip(
+            new LocString("static_hover_tips", "FGO_STATIC_HOVER_TIPS_VOID_SPACE.title"),
+            new LocString("static_hover_tips", "FGO_STATIC_HOVER_TIPS_VOID_SPACE.description"),
+            _voidSpaceIcon);
     }
 }

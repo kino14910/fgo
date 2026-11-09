@@ -8,10 +8,10 @@ using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Models.CardPools;
 using STS2RitsuLib.Interop.AutoRegistration;
 
-namespace Fgo.Scripts.Cards.DerivativeNemo;
+namespace Fgo.Scripts.Cards.Colorless.DerivativeNemo;
 
 /// <summary>
-///     航线规划: 拆掉 1 层〔水边〕换取 1 点探索点数；打出后回到手牌。
+///     航线规划: 1 层水边-> 1 点探索点数；打出后回到手牌。
 /// </summary>
 /// <remarks>
 ///     「打出后回到手牌」靠重写 <see cref="GetResultLocationForCardPlay" /> 把结果牌堆从弃牌堆改成

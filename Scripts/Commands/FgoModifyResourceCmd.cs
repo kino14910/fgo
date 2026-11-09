@@ -1,8 +1,9 @@
-using Fgo.Scripts.Commands;
 using MegaCrit.Sts2.Core.DevConsole;
 using MegaCrit.Sts2.Core.DevConsole.ConsoleCommands;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Runs;
+
+namespace Fgo.Scripts.Commands;
 
 public sealed class FgoModifyNpCmd : AbstractConsoleCmd
 {

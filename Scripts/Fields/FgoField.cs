@@ -1,4 +1,6 @@
 using MegaCrit.Sts2.Core.Combat;
+using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Models.Acts;
 using STS2RitsuLib.Utils;
 
 namespace Fgo.Scripts.Fields;
@@ -33,10 +35,30 @@ namespace Fgo.Scripts.Fields;
 /// </remarks>
 public static class FgoField
 {
+    /// <summary>章节进场时自带场地的持续回合数。</summary>
+    public const int ActFieldTurns = 3;
+
     private static readonly AttachedState<ICombatState, FgoFieldState> States =
         new(() => new FgoFieldState());
 
-    /// <summary>取该战斗的场地表；战斗为空或尚无任何场地改动时返回 null。</summary>
+    /// <summary>当前 Act 进场时自带的场地；未映射的 Act 返回 null。</summary>
+    public static FgoFieldId? FieldForAct(ActModel? act)
+    {
+        switch (act)
+        {
+            case Underdocks:
+                return FgoFieldId.Waterside;
+            case Overgrowth:
+                return FgoFieldId.Forest;
+            case Hive:
+                return FgoFieldId.Darkness;
+            case Glory:
+                return FgoFieldId.City;
+            default:
+                return null;
+        }
+    }
+
     public static FgoFieldState? Of(ICombatState? combat)
     {
         return combat == null ? null : States.GetValueOrDefault(combat);

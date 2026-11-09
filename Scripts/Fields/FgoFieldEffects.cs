@@ -37,36 +37,26 @@ public static class FgoFieldEffects
     /// <summary>〔阳光照射〕我方回合开始时，己方单位在翻倍既有「活力」之外额外获得的「活力」层数。</summary>
     public const decimal SunlightTurnStartVigor = 4m;
 
+    /// <summary>〔都市〕我方回合开始时，每名玩家获得的能量。</summary>
+    public const decimal CityEnergy = 1m;
+
+    /// <summary>〔都市〕我方回合开始时，没有「人工制品」的敌人获得的人工制品层数。</summary>
+    public const decimal CityArtifactStacks = 1m;
+
     /// <summary>
-    ///     我方（玩家方）回合开始: 先让有时限的场地递减，再依次结算「水边」「黑暗」「森林」「阳光照射」。
+    ///     我方（玩家方）回合开始: 先依次结算「水边」「黑暗」「森林」「阳光照射」「都市」，最后让有时限的场地递减。
     /// </summary>
     /// <remarks>
-    ///     先递减再结算: 层数 N 表示该场地存在 N 个我方回合（施放当回合算第 1 个）。
-    ///     由于施放当回合的回合开始已经过去，「回合开始」类结算从下一回合起才触发
-    ///     （共 N-1 次）；「回合结束」类结算当回合就会触发（共 N 次）。
-    ///     <para />
-    ///     <see cref="MegaCrit.Sts2.Core.Models.AbstractModel.AfterSideTurnStart" /> 不带
-    ///     <see cref="PlayerChoiceContext" />，而施加能力需要它；这里用
-    ///     <see cref="BlockingPlayerChoiceContext" />（场地施加不产生玩家选择，不存在阻塞风险）。
-    ///     <para />
-    ///     能力来源是战场本身而非某个生物，因此 <c>applier</c> 传 null。
-    ///     <c>PowerCmd.Apply</c> 显式支持 null applier（内部只跳过「施加方修正」那一段）。
-    ///     <para />
-    ///     <c>await FgoField.TickDown</c> 的 Task 恒为已完成（见 <see cref="FgoField" /> 的 remarks），
-    ///     因此递减仍是同步落地的，紧随其后的 <c>Has</c> 判定看到的一定是递减后的状态。
+    ///     先结算再递减：层数 N = 「回合开始」类结算 N 次，进场场地不会在首回合白掉一层。
+    ///     用 <see cref="BlockingPlayerChoiceContext" />（场地施加无玩家选择，无阻塞风险）；能力来源是战场、applier 传 null（<c>PowerCmd.Apply</c> 显式支持）。
+    ///     <c>await FgoField.TickDown</c> 的 Task 恒已完成（见 <see cref="FgoField" /> 的 remarks），递减同步落地。
     /// </remarks>
     public static async Task OnPlayerSideTurnStart(ICombatState combat)
     {
-        await FgoField.TickDown(combat);
-
         // 重置〔阳光照射〕的「本回合首次攻击牌」标记：每回合重新计一次。
         var sunlightTurn = FgoField.Of(combat);
         if (sunlightTurn != null)
             sunlightTurn.SunlightAttackPlayedThisTurn = false;
-
-        // 递减之后立刻结算〔虚数空间〕的到期退出：side 级钩子每轮只跑一次，
-        // 因此「场次结束」会在同一份复制动作里对所有人同时发生（见 FgoVoidHand.ExitIfInactive）。
-        await FgoVoidHand.ExitIfInactive(combat);
 
         if (FgoField.Has(combat, FgoFieldId.Waterside))
             foreach (var creature in LivingUnits(combat))
@@ -74,39 +64,48 @@ public static class FgoFieldEffects
 
         var choiceContext = new BlockingPlayerChoiceContext();
         var units = LivingUnits(combat);
-        if (units.Count <= 0) return;
-
-        if (FgoField.Has(combat, FgoFieldId.Darkness))
-            await PowerCmd.Apply<BlindPower>(choiceContext, units, DarknessBlindStacks, null, null);
-
-        if (FgoField.Has(combat, FgoFieldId.Forest))
+        if (units.Count > 0)
         {
-            var wounded = units.Where(static c => c.CurrentHp < c.MaxHp * ForestRegenHpRatio).ToList();
-            if (wounded.Count > 0)
-                await PowerCmd.Apply<RegenPower>(choiceContext, wounded, ForestRegenAmount, null, null);
+            if (FgoField.Has(combat, FgoFieldId.Darkness))
+                await PowerCmd.Apply<BlindPower>(choiceContext, units, DarknessBlindStacks, null, null);
+
+            if (FgoField.Has(combat, FgoFieldId.Forest))
+            {
+                var wounded = units.Where(static c => c.CurrentHp < c.MaxHp * ForestRegenHpRatio).ToList();
+                if (wounded.Count > 0)
+                    await PowerCmd.Apply<RegenPower>(choiceContext, wounded, ForestRegenAmount, null, null);
+            }
+
+            if (FgoField.Has(combat, FgoFieldId.Sunlight))
+                foreach (var ally in LivingAllies(combat))
+                {
+                    var vigor = ally.GetPower<VigorPower>()?.Amount ?? 0;
+                    await PowerCmd.Apply<VigorPower>(choiceContext, ally, vigor + SunlightTurnStartVigor, null, null);
+                }
         }
 
-        if (FgoField.Has(combat, FgoFieldId.Sunlight))
-            foreach (var ally in LivingAllies(combat))
-            {
-                var vigor = ally.GetPower<VigorPower>()?.Amount ?? 0;
-                await PowerCmd.Apply<VigorPower>(choiceContext, ally, vigor + SunlightTurnStartVigor, null, null);
-            }
+        // 最后结算：人工制品会抵消之后施加的减益，不能抢在〔黑暗〕等场地之前。
+        if (FgoField.Has(combat, FgoFieldId.City))
+        {
+            foreach (var player in combat.Players)
+                await PlayerCmd.GainEnergy(CityEnergy, player);
+
+            var unprotected = combat.Enemies
+                .Where(static e => e.IsAlive && e.GetPower<ArtifactPower>() is not { Amount: > 0 })
+                .ToList();
+            if (unprotected.Count > 0)
+                await PowerCmd.Apply<ArtifactPower>(choiceContext, unprotected, CityArtifactStacks, null, null);
+        }
+
+        await FgoField.TickDown(combat);
     }
 
     /// <summary>
     ///     我方（玩家方）回合结束: 结算「燃烧」（伤害）。
     /// </summary>
     /// <remarks>
-    ///     <para>
-    ///         伤害用 <see cref="ValueProp.Unpowered" />（来自能力/效果而非攻击）结算:
-    ///         不吃力量、不吃易伤，也不会触发暴击、宝具值等攻击侧逻辑；可被格挡。
-    ///     </para>
-    ///     <para>
-    ///         〔阳光照射〕已改到回合开始结算（见 <see cref="OnPlayerSideTurnStart" />），
-    ///         是唯一**只对己方单位生效**的场地（<c>combat.Allies</c>，含随从），
-    ///         其余场地均对战场上所有单位（含敌方）生效。
-    ///     </para>
+    ///     伤害用 <see cref="ValueProp.Unpowered" />（来自效果而非攻击）结算：不吃力量/易伤、不触发暴击与宝具值，但可被格挡。
+    ///     〔阳光照射〕已改到回合开始结算（见 <see cref="OnPlayerSideTurnStart" />），是唯一只对己方（含随从）生效的场地；其余场地对敌我所有单位生效。
     /// </remarks>
     public static async Task OnPlayerSideTurnEnd(PlayerChoiceContext choiceContext, ICombatState combat)
     {
@@ -143,19 +142,15 @@ public static class FgoFieldEffects
     }
 
     /// <summary>
-    ///     每名玩家回合开始时: 对〔虚数空间〕的「替换手牌」状态做一次自愈式对账。
+    ///     每名玩家回合开始时: 自愈式补齐〔虚数空间〕专用牌、清理残留状态。
     /// </summary>
     /// <remarks>
-    ///     这一段刻意挂在 <c>AfterPlayerTurnStart</c>（每名玩家各一次）而不是 side 级钩子:
-    ///     状态是**按玩家**的（每个玩家的手牌/额外手牌各一份），按玩家结算才对得上。
-    ///     <para />
-    ///     实际进出由 <see cref="FgoVoidHand" /> 负责；这里只处理"该修就修"的两种情况，
-    ///     正常路径是进入那一刻（<c>GreatVoidSeaBattle</c> 出牌时）就已经替换好了。
+    ///     必须挂 <c>AfterPlayerTurnStart</c>（每名玩家各一次）而非 side 级：虚数空间是按玩家持有的单人效果，
+    ///     各人独立进出，不能由战场级钩子统一裁决。这里不计时，虚数空间不会自动到期。
     /// </remarks>
-    public static Task OnPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
+    public static Task OnPlayerTurnStart(Player player)
     {
-        var combat = player.Creature.CombatState;
-        return combat == null ? Task.CompletedTask : FgoVoidHand.Reconcile(combat, player);
+        return FgoVoidHand.OnPlayerTurnStart(player);
     }
 
     /// <summary>战场上的所有存活单位（敌我双方）。</summary>

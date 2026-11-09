@@ -72,7 +72,7 @@ public class FgoCharacter : ModCharacterTemplate<FgoCardPool, FgoRelicPool, FgoP
             VanillaRelicVisualOverrides:
             [
                 new CharacterVanillaRelicVisualOverride(CharacterOwnedVanillaRelicModelId.YummyCookie,
-                    new RelicAssetProfile("res://Fgo/images/relics/big/YummyCookieFgo.png")) // 美味饼干覆盖
+                    new RelicAssetProfile("res://Fgo/images/relics/big/YummyCookieFgo.png"))
             ],
             VanillaPotionVisualOverrides: []
         ));

@@ -9,7 +9,7 @@ using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Models.CardPools;
 using STS2RitsuLib.Interop.AutoRegistration;
 
-namespace Fgo.Scripts.Cards.DerivativeNemo;
+namespace Fgo.Scripts.Cards.Colorless.DerivativeNemo;
 
 /// <summary>
 ///     上浮吧鹦鹉螺号: 对一名敌人打出<b>鹦鹉螺的大冲角</b>；若斩杀该敌人，获得 2 点探索点数。

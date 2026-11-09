@@ -1,4 +1,3 @@
-using Fgo.Scripts.Fields;
 using Fgo.Scripts.Powers;
 using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.Commands;
@@ -8,7 +7,7 @@ using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Models.CardPools;
 using STS2RitsuLib.Interop.AutoRegistration;
 
-namespace Fgo.Scripts.Cards.DerivativeNemo;
+namespace Fgo.Scripts.Cards.Colorless.DerivativeNemo;
 
 /// <summary>
 ///     好似飞鸟: 在〔虚数空间〕中造成的伤害变为 200%。
@@ -26,7 +25,7 @@ public class LikeABird() : FgoBaseCardModel(0, CardType.Power,
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
-        FgoFieldId.ImaginarySpace.ToHoverTip(),
+        FgoHoverTipFactory.FromVoidSpace(),
         HoverTipFactory.FromPower<LikeABirdPower>()
     ];
 

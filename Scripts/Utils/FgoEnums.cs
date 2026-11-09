@@ -1,5 +1,4 @@
 using Fgo.Scripts.Character;
-using Fgo.Scripts.Fields;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using STS2RitsuLib;
 using STS2RitsuLib.CardPiles;
@@ -55,10 +54,10 @@ public static class FgoEnums
                     // 不叠加原版手牌的回合结束语义: 钥匙卡要跨回合保留（只有主动打出才离开虚数空间）。
                     Behaviors = ModExtraHandBehavior.None
                 },
-                // 不在虚数空间里就整条隐藏，避免空容器挂在手牌位置上。
+                // 只按该控件绑定的玩家判定：联机时其他玩家进入虚数空间不该让自己这里冒出空手牌区。
                 VisibleWhen = ctx =>
                     ctx.Player is null
-                    || FgoField.Has(ctx.Player.Creature.CombatState, FgoFieldId.ImaginarySpace)
+                    || FgoVoidHand.IsInside(ctx.Player)
             }).PileType;
 
         VoidHold = ModCardPileRegistry.For(modId)

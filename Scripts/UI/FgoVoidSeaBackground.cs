@@ -1,6 +1,7 @@
-using Fgo.Scripts.Fields;
+using Fgo.Scripts.Utils;
 using Godot;
 using MegaCrit.Sts2.Core.Combat;
+using MegaCrit.Sts2.Core.Context;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
 using STS2RitsuLib;
 using STS2RitsuLib.Scaffolding.Godot;
@@ -115,7 +116,7 @@ public sealed partial class FgoVoidSeaBackground : Node
             return;
         }
 
-        var inVoidSpace = FgoField.Has(combat, FgoFieldId.ImaginarySpace);
+        var inVoidSpace = FgoVoidHand.IsInside(LocalContext.GetMe(combat));
         if (inVoidSpace == instance._lastInVoidSpace) return;
 
         Entry.Logger.Info($"[Fgo] VoidSea: edge -> inVoidSpace={inVoidSpace}");

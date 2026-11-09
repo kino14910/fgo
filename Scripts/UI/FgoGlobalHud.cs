@@ -6,6 +6,7 @@ using Fgo.Scripts.Utils;
 using Godot;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Context;
+using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Nodes.Combat;
@@ -323,7 +324,7 @@ public sealed partial class FgoGlobalHud : Control
             RebuildFieldRow(state);
         }
 
-        SyncVoidSpaceHand(state);
+        SyncVoidSpaceHand(player);
     }
 
     /// <summary>
@@ -339,13 +340,14 @@ public sealed partial class FgoGlobalHud : Control
     ///         <c>CardHolderContainer</c> 里（<c>AddCardHolder</c> 只往它里面塞 holder），所以藏它一个就够。
     ///     </para>
     ///     <para>
-    ///         真实手牌已被 <c>FgoVoidHand</c> 搬进无界面的暂存牌堆，但期间**新抽到的牌仍会落进原版手牌**，
-    ///         不隐藏的就会和额外手牌区（同一套手牌扇形布局）叠在一起。这里只改本机 UI，属表现层同步。
+    ///         真实手牌已被 <c>FgoVoidHand</c> 搬进无界面的暂存牌堆，期间抽牌被 <c>ImaginarySpacePower</c> 拦下；
+    ///         仍要隐藏卡牌容器，避免残留牌位与额外手牌区（同一套手牌扇形布局）叠在一起。
+    ///         判定按<b>本地玩家</b>：联机时别人进入虚数空间不影响自己的手牌区。
     ///     </para>
     /// </remarks>
-    private void SyncVoidSpaceHand(ICombatState? combat)
+    private void SyncVoidSpaceHand(Player? player)
     {
-        var inVoidSpace = FgoField.Has(combat, FgoFieldId.ImaginarySpace);
+        var inVoidSpace = FgoVoidHand.IsInside(player);
         if (inVoidSpace != _lastVoidSpace)
         {
             _lastVoidSpace = inVoidSpace;

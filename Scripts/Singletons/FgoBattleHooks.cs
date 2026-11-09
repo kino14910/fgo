@@ -71,6 +71,14 @@ public sealed class FgoBattleHooks() : HookedSingletonModel(HookType.Combat)
 
         var combat = CurrentCombatState;
         if (combat == null) return;
+
+        // StacksOf 判空是幂等保护：同一场战斗重复触发不叠加层数。
+        var actField = FgoField.FieldForAct(combat.RunState.Act);
+        if (actField is { } fieldId
+            && combat.Players.Any(static p => p.Character is FgoCharacter)
+            && FgoField.StacksOf(combat, fieldId) == 0)
+            await FgoField.Add(combat, fieldId, FgoField.ActFieldTurns);
+
         foreach (var player in combat.Players)
         {
             if (player.Character is not FgoCharacter)
@@ -161,8 +169,8 @@ public sealed class FgoBattleHooks() : HookedSingletonModel(HookType.Combat)
 
     public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
     {
-        // 场地效果对所有玩家生效（场地是战场级属性），先于 FGO 角色专有逻辑结算。
-        await FgoFieldEffects.OnPlayerTurnStart(choiceContext, player);
+        // 〔虚数空间〕是按玩家结算的单人效果，先于 FGO 角色专有逻辑。
+        await FgoFieldEffects.OnPlayerTurnStart(player);
 
         if (player.Character is not FgoCharacter)
             return;
