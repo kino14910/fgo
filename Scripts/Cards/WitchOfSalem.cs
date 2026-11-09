@@ -10,7 +10,7 @@ using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
 
-public class WitchOfSalem() : FgoCardModel(1, CardType.Power,
+public class WitchOfSalem() : FgoCardModel(2, CardType.Power,
     CardRarity.Rare, TargetType.Self)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>

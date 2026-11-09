@@ -20,14 +20,18 @@ public class SniperRifle() : FgoBaseCardModel(0, CardType.Attack,
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        ModCardVars.Int("LowHpBonus", 6),
         ModCardVars.ComputedDamage("SniperDamage", 6m, static (card, target) =>
         {
             var baseDamage = card?.DynamicVars["SniperDamage"].BaseValue ?? 6m;
             var bonus = card?.DynamicVars["LowHpBonus"].BaseValue ?? 0m;
-            return target != null && target.CurrentHp * 2m <= target.MaxHp ? baseDamage + bonus : baseDamage;
+            return target != null && target.CurrentHp * 2m <= target.MaxHp ? baseDamage * 2 : baseDamage;
         })
     ];
+
+    protected override void OnUpgrade()
+    {
+        DynamicVars["SniperDamage"].UpgradeValueBy(2);
+    }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {

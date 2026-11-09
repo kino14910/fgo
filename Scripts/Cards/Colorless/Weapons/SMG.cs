@@ -20,6 +20,11 @@ public class SMG() : FgoBaseCardModel(0, CardType.Attack, CardRarity.Token,
         ModCardVars.Int("Hits", 3)
     ];
 
+    protected override void OnUpgrade()
+    {
+        DynamicVars["Hits"].UpgradeValueBy(1);
+    }
+
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         ArgumentNullException.ThrowIfNull(cardPlay.Target, nameof(cardPlay.Target));

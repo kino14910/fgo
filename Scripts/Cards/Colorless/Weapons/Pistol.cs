@@ -20,6 +20,11 @@ public class Pistol() : FgoBaseCardModel(0, CardType.Attack,
         ModCardVars.Cards(1)
     ];
 
+    protected override void OnUpgrade()
+    {
+        DynamicVars.Damage.UpgradeValueBy(1);
+    }
+
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         ArgumentNullException.ThrowIfNull(cardPlay.Target, nameof(cardPlay.Target));

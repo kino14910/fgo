@@ -17,9 +17,13 @@ public class RocketLauncher() : FgoBaseCardModel(0, CardType.Attack,
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        ModCardVars.Damage(8),
-        ModCardVars.Int("Splash", 4)
+        ModCardVars.Damage(8)
     ];
+
+    protected override void OnUpgrade()
+    {
+        DynamicVars.Damage.UpgradeValueBy(2);
+    }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -40,7 +44,7 @@ public class RocketLauncher() : FgoBaseCardModel(0, CardType.Attack,
         var others = combat.HittableEnemies.Where(enemy => enemy != target && enemy.IsAlive).ToList();
         if (others.Count == 0) return;
 
-        await CreatureCmd.Damage(choiceContext, others, DynamicVars["Splash"].BaseValue,
+        await CreatureCmd.Damage(choiceContext, others, DynamicVars.Damage.BaseValue / 2m,
             ValueProp.Move, Owner.Creature, this, cardPlay);
     }
 }

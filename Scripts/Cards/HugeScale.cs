@@ -15,7 +15,7 @@ namespace Fgo.Scripts.Cards;
 ///     巨型规模：打出后获得 HugeScalePower。
 ///     在每个回合开始获得额外最大生命值，并将一张幼儿退化加入手牌。
 /// </summary>
-public class HugeScale() : FgoCardModel(2, CardType.Power,
+public class HugeScale() : FgoCardModel(1, CardType.Power,
     CardRarity.Uncommon, TargetType.Self)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>

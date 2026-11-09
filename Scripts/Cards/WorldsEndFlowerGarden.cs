@@ -9,7 +9,7 @@ using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
 
-public class WorldsEndFlowerGarden() : FgoCardModel(0, CardType.Power,
+public class WorldsEndFlowerGarden() : FgoCardModel(1, CardType.Power,
     CardRarity.Uncommon, TargetType.Self)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>

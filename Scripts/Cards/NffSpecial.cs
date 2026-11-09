@@ -5,6 +5,7 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.Nodes.CommonUi;
 using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
@@ -33,11 +34,6 @@ public class NffSpecial() : FgoCardModel(0, CardType.Skill,
         ModCardVars.Cards(2)
     ];
 
-    protected override void OnUpgrade()
-    {
-        DynamicVars.Cards.UpgradeValueBy(1);
-    }
-
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         // 按"恰好 count 张"选: 手牌不足时把数量压到实际手牌数，否则选牌界面开不出来。
@@ -48,6 +44,17 @@ public class NffSpecial() : FgoCardModel(0, CardType.Skill,
         var selected = (await CardSelectCmd.FromHand(choiceContext, Owner, prefs, null, this)).ToArray();
 
         foreach (var card in selected)
-            await CardCmd.TransformTo<GunDealer>(card);
+        {
+            if (IsUpgraded)
+            {
+                var replacement = card.CardScope!.CreateCard<GunDealer>(card.Owner);
+                CardCmd.Upgrade(replacement, CardPreviewStyle.None);
+                await CardCmd.Transform(card, replacement);
+            }
+            else
+            {
+                await CardCmd.TransformTo<GunDealer>(card);
+            }
+        }
     }
 }

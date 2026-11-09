@@ -5,6 +5,7 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.CardPools;
+using MegaCrit.Sts2.Core.Nodes.CommonUi;
 using STS2RitsuLib.Interop.AutoRegistration;
 
 namespace Fgo.Scripts.Cards.Colorless.Weapons;
@@ -52,6 +53,9 @@ public class GunDealer() : FgoBaseCardModel(0, CardType.Skill,
             combat.CreateCard<SniperRifle>(Owner),
             combat.CreateCard<RocketLauncher>(Owner)
         };
+
+        if (IsUpgraded)
+            CardCmd.Upgrade(options, CardPreviewStyle.None);
 
         var selected = await FgoCardActions.FromChooseACardScreenUncapped(choiceContext, options, Owner);
 
