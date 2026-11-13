@@ -354,7 +354,7 @@
   "FGO_CARD_SMG.title": "冲锋枪",
   "FGO_CARD_SMG.description": "造成{Damage:diff()}点伤害{Hits:diff()}次。",
   "FGO_CARD_SNIPER_RIFLE.title": "狙击枪",
-  "FGO_CARD_SNIPER_RIFLE.description": "造成{SniperDamage:diff()}点伤害。\n目标生命值低于其上限50%时，伤害额外提高{LowHpBonus:diff()}点。",
+  "FGO_CARD_SNIPER_RIFLE.description": "造成{SniperDamage:diff()}点伤害。\n目标生命值低于其上限50%时，伤害翻倍。",
   "FGO_CARD_ROCKET_LAUNCHER.title": "火箭筒",
   "FGO_CARD_ROCKET_LAUNCHER.description": "造成{Damage:diff()}点伤害。\n对其他敌人造成{Splash:diff()}点伤害。",
   "FGO_CARD_ZHANG_JIAO.title": "苍天已死，黄天当立",

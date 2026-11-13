@@ -354,7 +354,7 @@
   "FGO_CARD_SMG.title": "サブマシンガン",
   "FGO_CARD_SMG.description": "{Damage:diff()}ダメージを{Hits:diff()}回与える。",
   "FGO_CARD_SNIPER_RIFLE.title": "狙撃銃",
-  "FGO_CARD_SNIPER_RIFLE.description": "{SniperDamage:diff()}ダメージを与える。\n対象のHPがその最大HPの50%未満の場合、{LowHpBonus:diff()}の追加ダメージを与える。",
+  "FGO_CARD_SNIPER_RIFLE.description": "{SniperDamage:diff()}ダメージを与える。\n対象のHPがその最大HPの50%未満の場合、ダメージが倍になる。",
   "FGO_CARD_ROCKET_LAUNCHER.title": "ロケットランチャー",
   "FGO_CARD_ROCKET_LAUNCHER.description": "{Damage:diff()}ダメージを与える。\n他の敵に{Splash:diff()}ダメージを与える。",
   "FGO_CARD_ZHANG_JIAO.title": "蒼天已死、黄天當立",

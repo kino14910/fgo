@@ -354,7 +354,7 @@
   "FGO_CARD_SMG.title": "SMG",
   "FGO_CARD_SMG.description": "Deal {Damage:diff()} damage {Hits:diff()} times.",
   "FGO_CARD_SNIPER_RIFLE.title": "Sniper Rifle",
-  "FGO_CARD_SNIPER_RIFLE.description": "Deal {SniperDamage:diff()} damage.\nIf the target's HP is below 50% of its Max HP, deal {LowHpBonus:diff()} additional damage.",
+  "FGO_CARD_SNIPER_RIFLE.description": "Deal {SniperDamage:diff()} damage.\nIf the target's HP is below 50% of its Max HP, double this damage.",
   "FGO_CARD_ROCKET_LAUNCHER.title": "Rocket Launcher",
   "FGO_CARD_ROCKET_LAUNCHER.description": "Deal {Damage:diff()} damage.\nDeal {Splash:diff()} damage to the other enemies.",
   "FGO_CARD_ZHANG_JIAO.title": "Soutensudenishisu, Koutenmasanitatsubeshi",
