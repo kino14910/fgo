@@ -17,7 +17,7 @@ namespace Fgo.Scripts.Cards;
 ///     选牌用 <c>CardSelectCmd.FromHand</c>（候选就是本端手牌，各端一致；结果按 index 跨端同步），
 ///     转换用 <c>CardCmd.TransformTo</c> 原地替换，保留原牌的位置。
 /// </remarks>
-public class NffSpecial() : FgoCardModel(0, CardType.Skill,
+public class NffSpecial() : FgoCardModel(1, CardType.Skill,
     CardRarity.Uncommon, TargetType.Self)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
