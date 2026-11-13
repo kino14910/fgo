@@ -11,7 +11,7 @@ using STS2RitsuLib.Cards.DynamicVars;
 namespace Fgo.Scripts.Cards;
 
 public class StarHunter() : FgoCardModel(1, CardType.Skill,
-    CardRarity.Uncommon, TargetType.Self)
+    CardRarity.Rare, TargetType.Self)
 {
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [

@@ -1,4 +1,5 @@
 using Fgo.Scripts.Fields;
+using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -29,7 +30,9 @@ public class CafeterrasBijNacht() : NobleCardModel(2, CardType.Attack, TargetTyp
         FgoFieldId.City.ToHoverTip(),
         HoverTipFactory.Static(StaticHoverTip.Stun)
     ];
-
+    
+    protected override HashSet<CardTag> CanonicalTags => [FgoTags.Foreigner];
+    
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         ModCardVars.Damage(32),

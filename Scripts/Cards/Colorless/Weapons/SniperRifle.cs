@@ -23,7 +23,6 @@ public class SniperRifle() : FgoBaseCardModel(0, CardType.Attack,
         ModCardVars.ComputedDamage("SniperDamage", 6m, static (card, target) =>
         {
             var baseDamage = card?.DynamicVars["SniperDamage"].BaseValue ?? 6m;
-            var bonus = card?.DynamicVars["LowHpBonus"].BaseValue ?? 0m;
             return target != null && target.CurrentHp * 2m <= target.MaxHp ? baseDamage * 2 : baseDamage;
         })
     ];

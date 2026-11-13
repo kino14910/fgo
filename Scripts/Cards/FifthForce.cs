@@ -8,8 +8,8 @@ using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards;
 
-public class FifthForce() : FgoCardModel(0, CardType.Skill,
-    CardRarity.Rare, TargetType.Self)
+public class FifthForce() : FgoCardModel(1, CardType.Skill,
+    CardRarity.Uncommon, TargetType.Self)
 {
     private FifthForcePower? _fifthForcePower;
 
