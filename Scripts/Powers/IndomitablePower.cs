@@ -2,6 +2,7 @@ using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
 using STS2RitsuLib.Scaffolding.Content;
 
@@ -17,13 +18,13 @@ public class IndomitablePower : FgoPowerModel
         "res://Fgo/images/powers/big/TriggerAfterGutsPowerPower.png"
     );
 
-    public override async Task AfterDeath(PlayerChoiceContext choiceContext, Creature creature,
+    public override async Task AfterDeath(PlayerChoiceContext choiceContext, Creature creature, CardModel? source,
         bool wasRemovalPrevented, float deathAnimLength)
     {
         if (wasRemovalPrevented && creature == Owner)
         {
             Flash();
-            await PowerCmd.Apply<StrengthPower>(choiceContext, Owner, Amount, Owner, null);
+            await PowerCmd.Apply<StrengthPower>(choiceContext, Owner, Amount, Owner, source);
         }
     }
 }

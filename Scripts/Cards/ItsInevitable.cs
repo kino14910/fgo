@@ -46,6 +46,6 @@ public class ItsInevitable() : FgoCardModel(1, CardType.Attack,
             DynamicVars[nameof(ItsInevitablePower)].BaseValue,
             Owner.Creature, this);
         await FgoField.Add(CombatState, FgoFieldId.Burning, 3);
-        await FgoCardActions.AddToHand(CombatState!.CreateCard<Burn>(Owner));
+        await CardPileCmd.Add(CombatState!.CreateCard<Burn>(Owner), PileType.Hand);
     }
 }

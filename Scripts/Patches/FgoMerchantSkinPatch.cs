@@ -1,5 +1,6 @@
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
+using STS2RitsuLib.Patching.Models;
 
 namespace Fgo.Scripts.Patches;
 
@@ -16,9 +17,27 @@ namespace Fgo.Scripts.Patches;
 ///     （见 <c>NMerchantRoom.AfterRoomIsLoaded</c>：两者按同一个下标顺序添加）逐个套皮肤，
 ///     时机确定、多人下每个形象各归各主。
 /// </summary>
-[HarmonyPatch(typeof(NMerchantRoom), "AfterRoomIsLoaded")]
-public static class FgoMerchantSkinPatch
+/// <remarks>
+///     通过 RitsuLib 的 IPatchMethod 模式注册（见 Entry.Init）。原先是 [HarmonyPatch] 属性式 patch，
+///     依赖 Entry.Init 里的 Harmony.PatchAll；0.113 适配时该注册入口被移除，属性式 patch 不再被扫描。
+///     0.113 把商家房间拆成 NStandardMerchantRoom / NBlitzMerchantRoom，但两者的 _Ready 都调用
+///     base._Ready()，基类 NMerchantRoom._Ready 仍会调用私有的 AfterRoomIsLoaded，因此 patch 基类
+///     方法体即可同时覆盖两种房间；私有方法用字符串字面量声明目标（同 NobleCardPool 的 NCard.Reload）。
+/// </remarks>
+public sealed class FgoMerchantSkinPatch : IPatchMethod
 {
+    public static string PatchId => "fgo.skin.merchant_room";
+
+    public static string Description => "Apply per-owner skins to merchant room character visuals";
+
+    public static bool IsCritical => false;
+
+    public static ModPatchTarget[] GetTargets()
+    {
+        return [PatchTarget.Method<NMerchantRoom>("AfterRoomIsLoaded")];
+    }
+
+    [HarmonyPostfix]
     public static void Postfix(NMerchantRoom __instance)
     {
         FgoWorldSkin.ApplyMerchantRoom(__instance);

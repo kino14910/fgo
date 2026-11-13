@@ -9,7 +9,6 @@ using Fgo.Scripts.Singletons;
 using Fgo.Scripts.UI;
 using Fgo.Scripts.Utils;
 using HarmonyLib;
-using MegaCrit.Sts2.Core.AutoSlay;
 using MegaCrit.Sts2.Core.Logging;
 using MegaCrit.Sts2.Core.Modding;
 using MegaCrit.Sts2.Core.Models;
@@ -140,6 +139,18 @@ public class Entry
             DisableMod,
             "Player hand input guard patcher failed; card shortcut keys may crash during void space transitions.");
 
+        // 角色皮肤（战斗生物视觉 + 商家房间）。这两个原本是 [HarmonyPatch] 属性式 patch，
+        // 靠旧的 Harmony.PatchAll(typeof(NGamePatch).Assembly) 注册；0.113 适配移除 AutoSlay patch 时
+        // 该入口一并删除，而 vanilla 不 PatchAll(Fgo.dll)、Ritsu 也不扫 [HarmonyPatch] 特性，
+        // 导致皮肤不再套用且 VisualsCache 为空（连带 ReapplySkin 失效）。现统一改走 IPatchMethod 模式。
+        var skinPatcher = RitsuLibFramework.CreatePatcher(ModId, "skin_visuals");
+        skinPatcher.RegisterPatch<FgoCreatureSkinPatch>();
+        skinPatcher.RegisterPatch<FgoMerchantSkinPatch>();
+        RitsuLibFramework.ApplyRequiredPatcher(
+            skinPatcher,
+            DisableMod,
+            "Skin visual patcher failed; character skins will not apply in combat or merchant rooms.");
+
         // 领袖气质（Charisma）紫光: 只能靠该能力超能量额打出的卡，手牌描边改为紫色。
         // 原版 NCardHighlight 只有青(playable)/金/红三色，任意色必须走 RitsuLib 的
         // ModCardHandOutlineRegistry —— 它 postfix NHandCardHolder.UpdateCard 把
@@ -164,16 +175,6 @@ public class Entry
 
         // 玩家在主菜单设置页改了设置后，回到主菜单时同步一次。
         _mainMenuReadySubscription = RitsuLibFramework.SubscribeLifecycle<MainMenuReadyEvent>(OnMainMenuReady);
-        try
-        {
-            var harmony = new Harmony("Fgo.autoslay.fix");
-            harmony.PatchAll(typeof(NGamePatch).Assembly);
-            Logger.Info("[Fgo] Applied autoslay release patch.");
-        }
-        catch (Exception ex)
-        {
-            Logger.ErrorNoTrace($"[Fgo] Failed to apply autoslay patch: {ex}");
-        }
     }
 
     private static void OnMainMenuReady(MainMenuReadyEvent evt)
@@ -306,9 +307,6 @@ public class Entry
 /// </summary>
 public sealed class FgoRunState
 {
-    /// <summary>
-    ///     令咒数量（0-3）。默认 3。
-    /// </summary>
     public int CommandSpellCount { get; set; } = 3;
 
     /// <summary>
@@ -327,75 +325,12 @@ public sealed class FgoRunState
     public int Skin { get; set; }
 
     /// <summary>
-    ///     〔虚数大海战〕的永久基础宝具值加成（百分点）。由〔虚数脱出〕消耗探索点数换得，
-    ///     每 1 点 +1。基础宝具值 = 卡面写死的 5 + 本值；超过阈值时获得〔好似飞鸟〕并清回 0。
     ///     存在这里（而非某张卡实例）的原因: 加成由"另一张卡"赋予，且同一位玩家只会有一份。
     /// </summary>
     public int GreatVoidSeaBattleBonusNp { get; set; }
 
     /// <summary>
-    ///     是否已解锁〔好似飞鸟〕（〔虚数大海战〕的基础宝具值曾超过阈值）。
-    ///     这是"解锁"的唯一权威；卡上的〔好似飞鸟〕关键词只是它在局内的载体，
     ///     由 <c>GreatVoidSeaBattle.EnsureLikeABird</c> 按本标志补齐（幂等，随存档保存）。
     /// </summary>
     public bool LikeABirdUnlocked { get; set; }
-}
-
-[HarmonyPatch(typeof(NGame), nameof(NGame.IsReleaseGame))]
-public static class NGamePatch
-{
-    public static void Postfix(ref bool __result)
-    {
-        __result = false;
-    }
-}
-
-/// <summary>
-///     AutoSlay 选角拦截: AutoSlayer.PlayMainMenuAsync 调用 _random.NextItem(items).Select()
-///     随机选角。之前尝试 patch 泛型方法 Rng.NextItem&lt;T&gt; 的定义、以及对 async 方法
-///     PlayMainMenuAsync 做 transpiler，均不可靠（泛型 patch 不应用到特化版本；
-///     async 方法编译为状态机，transpiler 实际操作 MoveNext，IL 匹配困难）。
-///     这里改为 Prefix patch NCharacterSelectButton.Select(): AutoSlay 激活时若被选中的
-///     不是 FGO 按钮，重定向到同级的 FGO 按钮调用其 Select()。不依赖泛型 patch 与 IL 匹配。
-/// </summary>
-[HarmonyPatch(typeof(NCharacterSelectButton), nameof(NCharacterSelectButton.Select))]
-public static class FgoCharacterSelectPatch
-{
-    private static bool Prefix(NCharacterSelectButton __instance)
-    {
-        if (!AutoSlayer.IsActive)
-            return true;
-
-        // 已经是 FGO 按钮，放行（重定向时调用 fgoBtn.Select() 会再次进入此处并放行，不会递归）
-        if (__instance.Character is FgoCharacter)
-            return true;
-
-        // AutoSlay 随机选到了非 FGO 按钮，重定向到 FGO 按钮
-        var fgoBtn = FindFgoButton(__instance);
-        if (fgoBtn != null && fgoBtn != __instance)
-        {
-            Entry.Logger.Info(
-                $"[Fgo] Autoslay: redirect Select() from {__instance.Character.Id} to FGO {fgoBtn.Character.Id}");
-            fgoBtn.Select();
-            return false;
-        }
-
-        // 找不到 FGO 按钮（mod 未加载/角色未解锁），放行避免卡死选角流程
-        Entry.Logger.Warn(
-            $"[Fgo] Autoslay: FGO button not found, fallback to {__instance.Character.Id}");
-        return true;
-    }
-
-    private static NCharacterSelectButton? FindFgoButton(NCharacterSelectButton from)
-    {
-        // AutoSlayer 选角时所有按钮已在同一 ButtonContainer 下并已 Init（Character 已赋值）。
-        var parent = from.GetParent();
-        if (parent == null) return null;
-
-        foreach (var child in parent.GetChildren())
-            if (child is NCharacterSelectButton { Character: FgoCharacter, IsLocked: false } btn)
-                return btn;
-
-        return null;
-    }
 }

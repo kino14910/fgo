@@ -109,12 +109,7 @@ public static class FgoCardActions
     {
         CardCmd.PreviewCardPileAdd(await CardPileCmd.AddGeneratedCardToCombat(card, pile, card.Owner, position), time);
     }
-
-    public static async Task AddToHand(CardModel card)
-    {
-        await AddToPile(card, PileType.Hand, CardPilePosition.Bottom, 0);
-    }
-
+    
     /// <summary>
     ///     清理「生成一批候选卡 → 选一张 → 其余作废」流程中未被选中的候选。
     ///     这些候选由 <c>CombatState.CreateCard</c> 生成、从未进入任何牌堆，因此
@@ -136,39 +131,6 @@ public static class FgoCardActions
         }
     }
 
-    /// <summary>
-    ///     <c>CardSelectCmd.FromChooseACardScreen</c> 的**无张数上限**版本：逐行复刻其实现，
-    ///     只去掉「<c>cards.Count &gt; 3</c> 就抛异常」的护栏，以便一次展示四张（及以上）候选。
-    /// </summary>
-    /// <remarks>
-    ///     <para>
-    ///         原方法限死 3 张是 **UI 层面**的原因，不是逻辑限制：<c>NChooseACardSelectionScreen</c> 的类注释
-    ///         写明「卡片奖励选择界面目前只在恰好 3 张时好看」。该界面按固定 <c>340px</c> 间距、
-    ///         以 <c>-(Count-1) * 340 / 2</c> 为起点横向居中排布（见其 <c>_Ready</c>），
-    ///         因此 4 张同样能正确渲染，只是横向更宽。
-    ///     </para>
-    ///     <para>
-    ///         行为与原方法完全一致：
-    ///         <list type="bullet">
-    ///             <item>测试用 <c>CardSelectCmd.Selector</c> / <c>LocalSelector</c> 优先，直接自动选牌，不弹 UI；</item>
-    ///             <item>
-    ///                 本地玩家：弹 <c>NChooseACardSelectionScreen</c>，结果按 **index** 经
-    ///                 <c>PlayerChoiceSynchronizer.SyncLocalChoice</c> 同步给其它端；
-    ///             </item>
-    ///             <item>远端玩家：<c>WaitForRemoteChoice</c> 等该玩家的 index，再解析回本地候选。</item>
-    ///         </list>
-    ///         因此候选必须**各端数量与顺序完全一致**（用 <c>CombatState.CreateCard</c> 从 canonical 生成即可满足）。
-    ///     </para>
-    ///     <para>
-    ///         <c>CardSelectCmd.ShouldSelectLocalCard</c> / <c>LogChoice</c> / <c>ReportSoftlock</c> 均为
-    ///         <c>private</c>，无法复用，这里按等价逻辑就地重写（Replay 局不弹 UI、只记日志）。
-    ///     </para>
-    /// </remarks>
-    /// <param name="context">用于广播「玩家选择开始/结束」的上下文。</param>
-    /// <param name="cards">展示的候选，各端必须数量与顺序一致。</param>
-    /// <param name="player">进行选择的玩家。</param>
-    /// <param name="canSkip">是否允许跳过（跳过时返回 <c>null</c>）。</param>
-    /// <returns>被选中的卡；跳过或候选为空时为 <c>null</c>。</returns>
     public static async Task<CardModel?> FromChooseACardScreenUncapped(
         PlayerChoiceContext context,
         IReadOnlyList<CardModel> cards,
@@ -181,10 +143,19 @@ public static class FgoCardActions
             return null;
         }
 
-        CardModel? result;
-        if (CardSelectCmd.Selector != null)
+        var combat = CombatManager.Instance;
+        if (combat.IsPlayerReadyToEndTurn(player)
+            && player.Creature.CombatState is { CurrentSide: CombatSide.Player })
         {
-            result = (await CardSelectCmd.Selector.GetSelectedCards(cards, 0, 1)).FirstOrDefault();
+            combat.TryUndoReadyToEndTurn(player);
+        }
+
+        var stack = RunManager.Instance.CardSelectorStack;
+        CardModel? result;
+
+        if (stack.GetSelector(player) is { } selector)
+        {
+            result = (await selector.GetSelectedCards(cards, 0, 1)).FirstOrDefault();
         }
         else
         {
@@ -193,19 +164,20 @@ public static class FgoCardActions
 
             if (ShouldSelectLocalCard(player))
             {
-                if (CardSelectCmd.LocalSelector != null)
+                if (stack.LocalSelector is { } localSelector)
                 {
-                    result = (await CardSelectCmd.LocalSelector.GetSelectedCards(cards, 0, 1)).FirstOrDefault();
+                    result = (await localSelector.GetSelectedCards(cards, 0, 1)).FirstOrDefault();
                 }
                 else
                 {
                     NPlayerHand.Instance?.CancelAllCardPlay();
                     var screen = NChooseACardSelectionScreen.ShowScreen(cards, canSkip);
 
-                    // 本地玩家看过的候选都标记为「已见」，与原方法一致。
-                    foreach (var card in cards) SaveManager.Instance.MarkCardAsSeen(card);
+                    if (LocalContext.IsMe(player))
+                    {
+                        foreach (var card in cards) SaveManager.Instance.MarkCardAsSeen(card);
+                    }
 
-                    // TestMode 下 ShowScreen 返回 null，此时视为未选择。
                     result = screen == null ? null : (await screen.CardsSelected()).FirstOrDefault();
 
                     var index = result == null ? -1 : cards.IndexOf(result);

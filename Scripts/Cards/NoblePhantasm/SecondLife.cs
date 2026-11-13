@@ -1,11 +1,13 @@
 using Fgo.Scripts.Commands;
 using Fgo.Scripts.Utils;
+using MegaCrit.Sts2.Core.CardSelection;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Nodes.CommonUi;
 using STS2RitsuLib.Cards.DynamicVars;
 
@@ -30,26 +32,18 @@ public class SecondLife() : NobleCardModel(1, CardType.Skill, TargetType.Self)
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await GetExhaustedCard(choiceContext, cardPlay.Player);
-        await KillMinions(cardPlay.Player, DynamicVars["Np"].IntValue);
+        var cardModel = (await CardSelectCmd.FromCombatPile(choiceContext,
+            PileType.Exhaust.GetPile(Owner), Owner, new CardSelectorPrefs(SelectionScreenPrompt, 1)
+        )).FirstOrDefault();
+        if (cardModel != null)
+        {
+            await CardPileCmd.Add(cardModel, PileType.Hand);
+        }
+        
+        await KillMinions(Owner, DynamicVars["Np"].IntValue, cardPlay.Card);
     }
-
-    private static async Task GetExhaustedCard(PlayerChoiceContext choiceContext, Player player)
-    {
-        var exhaustCards = player.PlayerCombatState?.ExhaustPile.Cards.ToList() ?? [];
-        if (exhaustCards.Count == 0)
-            return;
-
-        var selected = await FgoCardActions.FromChooseACardScreenUncapped(choiceContext, exhaustCards, player);
-        if (selected == null)
-            return;
-
-        var copy = selected.CreateClone();
-        CardCmd.Upgrade(copy, CardPreviewStyle.None);
-        await FgoCardActions.AddToHand(copy);
-    }
-
-    private static async Task KillMinions(Player player, int npPerMinion)
+    
+    private static async Task KillMinions(Player player, int npPerMinion, CardModel source)
     {
         // Player.Character 是共享单例，判归属一律走 Creature / CombatState以保持同步。
         var combatState = player.Creature.CombatState;
@@ -63,7 +57,7 @@ public class SecondLife() : NobleCardModel(1, CardType.Skill, TargetType.Self)
         if (minions.Count == 0)
             return;
 
-        await CreatureCmd.Kill(minions);
+        await CreatureCmd.Kill(minions, source);
         await FgoResCmd.ModifyNp(npPerMinion * minions.Count, player);
     }
 }

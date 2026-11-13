@@ -3,7 +3,6 @@ using Fgo.Scripts.Character;
 using Godot;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Localization;
-using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Nodes.Screens.CharacterSelect;
 using STS2RitsuLib.Patching.Models;
 
@@ -47,10 +46,10 @@ public sealed class FgoCharacterSelectSettingsSelectPatch : IPatchMethod
     [HarmonyPostfix]
     public static void Postfix(
         NCharacterSelectScreen __instance,
-        NCharacterSelectButton charSelectButton,
-        CharacterModel characterModel)
+        NCharacterSelectButton charSelectButton)
     {
-        var show = characterModel is FgoCharacter
+        // 0.113 起 SelectCharacter 只接收按钮本身，角色改由 charSelectButton.Character 提供。
+        var show = charSelectButton.Character is FgoCharacter
                    && charSelectButton is { IsRandom: false, IsLocked: false };
         if (show)
         {

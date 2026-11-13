@@ -3,6 +3,7 @@ using HarmonyLib;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Nodes.Combat;
 using MegaCrit.Sts2.Core.Runs;
+using STS2RitsuLib.Patching.Models;
 
 namespace Fgo.Scripts.Patches;
 
@@ -20,12 +21,30 @@ namespace Fgo.Scripts.Patches;
 ///     而 <see cref="Creature" /> 是"每位玩家一个"的实例，带有 <c>Creature.Player</c>（拥有者）
 ///     与 <c>Player.NetId</c>，能唯一定位"这条视觉属于谁"。故 postfix 改挂在此处。
 /// </summary>
-[HarmonyPatch(typeof(Creature), nameof(Creature.CreateVisuals))]
-public static class FgoCreatureSkinPatch
+/// <remarks>
+///     通过 RitsuLib 的 IPatchMethod 模式注册（见 Entry.Init）。原先是 [HarmonyPatch] 属性式 patch，
+///     依赖 Entry.Init 里的 Harmony.PatchAll；0.113 适配时该注册入口被移除，属性式 patch 不再被扫描，
+///     因此改走 CreatePatcher + RegisterPatch + ApplyRequiredPatcher。
+///     VisualsCache 与 ReapplySkin 保留为静态成员，FgoSkinSync 的调用方式不变。
+/// </remarks>
+public sealed class FgoCreatureSkinPatch : IPatchMethod
 {
+    public static string PatchId => "fgo.skin.creature_visuals";
+
+    public static string Description =>
+        "Apply the owner's synced skin when a player creature's visuals are created";
+
+    public static bool IsCritical => false;
+
+    public static ModPatchTarget[] GetTargets()
+    {
+        return [PatchTarget.Method<Creature>(nameof(Creature.CreateVisuals))];
+    }
+
     // Creature（每位玩家唯一）-> 其已创建的视觉，供收到皮肤同步消息后即时重套
     private static readonly Dictionary<Creature, NCreatureVisuals> VisualsCache = new();
 
+    [HarmonyPostfix]
     public static void Postfix(Creature __instance, NCreatureVisuals? __result)
     {
         if (__result == null) return;
