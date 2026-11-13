@@ -358,5 +358,8 @@
   "FGO_CARD_ROCKET_LAUNCHER.title": "Rocket Launcher",
   "FGO_CARD_ROCKET_LAUNCHER.description": "Deal {Damage:diff()} damage.\nDeal {Splash:diff()} damage to the other enemies.",
   "FGO_CARD_ZHANG_JIAO.title": "Soutensudenishisu, Koutenmasanitatsubeshi",
-  "FGO_CARD_ZHANG_JIAO.description": "Deal {ZhangJiaoDamage:diff()} damage to ALL enemies.\nDeal {DamagePerField:diff()} additional damage for each [gold]Field[/gold]."
+  "FGO_CARD_ZHANG_JIAO.description": "Deal {ZhangJiaoDamage:diff()} damage to ALL enemies.\nDeal {DamagePerField:diff()} additional damage for each [gold]Field[/gold].",
+  "FGO_CARD_MOON_RABBIT.title": "Dancing Under the Full Moon",
+  "FGO_CARD_MOON_RABBIT.title_nap": "Napping Under the Sun",
+  "FGO_CARD_MOON_RABBIT.description": "{ShowMoon:choose(1):Gain {CriticalDamagePower:diff()}% [gold]Critical Damage[/gold]. Heal {Heal:diff()} HP.|}{ShowBoth:choose(1):\n|}{ShowNap:choose(1):Gain {NpDamagePower:diff()}% [gold]NP Damage[/gold]. Prevent the next time you would lose HP.|}{ShowHint:choose(1):\n[gold]Right-click[/gold] to switch forms.|}"
 }

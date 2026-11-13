@@ -358,5 +358,8 @@
   "FGO_CARD_ROCKET_LAUNCHER.title": "火箭筒",
   "FGO_CARD_ROCKET_LAUNCHER.description": "造成{Damage:diff()}点伤害。\n对其他敌人造成{Splash:diff()}点伤害。",
   "FGO_CARD_ZHANG_JIAO.title": "苍天已死，黄天当立",
-  "FGO_CARD_ZHANG_JIAO.description": "对所有敌人造成{ZhangJiaoDamage:diff()}点伤害。\n每有一个[gold]场地[/gold]，额外造成{DamagePerField:diff()}点伤害。"
+  "FGO_CARD_ZHANG_JIAO.description": "对所有敌人造成{ZhangJiaoDamage:diff()}点伤害。\n每有一个[gold]场地[/gold]，额外造成{DamagePerField:diff()}点伤害。",
+  "FGO_CARD_MOON_RABBIT.title": "月下逍遥",
+  "FGO_CARD_MOON_RABBIT.title_nap": "悠然午睡",
+  "FGO_CARD_MOON_RABBIT.description": "{ShowMoon:choose(1):获得{CriticalDamagePower:diff()}%[gold]暴击威力[/gold]，回复{Heal:diff()}点生命。|}{ShowBoth:choose(1):\n|}{ShowNap:choose(1):获得{NpDamagePower:diff()}%[gold]宝具威力[/gold]，阻止下一次你受到的生命值损伤。|}{ShowHint:choose(1):\n[gold]右键[/gold]切换形态。|}"
 }

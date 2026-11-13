@@ -358,5 +358,8 @@
   "FGO_CARD_ROCKET_LAUNCHER.title": "ロケットランチャー",
   "FGO_CARD_ROCKET_LAUNCHER.description": "{Damage:diff()}ダメージを与える。\n他の敵に{Splash:diff()}ダメージを与える。",
   "FGO_CARD_ZHANG_JIAO.title": "蒼天已死、黄天當立",
-  "FGO_CARD_ZHANG_JIAO.description": "すべての敵に{ZhangJiaoDamage:diff()}ダメージを与える。\n[gold]フィールド[/gold]1つにつき、追加で{DamagePerField:diff()}ダメージを与える。"
+  "FGO_CARD_ZHANG_JIAO.description": "すべての敵に{ZhangJiaoDamage:diff()}ダメージを与える。\n[gold]フィールド[/gold]1つにつき、追加で{DamagePerField:diff()}ダメージを与える。",
+  "FGO_CARD_MOON_RABBIT.title": "月下逍遥",
+  "FGO_CARD_MOON_RABBIT.title_nap": "悠然午睡",
+  "FGO_CARD_MOON_RABBIT.description": "{ShowMoon:choose(1):{CriticalDamagePower:diff()}%の[gold]クリティカルダメージ[/gold]を得る。{Heal:diff()}HPを回復する。|}{ShowBoth:choose(1):\n|}{ShowNap:choose(1):{NpDamagePower:diff()}%の[gold]宝具威力[/gold]を得る。次にHPを失う時、それを防ぐ。|}{ShowHint:choose(1):\n[gold]右クリック[/gold]で形態を切り替える。|}"
 }
