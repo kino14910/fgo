@@ -254,6 +254,7 @@
   "FGO_CARD_KUR_KIGAL_IRKALLA.extended_description_0": "\n2[gold]筋力[/gold]を得る。\n{MaxHpPower:diff()}[gold]追加最大HP[/gold]を得る。",
   "FGO_CARD_SECOND_LIFE.title": "冥鏡宝典",
   "FGO_CARD_SECOND_LIFE.description": "廃棄したカードを1枚選び、それを[gold]アップグレード[/gold]して[gold]手札[/gold]に入れる。\nすべての[gold]ミニオン[/gold]の敵は死亡し、1体につき{Np:diff()}%の[gold]NP[/gold]を得る。",
+  "FGO_CARD_SECOND_LIFE.selectionScreenPrompt": "手札に戻すカードを1枚選ぶ。",
   "FGO_CARD_YEW_BOW.title": "祈りの弓",
   "FGO_CARD_YEW_BOW.description": "{Damage:diff()}ダメージを与える。\n敵が[gold]毒[/gold]を持っている場合、さらに{Damage:diff()}ダメージを与える。",
   "FGO_CARD_UNLIMITED.title": "無限の剣製",
@@ -360,6 +361,7 @@
   "FGO_CARD_ZHANG_JIAO.title": "蒼天已死、黄天當立",
   "FGO_CARD_ZHANG_JIAO.description": "すべての敵に{ZhangJiaoDamage:diff()}ダメージを与える。\n[gold]フィールド[/gold]1つにつき、追加で{DamagePerField:diff()}ダメージを与える。",
   "FGO_CARD_MOON_RABBIT.title": "月下逍遥",
-  "FGO_CARD_MOON_RABBIT.title_nap": "悠然午睡",
-  "FGO_CARD_MOON_RABBIT.description": "{ShowMoon:choose(1):{CriticalDamagePower:diff()}%の[gold]クリティカルダメージ[/gold]を得る。{Heal:diff()}HPを回復する。|}{ShowBoth:choose(1):\n|}{ShowNap:choose(1):{NpDamagePower:diff()}%の[gold]宝具威力[/gold]を得る。次にHPを失う時、それを防ぐ。|}{ShowHint:choose(1):\n[gold]右クリック[/gold]で形態を切り替える。|}"
+  "FGO_CARD_MOON_RABBIT.description": "{CriticalDamagePower:diff()}%の[gold]クリティカルダメージ[/gold]を得る。{Heal:diff()}HPを回復する。\n[gold]右クリック[/gold]で形態を切り替える。",
+  "FGO_CARD_MOON_RABBIT_NAP.title": "悠然午睡",
+  "FGO_CARD_MOON_RABBIT_NAP.description": "{NpDamagePower:diff()}%の[gold]宝具威力[/gold]を得る。次にHPを失う時、それを防ぐ。\n[gold]右クリック[/gold]で形態を切り替える。"
 }

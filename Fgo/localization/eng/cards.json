@@ -254,6 +254,7 @@
   "FGO_CARD_KUR_KIGAL_IRKALLA.extended_description_0": "\nGain 2 [gold]Strength[/gold].\nGain {MaxHpPower:diff()} [gold]Extra Max HP[/gold].",
   "FGO_CARD_SECOND_LIFE.title": "Anpu Neb Ta Djeser",
   "FGO_CARD_SECOND_LIFE.description": "Choose a card from your exhaust pile, [gold]Upgrade[/gold] it and put it into your [gold]hand[/gold].\nAll [gold]Minion[/gold] enemies die, gain {Np:diff()}% [gold]NP[/gold] for each.",
+  "FGO_CARD_SECOND_LIFE.selectionScreenPrompt": "Choose a card to put back in your Hand.",
   "FGO_CARD_YEW_BOW.title": "Yew Bow",
   "FGO_CARD_YEW_BOW.description": "Deal {Damage:diff()} damage.\nIf the enemy has [gold]Poison[/gold], deal {Damage:diff()} damage again.",
   "FGO_CARD_UNLIMITED.title": "Unlimited Blade Works",
@@ -360,6 +361,7 @@
   "FGO_CARD_ZHANG_JIAO.title": "Soutensudenishisu, Koutenmasanitatsubeshi",
   "FGO_CARD_ZHANG_JIAO.description": "Deal {ZhangJiaoDamage:diff()} damage to ALL enemies.\nDeal {DamagePerField:diff()} additional damage for each [gold]Field[/gold].",
   "FGO_CARD_MOON_RABBIT.title": "Dancing Under the Full Moon",
-  "FGO_CARD_MOON_RABBIT.title_nap": "Napping Under the Sun",
-  "FGO_CARD_MOON_RABBIT.description": "{ShowMoon:choose(1):Gain {CriticalDamagePower:diff()}% [gold]Critical Damage[/gold]. Heal {Heal:diff()} HP.|}{ShowBoth:choose(1):\n|}{ShowNap:choose(1):Gain {NpDamagePower:diff()}% [gold]NP Damage[/gold]. Prevent the next time you would lose HP.|}{ShowHint:choose(1):\n[gold]Right-click[/gold] to switch forms.|}"
+  "FGO_CARD_MOON_RABBIT.description": "Gain {CriticalDamagePower:diff()}% [gold]Critical Damage[/gold]. Heal {Heal:diff()} HP.\n[gold]Right-click[/gold] to switch forms.",
+  "FGO_CARD_MOON_RABBIT_NAP.title": "Napping Under the Sun",
+  "FGO_CARD_MOON_RABBIT_NAP.description": "Gain {NpDamagePower:diff()}% [gold]NP Damage[/gold]. Prevent the next time you would lose HP.\n[gold]Right-click[/gold] to switch forms."
 }
