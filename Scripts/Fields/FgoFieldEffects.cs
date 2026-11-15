@@ -6,6 +6,7 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.ValueProps;
 
@@ -67,13 +68,12 @@ public static class FgoFieldEffects
         if (units.Count > 0)
         {
             if (FgoField.Has(combat, FgoFieldId.Darkness))
-                await PowerCmd.Apply<BlindPower>(choiceContext, units, DarknessBlindStacks, null, null);
+                await ApplyFieldPower<BlindPower>(choiceContext, units, DarknessBlindStacks);
 
             if (FgoField.Has(combat, FgoFieldId.Forest))
             {
                 var wounded = units.Where(static c => c.CurrentHp < c.MaxHp * ForestRegenHpRatio).ToList();
-                if (wounded.Count > 0)
-                    await PowerCmd.Apply<RegenPower>(choiceContext, wounded, ForestRegenAmount, null, null);
+                await ApplyFieldPower<RegenPower>(choiceContext, wounded, ForestRegenAmount);
             }
 
             if (FgoField.Has(combat, FgoFieldId.Sunlight))
@@ -93,8 +93,7 @@ public static class FgoFieldEffects
             var unprotected = combat.Enemies
                 .Where(static e => e.IsAlive && e.GetPower<ArtifactPower>() is not { Amount: > 0 })
                 .ToList();
-            if (unprotected.Count > 0)
-                await PowerCmd.Apply<ArtifactPower>(choiceContext, unprotected, CityArtifactStacks, null, null);
+            await ApplyFieldPower<ArtifactPower>(choiceContext, unprotected, CityArtifactStacks);
         }
 
         await FgoField.TickDown(combat);
@@ -163,5 +162,21 @@ public static class FgoFieldEffects
     private static List<Creature> LivingAllies(ICombatState combat)
     {
         return combat.Allies.Where(static c => c.IsAlive).ToList();
+    }
+
+    /// <summary>场地施加能力：抵消 <c>PowerCmd.Apply</c> 对敌人首次施加的多人缩放，保证敌我层数一致。</summary>
+    private static async Task ApplyFieldPower<T>(PlayerChoiceContext choiceContext,
+        IEnumerable<Creature> targets, decimal amount) where T : PowerModel
+    {
+        foreach (var target in targets)
+        {
+            var before = target.GetPower<T>()?.Amount ?? 0;
+            var power = await PowerCmd.Apply<T>(choiceContext, target, amount, null, null);
+            if (power == null) continue;
+
+            var delta = power.Amount - before;
+            if (delta > amount)
+                await PowerCmd.ModifyAmount(choiceContext, power, amount - delta, null, null);
+        }
     }
 }
