@@ -503,7 +503,7 @@ public sealed partial class FgoGlobalHud : Control
 
     private void OnStarMouseEntered()
     {
-        NHoverTipSet.CreateAndShow(_starBox, StarHoverTip, HoverTipAlignment.Center);
+        NHoverTipSet.CreateAndShow(_starBox, StarHoverTip);
     }
 
     private void OnStarMouseExited()
