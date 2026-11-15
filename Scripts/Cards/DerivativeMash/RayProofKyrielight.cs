@@ -18,7 +18,7 @@ namespace Fgo.Scripts.Cards.DerivativeMash;
 /// </summary>
 public class RayProofKyrielight() : NobleCardModel(1, CardType.Attack, TargetType.AllEnemies)
 {
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [FgoKeywords.IgnoreInvincible];
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Retain, FgoKeywords.IgnoreInvincible];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>
     [
