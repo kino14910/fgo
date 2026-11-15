@@ -42,13 +42,13 @@ public sealed class FinalUnderworld : ModEventTemplate
 
     protected override Task BeforeEventStarted(bool isPreFinished)
     {
-        SaintQuartz.RightClickSuppressed = true;
+        FgoQuartzSummon.RightClickSuppressed = true;
         return base.BeforeEventStarted(isPreFinished);
     }
 
     protected override void OnEventFinished()
     {
-        SaintQuartz.RightClickSuppressed = false;
+        FgoQuartzSummon.RightClickSuppressed = false;
         base.OnEventFinished();
     }
 

@@ -1,37 +1,39 @@
 using Fgo.Scripts.Cards.NoblePhantasm;
 using Fgo.Scripts.Character;
-using Fgo.Scripts.Commands;
 using Fgo.Scripts.Utils;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Players;
-using MegaCrit.Sts2.Core.Helpers;
+using MegaCrit.Sts2.Core.Entities.Relics;
+using MegaCrit.Sts2.Core.Extensions;
 using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Nodes.Screens.Capstones;
+using MegaCrit.Sts2.Core.Nodes.Screens.Map;
+using MegaCrit.Sts2.Core.Random;
 
 namespace Fgo.Scripts.Relics;
 
 /// <summary>
-///     圣晶石 / 召唤券右键抽取宝具的公共流程。
-///     <para>
-///         抽取是「本地弹界面 → 玩家点选 → 把结果提交为托管动作」三段式：
-///         前两段完全在同步动作之外（见 <see cref="Fgo.Scripts.Commands.FgoQuartzSummonCmd" /> 注释），
-///         只有第三段进入官方动作队列，且不含任何等待玩家输入的 await，
-///         因此不会占住 ActionExecutor，队友的地图投票等动作也不会被拖住。
-///     </para>
+///     圣晶石 / 呼符抽取宝具的共享逻辑：候选构造、本地门控与结算。
+///     选择与结算都发生在 RitsuLib 右键托管动作内，各端按队列顺序重放。
 /// </summary>
 internal static class FgoQuartzSummon
 {
-    private static bool _choosing;
-
-    /// <summary>当前能否提交抽取结果（界面应在弹出前先判断，避免选完才发现发不出去）。</summary>
-    internal static bool CanRequestNow()
-    {
-        return FgoQuartzSummonCmd.CanRequestNow();
-    }
+    /// <summary>冥界终局事件期间禁止抽取，避免玩家绕过「献上 3 圣晶石」选项。</summary>
+    internal static bool RightClickSuppressed { get; set; }
 
     /// <summary>
-    ///     抽取候选: 本局 NobleDeck 尚未拥有的、且不在共享排除列表里的宝具卡。
-    ///     用 RunState.CreateCard（非 CombatState），使右键在地图上也能使用。
+    ///     仅在本地预检调用：地图 / capstone 是本地 UI 状态，放进各端重放的动作会造成状态分歧。
+    ///     地图打开时 NOverlayStack.HideOverlays 会隐藏选卡界面，点击会穿透到地图节点。
     /// </summary>
+    internal static bool CanOpenSelection()
+    {
+        if (RightClickSuppressed) return false;
+        if (NMapScreen.Instance?.IsOpen == true) return false;
+        if (NCapstoneContainer.Instance?.InUse == true) return false;
+        return true;
+    }
+
     internal static List<CardModel> BuildCandidates(Player player)
     {
         var existing = CardPile.Get(FgoEnums.NobleDeck, player)?
@@ -49,36 +51,74 @@ internal static class FgoQuartzSummon
     }
 
     /// <summary>
-    ///     在同步动作之外启动抽取流程: flow 内部等待玩家点击的 await 只挂住本地流程，
-    ///     不会让 GameAction 滞留在队列里。本地同一时刻只允许一个抽取界面。
+    ///     候选在各端复制的动作内构造，随机源必须确定性。种子只用 run / 玩家槽位 / 遗物 Id / 楼层，
+    ///     不掺入可能各端滞后的计数；也不消耗 CombatCardSelection 等权威同步 RNG 流。
     /// </summary>
-    internal static void Begin(Func<Task> flow)
+    internal static List<CardModel> BuildOptions(Player player, RelicModel relic, int count)
     {
-        if (_choosing) return;
-        _choosing = true;
-        TaskHelper.RunSafely(Guarded(flow));
+        var candidates = BuildCandidates(player);
+        if (candidates.Count <= count) return candidates;
+        var rng = new Rng(player, relic.Id, (ulong)player.RunState.TotalFloor);
+        return candidates.TakeRandom(count, rng).ToList();
     }
 
-    private static async Task Guarded(Func<Task> flow)
+    internal static async Task<bool> Settle(Player player, CardModel selected)
     {
-        try
+        if (ModelDb.GetByIdOrNull<NobleCardModel>(selected.Id) is not { } canonical)
         {
-            await flow();
+            Entry.Logger.Warn($"[Fgo] quartz summon rejected: unknown noble card '{selected.Id}'.");
+            return false;
         }
-        catch (Exception ex)
+
+        var pile = CardPile.Get(FgoEnums.NobleDeck, player);
+        if (pile == null)
         {
-            // 纯本地的展示流程（含界面本身）失败不得影响牌局；异常多半来自 Godot 节点已释放。
-            Entry.Logger.Warn($"[Fgo] quartz summon flow failed: {ex}");
+            Entry.Logger.Warn($"[Fgo] quartz summon rejected: NobleDeck missing for netId={player.NetId}.");
+            return false;
         }
-        finally
+
+        if (pile.Cards.Any(c => c.Id == canonical.Id))
         {
-            _choosing = false;
+            Entry.Logger.Warn(
+                $"[Fgo] quartz summon skipped: {canonical.Id.Entry} already in NobleDeck of netId={player.NetId}.");
+            return false;
         }
+
+        var relic = FindQuartzRelic(player);
+        if (relic == null)
+        {
+            Entry.Logger.Warn($"[Fgo] quartz summon rejected: no quartz relic for netId={player.NetId}.");
+            return false;
+        }
+
+        if (relic.QuartzCount < SaintQuartz.CostPerChoice)
+        {
+            Entry.Logger.Warn(
+                $"[Fgo] quartz summon rejected: netId={player.NetId} count={relic.QuartzCount} < {SaintQuartz.CostPerChoice}.");
+            return false;
+        }
+
+        var card = player.RunState.CreateCard(canonical, player);
+        var result = await CardPileCmd.Add(card, pile);
+        if (result is not { success: true })
+        {
+            Entry.Logger.Warn(
+                $"[Fgo] quartz summon failed: could not add {canonical.Id.Entry} for netId={player.NetId}.");
+            return false;
+        }
+
+        relic.SpendQuartz(SaintQuartz.CostPerChoice);
+
+        // NobleDeck 是 RunPersistent 牌堆，运行期改动不自动传播。
+        FgoNobleDeckSync.NotifyAdd(player, card.Id);
+        FgoQuartzSync.NotifyLocalCount(player);
+
+        Entry.Logger.Info($"[Fgo] quartz summon: netId={player.NetId} gained {card.Id.Entry}");
+        return true;
     }
 
-    /// <summary>把选中的宝具提交为托管动作，各端按 Id 确定性加卡并扣除计数。</summary>
-    internal static bool Submit(Player player, CardModel selected)
+    private static FgoRelic? FindQuartzRelic(Player player)
     {
-        return FgoQuartzSummonCmd.Request(player, selected.Id);
+        return (FgoRelic?)player.GetRelic<SaintQuartz>() ?? player.GetRelic<SummonTicket>();
     }
 }

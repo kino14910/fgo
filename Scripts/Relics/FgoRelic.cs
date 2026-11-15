@@ -45,7 +45,7 @@ public abstract class FgoRelic : ModRelicTemplate
     }
 
     /// <summary>
-    ///     扣除圣晶石计数并刷新高亮。由抽取提交动作（FgoQuartzSummonCmd）在所有端确定性调用：
+    ///     扣除圣晶石计数并刷新高亮。由抽取结算（FgoQuartzSummon.Settle）在所有端确定性调用：
     ///     主机侧的写入是权威值，客户端的写入会被主机的广播覆盖，因此各端都执行不会算重。
     /// </summary>
     internal void SpendQuartz(int amount)

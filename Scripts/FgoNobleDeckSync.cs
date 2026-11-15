@@ -245,7 +245,7 @@ public static class FgoNobleDeckSync
     private static void BroadcastOwnDeck(Player player)
     {
         // 注意：不能用 `++LocalVersion[key]` —— Dictionary 索引器读缺失 key 会抛 KeyNotFoundException，
-        // 该异常发生在调用方（SaintQuartz 右键）扣费之前，会导致整段右键逻辑中断（表现为“点了不扣圣晶石”）。
+        // 该异常会中断调用方（抽取结算）的后续逻辑，且难以从外部定位。
         var version = LocalVersion.GetValueOrDefault(player.NetId) + 1;
         LocalVersion[player.NetId] = version;
         SendOwnDeckSnapshot(player, version);
