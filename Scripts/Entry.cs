@@ -18,6 +18,7 @@ using MegaCrit.Sts2.Core.Runs;
 using STS2RitsuLib;
 using STS2RitsuLib.CardPiles.Nodes;
 using STS2RitsuLib.Content;
+using STS2RitsuLib.Interactions.RightClick;
 using STS2RitsuLib.Interop;
 using STS2RitsuLib.Networking.ManagedActions;
 using STS2RitsuLib.Patching.Core;
@@ -69,6 +70,8 @@ public class Entry
         // 卡牌效果（如 SecondLife 即死爪牙）走 OnPlay，出牌本身已复制，不需要托管动作。
         RitsuLibManagedNetActions.Register(FgoNoblePhantasmCmd.SyncDescriptor);
         RitsuLibManagedNetActions.Register(FgoCommandSpellCmd.SyncDescriptor);
+        RitsuLibManagedNetActions.Register(FgoMoonRabbitFormCmd.SyncDescriptor);
+        ModRightClickRegistry.Register(new FgoMoonRabbitRightClickHandler());
 
         using (RitsuLibFramework.BeginModDataRegistration(ModId))
         {
