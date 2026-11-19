@@ -357,7 +357,7 @@
   "FGO_CARD_SNIPER_RIFLE.title": "狙击枪",
   "FGO_CARD_SNIPER_RIFLE.description": "造成{SniperDamage:diff()}点伤害。\n目标生命值低于其上限50%时，伤害翻倍。",
   "FGO_CARD_ROCKET_LAUNCHER.title": "火箭筒",
-  "FGO_CARD_ROCKET_LAUNCHER.description": "造成{Damage:diff()}点伤害。\n对其他敌人造成{Splash:diff()}点伤害。",
+  "FGO_CARD_ROCKET_LAUNCHER.description": "造成{Damage:diff()}点伤害。\n对其他敌人造成一半伤害。",
   "FGO_CARD_ZHANG_JIAO.title": "苍天已死，黄天当立",
   "FGO_CARD_ZHANG_JIAO.description": "对所有敌人造成{ZhangJiaoDamage:diff()}点伤害。\n每有一个[gold]场地[/gold]，额外造成{DamagePerField:diff()}点伤害。",
   "FGO_CARD_MOON_RABBIT.title": "月下逍遥",

@@ -357,7 +357,7 @@
   "FGO_CARD_SNIPER_RIFLE.title": "狙撃銃",
   "FGO_CARD_SNIPER_RIFLE.description": "{SniperDamage:diff()}ダメージを与える。\n対象のHPがその最大HPの50%未満の場合、ダメージが倍になる。",
   "FGO_CARD_ROCKET_LAUNCHER.title": "ロケットランチャー",
-  "FGO_CARD_ROCKET_LAUNCHER.description": "{Damage:diff()}ダメージを与える。\n他の敵に{Splash:diff()}ダメージを与える。",
+  "FGO_CARD_ROCKET_LAUNCHER.description": "{Damage:diff()}ダメージを与える。\n他の敵にその半分のダメージを与える。",
   "FGO_CARD_ZHANG_JIAO.title": "蒼天已死、黄天當立",
   "FGO_CARD_ZHANG_JIAO.description": "すべての敵に{ZhangJiaoDamage:diff()}ダメージを与える。\n[gold]フィールド[/gold]1つにつき、追加で{DamagePerField:diff()}ダメージを与える。",
   "FGO_CARD_MOON_RABBIT.title": "月下逍遥",
