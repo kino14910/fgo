@@ -114,7 +114,6 @@ public sealed partial class FgoNpGlowFx : Control
         var lifetime = Mathf.Max(t.EmberLifetime, 0.01f);
 
         var reach = t.EmberSpeedMax * lifetime + 0.5f * t.EmberAccelMax * lifetime * lifetime;
-
         var pad = 64f * t.EmberScaleMax + 24f;
         var half = reach + pad;
 

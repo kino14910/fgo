@@ -22,7 +22,6 @@ namespace Fgo.Scripts.UI;
 /// <remarks>调参入口：改字段后 <see cref="FgoNpBar.ApplyGlowTuning" /> 生效。</remarks>
 public sealed class NpGlowTuning
 {
-
     public static readonly StringName OriginParam = "origin";
     public static readonly StringName AspectParam = "aspect";
     public static readonly StringName IntensityParam = "intensity";
@@ -64,7 +63,6 @@ public sealed class NpGlowTuning
     public static readonly StringName CoreColorParam = "core_color";
     public static readonly StringName SparkColorParam = "spark_color";
 
-
     public float BaseIntensity { get; set; } = 1.0f;
 
     public float IntensitySmooth { get; set; } = 7f;
@@ -79,11 +77,9 @@ public sealed class NpGlowTuning
 
     public float ChargeRamp { get; set; } = 2.2f;
 
-
     public float BreatheSpeed { get; set; } = 0.3f;
 
     public float BreatheAmount { get; set; } = 0.18f;
-
 
     public float CoreSize { get; set; } = 0.07f;
 
@@ -99,7 +95,6 @@ public sealed class NpGlowTuning
 
     public float StreakGain { get; set; } = 0.3f;
 
-
     public float RayCount { get; set; } = 30f;
 
     public float RayWidth { get; set; } = 0.3f;
@@ -113,7 +108,6 @@ public sealed class NpGlowTuning
     public float RayGain { get; set; } = 0.42f;
 
     public float RayShimmer { get; set; } = 0.2f;
-
 
     public float StarSectors { get; set; } = 22f;
 
@@ -140,7 +134,6 @@ public sealed class NpGlowTuning
     /// <summary>径向变暗量 0..1。着色器用 sqrt 保外圈可见亮度，直接换幂函数会让外圈星星消失。</summary>
     public float StarDim { get; set; } = 0.7f;
 
-
     public Color RayColor { get; set; } = new(1f, 0.7f, 0.21f);
 
     public Color GlowColor { get; set; } = new(1f, 0.78f, 0.3f);
@@ -148,7 +141,6 @@ public sealed class NpGlowTuning
     public Color CoreColor { get; set; } = new(1f, 0.965f, 0.855f);
 
     public Color SparkColor { get; set; } = new(1f, 0.93f, 0.7f);
-
 
     public int EmberAmount { get; set; } = 28;
 
