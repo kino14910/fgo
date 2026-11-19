@@ -9,7 +9,10 @@ using STS2RitsuLib.Scaffolding.Godot.NodeAttachments;
 
 namespace Fgo.Scripts.UI;
 
-/// <remarks>只摘自己加的节点：<c>%BgContainer</c> 还烘焙了房间特效，清空会永久删掉。不碰 <c>NCombatRoom.Background</c>（setter 私有且会重复 AddChild），只做视觉叠加。挂 <c>NCombatRoom</c> 而非 <c>NCombatUi</c>（后者的 <c>_isDebugHidden</c> 跨战斗残留会把背景设透明）。</remarks>
+/// <remarks>
+///     只摘自己加的节点：<c>%BgContainer</c> 还烘焙了房间特效，清空会永久删掉。不碰 <c>NCombatRoom.Background</c>（setter 私有且会重复
+///     AddChild），只做视觉叠加。挂 <c>NCombatRoom</c> 而非 <c>NCombatUi</c>（后者的 <c>_isDebugHidden</c> 跨战斗残留会把背景设透明）。
+/// </remarks>
 public sealed partial class FgoVoidSeaBackground : Node
 {
     private const string BackgroundScenePath = "res://Fgo/scenes/fgo_void_sea_bg.tscn";
@@ -57,8 +60,10 @@ public sealed partial class FgoVoidSeaBackground : Node
         Entry.Logger.Info($"[Fgo] VoidSea: registered attachment '{def.Id}'");
     }
 
-    /// <remarks>初始化期一次性校验资源，把"场景根挂错脚本"从运行期 InvalidCastException 变成显式失败。
-    /// DEBUG 下直接抛出（开发期不可能漏）；RELEASE 下记录并熔断此功能，不影响 mod 其余部分。</remarks>
+    /// <remarks>
+    ///     初始化期一次性校验资源，把"场景根挂错脚本"从运行期 InvalidCastException 变成显式失败。
+    ///     DEBUG 下直接抛出（开发期不可能漏）；RELEASE 下记录并熔断此功能，不影响 mod 其余部分。
+    /// </remarks>
     private static void ValidateAssets()
     {
         _validated = true;
@@ -175,7 +180,7 @@ public sealed partial class FgoVoidSeaBackground : Node
 
         // 插在原版背景正后方：追加到末尾会盖住烘焙的房间特效（fire / square_specks）。
         var lastIndex = container.GetChildCount() - 1;
-        var targetIndex = vanilla != null && IsInstanceValid(vanilla) && vanilla.GetParent() == container
+        var targetIndex = IsInstanceValid(vanilla) && vanilla.GetParent() == container
             ? vanilla.GetIndex() + 1
             : lastIndex;
         if (targetIndex < lastIndex)
@@ -196,7 +201,7 @@ public sealed partial class FgoVoidSeaBackground : Node
         else
         {
             fade.TweenProperty(voidSea, "modulate:a", 1f, EnterFadeSeconds);
-            if (vanilla != null) fade.TweenProperty(vanilla, "modulate:a", 0f, EnterFadeSeconds);
+            fade.TweenProperty(vanilla, "modulate:a", 0f, EnterFadeSeconds);
         }
 
         _voidSea = voidSea;
@@ -222,7 +227,7 @@ public sealed partial class FgoVoidSeaBackground : Node
         {
             if (ReferenceEquals(_voidSea, finished)) _voidSea = null;
             RemoveAndFree(finished);
-            if (vanilla != null && IsInstanceValid(vanilla)) vanilla.Modulate = Colors.White;
+            if (IsInstanceValid(vanilla)) vanilla.Modulate = Colors.White;
         }
 
         var fade = StartFade();
@@ -233,16 +238,16 @@ public sealed partial class FgoVoidSeaBackground : Node
         }
 
         fade.TweenProperty(voidSea, "modulate:a", 0f, ExitFadeSeconds);
-        if (vanilla != null)
-        {
-            SetVanillaAlpha(vanilla, vanilla.Modulate.A);
-            fade.TweenProperty(vanilla, "modulate:a", 1f, ExitFadeSeconds);
-        }
+        SetVanillaAlpha(vanilla, vanilla.Modulate.A);
+        fade.TweenProperty(vanilla, "modulate:a", 1f, ExitFadeSeconds);
 
         fade.TweenCallback(Callable.From(Finish));
     }
 
-    /// <remarks>用 <c>ResourceLoader.Load</c> 而非 <c>PreloadManager.Cache.GetScene</c>：后者对 mod 场景永远未命中、每次打 "Asset not cached" 告警。</remarks>
+    /// <remarks>
+    ///     用 <c>ResourceLoader.Load</c> 而非 <c>PreloadManager.Cache.GetScene</c>：后者对 mod 场景永远未命中、每次打 "Asset not cached"
+    ///     告警。
+    /// </remarks>
     private static PackedScene? LoadScene(string path)
     {
         if (!ResourceLoader.Exists(path))
@@ -262,8 +267,10 @@ public sealed partial class FgoVoidSeaBackground : Node
         node.QueueFree();
     }
 
-    /// <remarks>资源不变量在 <see cref="ValidateAssets"/> 校验；此处按 <c>Node</c> 实例化以避开
-    /// <c>Instantiate&lt;NCombatBackground&gt;</c> 的 <c>InvalidCastException</c>。首次运行期失败即熔断，不再重试。</remarks>
+    /// <remarks>
+    ///     资源不变量在 <see cref="ValidateAssets" /> 校验；此处按 <c>Node</c> 实例化以避开
+    ///     <c>Instantiate&lt;NCombatBackground&gt;</c> 的 <c>InvalidCastException</c>。首次运行期失败即熔断，不再重试。
+    /// </remarks>
     private NCombatBackground? TryCreateBackground()
     {
         if (_disabled) return null;

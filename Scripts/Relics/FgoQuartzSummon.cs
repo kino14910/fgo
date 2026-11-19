@@ -4,7 +4,6 @@ using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Players;
-using MegaCrit.Sts2.Core.Entities.Relics;
 using MegaCrit.Sts2.Core.Extensions;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Nodes.Screens.Capstones;
@@ -46,7 +45,7 @@ internal static class FgoQuartzSummon
             .OfType<NobleCardModel>()
             .Where(card => !existing.Contains(card.GetType()) &&
                            !FgoCardActions.ExcludedFromNobleDrawing.Contains(card.GetType()))
-            .Select(card => (CardModel)player.RunState.CreateCard(card, player))
+            .Select(card => player.RunState.CreateCard(card, player))
             .ToList();
     }
 

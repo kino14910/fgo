@@ -44,7 +44,6 @@ public class NffSpecial() : FgoCardModel(1, CardType.Skill,
         var selected = (await CardSelectCmd.FromHand(choiceContext, Owner, prefs, null, this)).ToArray();
 
         foreach (var card in selected)
-        {
             if (IsUpgraded)
             {
                 var replacement = card.CardScope!.CreateCard<GunDealer>(card.Owner);
@@ -55,6 +54,5 @@ public class NffSpecial() : FgoCardModel(1, CardType.Skill,
             {
                 await CardCmd.TransformTo<GunDealer>(card);
             }
-        }
     }
 }

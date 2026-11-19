@@ -96,11 +96,21 @@ public class FgoReflectedSettings
         // 页面可能在主菜单预温时才注册，过早调用（如 mod 初始化阶段）会读不到，届时保持可重试。
         if (!ModSettingsRegistry.TryGetPage(Entry.ModId, Entry.ModId, out var page)) return;
 
-        foreach (var section in page.Sections)
-        foreach (var entry in section.Entries)
-            if (entry is ToggleModSettingsEntryDefinition toggle) toggle.Binding.Read();
-            else if (entry is IntSliderModSettingsEntryDefinition slider) slider.Binding.Read();
-            else ReadEntryBinding(entry);
+        if (page?.Sections != null)
+            foreach (var section in page.Sections)
+            foreach (var entry in section.Entries)
+                switch (entry)
+                {
+                    case ToggleModSettingsEntryDefinition toggle:
+                        toggle.Binding.Read();
+                        break;
+                    case IntSliderModSettingsEntryDefinition slider:
+                        slider.Binding.Read();
+                        break;
+                    default:
+                        ReadEntryBinding(entry);
+                        break;
+                }
 
         _reflected = true;
     }
@@ -141,13 +151,10 @@ public class FgoReflectedSettings
     public static bool TryGetSkinBinding(out IModSettingsValueBinding<CharacterSkinId> binding)
     {
         binding = null!;
-        if (FindEntry(CharacterSkinEntryId) is ChoiceModSettingsEntryDefinition<CharacterSkinId> choice)
-        {
-            binding = choice.Binding;
-            return true;
-        }
-
-        return false;
+        if (FindEntry(CharacterSkinEntryId) is not ChoiceModSettingsEntryDefinition<CharacterSkinId> choice)
+            return false;
+        binding = choice.Binding;
+        return true;
     }
 
     private static void ReadEntryBinding(ModSettingsEntryDefinition entry)
@@ -163,12 +170,8 @@ public class FgoReflectedSettings
     {
         if (!ModSettingsRegistry.TryGetPage(Entry.ModId, Entry.ModId, out var page)) return null;
 
-        foreach (var section in page.Sections)
-        foreach (var entry in section.Entries)
-            if (string.Equals(entry.Id, entryId, StringComparison.OrdinalIgnoreCase))
-                return entry;
-
-        return null;
+        return page?.Sections.SelectMany(section => section.Entries)
+            .FirstOrDefault(entry => string.Equals(entry.Id, entryId, StringComparison.OrdinalIgnoreCase));
     }
 
     // [ModSettingsToggle("enableEnemies", "enemies", LabelLocKey = "FGO_SETTINGS_UI_ENABLE_ENEMIES.title",

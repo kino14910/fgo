@@ -1,6 +1,5 @@
 using Fgo.Scripts.Cards.Colorless.OptionCards;
 using Fgo.Scripts.Singletons;
-using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Multiplayer;

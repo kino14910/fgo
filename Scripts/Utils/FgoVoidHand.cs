@@ -12,7 +12,6 @@ using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Nodes.Cards.Holders;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
 using STS2RitsuLib.CardPiles.Nodes;
-using STS2RitsuLib.Utils;
 
 namespace Fgo.Scripts.Utils;
 
@@ -25,8 +24,8 @@ namespace Fgo.Scripts.Utils;
 ///     ② <c>FgoGlobalHud</c> 隐藏原版手牌节点，否则额外手牌与原手牌叠在一起。
 ///     <para>
 ///         <b>状态载体</b>：是否在虚数空间内 = 该玩家 <c>Creature</c> 上有没有 <see cref="ImaginarySpacePower" />。
-    ///         它不计时，只有打出〔虚数脱出〕才会解除。Power 是游戏原生状态，随复制动作与存档同步，
-    ///         联机时每名玩家各自持有，不需要内存名单，也不需要额外的网络广播。
+///         它不计时，只有打出〔虚数脱出〕才会解除。Power 是游戏原生状态，随复制动作与存档同步，
+///         联机时每名玩家各自持有，不需要内存名单，也不需要额外的网络广播。
 ///     </para>
 /// </remarks>
 public static class FgoVoidHand

@@ -41,6 +41,6 @@ public class WisdomOfThePeople() : FgoCardModel(3, CardType.Skill,
     private static IEnumerable<CardModel> GetStatuses(Player owner)
     {
         return owner.PlayerCombatState!.AllCards.Where(c =>
-            c.Type == CardType.Status && c.Pile.Type != PileType.Exhaust);
+            c is { Type: CardType.Status, Pile: not null } && c.Pile.Type != PileType.Exhaust);
     }
 }

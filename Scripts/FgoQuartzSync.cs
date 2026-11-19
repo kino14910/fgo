@@ -36,7 +36,7 @@ public static class FgoQuartzSync
         if (!_handshakeSubscribed)
         {
             _handshakeSubscribed = true;
-            RitsuLibSidecarEvents.OnHandshakeCompleted(_ => BroadcastAll(RunManager.Instance?.DebugOnlyGetState()));
+            RitsuLibSidecarEvents.OnHandshakeCompleted(_ => BroadcastAll(RunManager.Instance.DebugOnlyGetState()));
         }
     }
 
@@ -46,7 +46,7 @@ public static class FgoQuartzSync
     /// </summary>
     public static void OnRunLoaded(RunState? runState)
     {
-        if (RunManager.Instance?.NetService is NetClientGameService)
+        if (RunManager.Instance.NetService is NetClientGameService)
             _skipNextRoomEntryOnClient = true;
         else
             BroadcastAll(runState);
@@ -70,7 +70,7 @@ public static class FgoQuartzSync
     public static void BroadcastAll(RunState? runState)
     {
         if (runState == null) return;
-        var netService = RunManager.Instance?.NetService;
+        var netService = RunManager.Instance.NetService;
         if (netService is not NetHostGameService) return;
 
         foreach (var player in runState.Players.Where(p => p.Character is FgoCharacter))
@@ -94,8 +94,7 @@ public static class FgoQuartzSync
         try
         {
             if (player == null) return;
-            var netService = RunManager.Instance?.NetService;
-            if (netService == null) return;
+            var netService = RunManager.Instance.NetService;
 
             var count = Entry.RunState.Get(player).QuartzCount;
             var msg = new QuartzSyncMessage(player.NetId, count);
@@ -121,7 +120,7 @@ public static class FgoQuartzSync
         // 主机收到客户端上报后转发广播给其它队友（广播不回传发送方，无环）。
         if (context.IsHostIngest)
             RitsuLibSidecarTypedMessageRegistry.Broadcast(
-                RunManager.Instance?.NetService, QuartzSyncDescriptor, context.Message);
+                RunManager.Instance.NetService, QuartzSyncDescriptor, context.Message);
 
         // 计数写入与遗物高亮都触碰游戏状态，调度回 Godot 主线程，避开网络接收线程竞态。
         var msg = context.Message;
@@ -130,7 +129,7 @@ public static class FgoQuartzSync
 
     private static void ApplyCount(QuartzSyncMessage msg)
     {
-        var runState = RunManager.Instance?.DebugOnlyGetState();
+        var runState = RunManager.Instance.DebugOnlyGetState();
         if (runState == null) return;
         Entry.RunState.Modify(runState, msg.NetId, d => d.QuartzCount = msg.QuartzCount);
         RefreshVisual(msg.NetId);
@@ -138,7 +137,7 @@ public static class FgoQuartzSync
 
     private static void RefreshVisual(ulong netId)
     {
-        var runState = RunManager.Instance?.DebugOnlyGetState();
+        var runState = RunManager.Instance.DebugOnlyGetState();
         if (runState == null) return;
         var player = runState.Players.FirstOrDefault(p => p.NetId == netId);
         if (player == null) return;

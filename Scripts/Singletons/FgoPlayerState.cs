@@ -339,7 +339,8 @@ public sealed class FgoPlayerState
         CommandSpell -= 3;
         await CreatureCmd.Heal(creature, creature.MaxHp - creature.CurrentHp);
         if (Np < 300)
-            await ModifyNp(300 - Np, creature.Player);
+            if (creature.Player != null)
+                await ModifyNp(300 - Np, creature.Player);
     }
 
     private sealed class CritContext

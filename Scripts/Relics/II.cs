@@ -18,7 +18,7 @@ public class II : FgoRelic
 
     public int CardsPlayedThisTurn { get; private set; }
 
-    public override int DisplayAmount => Owner != null ? Affection : 0;
+    public override int DisplayAmount => Affection;
 
     public int ModifyAffection(int amount)
     {
@@ -55,7 +55,7 @@ public class II : FgoRelic
 
     public void ResetAffectionForCombat()
     {
-        var defaultValue = Owner != null && Owner.GetRelic<AstralSwordEpitaph>() != null ? 10 : 0;
+        var defaultValue = Owner.GetRelic<AstralSwordEpitaph>() != null ? 10 : 0;
         CardsPlayedThisTurn = 0;
         if (Affection == defaultValue) return;
         Affection = defaultValue;

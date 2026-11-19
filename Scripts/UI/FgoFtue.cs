@@ -46,8 +46,10 @@ public static class FgoFtue
     ///     <see cref="RitsuLibFramework.BeginModDataRegistration" /> 作用域内调用。
     /// </summary>
     /// <remarks>
-    ///     <b>不能并进 Entry 已有的 using 块</b>：那里用 <c>GetRunSavedDataStore</c>、本槽要用 <c>GetDataStore</c>，是不同 store 实例；同 store 重复 Register 同 key 会抛 "Data key ... already registered"，故单开块。
-    ///     <b>Profile 槽注册后不能立刻读写</b>：注册时 profile 路径未就绪，<c>ModDataStore</c> 把 Initialize/Load 推迟到 <c>SaveManager.InitProfileId</c> 的 patch 触发；见 <see cref="TryGetProgress" />。
+    ///     <b>不能并进 Entry 已有的 using 块</b>：那里用 <c>GetRunSavedDataStore</c>、本槽要用 <c>GetDataStore</c>，是不同 store 实例；同 store 重复
+    ///     Register 同 key 会抛 "Data key ... already registered"，故单开块。
+    ///     <b>Profile 槽注册后不能立刻读写</b>：注册时 profile 路径未就绪，<c>ModDataStore</c> 把 Initialize/Load 推迟到
+    ///     <c>SaveManager.InitProfileId</c> 的 patch 触发；见 <see cref="TryGetProgress" />。
     /// </remarks>
     public static void Register()
     {
@@ -73,7 +75,9 @@ public static class FgoFtue
     ///     取当前存档的首见标记；Profile 数据尚未就绪时返回 <see langword="false" />。
     /// </summary>
     /// <remarks>
-    ///     <b>不能直接 <c>store.Get</c></b>：<c>ModDataStore.GetEntry</c> 的懒初始化只对 <c>SaveScope.Global</c> 生效；Profile 槽未初始化会走到 <c>RegisteredDataEntry.Data</c> 抛 "Data entry ... is not initialized"，故先判 <see cref="ModDataStore.IsProfileInitialized" />。
+    ///     <b>不能直接 <c>store.Get</c></b>：<c>ModDataStore.GetEntry</c> 的懒初始化只对 <c>SaveScope.Global</c> 生效；Profile 槽未初始化会走到
+    ///     <c>RegisteredDataEntry.Data</c> 抛 "Data entry ... is not initialized"，故先判
+    ///     <see cref="ModDataStore.IsProfileInitialized" />。
     ///     战斗中触发点（NP 满）必在 profile 就绪后，正常不走到 false 分支；保留是为防御模组加载顺序异常时不把异常抛进战斗逻辑。
     /// </remarks>
     private static bool TryGetProgress(out FgoFtueProgress progress)
@@ -96,8 +100,10 @@ public static class FgoFtue
     ///     宝具条充满且可释放时调用：首次触发本局教学提示。
     /// </summary>
     /// <remarks>
-    ///     自行跳过：Profile 未就绪（见 <see cref="TryGetProgress" />）、当前存档已看过、不在局内/已有 modal（<c>NModalContainer.Add</c> 有 modal 时只 warn 丢弃）、本地化缺失。
-    ///     <b>时机</b>：用 <c>canUse</c> 的 false→true 边沿（见 <c>FgoNpBar.OnNpChanged</c>）而非 <c>CombatStartingEvent</c>——需求是「满了才弹」，满的那刻指得准。
+    ///     自行跳过：Profile 未就绪（见 <see cref="TryGetProgress" />）、当前存档已看过、不在局内/已有 modal（<c>NModalContainer.Add</c> 有 modal 时只 warn
+    ///     丢弃）、本地化缺失。
+    ///     <b>时机</b>：用 <c>canUse</c> 的 false→true 边沿（见 <c>FgoNpBar.OnNpChanged</c>）而非 <c>CombatStartingEvent</c>
+    ///     ——需求是「满了才弹」，满的那刻指得准。
     ///     <b>目标矩形</b>：NP 条挂 <c>NCreatureStateDisplay</c> 下跟 HP 条走，运行期位置随分辨率/玩家变，故由调用方传按钮屏幕矩形，弹窗据此摆位、箭头指向。
     /// </remarks>
     /// <param name="npButtonScreenRect">NP 按钮在屏幕坐标系里的矩形。</param>

@@ -17,7 +17,7 @@ public class AlongSide() : FgoCardModel(2, CardType.Skill,
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         ModCardVars.Computed("CalculatedBlock", 0, (card, _) =>
-            card.Owner.Creature is { } c
+            card is { Owner.Creature: { } c }
                 ? Math.Max(0, c.MaxHp - c.CurrentHp)
                 : 0)
     ];

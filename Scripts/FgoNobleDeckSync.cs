@@ -100,8 +100,7 @@ public static class FgoNobleDeckSync
         // 接收端也会因 Epoch 变大而无条件接受随后的快照。
         LocalEpoch = DateTime.UtcNow.Ticks;
 
-        var netService = RunManager.Instance?.NetService;
-        if (netService == null) return;
+        var netService = RunManager.Instance.NetService;
 
         // 【关键】每个端都把自己拥有的 FGO 玩家牌堆作为权威内容主动推一次，即使本局内容从未变过（版本仍为 0）。
         // NobleDeck 只在本机播种 / 改动，而「只在改动时广播」有一个致命缺口：客户端牌堆的【基线内容】永远不会发给
@@ -126,9 +125,9 @@ public static class FgoNobleDeckSync
     {
         try
         {
-            var netService = RunManager.Instance?.NetService;
-            var runState = RunManager.Instance?.DebugOnlyGetState();
-            if (netService == null || runState == null) return;
+            var netService = RunManager.Instance.NetService;
+            var runState = RunManager.Instance.DebugOnlyGetState();
+            if (runState == null) return;
 
             foreach (var player in runState.Players.Where(p =>
                          p.Character is FgoCharacter && p.NetId == netService.NetId))
@@ -162,7 +161,7 @@ public static class FgoNobleDeckSync
             if (player == null) return;
 
             // 只有牌堆拥有者才有权威内容可播，其余端一律不发快照。
-            if (RunManager.Instance?.NetService is { } netService && netService.NetId != player.NetId)
+            if (RunManager.Instance.NetService is { } netService && netService.NetId != player.NetId)
                 return;
 
             BroadcastOwnDeck(player);
@@ -181,7 +180,7 @@ public static class FgoNobleDeckSync
     /// </summary>
     private static void RequestFullResync()
     {
-        var netService = RunManager.Instance?.NetService;
+        var netService = RunManager.Instance.NetService;
         if (netService is not NetClientGameService) return;
 
         RitsuLibSidecarTypedMessageRegistry.SendToHost(netService, ResyncDescriptor, new NobleDeckResyncRequest());
@@ -198,9 +197,9 @@ public static class FgoNobleDeckSync
     {
         try
         {
-            var netService = RunManager.Instance?.NetService;
-            var runState = RunManager.Instance?.DebugOnlyGetState();
-            if (netService == null || runState == null) return;
+            var netService = RunManager.Instance.NetService;
+            var runState = RunManager.Instance.DebugOnlyGetState();
+            if (runState == null) return;
 
             foreach (var player in runState.Players.Where(p => p.Character is FgoCharacter))
             {
@@ -257,8 +256,7 @@ public static class FgoNobleDeckSync
     /// </summary>
     private static void SendOwnDeckSnapshot(Player player, int version)
     {
-        var netService = RunManager.Instance?.NetService;
-        if (netService == null) return;
+        var netService = RunManager.Instance.NetService;
 
         var pile = CardPile.Get(FgoEnums.NobleDeck, player);
         if (pile == null) return;
@@ -294,7 +292,7 @@ public static class FgoNobleDeckSync
         // 主机从客户端收到后转发广播给其它队友（广播不回传发送方，无环）。
         if (context.IsHostIngest)
             RitsuLibSidecarTypedMessageRegistry.Broadcast(
-                RunManager.Instance?.NetService, SnapshotDescriptor, context.Message);
+                RunManager.Instance.NetService, SnapshotDescriptor, context.Message);
 
         // 调度到 Godot 主线程：CardPile 集合只能在主线程安全修改，避开网络接收线程竞态。
         Callable.From(() => ApplySnapshot(context.Message)).CallDeferred();
@@ -307,8 +305,7 @@ public static class FgoNobleDeckSync
     /// </summary>
     private static void ApplySnapshot(NobleDeckSnapshotMessage msg)
     {
-        var netService = RunManager.Instance?.NetService;
-        if (netService == null) return;
+        var netService = RunManager.Instance.NetService;
 
         // 自己就是该玩家：本地早已加入（本机是权威），跳过避免覆盖本地真理。
         if (netService.NetId == msg.NetId) return;
@@ -323,10 +320,9 @@ public static class FgoNobleDeckSync
                 msg.Version <= appliedVersion) return;
         }
 
-        var runState = RunManager.Instance?.DebugOnlyGetState();
-        if (runState == null) return;
+        var runState = RunManager.Instance.DebugOnlyGetState();
 
-        var player = runState.Players.FirstOrDefault(p => p.NetId == msg.NetId);
+        var player = runState?.Players.FirstOrDefault(p => p.NetId == msg.NetId);
         if (player == null) return;
 
         var pile = CardPile.Get(FgoEnums.NobleDeck, player);

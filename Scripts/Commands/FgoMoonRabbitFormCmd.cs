@@ -1,10 +1,8 @@
-using System;
 using Fgo.Scripts.Cards;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Multiplayer;
-using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Nodes.CommonUi;
 using MegaCrit.Sts2.Core.Runs;
@@ -31,7 +29,7 @@ public static class FgoMoonRabbitFormCmd
             return false;
 
         var payload = (handIndex << 1) | (targetNap ? 1 : 0);
-        return RitsuLibManagedNetActions.Request<int>(RunManager.Instance, SyncDescriptor, payload);
+        return RitsuLibManagedNetActions.Request(RunManager.Instance, SyncDescriptor, payload);
     }
 
     private static async Task ExecuteManaged(RitsuLibManagedNetActionContext<int> context)
@@ -46,7 +44,7 @@ public static class FgoMoonRabbitFormCmd
         if (card is not MoonRabbit && card is not MoonRabbitNap) return;
 
         var targetNap = (context.Message & 1) != 0;
-        if ((card is MoonRabbitNap) == targetNap) return;
+        if (card is MoonRabbitNap == targetNap) return;
 
         if (card.IsUpgraded)
         {
@@ -87,6 +85,7 @@ public sealed class FgoMoonRabbitRightClickHandler : IModRightClickHandler
             index = i;
             break;
         }
+
         if (index < 0) return false;
 
         return FgoMoonRabbitFormCmd.Request(index, card is MoonRabbit);

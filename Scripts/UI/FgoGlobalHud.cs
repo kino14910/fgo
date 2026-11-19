@@ -377,7 +377,7 @@ public sealed partial class FgoGlobalHud : Control
     /// <summary>找出〔虚数空间〕额外手牌区的容器节点（由 RitsuLib 挂在 NCombatUi 下）。</summary>
     private static NModExtraHand? FindVoidHandView()
     {
-        return NCombatRoom.Instance?.Ui?.GetChildren()
+        return NCombatRoom.Instance?.Ui.GetChildren()
             .OfType<NModExtraHand>()
             .FirstOrDefault(static view => view.Definition.PileType.Equals(FgoEnums.VoidHand));
     }
@@ -473,10 +473,9 @@ public sealed partial class FgoGlobalHud : Control
         _starBox.MouseExited -= OnStarMouseExited;
         NHoverTipSet.Remove(_starBox);
 
-        if (_fieldRow != null)
-            foreach (var child in _fieldRow.GetChildren())
-                if (child is Control control)
-                    NHoverTipSet.Remove(control);
+        foreach (var child in _fieldRow.GetChildren())
+            if (child is Control control)
+                NHoverTipSet.Remove(control);
     }
 
     private static void OnCommandSpellButtonPressed()

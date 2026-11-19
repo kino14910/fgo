@@ -8,7 +8,6 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
-using MegaCrit.Sts2.Core.Nodes.CommonUi;
 using STS2RitsuLib.Cards.DynamicVars;
 
 namespace Fgo.Scripts.Cards.NoblePhantasm;
@@ -35,14 +34,11 @@ public class SecondLife() : NobleCardModel(1, CardType.Skill, TargetType.Self)
         var cardModel = (await CardSelectCmd.FromCombatPile(choiceContext,
             PileType.Exhaust.GetPile(Owner), Owner, new CardSelectorPrefs(SelectionScreenPrompt, 1)
         )).FirstOrDefault();
-        if (cardModel != null)
-        {
-            await CardPileCmd.Add(cardModel, PileType.Hand);
-        }
-        
+        if (cardModel != null) await CardPileCmd.Add(cardModel, PileType.Hand);
+
         await KillMinions(Owner, DynamicVars["Np"].IntValue, cardPlay.Card);
     }
-    
+
     private static async Task KillMinions(Player player, int npPerMinion, CardModel source)
     {
         // Player.Character 是共享单例，判归属一律走 Creature / CombatState以保持同步。

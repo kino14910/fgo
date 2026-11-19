@@ -44,7 +44,7 @@ internal static class FgoWorldSkin
         var sprite = FindSprite(root, spritePath);
         if (sprite == null) return;
 
-        var netId = ownerNetId ?? RunManager.Instance?.NetService?.NetId ?? 0;
+        var netId = ownerNetId ?? RunManager.Instance.NetService.NetId;
         sprite.Texture = FgoSkinApplier.LoadSkinTexture(FgoSkinSync.ResolveSkin(netId));
 
         Bindings.Remove(root);
@@ -89,7 +89,7 @@ internal static class FgoWorldSkin
         for (var i = 0; i < count; i++)
         {
             var player = players[i];
-            if (player?.Character is not FgoCharacter) continue;
+            if (player.Character is not FgoCharacter) continue;
 
             Apply(visuals[i], MerchantSpritePath, player.NetId);
         }

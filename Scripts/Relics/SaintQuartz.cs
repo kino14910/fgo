@@ -1,5 +1,4 @@
 using Fgo.Scripts.Character;
-using Fgo.Scripts.Utils;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Context;
 using MegaCrit.Sts2.Core.Entities.Relics;
@@ -47,7 +46,7 @@ public class SaintQuartz : FgoRelic, IModRightClickableRelic
             return;
         }
 
-        var selected = await CardSelectCmd.FromChooseACardScreen(choiceContext, options, player, canSkip: true);
+        var selected = await CardSelectCmd.FromChooseACardScreen(choiceContext, options, player, true);
         if (selected == null)
         {
             Flash();

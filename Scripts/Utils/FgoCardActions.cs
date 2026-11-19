@@ -109,7 +109,7 @@ public static class FgoCardActions
     {
         CardCmd.PreviewCardPileAdd(await CardPileCmd.AddGeneratedCardToCombat(card, pile, card.Owner, position), time);
     }
-    
+
     /// <summary> <c>CardSelectCmd.FromChooseACardScreen</c> 无3张数量限制版本。</summary>
     public static async Task<CardModel?> FromChooseACardScreenUncapped(
         PlayerChoiceContext context,
@@ -126,9 +126,7 @@ public static class FgoCardActions
         var combat = CombatManager.Instance;
         if (combat.IsPlayerReadyToEndTurn(player)
             && player.Creature.CombatState is { CurrentSide: CombatSide.Player })
-        {
             combat.TryUndoReadyToEndTurn(player);
-        }
 
         var stack = RunManager.Instance.CardSelectorStack;
         CardModel? result;
@@ -154,9 +152,8 @@ public static class FgoCardActions
                     var screen = NChooseACardSelectionScreen.ShowScreen(cards, canSkip);
 
                     if (LocalContext.IsMe(player))
-                    {
-                        foreach (var card in cards) SaveManager.Instance.MarkCardAsSeen(card);
-                    }
+                        foreach (var card in cards)
+                            SaveManager.Instance.MarkCardAsSeen(card);
 
                     result = screen == null ? null : (await screen.CardsSelected()).FirstOrDefault();
 
@@ -203,8 +200,8 @@ public static class FgoCardActions
             return;
 
         var card = result.cardAdded;
-        var trailContainer = NRun.Instance?.GlobalUi?.TopBar?.TrailContainer as Control;
-        var previewContainer = NRun.Instance?.GlobalUi?.CardPreviewContainer;
+        var trailContainer = NRun.Instance?.GlobalUi.TopBar.TrailContainer as Control;
+        var previewContainer = NRun.Instance?.GlobalUi.CardPreviewContainer;
         if (trailContainer == null || previewContainer == null)
         {
             CardCmd.PreviewCardPileAdd(result, time);

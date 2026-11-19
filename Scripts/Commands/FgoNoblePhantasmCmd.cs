@@ -91,10 +91,8 @@ public static class FgoNoblePhantasmCmd
             cards.Add(nobleCard);
 
         if (cards.Count == 0)
-        {
             Entry.Logger.Warn(
                 $"[Fgo] np_button skipped for netId={player.NetId}: NobleDeck has {noblePile.Cards.Count} card(s) but no noble card.");
-        }
 
         return cards;
     }

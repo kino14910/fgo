@@ -29,6 +29,8 @@ namespace Fgo.Scripts.Patches;
 /// </remarks>
 public sealed class FgoCreatureSkinPatch : IPatchMethod
 {
+    // Creature（每位玩家唯一）-> 其已创建的视觉，供收到皮肤同步消息后即时重套
+    private static readonly Dictionary<Creature, NCreatureVisuals> VisualsCache = new();
     public static string PatchId => "fgo.skin.creature_visuals";
 
     public static string Description =>
@@ -40,9 +42,6 @@ public sealed class FgoCreatureSkinPatch : IPatchMethod
     {
         return [PatchTarget.Method<Creature>(nameof(Creature.CreateVisuals))];
     }
-
-    // Creature（每位玩家唯一）-> 其已创建的视觉，供收到皮肤同步消息后即时重套
-    private static readonly Dictionary<Creature, NCreatureVisuals> VisualsCache = new();
 
     [HarmonyPostfix]
     public static void Postfix(Creature __instance, NCreatureVisuals? __result)
@@ -74,10 +73,9 @@ public sealed class FgoCreatureSkinPatch : IPatchMethod
     /// </summary>
     public static void ReapplySkin(ulong netId, int skin)
     {
-        var runState = RunManager.Instance?.DebugOnlyGetState();
-        if (runState == null) return;
+        var runState = RunManager.Instance.DebugOnlyGetState();
 
-        var player = runState.Players.FirstOrDefault(p => p.NetId == netId);
+        var player = runState?.Players.FirstOrDefault(p => p.NetId == netId);
         if (player is null) return;
         if (!VisualsCache.TryGetValue(player.Creature, out var visuals)) return;
 

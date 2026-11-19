@@ -40,7 +40,7 @@ public sealed class FgoCharismaCostPatch : IPatchMethod
     private static void Postfix(CardModel card, ref UnplayableReason reason, ref bool __result)
     {
         if (!reason.HasFlag(UnplayableReason.EnergyCostTooHigh)) return;
-        if (card.Owner?.Creature is not { } creature) return;
+        if (card.Owner.Creature is not { } creature) return;
         if (!creature.HasPower<CharismaPower>()) return;
 
         reason &= ~UnplayableReason.EnergyCostTooHigh;

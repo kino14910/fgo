@@ -3,8 +3,10 @@ using STS2RitsuLib;
 
 namespace Fgo.Scripts.UI;
 
-/// <remarks>参数全走 <see cref="FgoNpBar.NpGlowTuning" />，本类只持有节点、定位光心、转发强度。
-/// 层级与鼠标过滤由 <see cref="FgoNpBar.BuildGlowFx" /> 及场景设置（否则整层盖住按钮会吃掉点击）。</remarks>
+/// <remarks>
+///     参数全走 <see cref="FgoNpBar.NpGlowTuning" />，本类只持有节点、定位光心、转发强度。
+///     层级与鼠标过滤由 <see cref="FgoNpBar.BuildGlowFx" /> 及场景设置（否则整层盖住按钮会吃掉点击）。
+/// </remarks>
 public sealed partial class FgoNpGlowFx : Control
 {
     public const string ScenePath = "res://Fgo/scenes/fgo_np_glow_fx.tscn";
@@ -119,5 +121,4 @@ public sealed partial class FgoNpGlowFx : Control
 
         return new Rect2(-half, -half, half * 2f, half * 2f);
     }
-
 }

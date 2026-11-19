@@ -43,12 +43,12 @@ public class CharismaPower : FgoPowerModel
 
     /// <summary>
     ///     判定卡牌是否应显示[gold]超能量击[/gold]紫光：拥有者持有本能力、当前处于出牌阶段、
-    ///     卡牌其余条件均可打出（<see cref="CardModel.CanPlay" />），且应支付能量超过剩余能量
+    ///     卡牌其余条件均可打出（<see cref="CardModel.CanPlay()" />），且应支付能量超过剩余能量
     ///     —— 即"只能靠本能力超能量额打出"的卡。
     ///     <para>
     ///         能量门槛的解除见 <c>FgoCharismaCostPatch</c>（清除 <c>UnplayableReason.EnergyCostTooHigh</c>），
-    ///         所以这里的 <see cref="CardModel.CanPlay" /> 对超能卡必然为真；不可打出原因若是别的
-    ///         （Unplayable 关键词、BlockedByHook、星费等），<see cref="CardModel.CanPlay" /> 为假，
+    ///         所以这里的 <see cref="CardModel.CanPlay()" /> 对超能卡必然为真；不可打出原因若是别的
+    ///         （Unplayable 关键词、BlockedByHook、星费等），<see cref="CardModel.CanPlay()" /> 为假，
     ///         连同原版 holder 门控一起挡下，不会误亮，也不会覆盖红/金等其他描边。
     ///     </para>
     ///     <para>
@@ -57,7 +57,7 @@ public class CharismaPower : FgoPowerModel
     /// </summary>
     public static bool ShouldGlowPurple(CardModel card)
     {
-        if (card.Owner?.PlayerCombatState is not { } combatState) return false;
+        if (card.Owner.PlayerCombatState is not { } combatState) return false;
         if (combatState.Phase != PlayerTurnPhase.Play) return false;
         if (card.EnergyCost.GetAmountToSpend() <= combatState.Energy) return false;
         if (!card.CanPlay()) return false;

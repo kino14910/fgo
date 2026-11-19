@@ -39,7 +39,7 @@ public class WitchOfSalem() : FgoCardModel(2, CardType.Power,
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        var powers = await PowerCmd.Apply<TerrorPower>(choiceContext, CombatState.HittableEnemies,
+        var powers = await PowerCmd.Apply<TerrorPower>(choiceContext, CombatState!.HittableEnemies,
             DynamicVars[nameof(TerrorPower)].IntValue,
             Owner.Creature, this);
 

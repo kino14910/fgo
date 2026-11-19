@@ -90,8 +90,8 @@ public static class FgoSkinSync
     {
         FgoReflectedSettings.ReflectBoundValues();
 
-        var netService = RunManager.Instance?.NetService;
-        if (netService == null || netService.Type is NetGameType.None or NetGameType.Replay)
+        var netService = RunManager.Instance.NetService;
+        if (netService.Type is NetGameType.None or NetGameType.Replay)
         {
             // 握手事件常先于 RunManager 挂上 NetService 触发（加入大厅阶段），此时直接返回会让
             // "从未改过设置的人"整局都不发皮肤。交由 RunStarted / 视觉创建时的自愈路径补发。
@@ -131,11 +131,9 @@ public static class FgoSkinSync
         if (RemoteSkins.TryGetValue(netId, out var skin))
             return skin;
 
-        var localNetId = RunManager.Instance?.NetService?.NetId;
-        if (localNetId == null || netId == localNetId.Value)
-            return (int)FgoReflectedSettings.CharacterSkin;
-
-        return NeutralDefaultSkin;
+        return netId == RunManager.Instance.NetService.NetId
+            ? (int)FgoReflectedSettings.CharacterSkin
+            : NeutralDefaultSkin;
     }
 
     /// <summary>
@@ -153,8 +151,8 @@ public static class FgoSkinSync
     /// </summary>
     public static void OnSessionBound()
     {
-        var netService = RunManager.Instance?.NetService;
-        if (netService == null || netService.Type is NetGameType.None or NetGameType.Replay)
+        var netService = RunManager.Instance.NetService;
+        if (netService.Type is NetGameType.None or NetGameType.Replay)
             return;
 
         SendSkinSync();
@@ -168,7 +166,7 @@ public static class FgoSkinSync
     /// </summary>
     private static void RequestFullResync()
     {
-        var netService = RunManager.Instance?.NetService;
+        var netService = RunManager.Instance.NetService;
         if (netService is not NetClientGameService) return;
 
         RitsuLibSidecarTypedMessageRegistry.SendToHost(netService, SkinResyncDescriptor, new SkinResyncRequest());
@@ -182,7 +180,7 @@ public static class FgoSkinSync
     /// </summary>
     public static void RequestResyncFromVisualPath()
     {
-        var netService = RunManager.Instance?.NetService;
+        var netService = RunManager.Instance.NetService;
         if (netService is not NetClientGameService) return;
 
         var now = DateTime.UtcNow;
@@ -199,8 +197,7 @@ public static class FgoSkinSync
     {
         if (!context.IsHostIngest) return;
 
-        var netService = RunManager.Instance?.NetService;
-        if (netService == null) return;
+        var netService = RunManager.Instance.NetService;
 
         foreach (var (netId, skin) in RemoteSkins)
             RitsuLibSidecarTypedMessageRegistry.Broadcast(
@@ -219,7 +216,7 @@ public static class FgoSkinSync
         // 这里只需判断 IsHostIngest（主机从客户端收到的消息），广播只发往对端、不会回传主机自身，无环。
         if (context.IsHostIngest)
             RitsuLibSidecarTypedMessageRegistry.Broadcast(
-                RunManager.Instance?.NetService, SkinSyncDescriptor, context.Message);
+                RunManager.Instance.NetService, SkinSyncDescriptor, context.Message);
 
         // 若对应玩家的生物视觉已创建，立即按最新皮肤重套（覆盖视觉先于消息到达的情况）
         FgoCreatureSkinPatch.ReapplySkin(context.Message.NetId, context.Message.Skin);

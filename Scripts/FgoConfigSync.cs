@@ -104,7 +104,7 @@ public static class FgoConfigSync
     /// </summary>
     private static void PublishHostConfig(string reason)
     {
-        if (RunManager.Instance?.NetService is not NetHostGameService host) return;
+        if (RunManager.Instance.NetService is not NetHostGameService host) return;
 
         var config = CurrentConfig();
         NetworkNoCostNoblePhantasm = config.NoCostNoblePhantasm;
@@ -132,7 +132,7 @@ public static class FgoConfigSync
     /// </summary>
     public static bool IsNetworkedRun()
     {
-        return RunManager.Instance?.NetService is NetHostGameService or NetClientGameService;
+        return RunManager.Instance.NetService is NetHostGameService or NetClientGameService;
     }
 
     private static void OnTopicChanged(SidecarConfigTopicChangedEvent e)

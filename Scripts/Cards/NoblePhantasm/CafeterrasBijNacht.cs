@@ -30,9 +30,9 @@ public class CafeterrasBijNacht() : NobleCardModel(2, CardType.Attack, TargetTyp
         FgoFieldId.City.ToHoverTip(),
         HoverTipFactory.Static(StaticHoverTip.Stun)
     ];
-    
+
     protected override HashSet<CardTag> CanonicalTags => [FgoTags.Foreigner];
-    
+
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         ModCardVars.Damage(32),

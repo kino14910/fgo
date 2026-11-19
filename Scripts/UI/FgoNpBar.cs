@@ -1,4 +1,3 @@
-using System.Text;
 using Fgo.Scripts.Character;
 using Fgo.Scripts.Commands;
 using Fgo.Scripts.Powers;
@@ -367,7 +366,10 @@ public sealed partial class FgoNpBar : Node
         }
     }
 
-    /// <remarks>绘制顺序按有效 z 升序、同 z 按树序。本层须与按钮同 z（0）—— +1 盖住按钮、-1 掉到立绘（z=0）之下；靠 <c>MoveChild</c> 到按钮之前让按钮后绘制压住它（按钮置前避免加色泛白）。<c>_npBarRoot</c> 不能开 <c>clip_children</c>。</remarks>
+    /// <remarks>
+    ///     绘制顺序按有效 z 升序、同 z 按树序。本层须与按钮同 z（0）—— +1 盖住按钮、-1 掉到立绘（z=0）之下；靠 <c>MoveChild</c> 到按钮之前让按钮后绘制压住它（按钮置前避免加色泛白）。
+    ///     <c>_npBarRoot</c> 不能开 <c>clip_children</c>。
+    /// </remarks>
     private void BuildGlowFx()
     {
         if (_npBarRoot == null || _button == null)
@@ -720,7 +722,7 @@ public sealed partial class FgoNpBar : Node
         if (NHoverTipSet.shouldBlockHoverTips)
             return true;
 
-        if (NCombatRoom.Instance?.Ui?.Hand?.InCardPlay == true)
+        if (NCombatRoom.Instance?.Ui.Hand.InCardPlay == true)
             return true;
 
         return ActiveScreenContext.Instance.GetCurrentScreen() is { } screen &&
