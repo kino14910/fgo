@@ -3,7 +3,6 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models.CardPools;
-using MegaCrit.Sts2.Core.ValueProps;
 using STS2RitsuLib.Cards.DynamicVars;
 using STS2RitsuLib.Interop.AutoRegistration;
 
@@ -33,16 +32,21 @@ public class RocketLauncher() : FgoBaseCardModel(0, CardType.Attack,
         var combat = Owner.Creature.CombatState;
         if (combat == null) return;
 
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
+        var damage = DynamicVars.Damage.BaseValue;
+
+        await DamageCmd.Attack(damage)
             .FromCard(this, cardPlay)
             .Targeting(target)
             .WithHitFx("vfx/vfx_fire_burst")
             .Execute(choiceContext);
 
         var others = combat.HittableEnemies.Where(enemy => enemy != target && enemy.IsAlive).ToList();
-        if (others.Count == 0) return;
-
-        await CreatureCmd.Damage(choiceContext, others, DynamicVars.Damage.BaseValue / 2m,
-            ValueProp.Move, Owner.Creature, this, cardPlay);
+        foreach (var enemy in others)
+            await DamageCmd.Attack(damage / 2m)
+                .FromCard(this, cardPlay)
+                .Targeting(enemy)
+                .WithNoAttackerAnim()
+                .WithHitFx("vfx/vfx_fire_burst")
+                .Execute(choiceContext);
     }
 }
