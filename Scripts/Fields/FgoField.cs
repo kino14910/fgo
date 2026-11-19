@@ -5,10 +5,7 @@ using STS2RitsuLib.Utils;
 
 namespace Fgo.Scripts.Fields;
 
-/// <remarks>
-///     状态按 <see cref="ICombatState" /> 附着（<c>AttachedState</c>），若新增本地发起的改动须补版本化广播，否则各端分叉。写入方法返回的 Task 恒已完成，内部绝不能引入真
-///     <c>await</c>：调用点连续写入后紧接读取，让出会让逐帧 HUD/背景看到半状态、各端序列分叉。真异步放 <see cref="FgoFieldEffects" />，由调用方 await。
-/// </remarks>
+/// <remarks>写入方法返回的 Task 恒已完成，内部绝不能真 await：调用点连续写入后紧接读取，让出会让 HUD 看到半状态、各端序列分叉。</remarks>
 public static class FgoField
 {
     public const int ActFieldTurns = 3;

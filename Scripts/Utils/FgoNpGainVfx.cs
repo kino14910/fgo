@@ -38,7 +38,6 @@ public partial class FgoNpGainVfx : Label
 
         _velocity = new Vector2(Rng.Chaotic.NextFloat(-100f, 100f), Rng.Chaotic.NextFloat(-800f, -700f));
 
-        // 动画：淡入后淡出 + 缩放回归
         _tween = CreateTween().SetParallel();
         _tween.TweenProperty(this, "modulate", NpColor, 0.5)
             .SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
@@ -48,7 +47,6 @@ public partial class FgoNpGainVfx : Label
             .SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Quad)
             .From(Vector2.One * 2.5f);
 
-        // 动画结束后自动释放
         TaskHelper.RunSafely(AnimAndFree());
     }
 

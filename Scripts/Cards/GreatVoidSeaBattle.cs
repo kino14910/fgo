@@ -36,7 +36,6 @@ public class GreatVoidSeaBattle() : FgoCardModel(1, CardType.Skill,
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        // 基础宝具值 = 5 +〔虚数脱出〕换来的永久加成。
         ModCardVars.Computed("Np", static ctx =>
                 BaseNpOf(ctx.Player),
             BaseNp)
@@ -52,8 +51,6 @@ public class GreatVoidSeaBattle() : FgoCardModel(1, CardType.Skill,
         await FgoResCmd.ModifyNp(DynamicVars.EvaluateValueOrDefault("Np"), Owner);
         await FgoField.Add(Owner.Creature.CombatState, FgoFieldId.Waterside, 3);
 
-        // 〔虚数空间〕是出牌者本人的状态：只换自己的手牌，其余玩家不受影响。
-        // 状态挂在 ImaginarySpacePower 上，随复制动作跨端同步；重复打出按「能力在身」幂等。
         if (Owner.Creature.CombatState is { } combat)
             await FgoVoidHand.Enter(choiceContext, combat, Owner);
     }
@@ -78,12 +75,6 @@ public class GreatVoidSeaBattle() : FgoCardModel(1, CardType.Skill,
     ///     首次使基础宝具值达到 <see cref="BirdThresholdNp" /> 时解锁〔好似飞鸟〕，并把加成清空
     ///     （= 基础宝具值回到 <see cref="BaseNp" />）。
     /// </summary>
-    /// <remarks>
-    ///     <para />
-    ///     加成本身存放在按玩家的局内存档（<see cref="FgoRunState" />）而不是某张卡实例上，
-    ///     因为给出加成的是"另一张卡"（虚数脱出），且一位玩家只会有一份。
-    ///     <para />
-    /// </remarks>
     public static async Task ConsumeExplorationPoints(PlayerChoiceContext choiceContext, Player player)
     {
         var points = await ExplorationPointsPower.TakeAll(player.Creature);
@@ -103,6 +94,7 @@ public class GreatVoidSeaBattle() : FgoCardModel(1, CardType.Skill,
 
     private static void AddBonusNp(Player player, int delta)
     {
+        // 加成存按玩家的局内存档而非卡实例：给出加成的是另一张卡（虚数脱出），且每人只一份。
         Entry.RunState.Modify(player, data => data.GreatVoidSeaBattleBonusNp += delta);
     }
 }

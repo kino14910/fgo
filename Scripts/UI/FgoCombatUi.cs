@@ -62,6 +62,7 @@ internal sealed partial class EnergyCounterPivotFix : Node
     {
         var rotationLayers = GetParent()?.GetNodeOrNull<Control>("%RotationLayers");
         if (rotationLayers != null)
+            // 64 是能量计数器 128×128 的中心，把旋转支点从左上角移到正中。
             rotationLayers.PivotOffset = new Vector2(64, 64);
     }
 }

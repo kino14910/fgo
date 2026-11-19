@@ -28,6 +28,7 @@ public static class FgoMoonRabbitFormCmd
             RunManager.Instance.ActionQueueSynchronizer.CombatState != ActionSynchronizerCombatState.PlayPhase)
             return false;
 
+        // payload 低位存 targetNap、其余位存手牌索引；解包见 >>1 与 &1。
         var payload = (handIndex << 1) | (targetNap ? 1 : 0);
         return RitsuLibManagedNetActions.Request(RunManager.Instance, SyncDescriptor, payload);
     }

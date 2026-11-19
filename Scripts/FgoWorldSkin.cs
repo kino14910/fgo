@@ -20,13 +20,10 @@ namespace Fgo.Scripts;
 /// </summary>
 internal static class FgoWorldSkin
 {
-    // 商店形象根节点下皮肤精灵的节点名（guda_merchant.tscn）
     public const string MerchantSpritePath = "Icon";
 
-    // 火堆形象根节点下皮肤精灵的节点路径（guda_rest_site.tscn）
     public const string RestSiteSpritePath = "ControlRoot/Sprite";
 
-    // 节点弱引用 -> 皮肤绑定，供收到远端皮肤消息后即时刷新
     private static readonly ConditionalWeakTable<Node, SkinBinding> Bindings = new();
 
     private static FieldInfo? _merchantPlayersField;
@@ -50,7 +47,6 @@ internal static class FgoWorldSkin
         Bindings.Remove(root);
         Bindings.Add(root, new SkinBinding { NetId = netId, SpritePath = spritePath });
 
-        // 该拥有者皮肤未知时请求一次全量重播（节流），到达后由 Refresh 纠正。
         if (!FgoSkinSync.HasRemoteSkin(netId))
             FgoSkinSync.RequestResyncFromVisualPath();
     }

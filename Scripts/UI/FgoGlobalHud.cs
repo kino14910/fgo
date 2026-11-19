@@ -14,8 +14,6 @@ using MegaCrit.Sts2.Core.Nodes.HoverTips;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
 using STS2RitsuLib.CardPiles.Nodes;
 using STS2RitsuLib.Scaffolding.Godot.NodeAttachments;
-// ReSharper disable once RedundantUsingDirective
-using Fgo.Scripts;
 
 namespace Fgo.Scripts.UI;
 
@@ -61,22 +59,18 @@ public sealed partial class FgoGlobalHud : Control
 
     private TextureButton _commandSpellButton = null!;
 
-    // 场地行: 显示当前战场上的场地。按版本号做脏检查，仅在场地集合变化时重建。
     private CenterContainer _fieldRoot = null!;
     private HBoxContainer _fieldRow = null!;
     private bool _lastCanUse;
     private int _lastCommandSpell = -1;
     private int _lastFieldVersion = -1;
 
-    // 脏检查缓存: 仅值变化时才触碰控件，避免每帧无条件 GD.Load/赋值导致的重绘。
     private int _lastStars = -1;
 
-    // 〔虚数空间〕期间需要隐藏原版手牌区、并把额外手牌区对齐到原版位置，这里记上次的开关状态做脏检查。
     private bool _lastVoidSpace;
     private HBoxContainer _starBox = null!;
     private Label _starLabel = null!;
 
-    // 缓存的额外手牌区容器（RitsuLib 挂在 NCombatUi 下），失效时重新查找。
     private NModExtraHand? _voidHandView;
 
     private static HoverTip CommandSpellHoverTip =>
@@ -151,9 +145,6 @@ public sealed partial class FgoGlobalHud : Control
         //---------------------------------------
         //---------------------------------------
 
-        // 场地是战场级属性（对所有单位生效），因此只在 HUD 上显示一次，不给每个生物各挂图标。
-        // 位置: 顶部居中（TopCenter）。外层 CenterContainer 只占顶部一条横带（TopWide + 固定高度），
-        // 由它把场地行水平居中；上下位置改 FieldRowTop，横带高度改 FieldRowHeight。
         _fieldRoot = new CenterContainer();
         _fieldRoot.Name = "FieldRoot";
         _fieldRoot.MouseFilter = MouseFilterEnum.Ignore;
@@ -188,7 +179,6 @@ public sealed partial class FgoGlobalHud : Control
         var hbox = new HBoxContainer();
 
         hbox.AddThemeConstantOverride("separation", 8);
-        // 整个 star 行作为 hover tip 的载体
         hbox.MouseFilter = MouseFilterEnum.Stop;
         hbox.MouseEntered += OnStarMouseEntered;
         hbox.MouseExited += OnStarMouseExited;
@@ -199,7 +189,6 @@ public sealed partial class FgoGlobalHud : Control
         var starIcon = new Label();
 
         starIcon.Text = "✨";
-        // 让父 HBoxContainer 接收鼠标事件
         starIcon.MouseFilter = MouseFilterEnum.Pass;
 
         starIcon.AddThemeFontSizeOverride(
@@ -211,7 +200,6 @@ public sealed partial class FgoGlobalHud : Control
         _starLabel = new Label();
 
         _starLabel.Text = "0";
-        // 让父 HBoxContainer 接收鼠标事件
         _starLabel.MouseFilter = MouseFilterEnum.Pass;
 
         _starLabel.AddThemeFontSizeOverride(
@@ -235,13 +223,10 @@ public sealed partial class FgoGlobalHud : Control
             return;
         }
 
-        // 战斗尚未激活（开局 IsStarting 未置位）或仅处于暂停时保持轮询，
-        // 否则会错过恢复时机导致 HUD 永久隐藏。
+        // 战斗未激活或暂停时保持轮询，否则错过恢复时机致 HUD 永久隐藏。
         if (!_combatSeenActivated || CombatManager.Instance.IsPaused)
             return;
 
-        // 战斗已结束: 本节点即将随战斗场景销毁，关掉轮询避免空跑。
-        // 下局战斗会重建实例（_Process 默认开启），BeforeCombatStart 兜底唤醒。
         SetProcess(false);
     }
 
@@ -266,9 +251,8 @@ public sealed partial class FgoGlobalHud : Control
         foreach (var hud in Instances)
         {
             hud._combatSeenActivated = false;
-            // 新战斗的场地集合从空开始，版本号会归 0，必须让脏检查失效以重建场地行。
+            // 新战斗场地版本号归 0，须让脏检查失效以重建场地行。
             hud._lastFieldVersion = -1;
-            // 上一场战斗若停在虚数空间，手牌区可能还是隐藏的，这里强制下次刷新时恢复。
             hud._lastVoidSpace = false;
             hud._voidHandView = null;
             hud.SetProcess(true);
@@ -280,13 +264,10 @@ public sealed partial class FgoGlobalHud : Control
         var state = CombatManager.Instance.DebugOnlyGetState();
         var player = LocalContext.GetMe(state);
 
-        // 仅在本地玩家是 FGO 角色时显示令咒 / 暴击星。
-        // 多人模式下不能回退到 Players.FirstOrDefault()，那会拿到错误的（主机）玩家。
+        // 多人下不能回退到 Players.FirstOrDefault()，那会拿到错误的（主机）玩家。
         if (player is null || player.Character is not FgoCharacter)
         {
             if (Visible) Visible = false;
-            // 本地玩家不是 FGO 角色（角色不会在战斗中改变）: 本场战斗内
-            // HUD 持续隐藏，无需继续轮询；下局战斗由 BeforeCombatStart 兜底唤醒。
             SetProcess(false);
             return;
         }
@@ -295,7 +276,6 @@ public sealed partial class FgoGlobalHud : Control
 
         var resources = FgoBattleHooks.Get(player);
 
-        // 脏检查: 每帧只读数值，仅变化时更新控件，避免无条件 GD.Load / Text 赋值。
         if (resources.Stars != _lastStars)
         {
             _lastStars = resources.Stars;
@@ -330,21 +310,7 @@ public sealed partial class FgoGlobalHud : Control
     /// <summary>
     ///     〔虚数空间〕期间隐藏原版手牌区的牌、并把额外手牌区搬到原版手牌区的位置。
     /// </summary>
-    /// <remarks>
-    ///     <para>
-    ///         <b>只藏 <c>CardHolderContainer</c>，绝不能藏整个 <c>NPlayerHand</c>。</b>
-    ///         原版出牌时 <c>NPlayerHand.StartCardPlay</c> 会把被拿起的 holder
-    ///         <c>Reparent(this)</c>（挂到 NPlayerHand 自己身上，而不是牌位容器里），并把拖动/目标预览节点
-    ///         <c>NMouseCardPlay</c> 也 <c>AddChild</c> 到 NPlayerHand 下。父节点一旦不可见，拖动跟手、
-    ///         目标选择时的居中预览就全部消失——只剩"点一下能出牌"。而原版手牌的牌位恰好全部住在
-    ///         <c>CardHolderContainer</c> 里（<c>AddCardHolder</c> 只往它里面塞 holder），所以藏它一个就够。
-    ///     </para>
-    ///     <para>
-    ///         真实手牌已被 <c>FgoVoidHand</c> 搬进无界面的暂存牌堆，期间抽牌被 <c>ImaginarySpacePower</c> 拦下；
-    ///         仍要隐藏卡牌容器，避免残留牌位与额外手牌区（同一套手牌扇形布局）叠在一起。
-    ///         判定按<b>本地玩家</b>：联机时别人进入虚数空间不影响自己的手牌区。
-    ///     </para>
-    /// </remarks>
+    /// <remarks>只藏 CardHolderContainer，绝不藏整个 NPlayerHand：后者的 Visible=false 会让拖动跟手与目标预览一起消失。判定按本地玩家。</remarks>
     private void SyncVoidSpaceHand(Player? player)
     {
         var inVoidSpace = FgoVoidHand.IsInside(player);
@@ -364,12 +330,8 @@ public sealed partial class FgoGlobalHud : Control
         if (_voidHandView is not { } view || NPlayerHand.Instance is not { } vanilla) return;
         if (vanilla.CardHolderContainer is not { } holder) return;
 
-        // 手牌扇形坐标的原点: 原版是 CardHolderContainer（NPlayerHand.tscn 里锚点 (0.5, 1) 的零尺寸
-        // Control，即屏幕底边中点），RitsuLib 则是「容器左上角 + Size * 0.5」（见 NModExtraHand.ArrangeCards
-        // 的 center）。两者对齐后两边的 HandPosHelper 偏移就落在同一点上。
-        // 取「相对手牌节点」的偏移而不是全局坐标，是为了剔除手牌节点自身在入场(0→500)与禁用(+100)
-        // 动画里的平移——额外手牌区有自己那套等价的禁用表现（DisabledOffset 默认也是 (0,100)），跟着动会叠两倍。
         var origin = holder.GlobalPosition - vanilla.GlobalPosition;
+        // 额外手牌区锚点在中心，须减半尺寸把它中心对齐到原手牌区原点。
         var aligned = origin - view.Size * 0.5f;
         if (view.Position != aligned) view.Position = aligned;
     }
@@ -402,7 +364,6 @@ public sealed partial class FgoGlobalHud : Control
         {
             var entry = new Control();
             entry.CustomMinimumSize = new Vector2(FieldIconSize, FieldIconSize);
-            // 用 Pass 而不是 Stop: 悬停提示照常触发，但鼠标事件继续往下传，
             entry.MouseFilter = MouseFilterEnum.Pass;
 
             if (id.Icon() is { } icon)
@@ -416,7 +377,6 @@ public sealed partial class FgoGlobalHud : Control
             }
             else
             {
-                // 图标缺失（资源未导入）时退化为文字，保证场地仍然可见。
                 var fallback = new Label();
                 fallback.Text = id.ToTitle();
                 fallback.SetAnchorsAndOffsetsPreset(LayoutPreset.FullRect);
@@ -434,11 +394,8 @@ public sealed partial class FgoGlobalHud : Control
                 count.Text = stacks.ToString();
                 count.MouseFilter = MouseFilterEnum.Ignore;
                 count.AddThemeFontSizeOverride("font_size", FieldBadgeFontSize);
-                // 数字直接压在图标上容易糊，加一圈描边保证可读。
                 count.AddThemeConstantOverride("outline_size", 4);
                 count.AddThemeColorOverride("font_outline_color", Colors.Black);
-                // 锚到右下角并向内收缩; GrowDirection.Begin 让文字超出预留框时朝左上生长，
-                // 这样无论几位数都贴着右下角，不会溢出到图标外。
                 count.SetAnchorsPreset(LayoutPreset.BottomRight);
                 count.GrowHorizontal = GrowDirection.Begin;
                 count.GrowVertical = GrowDirection.Begin;
@@ -484,9 +441,7 @@ public sealed partial class FgoGlobalHud : Control
         var player = LocalContext.GetMe(state);
         if (player is null || player.Character is not FgoCharacter) return;
 
-        // 选牌作为托管网络动作走官方动作队列（药水 UsePotionAction 模式），
-        // 在所有 peer 上执行；此前直接在 UI 事件里跑选牌会让 host 侧
-        // 永远等不到 SetChoiceContext，动作队列死锁、全游戏卡死。
+        // 选牌须走托管动作队列：直接在 UI 事件里跑会让 host 等不到 SetChoiceContext、全游戏死锁。
         FgoCommandSpellCmd.Request();
     }
 

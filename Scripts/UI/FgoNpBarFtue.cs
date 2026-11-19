@@ -6,7 +6,6 @@ using MegaCrit.Sts2.Core.TestSupport;
 
 namespace Fgo.Scripts.UI;
 
-/// <remarks>弹窗贴 NP 按钮、运行时摆位，由 <see cref="Create" /> 传入按钮矩形。</remarks>
 public sealed partial class FgoNpBarFtue : NFtue
 {
     private const string TitleKey = "FGO_NP_FTUE_TITLE";
@@ -18,6 +17,7 @@ public sealed partial class FgoNpBarFtue : NFtue
 
     private const float ArrowScale = 0.5f;
 
+    // 箭头贴图的固有默认朝向角，用于校正 atan2 结果；换资源须同步改。
     private const float ArrowDefaultBearingDeg = 137.83f;
 
     private static readonly Vector2 ArrowTipOffset = new(-106f, 96f);
@@ -33,7 +33,6 @@ public sealed partial class FgoNpBarFtue : NFtue
 
     private static string ScenePath => $"{Entry.ResPath}/scenes/fgo_np_bar_ftue.tscn";
 
-    /// <remarks>mod 场景不在主程序集的 <c>PreloadManager</c> 缓存里，须 <c>GD.Load</c>；路径写成常量以便导出时算进 pck 依赖。</remarks>
     public static FgoNpBarFtue? Create(Rect2 targetRect)
     {
         if (TestMode.IsOn)
@@ -72,7 +71,6 @@ public sealed partial class FgoNpBarFtue : NFtue
         _confirmButton.GrabFocus();
     }
 
-    /// <remarks>默认摆按钮右侧、放不下翻左；箭头按方位角旋转（瞄尖端而非 pivot，否则指偏）。</remarks>
     private void LayoutTowards(Rect2 targetRect)
     {
         if (_popup == null || _arrow == null)
@@ -80,7 +78,7 @@ public sealed partial class FgoNpBarFtue : NFtue
 
         var screen = GetViewport().GetVisibleRect().Size;
 
-        // 先量尺寸再改 anchor；offset 必须按 popupSize 铺满，否则 TextureRect 按 expand_mode 用贴图原生尺寸重算宽度，弹窗跑出屏外。
+        // 先量尺寸再改 anchor；offset 须按 popupSize 铺满，否则 TextureRect 按 expand_mode 重算宽度致弹窗跑出屏外。
         var popupSize = _popup.Size;
 
         _popup.AnchorLeft = 0f;
@@ -117,7 +115,6 @@ public sealed partial class FgoNpBarFtue : NFtue
 
         var targetIsLeft = targetCenter.X < popupTopLeft.X + popupSize.X * 0.5f;
 
-        // 先量尺寸再铺 offset（TextureRect 换 anchor 会按 expand_mode 重算最小尺寸）。
         var arrowSize = _arrow.Size;
 
         var pivotGuess = new Vector2(
@@ -131,6 +128,7 @@ public sealed partial class FgoNpBarFtue : NFtue
         _arrow.Scale = Vector2.One * ArrowScale;
 
         // 尖端偏移 = ArrowTipOffset * Scale 再旋转；pivot 放在「目标 - 该偏移 - PivotOffset」处，尖端才落在目标上。
+        // 手算尖端旋转后反推位置对准目标；anchor 归零后 Position 相对 pivot，须减 PivotOffset。
         var rotatedTip = ArrowTipOffset * ArrowScale;
         rotatedTip = new Vector2(
             rotatedTip.X * Mathf.Cos(_arrow.Rotation) - rotatedTip.Y * Mathf.Sin(_arrow.Rotation),
@@ -148,7 +146,6 @@ public sealed partial class FgoNpBarFtue : NFtue
         _arrow.Position = targetCenter - rotatedTip - _arrow.PivotOffset;
     }
 
-    // 带 NButton 参数以遮蔽基类无参 CloseFtue()：信号签名 Action<NButton>，直接转方法组会 CS0123。
     private void OnConfirmReleased(NButton _)
     {
         CloseFtue();

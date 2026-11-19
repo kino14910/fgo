@@ -9,10 +9,6 @@ using STS2RitsuLib.Scaffolding.Godot.NodeAttachments;
 
 namespace Fgo.Scripts.UI;
 
-/// <remarks>
-///     只摘自己加的节点：<c>%BgContainer</c> 还烘焙了房间特效，清空会永久删掉。不碰 <c>NCombatRoom.Background</c>（setter 私有且会重复
-///     AddChild），只做视觉叠加。挂 <c>NCombatRoom</c> 而非 <c>NCombatUi</c>（后者的 <c>_isDebugHidden</c> 跨战斗残留会把背景设透明）。
-/// </remarks>
 public sealed partial class FgoVoidSeaBackground : Node
 {
     private const string BackgroundScenePath = "res://Fgo/scenes/fgo_void_sea_bg.tscn";
@@ -60,10 +56,6 @@ public sealed partial class FgoVoidSeaBackground : Node
         Entry.Logger.Info($"[Fgo] VoidSea: registered attachment '{def.Id}'");
     }
 
-    /// <remarks>
-    ///     初始化期一次性校验资源，把"场景根挂错脚本"从运行期 InvalidCastException 变成显式失败。
-    ///     DEBUG 下直接抛出（开发期不可能漏）；RELEASE 下记录并熔断此功能，不影响 mod 其余部分。
-    /// </remarks>
     private static void ValidateAssets()
     {
         _validated = true;
@@ -116,7 +108,7 @@ public sealed partial class FgoVoidSeaBackground : Node
         _reportedMissingInstance = false;
     }
 
-    /// <remarks>每帧轮询、只在边沿动作：状态只由〔虚数脱出〕解除，挂在 OnPlay 上会换不回。只认本地玩家。</remarks>
+    /// <remarks>每帧轮询、只在边沿动作：状态只由虚数脱出解除，挂在 OnPlay 上会换不回。</remarks>
     public static void Update(ICombatState? combat)
     {
         if (_disabled) return;
@@ -194,7 +186,6 @@ public sealed partial class FgoVoidSeaBackground : Node
         var fade = StartFade();
         if (fade == null)
         {
-            // 建不出补间（节点不在树内）就直接落最终态，至少保证背景换上。
             voidSea.Modulate = Colors.White;
             SetVanillaAlpha(vanilla, 0f);
         }
@@ -244,10 +235,6 @@ public sealed partial class FgoVoidSeaBackground : Node
         fade.TweenCallback(Callable.From(Finish));
     }
 
-    /// <remarks>
-    ///     用 <c>ResourceLoader.Load</c> 而非 <c>PreloadManager.Cache.GetScene</c>：后者对 mod 场景永远未命中、每次打 "Asset not cached"
-    ///     告警。
-    /// </remarks>
     private static PackedScene? LoadScene(string path)
     {
         if (!ResourceLoader.Exists(path))
@@ -267,10 +254,6 @@ public sealed partial class FgoVoidSeaBackground : Node
         node.QueueFree();
     }
 
-    /// <remarks>
-    ///     资源不变量在 <see cref="ValidateAssets" /> 校验；此处按 <c>Node</c> 实例化以避开
-    ///     <c>Instantiate&lt;NCombatBackground&gt;</c> 的 <c>InvalidCastException</c>。首次运行期失败即熔断，不再重试。
-    /// </remarks>
     private NCombatBackground? TryCreateBackground()
     {
         if (_disabled) return null;
@@ -355,7 +338,7 @@ public sealed partial class FgoVoidSeaBackground : Node
         vanilla.Visible = true;
     }
 
-    /// <remarks><c>Visible</c> 必须保持 true，否则整棵子树不绘制、alpha 补间看不到效果。</remarks>
+    /// <remarks>Visible 必须保持 true，否则整棵子树不绘制、alpha 补间看不到效果。</remarks>
     private static void SetVanillaAlpha(NCombatBackground? vanilla, float alpha)
     {
         if (vanilla == null || !IsInstanceValid(vanilla)) return;

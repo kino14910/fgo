@@ -62,10 +62,7 @@ public class Entry
         FgoEnums.Initialize(ModId);
         FgoCombatUi.Initialize();
 
-        // 注册 UI 按钮（NP 条/令咒）的托管网络动作 descriptor。
-        // 必须在任何 peer 可能发起请求前于所有端注册完成，
-        // 否则 ExecuteAction 按 opcode 找不到注册会抛异常。
-        // 卡牌效果（如 SecondLife 即死爪牙）走 OnPlay，出牌本身已复制，不需要托管动作。
+        // 必须在任何 peer 发起请求前于所有端注册，否则 ExecuteAction 按 opcode 找不到注册会抛异常。
         RitsuLibManagedNetActions.Register(FgoNoblePhantasmCmd.SyncDescriptor);
         RitsuLibManagedNetActions.Register(FgoCommandSpellCmd.SyncDescriptor);
         RitsuLibManagedNetActions.Register(FgoMoonRabbitFormCmd.SyncDescriptor);
@@ -83,23 +80,15 @@ public class Entry
                 });
         }
 
-        // FTUE 首见标记。必须单开一个 using 块：上面那个用的是 GetRunSavedDataStore，
-        // 这里用的是 GetDataStore（两个不同的 store 实例）。
+        // 必须单开 using 块：上面用 GetRunSavedDataStore、这里用 GetDataStore，是不同 store 实例。
         FgoFtue.Register();
 
-        // Noble 卡牌图书馆筛选按钮: 调用 RitsuLib 的注册 API，
-        // 由 RitsuLib 的 CardLibraryCompendiumPatch 在 NCardLibrary._Ready
-        // postfix 中自动构造按钮、加入 strip、连接信号、注册到 _poolFilters。
-        // 详见 NoblePoolFilterRegistration 上的文档注释。
         ModContentRegistry
             .For(ModId)
             .RegisterCardLibraryCompendiumSharedPoolFilter<NobleCardPool>(
                 NoblePoolFilterRegistration.StableId,
                 NoblePoolFilterRegistration.IconTexturePath);
 
-        // Noble 卡相关 patch。全部通过 Ritsu 的 patcher 模式注册
-        // （IPatchMethod + CreatePatcher + ApplyRequiredPatcher），
-        // 不直接用 new Harmony(...).PatchAll() —— 那样绕过了 Ritsu 的诊断/回滚机制。
         var noblePatcher = RitsuLibFramework.CreatePatcher(ModId, "noble_cards");
         noblePatcher.RegisterPatch<NobleCardHideBannerPatch>();
         noblePatcher.RegisterPatch<NobleRaritySortPatch>();
@@ -111,7 +100,6 @@ public class Entry
             DisableMod,
             "Noble card patcher failed; Noble pool UI features will not work.");
 
-        // 选人页设置面板 patch（修改 FgoReflectedSettings 的滑块/开关）。
         var charSelectPatcher = RitsuLibFramework.CreatePatcher(ModId, "character_select_settings");
         charSelectPatcher.RegisterPatch<FgoCharacterSelectSettingsReadyPatch>();
         charSelectPatcher.RegisterPatch<FgoCharacterSelectSettingsSelectPatch>();
@@ -121,7 +109,6 @@ public class Entry
             DisableMod,
             "Character select settings patcher failed; in-run settings panel will not work.");
 
-        // 领袖气质（Charisma）: 能量不足时仍可打出（缺失能量改由生命值支付）。
         var cardCostPatcher = RitsuLibFramework.CreatePatcher(ModId, "card_cost");
         cardCostPatcher.RegisterPatch<FgoCharismaCostPatch>();
         RitsuLibFramework.ApplyRequiredPatcher(
@@ -129,10 +116,7 @@ public class Entry
             DisableMod,
             "Charisma cost patcher failed; Charisma cannot be played with insufficient energy.");
 
-        // 原版手牌输入护栏: 〔虚数空间〕进出时原版手牌被整体搬空并隐藏，拖动出牌期间
-        // NPlayerHand._draggedHolderIndex 与可见牌位数脱节，_UnhandledInput 里的
-        // list.Insert 会抛 IndexOutOfRange（打〔虚数大海战〕时必现那条 ERROR）。
-        // 索引越界时跳过本次输入即可，无其他副作用。
+        // 虚数空间进出时原版手牌被搬空隐藏，拖动期间 list.Insert 索引会越界抛异常；护栏跳过该次输入即可。
         var handInputPatcher = RitsuLibFramework.CreatePatcher(ModId, "player_hand_input");
         handInputPatcher.RegisterPatch<FgoPlayerHandInputPatch>();
         RitsuLibFramework.ApplyRequiredPatcher(
@@ -140,10 +124,6 @@ public class Entry
             DisableMod,
             "Player hand input guard patcher failed; card shortcut keys may crash during void space transitions.");
 
-        // 角色皮肤（战斗生物视觉 + 商家房间）。这两个原本是 [HarmonyPatch] 属性式 patch，
-        // 靠旧的 Harmony.PatchAll(typeof(NGamePatch).Assembly) 注册；0.113 适配移除 AutoSlay patch 时
-        // 该入口一并删除，而 vanilla 不 PatchAll(Fgo.dll)、Ritsu 也不扫 [HarmonyPatch] 特性，
-        // 导致皮肤不再套用且 VisualsCache 为空（连带 ReapplySkin 失效）。现统一改走 IPatchMethod 模式。
         var skinPatcher = RitsuLibFramework.CreatePatcher(ModId, "skin_visuals");
         skinPatcher.RegisterPatch<FgoCreatureSkinPatch>();
         skinPatcher.RegisterPatch<FgoMerchantSkinPatch>();
@@ -152,29 +132,19 @@ public class Entry
             DisableMod,
             "Skin visual patcher failed; character skins will not apply in combat or merchant rooms.");
 
-        // 领袖气质（Charisma）紫光: 只能靠该能力超能量额打出的卡，手牌描边改为紫色。
-        // 原版 NCardHighlight 只有青(playable)/金/红三色，任意色必须走 RitsuLib 的
-        // ModCardHandOutlineRegistry —— 它 postfix NHandCardHolder.UpdateCard 把
-        // CardHighlight.Modulate 写成规则颜色；refreshEveryFrame 的规则每帧重算，
-        // 打出卡后能量变化自动刷新，无需手动 refresh。
-        // 注册在 CardModel 上 ⇒ 覆盖所有卡（FGO 卡/无色/原版卡），与能力的全局语义一致；
-        // 判定逻辑收敛在 CharismaPower.ShouldGlowPurple（持有能力 + 出牌阶段 + 可打出 + 能量缺口）。
-        // 须在 ModelDb 冻结内容注册前调用（与上面的 RegisterCardLibraryCompendiumSharedPoolFilter 同）。
         ModContentRegistry
             .For(ModId)
+            // 任意色描边必须走 RitsuLib 的 ModCardHandOutlineRegistry（原版只有青/金/红）；注册在 CardModel 上覆盖所有卡。
             .RegisterCardHandOutline<CardModel>(card =>
                 CharismaPower.ShouldGlowPurple(card) ? CharismaPower.GlowColor : null);
 
-        // 订阅 run 开始/加载事件，从 RunSavedData 恢复令咒数量
         _runStartedSubscription = RitsuLibFramework.SubscribeLifecycle<RunStartedEvent>(OnRunStarted);
         _runLoadedSubscription = RitsuLibFramework.SubscribeLifecycle<RunLoadedEvent>(OnRunLoaded);
 
         FgoTelemetry.Register();
 
-        // 游戏就绪后注册 N 快捷键打开 NobleDeck
         _gameReadySubscription = RitsuLibFramework.SubscribeLifecycle<GameReadyEvent>(OnGameReady);
 
-        // 玩家在主菜单设置页改了设置后，回到主菜单时同步一次。
         _mainMenuReadySubscription = RitsuLibFramework.SubscribeLifecycle<MainMenuReadyEvent>(OnMainMenuReady);
     }
 
@@ -187,31 +157,23 @@ public class Entry
     private static void OnRunStarted(RunStartedEvent evt)
     {
         FgoConfigSync.SyncAtRunStart(RunManager.Instance);
-        // 每个端在此把自己的皮肤作为权威值再推一次：握手事件常早于 NetService 就绪（会早退），
-        // 开局是"必然已有 NetService"的确定时点，可补上那次漏发。
         FgoSkinSync.OnSessionBound();
         LoadCommandSpellForFgoPlayers(evt.RunState);
         InitializeNobleDecks(evt.RunState);
 
-        // 新局边界刷新 NobleDeck 同步的 Epoch 并重播一次，避免跨重启/跨局残留的旧版本基数挡住新快照。
         FgoNobleDeckSync.OnRunStarted();
     }
 
     private static void OnRunLoaded(RunLoadedEvent evt)
     {
-        // 读档同样要同步配置："重启游戏 → 继续存档" 不会再触发 RunStartedEvent，
-        // 若此处不同步，NetworkBaseNpPerCost 会停在 CLR 默认值（0），导致打出卡牌按费用获取宝具值失效。
         FgoConfigSync.SyncAtRunStart(RunManager.Instance);
         LoadCommandSpellForFgoPlayers(evt.RunState);
         InitializeNobleDecks(evt.RunState);
 
         FgoNobleDeckSync.OnRunStarted();
 
-        // 读档回来时同样补发一次皮肤：期间可能有队友的皮肤从未同步到（例如对方中途加入）。
         FgoSkinSync.OnSessionBound();
 
-        // 读档回到当前房间时：客户端置「跳过下一次房间进入自增」标志抵消重放多 +1，
-        // 主机把全员圣晶石计数广播一次兜底，保证读档后客户端与主机一致。
         FgoQuartzSync.OnRunLoaded(evt.RunState);
     }
 
@@ -240,12 +202,8 @@ public class Entry
 
     private static void OnGameReady(GameReadyEvent evt)
     {
-        // 主菜单就绪、设置页已预注册后，把已持久化的反射设置回填到静态属性，
-        // 确保 NobleCardModel.CanonicalEnergyCost 等依赖开关值的覆盖在规范卡首次访问费用前读到正确值。
         FgoReflectedSettings.ReflectBoundValues();
 
-        // 注册打开 NobleDeck 的快捷键：从设置页读取已持久化（SaveScope.Global）的按键绑定，
-        // 由 RitsuLib 的 RuntimeHotkeyService 在共享输入节点上路由回调。
         RegisterNobleDeckHotkey();
     }
 
@@ -297,8 +255,6 @@ public class Entry
 
     private static void DisableMod()
     {
-        // 关键 patch 失败时调用。目前没有需要全局禁用的状态，
-        // 但 Ritsu 要求传入一个 disable 回调以满足契约。
         Logger.ErrorNoTrace("[Fgo] Critical patch failed, mod disabled.");
     }
 }

@@ -21,15 +21,8 @@ namespace Fgo.Scripts.Patches;
 ///     而 <see cref="Creature" /> 是"每位玩家一个"的实例，带有 <c>Creature.Player</c>（拥有者）
 ///     与 <c>Player.NetId</c>，能唯一定位"这条视觉属于谁"。故 postfix 改挂在此处。
 /// </summary>
-/// <remarks>
-///     通过 RitsuLib 的 IPatchMethod 模式注册（见 Entry.Init）。原先是 [HarmonyPatch] 属性式 patch，
-///     依赖 Entry.Init 里的 Harmony.PatchAll；0.113 适配时该注册入口被移除，属性式 patch 不再被扫描，
-///     因此改走 CreatePatcher + RegisterPatch + ApplyRequiredPatcher。
-///     VisualsCache 与 ReapplySkin 保留为静态成员，FgoSkinSync 的调用方式不变。
-/// </remarks>
 public sealed class FgoCreatureSkinPatch : IPatchMethod
 {
-    // Creature（每位玩家唯一）-> 其已创建的视觉，供收到皮肤同步消息后即时重套
     private static readonly Dictionary<Creature, NCreatureVisuals> VisualsCache = new();
     public static string PatchId => "fgo.skin.creature_visuals";
 
@@ -48,21 +41,15 @@ public sealed class FgoCreatureSkinPatch : IPatchMethod
     {
         if (__result == null) return;
 
-        // 只处理玩家生物：怪物的 Creature.Player 为 null，直接跳过。
+        // 按拥有者 NetId 取该玩家同步出去的皮肤；远端缺值返回确定默认值，绝不用本机皮肤顶替（否则他没同步到会显示成我的皮肤）。
         var player = __instance.Player;
         if (player is null) return;
         if (player.Character is not FgoCharacter) return;
 
         VisualsCache[__instance] = __result;
 
-        // 按"拥有者的 NetId"取该玩家自己同步出去的皮肤（Sidecar 已缓存到 RemoteSkins）：
-        // 本机玩家未同步到时回退本机设置（单机 / 开局瞬间），远端玩家缺值时返回各端一致的默认值，
-        // 绝不用本机皮肤顶替远端（否则"他没同步到"会表现为"他显示成我的皮肤"）。
         FgoSkinApplier.ApplySkinToCreature(__result, FgoSkinSync.ResolveSkin(player.NetId));
 
-        // 远端玩家皮肤未知（消息没到 / 对方从未发过）时请求一次全量重播：
-        // 视觉通常每场战斗重建，这里是"发现缺值"的天然时机。ResolveSkin 已保证此时不会
-        // 用本机皮肤顶替（远端缺值返回确定默认值），重播到达后会由 ReapplySkin 纠正。
         if (!FgoSkinSync.HasRemoteSkin(player.NetId))
             FgoSkinSync.RequestResyncFromVisualPath();
     }

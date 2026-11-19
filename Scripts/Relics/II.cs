@@ -29,7 +29,6 @@ public class II : FgoRelic
         return Affection - old;
     }
 
-    // 基础 +3；本回合第一张卡 +2；〔水边〕场地时 +10。
     public void OnBeforeCardPlayed(CardPlay cardPlay)
     {
         if (Owner is not { } owner)

@@ -48,7 +48,6 @@ public sealed class FgoCharacterSelectSettingsSelectPatch : IPatchMethod
         NCharacterSelectScreen __instance,
         NCharacterSelectButton charSelectButton)
     {
-        // 0.113 起 SelectCharacter 只接收按钮本身，角色改由 charSelectButton.Character 提供。
         var show = charSelectButton.Character is FgoCharacter
                    && charSelectButton is { IsRandom: false, IsLocked: false };
         if (show)
@@ -128,7 +127,6 @@ internal sealed class FgoSettingsPanel
         _skinScroll = CreateSkinList();
         _skinPreview = CreateSkinPreview();
 
-        // 展开列表挂在独立的高层 CanvasLayer 上：浮在全局最顶层，且不参与面板容器的布局计算。
         _skinLayer = new CanvasLayer { Layer = SkinLayerIndex, Visible = false };
         _skinLayerBlocker = new Control { MouseFilter = Control.MouseFilterEnum.Stop };
         _skinLayerBlocker.SetAnchorsPreset(Control.LayoutPreset.FullRect);
@@ -294,7 +292,6 @@ internal sealed class FgoSettingsPanel
         return header;
     }
 
-    // 自定义下拉列表：纯 Control（不弹原生 PopupMenu 窗口），避免选人界面在弹窗打开时暂停 BGM。
     private ScrollContainer CreateSkinList()
     {
         var scroll = new ScrollContainer
@@ -304,7 +301,6 @@ internal sealed class FgoSettingsPanel
             MouseFilter = Control.MouseFilterEnum.Stop
         };
 
-        // 边框画在 ScrollContainer 自身的 "panel" 上：可视区外框固定不动，不会随内容滚动。
         var bg = new StyleBoxFlat
         {
             BgColor = new Color(0.1f, 0.08f, 0.05f, 0.98f),
@@ -360,7 +356,6 @@ internal sealed class FgoSettingsPanel
             CloseSkinList();
     }
 
-    // 列表浮层不参与布局，所以按表头的屏幕矩形手动定位：默认挂在表头下方，空间不够时向上翻转。
     private void PositionSkinList()
     {
         var header = _skinHeader.GetGlobalRect();
@@ -390,7 +385,6 @@ internal sealed class FgoSettingsPanel
     {
         return new TextureRect
         {
-            // IgnoreSize：预览框尺寸固定（不随纹理比例变化），任何比例的皮肤图都在框内等比居中。
             ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize,
             StretchMode = TextureRect.StretchModeEnum.KeepAspectCentered,
             SizeFlagsHorizontal = Control.SizeFlags.ExpandFill,

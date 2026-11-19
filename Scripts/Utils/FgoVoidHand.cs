@@ -18,16 +18,6 @@ namespace Fgo.Scripts.Utils;
 /// <summary>
 ///     〔虚数空间〕的「替换手牌」机制：暂存原手牌，改用固定额外手牌。按玩家各自结算，互不影响。
 /// </summary>
-/// <remarks>
-///     RitsuLib 的 ExtraHand 是<b>叠加</b>语义、无「接管原版手牌」开关，故需补两件事：
-///     ① 原手牌搬进无界面的 <see cref="FgoEnums.VoidHold" />（否则回合结束 <c>CombatManager.FlushPlayerHand</c> 会弃掉）；
-///     ② <c>FgoGlobalHud</c> 隐藏原版手牌节点，否则额外手牌与原手牌叠在一起。
-///     <para>
-///         <b>状态载体</b>：是否在虚数空间内 = 该玩家 <c>Creature</c> 上有没有 <see cref="ImaginarySpacePower" />。
-///         它不计时，只有打出〔虚数脱出〕才会解除。Power 是游戏原生状态，随复制动作与存档同步，
-///         联机时每名玩家各自持有，不需要内存名单，也不需要额外的网络广播。
-///     </para>
-/// </remarks>
 public static class FgoVoidHand
 {
     /// <summary>施加 Power 用的固定层数：不计时，只保证 <c>PowerCmd.Apply</c> 的 amount 非 0（0 会跳过施加、≤0 会被自动移除）。</summary>
@@ -56,10 +46,9 @@ public static class FgoVoidHand
             player.Creature, null);
         if (power == null) return;
 
-        // 进场先清一次额外手牌区：上一场次残留牌位（模型已不在牌堆、UI 没人收）不清会和新补的牌一起显示。
+        // 进场先清残留牌位（模型已不在牌堆、UI 没人收），否则和新补的牌一起显示。
         PurgeVoidHandViews();
 
-        // VoidHold 为 null 说明该玩家没有牌堆（理论上不会发生），此时仍要继续补额外手牌，否则拿到空手牌区且无法自救。
         if (CardPile.Get(FgoEnums.VoidHold, player) is { } hold)
         {
             var hand = PileType.Hand.GetPile(player);
@@ -71,11 +60,7 @@ public static class FgoVoidHand
     }
 
     /// <summary>只让指定玩家退出：解除不抽牌状态、清掉额外手牌、还回暂存手牌。</summary>
-    /// <remarks>
-    ///     <b>所有退出路径都必须经这里</b>（〔虚数脱出〕/ 残留自愈）；虚数空间不会自动到期。
-    ///     不抽牌由 <see cref="ImaginarySpacePower.ShouldDraw" /> 实现，退出后必须立即失效：这里无条件移除能力，
-    ///     <c>RestoreHand</c> 再清掉额外手牌，两层都让钩子放行。
-    /// </remarks>
+    /// <remarks>所有退出路径都经这里；不抽牌由 ImaginarySpacePower.ShouldDraw 实现，退出后必须立即失效。</remarks>
     public static async Task Exit(Player player)
     {
         await PowerCmd.Remove<ImaginarySpacePower>(player.Creature);
@@ -85,10 +70,6 @@ public static class FgoVoidHand
     /// <summary>
     ///     玩家回合开始：仍在虚数空间则补齐被消耗/读档丢失的专用牌；不在但有残留则清理。
     /// </summary>
-    /// <remarks>
-    ///     虚数空间没有倒计时，这里不决定进出；补牌保证〔虚数脱出〕始终可用，不会把玩家锁在里面。
-    ///     残留清理经 <see cref="Exit" />，确保不抽牌状态一并解除。
-    /// </remarks>
     public static async Task OnPlayerTurnStart(Player player)
     {
         var combat = player.Creature.CombatState;
@@ -143,7 +124,7 @@ public static class FgoVoidHand
     ///     RitsuLib 额外手牌容器只在牌堆移动视觉流程或出牌结束时摘牌位；
     ///     <see cref="CardPileCmd.RemoveFromCombat(CardModel, bool)" /> 的 <c>skipVisuals</c> 分支直接
     ///     <c>card.RemoveFromCurrentPile()</c>，两条都不走 ⇒ 退出时模型清掉但牌位还在容器上。
-    ///     判定用「模型当前牌堆≠VoidHand」而非比较实例：出牌途中模型短暂在 Play 牌堆，但 holder 已被 reparent 走、不在区内，不会误伤。
+    ///     故手动清除。
     /// </remarks>
     private static void PurgeVoidHandViews()
     {
@@ -158,7 +139,6 @@ public static class FgoVoidHand
                 if (holder.CardNode?.Model is { } model && model.Pile?.Type.Equals(FgoEnums.VoidHand) == true)
                     continue;
 
-                // 与 RitsuLib RemoveHolderForPileMove 同款收尾：先摘焦点再拆节点。
                 if (holder.HasFocus()) holder.ReleaseFocus();
                 holder.GetParent()?.RemoveChildSafely(holder);
                 holder.Clear();
@@ -196,7 +176,6 @@ public static class FgoVoidHand
                 await CardPileCmd.RemoveFromCombat(card, true);
             voidHand.Clear(true);
 
-            // 模型清完还要收掉额外手牌区牌位：RemoveFromCombat 的 skipVisuals 不走视觉流程，容器不自己摘牌位。
             PurgeVoidHandViews();
         }
 

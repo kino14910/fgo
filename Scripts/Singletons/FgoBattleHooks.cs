@@ -92,7 +92,6 @@ public sealed class FgoBattleHooks() : HookedSingletonModel(HookType.Combat)
             FgoCardActions.EnsureNobleDeckSeeded(player);
 
             await Get(player).Reset();
-            // 好感度由 II 遗物重置: 默认 0，持星剑的墓志铭时 10
             player.GetRelic<II>()?.ResetAffectionForCombat();
 
             foreach (var cd in CooldownCards(player))
@@ -130,7 +129,6 @@ public sealed class FgoBattleHooks() : HookedSingletonModel(HookType.Combat)
         var current = target.GetPower<OverchargePower>()?.Amount ?? 0;
         var cappedDelta = Math.Min(OverchargePower.MaxOvercharge, current + (int)amount) - current;
 
-        // 未触及上限时不介入，避免抢掉其它修正逻辑。
         if (cappedDelta == amount) return false;
 
         modifiedAmount = cappedDelta;
@@ -150,15 +148,11 @@ public sealed class FgoBattleHooks() : HookedSingletonModel(HookType.Combat)
         if (cardPlay.Card.Owner is not { Character: FgoCharacter } player)
             return;
 
-        // 打出任意宝具牌后，为该玩家获得 1 层 OverchargePower；
-        // 层数上限由本类的 TryModifyPowerAmountReceived 统一封顶（满层时增量为 0，Apply 自动跳过）。
         if (cardPlay.Card is NobleCardModel)
             await PowerCmd.Apply<OverchargePower>(choiceContext, player.Creature, 1, player.Creature, null);
 
         await Get(player).ResetCrit();
 
-        // 1) 打出一张冷却卡 → 其冷却重置为 CooldownMax（重新进入冷却）；
-        // 2) 打出任意一张牌 → 玩家手牌中其余冷却卡冷却 -1（到时为 0 即可打出）。
         var playedCooldown = cardPlay.Card as FgoCooldownCardModel;
         playedCooldown?.ResetCooldown();
 
@@ -169,7 +163,6 @@ public sealed class FgoBattleHooks() : HookedSingletonModel(HookType.Combat)
 
     public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
     {
-        // 〔虚数空间〕是按玩家结算的单人效果，先于 FGO 角色专有逻辑。
         await FgoFieldEffects.OnPlayerTurnStart(player);
 
         if (player.Character is not FgoCharacter)
@@ -220,7 +213,6 @@ public sealed class FgoBattleHooks() : HookedSingletonModel(HookType.Combat)
         if (dealer?.Player is not { Character: FgoCharacter } player
             || result.TotalDamage <= 0) return;
 
-        // 〔恋歌〕: 本回合内所有友方攻击产生的暴击星统一归收星者，不再留在攻击者身上。
         var receiver = SongOfLovePower.ResolveStarReceiver(CurrentCombatState) ?? player;
         await Get(receiver).ModifyStars(1, receiver);
     }

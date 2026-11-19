@@ -1,6 +1,5 @@
 namespace Fgo.Scripts.Fields;
 
-/// <remarks>是否递减由 <see cref="FgoFieldIdExtensions.TicksDownEachTurn" /> 决定。状态按战斗对象附着（见 <see cref="FgoField" />），随战斗回收。</remarks>
 public sealed class FgoFieldState
 {
     private readonly Dictionary<FgoFieldId, int> _stacks = [];
@@ -44,7 +43,6 @@ public sealed class FgoFieldState
     {
         if (_stacks.Count == 0) return false;
 
-        // 先快照键：递减中会移除条目。
         var changed = false;
         foreach (var id in _stacks.Keys.ToList())
         {

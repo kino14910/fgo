@@ -43,6 +43,7 @@ public class SongOfThePoet() : FgoCardModel(1, CardType.Attack,
             cardPlay
         )).ToList();
 
+        // 手动建攻击上下文并 AddHit，否则按命中结算的钩子（暴击星等）收不到这次伤害。
         context.AddHit(results);
 
         await FgoResCmd.ModifyNp(results.FirstOrDefault()?.UnblockedDamage ?? 0, cardPlay.Player);

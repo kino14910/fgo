@@ -38,7 +38,6 @@ public class HugeScale() : FgoCardModel(1, CardType.Power,
     {
         await FgoCardActions.AddToPile(CombatState!.CreateCard(
             ModelDb.Card<InfantileRegression>(), Owner), PileType.Hand);
-        // HugeScalePower.Amount 即每回合获得的额外最大生命值（与卡上显示的 MaxHpPower 一致）。
         await PowerCmd.Apply<HugeScalePower>(choiceContext, Owner.Creature,
             DynamicVars[nameof(MaxHpPower)].BaseValue, Owner.Creature, this);
     }

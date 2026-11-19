@@ -14,20 +14,8 @@ using STS2RitsuLib.Cards.DynamicVars;
 namespace Fgo.Scripts.Cards;
 
 /// <summary>
-///     领袖气质（Charisma）。
-///     <para>
-///         打出后授予<see cref="CharismaPower" />：持有该能力期间，你在能量不足时也能打出卡牌，
-///         每缺少 1 点能量失去 1 点生命并获得 1 层[gold]疲劳[/gold]。
-///     </para>
-///     <para>
-///         疲劳**只**由该能力产生 —— 打出本卡自身不增加疲劳。
-///         打出本卡时做一次判定：若本卡的[gold]疲劳[/gold]大于你的当前生命值，
-///         则对你施加等于疲劳层数的[gold]灾厄[/gold]。
-///     </para>
-///     <para>
-///         永久持久化沿用原版 TheScythe 的模式：疲劳是卡牌自身的 [SavedProperty]，
-///         写入时同步卡面显示值，并经由 <c>DeckVersion</c> 写回主卡组本体，跨战斗保留。
-///     </para>
+///     领袖气质（Charisma）。打出授予 <see cref="CharismaPower" />，并按本卡累计疲劳做一次灾厄判定：
+///     疲劳大于当前生命值时施加等于疲劳层数的[gold]灾厄[/gold]。疲劳只由该能力产生，打出本卡自身不加疲劳。
 /// </summary>
 public class Charisma() : FgoCardModel(2, CardType.Power,
     CardRarity.Rare, TargetType.Self)
@@ -36,7 +24,7 @@ public class Charisma() : FgoCardModel(2, CardType.Power,
 
     private int _fatigue;
 
-    /// <summary>本卡累计的疲劳层数（永久值，随卡牌存档持久化）。写入时同步卡面显示值。</summary>
+    /// <summary>本卡累计的疲劳层数（永久值，随存档持久化），写入时同步卡面显示。</summary>
     [SavedProperty]
     public int CurrentFatigue
     {
@@ -69,23 +57,19 @@ public class Charisma() : FgoCardModel(2, CardType.Power,
 
     protected override void AfterDowngraded()
     {
-        // 疲劳是卡牌自身的持久值，降级只需把卡面显示值重新同步回来。
         SyncFatigueDisplay();
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        // 授予能力: 持有期间能量不足也可打出卡牌（缺口由能力结算为生命 + 疲劳）。
         await PowerCmd.Apply<CharismaPower>(choiceContext, Owner.Creature, 1, Owner.Creature, this);
 
-        // 本卡自身打出不加疲劳；只做一次灾厄判定。
         var fatigue = Fatigue;
         if (fatigue > Owner.Creature.CurrentHp)
             await PowerCmd.Apply<DoomPower>(choiceContext, Owner.Creature, fatigue,
                 Owner.Creature, this);
     }
 
-    /// <summary>为本卡累加疲劳（永久值），并刷新卡面显示。</summary>
     public void GainFatigue(int amount)
     {
         if (amount <= 0) return;
@@ -97,19 +81,8 @@ public class Charisma() : FgoCardModel(2, CardType.Power,
         CurrentFatigue = _fatigue;
     }
 
-    // ---- 供 CharismaPower 结算能量缺口时使用 ----
-
-    /// <summary>
-    ///     为玩家的[gold]领袖气质[/gold]累加疲劳。
-    ///     <para>
-    ///         沿用 TheScythe 的写法：战斗内的实例写完，还要通过 <see cref="CardModel.DeckVersion" />
-    ///         把同一个值写回主卡组本体，否则疲劳只活在本次战斗里，战斗结束就丢了。
-    ///     </para>
-    ///     <para>
-    ///         主卡组本体（<c>player.Deck</c>）里的卡在 <c>PopulateStartingDeck</c> 时已被 <c>ToMutable()</c>，
-    ///         可以安全地 <see cref="AbstractModel.AssertMutable" />，所以这里直接调用 <see cref="GainFatigue" />。
-    ///     </para>
-    /// </summary>
+    /// <summary>累加玩家所有领袖气质卡的疲劳（去重）。</summary>
+    /// <remarks>战斗内实例与 <see cref="CardModel.DeckVersion" /> 指向的主卡组本体都要写，否则疲劳只活到战斗结束。</remarks>
     public static void AddFatigue(Player player, CardModel? playedCard, int amount)
     {
         if (amount <= 0) return;
@@ -132,7 +105,6 @@ public class Charisma() : FgoCardModel(2, CardType.Power,
             {
                 yield return card;
 
-                // TheScythe 模式：战斗内实例 → 主卡组本体，保证跨战斗持久化。
                 if (card.DeckVersion is Charisma master)
                     yield return master;
             }

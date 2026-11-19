@@ -12,7 +12,6 @@ public class CharismaOfAdversity() : FgoCardModel(1, CardType.Attack,
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         ModCardVars.Damage(6),
-        // 计算命中次数: 基础 1 次，每失去 6 点生命额外 +1 次。
         ModCardVars.Computed("CalculatedHits", 0, (card, _) =>
             card?.Owner.Creature is { } c
                 ? 1 + Math.Max(0, (c.MaxHp - c.CurrentHp) / 6)

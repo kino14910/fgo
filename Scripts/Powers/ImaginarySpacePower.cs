@@ -9,9 +9,8 @@ namespace Fgo.Scripts.Powers;
 /// </summary>
 /// <remarks>
 ///     「能力在身」等价于「该玩家在虚数空间内」，由 <c>FgoVoidHand</c> 施加/解除并据此替换手牌；
-///     没有倒计时，只有打出〔虚数脱出〕走的 <c>FgoVoidHand.Exit</c> 才会移除它。
-///     联机时每名玩家各持一份，互不干扰；两个钩子都按持有者过滤，不能拦住别人的弃牌/抽牌。
-///     不抽牌/不弃牌只在 <c>FgoVoidHand.IsVoidHandActive</c> 为真时生效；任何方式退出 voidHand 后都必须立即失效。
+///     只有打出〔虚数脱出〕走的 <c>FgoVoidHand.Exit</c> 才会移除它。
+///     <c>FgoVoidHand.IsVoidHandActive</c> 为真时不抽牌/不弃牌；任何方式退出 voidHand 后立即失效。
 /// </remarks>
 public class ImaginarySpacePower : FgoPowerModel
 {

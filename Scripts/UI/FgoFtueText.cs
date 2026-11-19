@@ -9,17 +9,8 @@ namespace Fgo.Scripts.UI;
 /// <summary>
 ///     FTUE 弹窗文字的辅助工具：字号自适应 + 原版 <c>[gold]</c>/<c>[red]</c> 等自定义 bbcode 效果安装。
 /// </summary>
-/// <remarks>
-///     <b>为什么需要它</b>：FTUE 文字节点用引擎原生 <see cref="Label" />/<see cref="RichTextLabel" /> 而非原版 <c>MegaLabel</c>/
-///     <c>MegaRichTextLabel</c>——后者的 C# 脚本在 <c>res://addons/mega_text/</c>（主程序集路径），mod pck 只打包 <c>res://Fgo/**</c> 与
-///     <c>res://Scripts/**</c>，引用 <c>res://addons/...</c> 会让 Godot 导出时找不到、<c>script</c> 静默变 null、节点退化成普通 Label。
-///     <b>算法可照搬</b>：<c>MegaLabelHelper</c> 是主程序集的 <c>public static class</c>，mod 直接引用即可；<see cref="RichTextGold" /> 等
-///     <c>RichTextEffect</c> 同理 <c>new</c> 后塞进 <c>CustomEffects</c>，语义与原版 <c>MegaRichTextLabel.InstallEffectsIfNeeded</c>
-///     一致。
-/// </remarks>
 public static class FgoFtueText
 {
-    /// <summary>原版 <c>MegaRichTextLabel._textEffects</c> 的等价物（少了 <c>[fade]</c>/<c>[flyin]</c> 等与 FTUE 无关的动画标签）。</summary>
     private static readonly AbstractMegaRichTextEffect[] Effects =
     [
         new RichTextAqua(),
@@ -37,11 +28,6 @@ public static class FgoFtueText
     /// <summary>
     ///     给 <see cref="RichTextLabel" /> 装上原版那套 <c>[gold]</c>/<c>[red]</c>/… 自定义 bbcode。
     /// </summary>
-    /// <remarks>
-    ///     必须 <c>BbcodeEnabled = true</c> 才会生效（场景里已设）。
-    ///     装完要重新 <c>ParseBbcode</c> 才会按新效果表解析已存在的文本，
-    ///     所以本方法内部会调一次；调用方随后再赋 <c>Text</c> 也会自动重解析。
-    /// </remarks>
     public static void InstallRichTextEffects(RichTextLabel label)
     {
         if (!label.BbcodeEnabled)
@@ -116,7 +102,6 @@ public static class FgoFtueText
         label.ParseBbcode(text);
     }
 
-    /// <summary>节点尺寸变化后重算字号（对应原版 <c>_Notification(40 /* RESIZED */)</c> 的行为）。</summary>
     public static void Refit(Label label, int minSize = 8, int maxSize = 100)
     {
         var size = label.GetRect().Size;
@@ -147,7 +132,6 @@ public static class FgoFtueText
         if (!MegaLabelHelper.IsTooBig(Paragraph, text, font, maxSize, lineSpacing, wrap, rectSize))
             return maxSize;
 
-        // 二分找出「放得下的最大字号」，与原版 MegaLabel.AdjustFontSize 同策略。
         var low = minSize;
         var high = maxSize;
 
@@ -161,6 +145,7 @@ public static class FgoFtueText
                 low = mid + 1;
         }
 
+        // 二分末态 low 已溢出、high 为最后可行解，取 min 才是最大不溢出字号。
         return Mathf.Max(minSize, Mathf.Min(low, high));
     }
 
@@ -190,6 +175,7 @@ public static class FgoFtueText
                 low = mid + 1;
         }
 
+        // 二分末态 low 已溢出、high 为最后可行解，取 min 才是最大不溢出字号。
         return Mathf.Max(minSize, Mathf.Min(low, high));
     }
 }

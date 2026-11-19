@@ -46,7 +46,6 @@ public class RoutePlanning() : FgoBaseCardModel(0, CardType.Skill,
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        // 负层数等价于减少: FgoFieldState.Add 在结果 <= 0 时走移除分支。
         await FgoField.Add(Owner.Creature.CombatState, FgoFieldId.Waterside, -1);
         await PowerCmd.Apply<ExplorationPointsPower>(choiceContext, Owner.Creature, 1m, Owner.Creature, this);
     }

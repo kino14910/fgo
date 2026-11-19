@@ -57,10 +57,9 @@ public class JyuuouManpukuTsuzuraNoEnkai() : NobleCardModel(1, CardType.Attack, 
 
         var allies = combat.GetTeammatesOf(Owner.Creature).ToList();
 
-        // 满腹槽上限与饱腹合并挂在同一个能力上: 先保证每人已有（首次施加会带上基础上限），再叠 +4。
-        // 不能只靠一次 Apply —— 没有能力的盟友会被创建成"上限只有 4"而不是 8。
         foreach (var ally in allies)
         {
+            // 先保证每人有能力（首次施加带基础上限）再叠 +4；只 Apply 一次会让无能力者上限只有 4。
             await FullnessPower.Ensure(choiceContext, ally, Owner.Creature, this);
             await PowerCmd.Apply<FullnessPower>(choiceContext, ally, FullnessCapacityPerPlay,
                 Owner.Creature, this);
@@ -74,7 +73,6 @@ public class JyuuouManpukuTsuzuraNoEnkai() : NobleCardModel(1, CardType.Attack, 
             if (ally.Player is { Character: FgoCharacter } player)
                 await FgoResCmd.ModifyNp(np, player);
 
-        // 净化: 中毒与诅呪是两种不同的 Power，逐个实例移除。
         foreach (var ally in allies)
         foreach (var ailment in ally.Powers.Where(power => power is PoisonPower or CursePower).ToList())
             await PowerCmd.Remove(ailment);

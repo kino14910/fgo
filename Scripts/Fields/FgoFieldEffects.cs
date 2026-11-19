@@ -12,7 +12,6 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace Fgo.Scripts.Fields;
 
-/// <remarks>由 <c>FgoBattleHooks</c> 在钩子上调用：结算时查场地而非施加时烧死数值，中途召唤/复活的单位天然被覆盖。</remarks>
 public static class FgoFieldEffects
 {
     public const decimal WatersideBlock = 3m;
@@ -33,7 +32,6 @@ public static class FgoFieldEffects
     /// <summary>只给没有「人工制品」的敌人。</summary>
     public const decimal CityArtifactStacks = 1m;
 
-    /// <remarks>先结算再递减：层数 N = 结算 N 次，首回合不白掉层。</remarks>
     public static async Task OnPlayerSideTurnStart(ICombatState combat)
     {
         var sunlightTurn = FgoField.Of(combat);
@@ -61,11 +59,12 @@ public static class FgoFieldEffects
                 foreach (var ally in LivingAllies(combat))
                 {
                     var vigor = ally.GetPower<VigorPower>()?.Amount ?? 0;
+                    // Apply 是设总量：须读当前活力再加增量，直接传增量会覆盖原层数。
                     await PowerCmd.Apply<VigorPower>(choiceContext, ally, vigor + SunlightTurnStartVigor, null, null);
                 }
         }
 
-        // 最后结算：人工制品会抵消之后施加的减益，不能抢在〔黑暗〕等场地之前。
+        // City 最后结算：人工制品会抵消之后施加的减益，不能抢在黑暗等场地之前。
         if (FgoField.Has(combat, FgoFieldId.City))
         {
             foreach (var player in combat.Players)
@@ -80,7 +79,6 @@ public static class FgoFieldEffects
         await FgoField.TickDown(combat);
     }
 
-    /// <remarks>伤害用 <see cref="ValueProp.Unpowered" />：不吃力量/易伤、不触发暴击与宝具值，但可被格挡。</remarks>
     public static async Task OnPlayerSideTurnEnd(PlayerChoiceContext choiceContext, ICombatState combat)
     {
         if (FgoField.Has(combat, FgoFieldId.Burning))
@@ -92,7 +90,6 @@ public static class FgoFieldEffects
         }
     }
 
-    /// <remarks>〔阳光照射〕下每回合首次攻击牌给出牌者等于层数的「活力」；仅玩家方（怪物攻击不走 <c>CardPlay</c>）。</remarks>
     public static async Task OnCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         if (cardPlay.Card is not { Type: CardType.Attack }) return;

@@ -147,7 +147,6 @@ public sealed class NobleTitleOutlinePatch : IPatchMethod
         var model = AccessTools.Field(typeof(NCard), "_model")?.GetValue(__instance) as CardModel;
         if (model?.Pool is NobleCardPool)
         {
-            // 透明色（alpha=0）: 完全去掉标题文字描边
             __result = new Color(0.42f, 0.36f, 0.08f);
             return false;
         }
@@ -188,12 +187,9 @@ public sealed class NobleRarityLockPatch : IPatchMethod
     [HarmonyPriority(Priority.Low)]
     private static void Postfix(NCardLibrary __instance, NCardPoolFilter filter)
     {
-        // filter 是触发本次 UpdateCardPoolFilter 的按钮（方法参数注入，比字段注入可靠）
-        // 如果不是 Noble filter 不做任何事
         if (filter.Name != "MOD_FILTER_SHARED_Noble" || !filter.IsSelected)
             return;
 
-        // 反射获取 _rarityFilters（不依赖 Harmony 字段注入）
         if (RarityFiltersField?.GetValue(__instance) is not IDictionary rarityFilters)
             return;
 
@@ -213,8 +209,6 @@ public sealed class NobleRarityLockPatch : IPatchMethod
 /// </summary>
 public sealed class NoblePoolPredicatePatch : IPatchMethod
 {
-    // 反射获取 _poolFilters（不依赖 Harmony 字段注入，字段名带前导下划线，
-    // ___poolFilters 会查不到，___poolFilters 又与记忆中"3 个下划线"约定冲突）
     private static readonly FieldInfo? PoolFiltersField =
         AccessTools.Field(typeof(NCardLibrary), "_poolFilters");
 
@@ -237,7 +231,6 @@ public sealed class NoblePoolPredicatePatch : IPatchMethod
         if (PoolFiltersField?.GetValue(__instance) is not IDictionary poolFilters)
             return;
 
-        // 找到 Ritsu 创建的 Noble filter
         NCardPoolFilter? nobleFilter = null;
         foreach (var key in poolFilters.Keys)
             if (key is NCardPoolFilter f && f.Name == "MOD_FILTER_SHARED_Noble")
@@ -249,7 +242,6 @@ public sealed class NoblePoolPredicatePatch : IPatchMethod
         if (nobleFilter == null)
             return;
 
-        // 替换谓词为按池类型筛选（比 AllCardIds.Contains 更健壮）
         poolFilters[nobleFilter] = (Func<CardModel, bool>)(c => c.Pool is NobleCardPool);
     }
 }

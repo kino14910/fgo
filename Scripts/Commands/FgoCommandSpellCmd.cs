@@ -63,10 +63,8 @@ public static class FgoCommandSpellCmd
         if (selected == null) return false;
 
         await playerState.UseCommandSpell();
-        // 不在此处立即同步到 RunSavedData。
-        // 使用后仅更新内存值，在战斗结束时（AfterCombatVictory）才同步到 RunSavedData。
-        // 这样退出战斗中再继续会恢复到战前值，而打赢后下一场战斗保留战后值（SL后不消耗令咒数）。
 
+        // 不在此处同步 RunSavedData：战斗胜利时才同步，使退出战斗恢复战前值、打赢后保留（SL 不消耗令咒）。
         switch (selected)
         {
             case RepairSpiritOrigin:

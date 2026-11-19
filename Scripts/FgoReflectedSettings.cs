@@ -4,6 +4,7 @@ namespace Fgo.Scripts;
 
 public enum CharacterSkinId
 {
+    // 皮肤枚举顺序须与 SkinNames/设置页 OptionLabels/贴图索引一致，增删请同步这几处。
     Chaldea = 0,
     HalloweenRoyalty = 1,
     SchoolUniformChapter2 = 2,

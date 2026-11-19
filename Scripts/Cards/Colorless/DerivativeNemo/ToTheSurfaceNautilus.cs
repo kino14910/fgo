@@ -14,13 +14,8 @@ namespace Fgo.Scripts.Cards.Colorless.DerivativeNemo;
 /// <summary>
 ///     上浮吧鹦鹉螺号: 对一名敌人打出<b>鹦鹉螺的大冲角</b>；若斩杀该敌人，获得 2 点探索点数。
 /// </summary>
-/// <remarks>
-///     斩杀判定与官方 <c>Feed</c> 同源: 先用「所有能力都允许其死亡触发斩杀」做门槛，再确认目标确实死了。
-///     <c>CardCmd.AutoPlay</c> 拿不到 <c>AttackCommand.Results</c>，故改用「攻击前存活 → 攻击后不存活」等价判定
-///     （<c>Creature.IsAlive</c> = <c>CurrentHp &gt; 0</c>，被「毅力」救回仍算存活，
-///     比 <c>WasTargetKilled</c> 的"血量触底"更贴合「斩杀」含义）。
-/// </remarks>
 [RegisterCard(typeof(TokenCardPool))]
+/// <remarks>斩杀判定与官方 Feed 同源（先过「所有能力允许死亡触发斩杀」门槛，再确认目标死了）。AutoPlay 拿不到 AttackCommand.Results，故用「攻击前存活→攻击后不存活」等价判定：IsAlive = CurrentHp>0，被毅力救回仍算存活，比 WasTargetKilled 的血量触底更贴合「斩杀」。</remarks>
 public class ToTheSurfaceNautilus() : FgoBaseCardModel(0, CardType.Power,
     CardRarity.Token, TargetType.AnyEnemy,
     false)
@@ -53,8 +48,6 @@ public class ToTheSurfaceNautilus() : FgoBaseCardModel(0, CardType.Power,
         var shouldTriggerFatal = target.IsAlive
                                  && target.Powers.All(static p => p.ShouldOwnerDeathTriggerFatal());
 
-        // 战斗中的卡一律走 ICombatState.CreateCard: RunState.CreateCard 只登记进运行存档的卡表，
-        // 手动/自动出牌时都会踩 "must be added to a CombatState before playing it."
         var ram = combat.CreateCard<GreatRamNautilus>(Owner);
         await CardPileCmd.AddGeneratedCardToCombat(ram, PileType.Hand, Owner);
         await CardCmd.AutoPlay(choiceContext, ram, target);

@@ -45,7 +45,6 @@ public class KurakurasMeals() : FgoCardModel(0, CardType.Power,
 
         power.Configure(DynamicVars["Star"].BaseValue, IsUpgraded);
 
-        // 首张菜品卡在打出当回合就发，轮换位置从第 2 张（咖喱）继续。
         await KurakurasMealsPower.GrantNextDish(choiceContext, power, Owner);
     }
 }

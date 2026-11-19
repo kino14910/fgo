@@ -116,6 +116,7 @@ public sealed partial class FgoNpGlowFx : Control
         var lifetime = Mathf.Max(t.EmberLifetime, 0.01f);
 
         var reach = t.EmberSpeedMax * lifetime + 0.5f * t.EmberAccelMax * lifetime * lifetime;
+        // 64≈scale=1 的粒子像素尺寸、24 为余量；包络须覆盖 reach+pad 否则粒子被静默裁剪。
         var pad = 64f * t.EmberScaleMax + 24f;
         var half = reach + pad;
 

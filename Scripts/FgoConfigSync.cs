@@ -39,6 +39,7 @@ public static class FgoConfigSync
         get
         {
             FgoReflectedSettings.ReflectBoundValues();
+            // 必须先回填：[ModSettingsBinding] 静态镜像启动时不会自动读磁盘，否则读到的永远是 C# 默认值。
             return FgoReflectedSettings.BaseNpPerCost;
         }
     }
@@ -120,8 +121,6 @@ public static class FgoConfigSync
 
     private static FgoConfig CurrentConfig()
     {
-        // 必须先回填：RitsuLib 的 [ModSettingsBinding] 静态镜像不会在启动时自动读磁盘，
-        // 不调用 ReflectBoundValues() 的话这里读到的永远是 C# 默认值（BaseNpPerCost=5 / 关闭 0 费）。
         FgoReflectedSettings.ReflectBoundValues();
         return new FgoConfig(FgoReflectedSettings.EnableNoCostNoblePhantasm, FgoReflectedSettings.BaseNpPerCost);
     }

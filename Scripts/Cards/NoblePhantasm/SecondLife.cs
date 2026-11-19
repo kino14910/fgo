@@ -41,7 +41,7 @@ public class SecondLife() : NobleCardModel(1, CardType.Skill, TargetType.Self)
 
     private static async Task KillMinions(Player player, int npPerMinion, CardModel source)
     {
-        // Player.Character 是共享单例，判归属一律走 Creature / CombatState以保持同步。
+        // Character 是共享单例，判归属走 Creature/CombatState。
         var combatState = player.Creature.CombatState;
         if (combatState == null)
             return;

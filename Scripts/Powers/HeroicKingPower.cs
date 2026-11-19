@@ -10,6 +10,7 @@ namespace Fgo.Scripts.Powers;
 
 public class HeroicKingPower : FgoPowerModel
 {
+    // 多段命中共享同一次暴击的 Id，只在该次激活的首次命中叠一层，靠它去重。
     private int _lastCritActivation;
 
     public override PowerType Type => PowerType.Buff;
@@ -25,7 +26,6 @@ public class HeroicKingPower : FgoPowerModel
 
         var state = FgoBattleHooks.Get(player);
         if (!state.CritTriggered) return;
-        // 多段攻击的每一段都会调 AfterDamageGiven，按暴击激活编号去重，保证一次暴击只加一层
         if (state.CritActivationId == _lastCritActivation) return;
         _lastCritActivation = state.CritActivationId;
 

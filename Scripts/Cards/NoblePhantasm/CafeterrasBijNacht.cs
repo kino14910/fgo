@@ -55,8 +55,6 @@ public class CafeterrasBijNacht() : NobleCardModel(2, CardType.Attack, TargetTyp
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
 
-        // 伤害落地后再取一次目标: 被打死的敌人不该再被眩晕。
-        // 概率当场只掷一次（"40% 概率付与所有敌方"），不是每个敌人各掷一次。
         var enemies = combat.HittableEnemies;
         var roll = Owner.RunState.Rng.Niche.NextFloat() * 100f;
         if (roll < (float)DynamicVars["StunChance"].BaseValue)

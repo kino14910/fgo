@@ -34,7 +34,6 @@ public static class FgoEnums
                 Scope = ModCardPileScope.RunPersistent,
                 Style = ModCardPileUiStyle.TopBarDeck,
                 IconPath = $"res://{modId}/images/ui/noble_deck_button.png",
-                // 复用 Deck 的牌堆界面能力：点击/右键卡牌打开原版检查界面（卡牌详情）。
                 View = ModCardPileViewSpec.DeckLike,
                 VisibleWhen = ctx =>
                     ctx.Player is null || ctx.Player.Character is FgoCharacter
@@ -45,16 +44,13 @@ public static class FgoEnums
             {
                 Scope = ModCardPileScope.CombatOnly,
                 Style = ModCardPileUiStyle.ExtraHand,
-                // AllowCardPlay 会强制启用卡牌节点表示，这里显式写出表示意图。
                 CardShouldBeVisible = true,
                 ExtraHand = new ModCardPileExtraHandSpec
                 {
                     Direction = ModExtraHandLayoutDirection.VanillaHand,
                     AllowCardPlay = true,
-                    // 不叠加原版手牌的回合结束语义: 钥匙卡要跨回合保留（只有主动打出才离开虚数空间）。
                     Behaviors = ModExtraHandBehavior.None
                 },
-                // 只按该控件绑定的玩家判定：联机时其他玩家进入虚数空间不该让自己这里冒出空手牌区。
                 VisibleWhen = ctx =>
                     ctx.Player is null
                     || FgoVoidHand.IsInside(ctx.Player)

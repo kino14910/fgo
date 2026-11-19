@@ -30,8 +30,6 @@ public class PhaseGlidingBladePower : FgoPowerModel
 
         Flash();
 
-        // 仿照 Catastrophe: 从抽牌堆随机取一张与此牌类型不同的可打牌加入手牌。
-        // 每轮实时基于当前抽牌堆选取，避免取到已移走的牌。
         for (var i = 0; i < Amount; i++)
         {
             var card = PileType.Draw.GetPile(player).Cards

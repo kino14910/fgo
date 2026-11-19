@@ -12,7 +12,6 @@ using STS2RitsuLib.Scaffolding.Content;
 
 namespace Fgo.Scripts.Cards;
 
-// 只作为 MoonRabbit 的右键替换目标存在，不进奖励卡池与图鉴。
 [RegisterCard(typeof(TokenCardPool))]
 public class MoonRabbitNap() : FgoCardModel(2, CardType.Skill,
     CardRarity.Uncommon, TargetType.Self, false)

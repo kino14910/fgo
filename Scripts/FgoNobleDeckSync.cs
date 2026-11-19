@@ -17,21 +17,7 @@ namespace Fgo.Scripts;
 /// <summary>
 ///     联机宝具卡组（NobleDeck）同步。
 /// </summary>
-/// <remarks>
-///     NobleDeck 是 RunPersistent 的 mod 牌堆，其持久化走
-///     <c>PlayerRunSavedData</c>（见 RitsuLib 的 ModCardPilePersistence：主机权威、
-///     仅在存/读档时快照），运行期间本机对它的改动不会实时传播到其它端。
-///     于是「客户端右键圣晶石抽到宝具卡」只写进客户端自己的 NobleDeck，主机端该玩家的
-///     NobleDeck 仍停留在初始播种内容。之后 np_button 托管动作在所有端按【本地】NobleDeck
-///     重放（候选列表取自 <c>noblePile.Cards</c>），各端候选不同 → 加入手牌的宝具不同 →
-///     校验和分歧断线。
-///     <para />
-///     同步采用「版本化整堆快照」：拥有者在本地每次改动 NobleDeck 后，自增该玩家牌堆的版本号，
-///     并把【整堆内容】作为快照广播给所有端。各端按版本号收敛（低于已应用版本的快照直接丢弃），
-///     整堆重建而非按单卡 Id 判重，因此同名重复宝具、乱序/重投送达都能正确还原。
-///     接收端在 Godot 主线程上应用（<c>CardPile</c> 集合只能在主线程安全修改），
-///     避开 Sidecar 回调所在的网络接收线程与游戏主线程之间的竞态。
-/// </remarks>
+/// <remarks> NobleDeck 是 RunPersistent，改动不会实时同步（持久化只在存读档），故用版本化整堆快照广播；各端按版本收敛、在 Godot 主线程应用。</remarks>
 public static class FgoNobleDeckSync
 {
     private static readonly RitsuLibSidecarMessageDescriptor<NobleDeckSnapshotMessage> SnapshotDescriptor = new(
@@ -52,18 +38,13 @@ public static class FgoNobleDeckSync
         static _ => Array.Empty<byte>(),
         static _ => new NobleDeckResyncRequest());
 
-    // 本机作为拥有者时的牌堆版本：每次本地改动自增，作为广播快照的版本号。
+    // 接收快照时低于已应用版本的直接丢弃，按版本收敛而非按卡 Id 判重。
     private static readonly Dictionary<ulong, int> LocalVersion = new();
 
-    // 本机已应用的牌堆版本（含其它玩家）：接收快照时低于此值的直接丢弃，按版本收敛而非按卡 Id 判重。
     private static readonly Dictionary<ulong, int> AppliedVersion = new();
 
-    // 本机作为拥有者时的会话/局标识：每次新会话/新局刷新（真实时间派生的单调值）。
-    // 接收端见到更大的 Epoch 即无条件接受快照，从而消除「跨进程重启/跨局重连」时版本号基数不一致、
-    // 正当快照被误判为过时而丢弃的问题（netId 是跨进程稳定的 SteamId，旧版本基数不会自然归零）。
     private static long LocalEpoch = DateTime.UtcNow.Ticks;
 
-    // 本机已应用的会话/局标识（含其它玩家）。
     private static readonly Dictionary<ulong, long> AppliedEpoch = new();
 
     private static IDisposable? _snapshotSubscription;
@@ -96,18 +77,11 @@ public static class FgoNobleDeckSync
 
     private static void OnHandshake()
     {
-        // 会话边界刷新本机作为拥有者的 Epoch：即便本机进程刚重启（LocalVersion 归零），
-        // 接收端也会因 Epoch 变大而无条件接受随后的快照。
+        // 每端都把自已拥有的牌堆作为权威内容主动推一次，即使本局没改动：「只在改动时广播」无法把基线内容发给主机，会致手牌分歧。
         LocalEpoch = DateTime.UtcNow.Ticks;
 
         var netService = RunManager.Instance.NetService;
 
-        // 【关键】每个端都把自己拥有的 FGO 玩家牌堆作为权威内容主动推一次，即使本局内容从未变过（版本仍为 0）。
-        // NobleDeck 只在本机播种 / 改动，而「只在改动时广播」有一个致命缺口：客户端牌堆的【基线内容】永远不会发给
-        // 主机（播种不是一次 NotifyAdd）。于是主机的本地副本一旦与拥有者不一致（例如该端此刻解析不出角色、
-        // 播种时机错过、或副本被空快照清空），就再没有任何机制能纠正它。
-        // 后果：np_button 托管动作在所有端各按【本地】NobleDeck 取候选 —— 主机牌堆为空时会直接 return false
-        // 跳过整段选择，而拥有者照常选牌并把宝具加进手牌 → 手牌数量分歧（曾表现为一端可选牌、另一端手牌少一张）。
         BroadcastOwnDecks();
 
         if (netService is NetHostGameService)
@@ -132,9 +106,6 @@ public static class FgoNobleDeckSync
             foreach (var player in runState.Players.Where(p =>
                          p.Character is FgoCharacter && p.NetId == netService.NetId))
             {
-                // 空牌堆不补发基线：空内容不携带任何信息，却会把对端已正确的副本 Clear 成空
-                // （例如握手事件早于读档播种触发）。NobleDeck 在正常玩法中不会被清空，
-                // 真正因改动而清空的情况仍由 NotifyAdd → BroadcastOwnDeck 照常广播。
                 var pile = CardPile.Get(FgoEnums.NobleDeck, player);
                 if (pile == null || pile.IsEmpty) continue;
 
@@ -160,7 +131,6 @@ public static class FgoNobleDeckSync
         {
             if (player == null) return;
 
-            // 只有牌堆拥有者才有权威内容可播，其余端一律不发快照。
             if (RunManager.Instance.NetService is { } netService && netService.NetId != player.NetId)
                 return;
 
@@ -168,8 +138,6 @@ public static class FgoNobleDeckSync
         }
         catch (Exception ex)
         {
-            // 同步是「尽力而为」的旁路：任何异常都不能波及调用方的核心玩法（如右键扣费），
-            // 否则一次同步故障就会把整段玩法逻辑吞掉（曾因此出现「右键不扣圣晶石」）。
             Entry.Logger.Warn($"[Fgo] NobleDeck snapshot send failed: {ex}");
         }
     }
@@ -211,14 +179,11 @@ public static class FgoNobleDeckSync
                 int version;
                 if (isOwner)
                 {
-                    // 拥有者用本机权威 Epoch。即便 version=0（本局还没通过 NotifyAdd 加过卡）也照播：
-                    // Epoch 是新值，接收端会无条件接受，从而把初始播种内容一并推给客户端。
                     epoch = LocalEpoch;
                     version = LocalVersion.GetValueOrDefault(player.NetId);
                 }
                 else
                 {
-                    // 主机视角下的客户端玩家：用主机已记录的该玩家 Epoch/版本；从未收到过则无权威内容可播。
                     epoch = AppliedEpoch.GetValueOrDefault(player.NetId);
                     if (epoch == 0) continue;
                     version = AppliedVersion.GetValueOrDefault(player.NetId);
@@ -243,8 +208,7 @@ public static class FgoNobleDeckSync
     /// </summary>
     private static void BroadcastOwnDeck(Player player)
     {
-        // 注意：不能用 `++LocalVersion[key]` —— Dictionary 索引器读缺失 key 会抛 KeyNotFoundException，
-        // 该异常会中断调用方（抽取结算）的后续逻辑，且难以从外部定位。
+        // 不能用 ++LocalVersion[key]：Dictionary 索引器读缺失 key 会抛 KeyNotFoundException，中断调用方结算。
         var version = LocalVersion.GetValueOrDefault(player.NetId) + 1;
         LocalVersion[player.NetId] = version;
         SendOwnDeckSnapshot(player, version);
@@ -266,11 +230,9 @@ public static class FgoNobleDeckSync
 
         switch (netService.Type)
         {
-            // 客户端 → 主机；主机收到后转发广播给其它队友
             case NetGameType.Client:
                 RitsuLibSidecarTypedMessageRegistry.SendToHost(netService, SnapshotDescriptor, msg);
                 break;
-            // 主机 / 单机 → 直接广播（单机无对端，本机已加入生效）
             default:
                 RitsuLibSidecarTypedMessageRegistry.Broadcast(netService, SnapshotDescriptor, msg);
                 break;
@@ -282,19 +244,16 @@ public static class FgoNobleDeckSync
 
     private static void OnResyncReceived(RitsuLibSidecarTypedDispatchContext<NobleDeckResyncRequest> context)
     {
-        // 仅主机在收到客户端请求时重播全员牌组；客户端忽略（它已通过 Broadcast 接收）。
         if (context.IsHostIngest)
             BroadcastAllDecks();
     }
 
     private static void OnSnapshotReceived(RitsuLibSidecarTypedDispatchContext<NobleDeckSnapshotMessage> context)
     {
-        // 主机从客户端收到后转发广播给其它队友（广播不回传发送方，无环）。
         if (context.IsHostIngest)
             RitsuLibSidecarTypedMessageRegistry.Broadcast(
                 RunManager.Instance.NetService, SnapshotDescriptor, context.Message);
 
-        // 调度到 Godot 主线程：CardPile 集合只能在主线程安全修改，避开网络接收线程竞态。
         Callable.From(() => ApplySnapshot(context.Message)).CallDeferred();
     }
 
@@ -307,11 +266,8 @@ public static class FgoNobleDeckSync
     {
         var netService = RunManager.Instance.NetService;
 
-        // 自己就是该玩家：本地早已加入（本机是权威），跳过避免覆盖本地真理。
         if (netService.NetId == msg.NetId) return;
 
-        // 按 (Epoch, Version) 收敛：Epoch 更大 → 无条件接受（拥有者新会话/新局）；Epoch 相同才比版本；
-        // Epoch 更小 → 旧会话的迟到快照，丢弃。
         if (AppliedEpoch.TryGetValue(msg.NetId, out var appliedEpoch))
         {
             if (msg.Epoch < appliedEpoch) return;
@@ -328,7 +284,6 @@ public static class FgoNobleDeckSync
         var pile = CardPile.Get(FgoEnums.NobleDeck, player);
         if (pile == null) return;
 
-        // 按快照整体重建（Clear + 逐张加回），保留同名重复卡；幂等于版本号。
         pile.Clear(true);
         foreach (var cardId in msg.CardIds)
         {

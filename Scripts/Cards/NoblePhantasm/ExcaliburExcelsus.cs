@@ -42,7 +42,6 @@ public class ExcaliburExcelsus() : NobleCardModel(3, CardType.Attack, TargetType
         await IgnoreInvincibleAction(CombatState!.HittableEnemies);
 
         var enemyCount = CombatState!.HittableEnemies.Count;
-        // 每有一名敌人，获得格挡、力量、宝具值
         if (enemyCount > 0)
         {
             await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block.BaseValue * enemyCount,

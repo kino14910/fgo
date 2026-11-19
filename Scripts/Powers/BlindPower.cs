@@ -12,11 +12,6 @@ namespace Fgo.Scripts.Powers;
 /// <summary>
 ///     〔盲目〕进行攻击时伤害降低 25%，每次攻击后移除 1 层。
 /// </summary>
-/// <remarks>
-///     与内置的 [gold]虚弱[/gold] 相似但语义不同: 虚弱是持续整回合的减益，盲目是「消耗型」——
-///     每打出一次攻击就烧掉 1 层，因此多段攻击的整次攻击都会吃到减伤（减伤在
-///     <see cref="ModifyDamageMultiplicative" /> 里按伤害实例求值，层数只在攻击结束后才扣）。
-/// </remarks>
 public class BlindPower : FgoPowerModel
 {
     private const decimal DamageMultiplier = 0.75m;

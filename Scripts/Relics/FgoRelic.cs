@@ -31,8 +31,6 @@ public abstract class FgoRelic : ModRelicTemplate
     {
         get
         {
-            // 有专属图标用专属图标，否则回退到占位 relic.png
-            // （与 FgoPowerModel 的 fallback 策略一致，避免新遗物缺图时显示异常）。
             var small = $"res://Fgo/images/relics/{GetType().Name}.png";
             var big = $"res://Fgo/images/relics/big/{GetType().Name}.png";
             var outline = $"res://Fgo/images/relics/outline/{GetType().Name}.png";

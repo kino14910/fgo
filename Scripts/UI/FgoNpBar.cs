@@ -18,7 +18,6 @@ using STS2RitsuLib.Scaffolding.Godot.NodeAttachments;
 
 namespace Fgo.Scripts.UI;
 
-/// <remarks>调参入口：改字段后 <see cref="FgoNpBar.ApplyGlowTuning" /> 生效。</remarks>
 public sealed class NpGlowTuning
 {
     public static readonly StringName OriginParam = "origin";
@@ -280,7 +279,6 @@ public sealed partial class FgoNpBar : Node
             _button.MouseExited += OnNpButtonMouseExited;
         }
 
-        // npBar 被 NCreature 的 %Hitbox 压住，收不到 MouseEntered/Exited；悬停统一在 _Process 里按鼠标位置判定。
         BuildGlowFx();
         InitializeBarLayout();
         SyncWithHealthBar();
@@ -366,10 +364,7 @@ public sealed partial class FgoNpBar : Node
         }
     }
 
-    /// <remarks>
-    ///     绘制顺序按有效 z 升序、同 z 按树序。本层须与按钮同 z（0）—— +1 盖住按钮、-1 掉到立绘（z=0）之下；靠 <c>MoveChild</c> 到按钮之前让按钮后绘制压住它（按钮置前避免加色泛白）。
-    ///     <c>_npBarRoot</c> 不能开 <c>clip_children</c>。
-    /// </remarks>
+    /// <remarks>光效层须与按钮同 z（0）：+1 盖住按钮、-1 掉到立绘（z=0）之下；靠 MoveChild 到按钮之前让按钮后绘制压住它。</remarks>
     private void BuildGlowFx()
     {
         if (_npBarRoot == null || _button == null)
@@ -394,7 +389,7 @@ public sealed partial class FgoNpBar : Node
         SetGlowActive(false);
     }
 
-    /// <remarks>每帧调用 + 变更检测：根尺寸改写后按钮局部位置要等 Godot 布局传递才更新，不能改尺寸当帧算一次。</remarks>
+    /// <remarks>每帧调用 + 变更检测：根尺寸改写后按钮局部位置要等 Godot 布局传递才更新，不能当帧算一次。</remarks>
     private void SyncGlowFxLayout()
     {
         if (_glowFx == null || _button == null)
@@ -463,7 +458,6 @@ public sealed partial class FgoNpBar : Node
         _glowFx.ApplyEmberTuning(t);
     }
 
-    /// <remarks>指数缓动（帧率无关、带甩尾）。hover 自行按鼠标位置判定：npBar 被 Hitbox 压住，Godot 不派发 enter/leave。</remarks>
     private void TickGlow(double delta)
     {
         if (_glowFx == null)
@@ -490,6 +484,7 @@ public sealed partial class FgoNpBar : Node
 
             if (t.ChargeGlow > 0f)
                 target += t.ChargeGlow *
+                          // 100 = 单档 NP 满值（三段共 300），按当前档进度算充能光效。
                           Mathf.Pow(Mathf.Clamp(_lastNp / 100f, 0f, 1f), t.ChargeRamp);
 
             target += t.HoverBoost * _glowHover + t.BurstStrength * _glowBurst;
@@ -574,12 +569,10 @@ public sealed partial class FgoNpBar : Node
             _button.Visible = charged;
             _button.Disabled = !canUse;
 
-            // Disabled 只拦输入不改外观，置灰须手动改 Modulate。
             _button.Modulate = canUse ? Colors.White : StsColors.gray;
 
             SetGlowActive(canUse);
 
-            // FTUE 只认 false→true 上升沿；传屏幕矩形（NP 条位置随分辨率/玩家变化）。
             if (canUse && !_lastCanUse)
                 FgoFtue.MaybeShowNpBarFtue(_button.GetGlobalRect());
 
@@ -641,6 +634,7 @@ public sealed partial class FgoNpBar : Node
 
         _glowBurst = 1f;
 
+        // Pressed 回调内同步发请求会与 host 的选牌握手重入，须延后一帧。
         CallDeferred(nameof(DoNpButtonPressed));
     }
 
@@ -667,7 +661,6 @@ public sealed partial class FgoNpBar : Node
         NHoverTipSet.Remove(_button);
     }
 
-    /// <remarks>npBar 与 %Hitbox 重叠且在下层，鼠标总判给 Hitbox ⇒ 每帧自测指针进出，并压制会并存的生物提示。抑制条件见 <see cref="ShouldSuppressHoverTips" />。</remarks>
     private void UpdateHoverTip()
     {
         if (_npBarRoot == null)
@@ -692,7 +685,6 @@ public sealed partial class FgoNpBar : Node
 
         if (inBar)
         {
-            // 每帧压制：生物 OnFocus 订阅了 CombatStateChanged，状态变化会重弹提示。
             _creatureNode?.HideHoverTips();
 
             if (_hoverTipShown)
@@ -711,7 +703,6 @@ public sealed partial class FgoNpBar : Node
         _hoverTipShown = false;
         NHoverTipSet.Remove(_npBarRoot);
 
-        // 移回生物身上时 Hitbox 仍 mouse-over、不会再发 MouseEntered，需手动补回提示。
         if (_creatureNode != null &&
             _creatureNode.Hitbox.GetGlobalRect().HasPoint(mousePosition))
             _creatureNode.ShowHoverTips(_creatureNode.Entity.HoverTips);

@@ -45,7 +45,6 @@ public class SongOfLove() : FgoCardModel(1, CardType.Skill,
         await PlayerCmd.GainEnergy(2, Owner);
         await FgoResCmd.ModifyNp(DynamicVars["Np"].BaseValue, Owner);
 
-        // 同时只允许存在一个收星者：先清掉友方身上残留的旧能力，再给本次选中的盟友挂上。
         var allies = CombatState!.GetTeammatesOf(Owner.Creature).ToList();
         foreach (var ally in allies)
             if (ally.HasPower<SongOfLovePower>())

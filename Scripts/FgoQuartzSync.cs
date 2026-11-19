@@ -110,19 +110,16 @@ public static class FgoQuartzSync
         }
         catch (Exception ex)
         {
-            // 同步是「尽力而为」的旁路：失败不得波及调用方的核心玩法（如右键扣费）。
             Entry.Logger.Warn($"[Fgo] Quartz count sync send failed: {ex}");
         }
     }
 
     private static void OnReceived(RitsuLibSidecarTypedDispatchContext<QuartzSyncMessage> context)
     {
-        // 主机收到客户端上报后转发广播给其它队友（广播不回传发送方，无环）。
         if (context.IsHostIngest)
             RitsuLibSidecarTypedMessageRegistry.Broadcast(
                 RunManager.Instance.NetService, QuartzSyncDescriptor, context.Message);
 
-        // 计数写入与遗物高亮都触碰游戏状态，调度回 Godot 主线程，避开网络接收线程竞态。
         var msg = context.Message;
         Callable.From(() => ApplyCount(msg)).CallDeferred();
     }

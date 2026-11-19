@@ -13,13 +13,10 @@ public class GutsPower : FgoPowerModel
 
     public override bool ShouldDie(Creature creature)
     {
-        // BeforeDeath 无法阻止死亡，须像官方 FairyInABottle/LizardTail 一样
-        // 通过 ShouldDie + AfterPreventingDeath 实现复活，否则死亡流程照常执行
-        // （卡牌耗尽、血条 UI 消失）而角色血量已被恢复。
+        // BeforeDeath 无法阻止死亡，须走 ShouldDie + AfterPreventingDeath 复活，否则死亡流程照常执行。
         if (creature != Owner || Amount <= 0) return true;
 
-        // 存在可用的不可叠加毅力时优先由其处理，保证与 FgoPlayerState.ShouldDie 的
-        // 判定优先级一致（先 NonStackableGutsPower，再普通 GutsPower）。
+        // 仍让死亡流程进入复活，是为让同场生效的非叠加毅力（times>0）接手。
         return creature.Powers.OfType<NonStackableGutsPower>()
             .Any(power => power.DynamicVars["times"].BaseValue > 0);
     }
@@ -30,13 +27,11 @@ public class GutsPower : FgoPowerModel
 
         Flash();
         await ReviveCmd.Execute(creature, Amount);
-        // 必须移除 this 而非 Remove<GutsPower>：
-        // GetPower<GutsPower> 匹配的是 p is GutsPower，会误删 NonStackableGutsPower 实例。
+        // 必须移除 this 而非 Remove<GutsPower>：后者按 p is GutsPower 匹配，会误删 NonStackableGutsPower。
         await PowerCmd.Remove(this);
         await NotifyGutsRelics(creature);
     }
 
-    // 毅力发动广播: 凤凰羽毛在免死回血之后追加效果（仅玩家本人持有该遗物时）。
     internal static async Task NotifyGutsRelics(Creature creature)
     {
         if (creature.Player?.GetRelic<PhoenixFeather>() is { } feather)

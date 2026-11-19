@@ -56,7 +56,6 @@ public sealed class FinalUnderworld : ModEventTemplate
     {
         if (Owner == null) return;
 
-        // 非战斗牌堆的卡用 RunState.CreateCard 创建实例，加入主卡组。
         var sugarCard = Owner.RunState.CreateCard(ModelDb.Card<GoddessSugar>(), Owner);
         CardCmd.PreviewCardPileAdd(await CardPileCmd.Add(sugarCard, Owner.Deck));
 
@@ -77,14 +76,12 @@ public sealed class FinalUnderworld : ModEventTemplate
 
         await RelicCmd.Obtain<RelicII>(Owner);
 
-        // 兽冠宝具加入 NobleDeck 并播放预览动画。
         var noblePile = CardPile.Get(FgoEnums.NobleDeck, Owner);
         if (noblePile != null)
         {
             var crown = Owner.RunState.CreateCard(ModelDb.Card<EdinShugurraCollapsar>(), Owner);
             var result = await CardPileCmd.Add(crown, noblePile);
 
-            // 联机同步：把「该玩家获得此宝具」广播给其它端，保持各端 NobleDeck 一致。
             if (result is { success: true })
                 FgoNobleDeckSync.NotifyAdd(Owner, crown.Id);
 
@@ -119,8 +116,7 @@ public sealed class FinalUnderworld : ModEventTemplate
 
         Entry.RunState.Modify(Owner, data => data.QuartzCount -= QuartzCost);
 
-        // 联机同步：事件选项只在拥有者本机运行（同 Follow 需手动 NotifyAdd 可证），QuartzCount 又在
-        // 主机权威的 PlayerRunSavedData 上，故扣费后上报/广播新计数，避免主机不扣 & 被 BroadcastAll 覆盖回旧值。
+        // 事件选项只在拥有者本机运行，故扣费后须上报/广播新计数，避免主机不扣被 BroadcastAll 覆盖回旧值。
         FgoQuartzSync.NotifyLocalCount(Owner);
 
         Owner.GetRelic<SaintQuartz>()?.RefreshQuartzActivationVisual(QuartzCost);

@@ -57,7 +57,6 @@ public class SummonTicket : FgoRelic, IModRightClickableRelic
 
     public override Task AfterRoomEntered(AbstractRoom room)
     {
-        // 同 SaintQuartz：客户端读档重放当前房间时跳过，避免相对主机多 +1。
         if (FgoQuartzSync.ShouldSkipRoomEntry()) return Task.CompletedTask;
         IncrementQuartzOnRoomEntry(CostPerChoice);
         return Task.CompletedTask;

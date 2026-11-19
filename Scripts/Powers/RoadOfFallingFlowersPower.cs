@@ -29,6 +29,7 @@ public class RoadOfFallingFlowersPower : FgoPowerModel
 
     public override async Task AfterCurrentHpChanged(Creature creature, decimal delta)
     {
+        // 治疗本身会再次触发本钩子，_isHealing 是防无限递归的重入屏障。
         if (_isHealing) return;
         if (delta <= 0) return;
         if (creature != Owner.Player?.Creature) return;

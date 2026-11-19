@@ -29,6 +29,7 @@ public class SwordOfSelection() : FgoCardModel(1, CardType.Skill,
             var handCount = ctx.Player.PlayerCombatState?.Hand.Cards.Count ?? 0;
             var maxHand = MaxHandSizeCalculator.Calculate(ctx.Player);
             var cards = ctx.GetCardBaseValueOrDefault("Cards");
+            // 预览时本卡尚未离手，先减 1 才是抽牌前真实手牌数，并受手牌上限截断。
             return npPerHands * Math.Min(handCount - 1 + cards, maxHand);
         })
     ];

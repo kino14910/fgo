@@ -12,10 +12,6 @@ namespace Fgo.Scripts.Cards.Colorless.DerivativeNemo;
 /// <summary>
 ///     好似飞鸟: 在〔虚数空间〕中造成的伤害变为 200%。
 /// </summary>
-/// <remarks>
-///     仅当玩家解锁过（<see cref="GreatVoidSeaBattle.IsLikeABirdUnlocked" />）时，
-///     加入和移除逻辑由 <see cref="FgoVoidHand" /> 管理。
-/// </remarks>
 [RegisterCard(typeof(TokenCardPool))]
 public class LikeABird() : FgoBaseCardModel(0, CardType.Power,
     CardRarity.Token, TargetType.Self,

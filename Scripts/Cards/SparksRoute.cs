@@ -24,7 +24,6 @@ public class SparksRoute() : FgoCardModel(0, CardType.Skill,
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        // 1. 失去至少 10% 宝具值。
         await FgoResCmd.ModifyNp(-10, Owner);
 
         var hand = PileType.Hand.GetPile(Owner).Cards.ToList();
@@ -34,7 +33,6 @@ public class SparksRoute() : FgoCardModel(0, CardType.Skill,
 
         if (IsUpgraded)
         {
-            // 「任意数量」= 0 ~ 手牌数都合法，由玩家自选。
             var prefs = new CardSelectorPrefs(SelectionScreenPrompt, 0, hand.Count);
             toMove = (await CardSelectCmd.FromHand(choiceContext, Owner, prefs, null, this)).ToList();
 

@@ -16,23 +16,7 @@ namespace Fgo.Scripts;
 ///     这里改为 Sidecar 即时消息：客户端把自己的皮肤发给主机，主机收到后转发广播给所有队友，
 ///     每个端按玩家的 NetId 缓存到 <see cref="RemoteSkins" />，渲染时按拥有者套用，跨端一致。
 /// </summary>
-/// <remarks>
-///     <para>
-///         同步的可靠性要求来自一个具体故障：<b>第一次下载本 mod、从未在设置里动过皮肤选项的人</b>，
-///         别人看他时会显示成默认形象。原因是皮肤缓存只靠"发出/收到消息"填充，而
-///         <see cref="RitsuLibSidecarEvents.OnHandshakeCompleted" /> 触发时
-///         <c>RunManager.Instance.NetService</c> 往往还没挂上（大厅加入阶段），于是
-///         <see cref="SendSkinSync" /> 直接早退、从未发出，对端 <see cref="RemoteSkins" /> 里没有该玩家的键，
-///         <see cref="ResolveSkin" /> 便回退到<b>本机</b>皮肤 —— 一台没同步到就整体显示本机（默认）外观。
-///     </para>
-///     <para>
-///         因此这里做三件事：
-///         ① 每个端在握手/开局时都把自己的皮肤作为权威值主动推一次（不依赖"只在改动时发"）；
-///         ② 客户端可向主机请求全量重播，弥补中途加入 / 漏收；
-///         ③ <see cref="ResolveSkin" /> 只在"本机玩家"身上回退到本机设置，远端玩家缺值时用
-///         各端一致的确定默认值，绝不再拿本机皮肤去污染别人。
-///     </para>
-/// </remarks>
+/// <remarks>握手时常早于 NetService 就绪导致皮肤漏发，故每端在握手/开局主动推自己皮肤为权威值；远端缺值用确定默认值，绝不拿本机皮肤顶替。</remarks>
 public static class FgoSkinSync
 {
     /// <summary>
@@ -210,10 +194,7 @@ public static class FgoSkinSync
     {
         RemoteSkins[context.Message.NetId] = context.Message.Skin;
 
-        // 主机收到客户端的皮肤后，转发广播给其它队友，保证全员一致。
-        // 注意：不能照搬教程的 "Message.NetId != SenderNetId" 判定——客户端 SendToHost 时
-        // 消息里的 NetId 就是发送者自身，二者相等会使该判定恒为假、转发永远不发生。
-        // 这里只需判断 IsHostIngest（主机从客户端收到的消息），广播只发往对端、不会回传主机自身，无环。
+        // 不能照搬教程的 NetId != SenderNetId：客户端 SendToHost 时二者相等会使转发恒不发生；IsHostIngest 判断即可，广播不回传无环。
         if (context.IsHostIngest)
             RitsuLibSidecarTypedMessageRegistry.Broadcast(
                 RunManager.Instance.NetService, SkinSyncDescriptor, context.Message);

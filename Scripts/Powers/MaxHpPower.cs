@@ -40,6 +40,7 @@ public class MaxHpPower : FgoPowerModel
             Owner.SetMaxHpInternal(Owner.MaxHp + hpChange);
         }
 
+        // Amount 变更不走本类 Amount 钩子，须订阅拥有者 Power 增减事件、按 _lastAmount 算增量手动同步 MaxHp。
         if (!_eventsSubscribed)
         {
             Owner.PowerIncreased += OnPowerIncreased;

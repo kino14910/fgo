@@ -21,19 +21,6 @@ namespace Fgo.Scripts.Powers;
 ///     </list>
 /// </summary>
 /// <remarks>
-///     两处与 <see cref="TerrorPower" /> 同源的做法:
-///     <para>
-///         ① 角标走 <see cref="IPowerExtraIconAmountLabelSpecsProvider" />，并且 <see cref="StackType" /> 取
-///         <c>None</c> —— 原版数量标签只对 <c>Counter</c> 出字（<c>NPower.RefreshAmount</c> 里是
-///         <c>StackType == Counter ? DisplayAmount : ""</c>），取 None 正好把原版标签腾空，避免和自己画的
-///         两个数字重复。改完值要手动 <c>InvokeDisplayAmountChanged()</c> 才会刷新角标。
-///     </para>
-///     <para>
-///         ② 上限放进 <c>Amount</c> 而不是另开一个 DynamicVar，是为了能用 <c>PowerCmd.Apply</c> 施加 ——
-///         <c>Apply</c> 对 amount 0 直接早退，没法"创建一个 0 层的能力"；把基础上限(4)当作首次施加的 amount
-///         就绕开了这个限制，而且 <c>Amount &gt; 0</c> 让能力不会被 <c>ShouldRemoveDueToAmount</c> 自动移除，
-///         十王满腹 给没有吃过菜的盟友抬上限也只需要 Apply(+4)。
-///     </para>
 /// </remarks>
 public class FullnessPower : FgoPowerModel, IPowerExtraIconAmountLabelSpecsProvider
 {
@@ -104,7 +91,7 @@ public class FullnessPower : FgoPowerModel, IPowerExtraIconAmountLabelSpecsProvi
         if (clamped == Fullness) return;
 
         DynamicVars["Fullness"].BaseValue = clamped;
-        // 角标由本类自己画，不经过 SetAmount 那条 DisplayAmountChanged 通路，必须手动通知刷新。
+        // 角标由本类自己画，不走 SetAmount 的 DisplayAmountChanged 通路，必须手动通知刷新。
         InvokeDisplayAmountChanged();
     }
 

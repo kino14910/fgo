@@ -26,8 +26,6 @@ public class FgoAncientUpgradeService() : HookedSingletonModel(HookType.Run)
 
             foreach (var player in players)
             {
-                // 刚进入游戏（第一层）时也会先进入先古之民房间，此时牌组/卡堆尚未就绪，
-                // 且玩家尚未经历任何战斗，不应触发进化；从 TotalFloor >= 2 开始才升级。
                 if (player.RunState.TotalFloor <= 1) continue;
 
                 await FgoCardActions.TryUpgradeDerivativeMash(player);

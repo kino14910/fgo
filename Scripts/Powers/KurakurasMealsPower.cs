@@ -16,11 +16,8 @@ namespace Fgo.Scripts.Powers;
 ///     回转膳食（Kurakura's Meals）: 每回合轮流发放一张菜品卡，并结算菜品卡打出时的附带收益。
 /// </summary>
 /// <remarks>
-///     每张〔回转膳食〕各持一个实例：各自轮换、各自发放，菜品卡增益按实例叠加。
-///     轮换状态（已发放数 / 下一个位置）保存在能力实例的字段里，跨回合持续，战斗结束随能力消失。
-///     发放与掷骰都发生在 <see cref="AfterPlayerTurnStart" /> —— 该钩子在复制的回合开始流程里
-///     于各端各执行一次，条件（发放数、轮换位）全是同步状态，因此各端消耗同一随机序列；
-///     主卡打出时的首张发放则发生在被复制的出牌动作内，同样安全。
+///     每张〔回转膳食〕各持一个实例：各自轮换、各自发放，增益按实例叠加。轮换状态（已发放数/下一位置）存在实例字段里，跨回合持续。发放与掷骰都在 AfterPlayerTurnStart ——
+///     该钩子在复制的回合开始流程里各端各跑一次，条件（发放数、轮换位）都是同步状态，因此各端消耗同一随机序列。
 /// </remarks>
 public class KurakurasMealsPower : FgoPowerModel
 {
@@ -47,8 +44,7 @@ public class KurakurasMealsPower : FgoPowerModel
 
     public override PowerType Type => PowerType.Buff;
 
-    // 每张〔回转膳食〕各自一个实例（各自轮换、各自升级）；角标显示本实例的暴击星数，
-    // 因此 Amount 始终与 Star 同步（见 Configure）。
+    // 每张卡各自一个实例、各自轮换；角标显示本实例暴击星数，故 Amount 恒等于 Star。
     public override PowerStackType StackType => PowerStackType.Counter;
 
     public override PowerInstanceType InstanceType => PowerInstanceType.Instanced;
@@ -60,7 +56,6 @@ public class KurakurasMealsPower : FgoPowerModel
 
     public bool UpgradedDishes { get; private set; }
 
-    // 能力描述随发放形态切换，升级后显示「获得升级的菜品卡」。
     protected override string SmartDescriptionLocKey => UpgradedDishes
         ? "FGO_POWER_KURAKURAS_MEALS_POWER.smartDescriptionUpgraded"
         : "FGO_POWER_KURAKURAS_MEALS_POWER.smartDescription";
@@ -80,7 +75,7 @@ public class KurakurasMealsPower : FgoPowerModel
     public void Configure(decimal stars, bool upgradedDishes)
     {
         DynamicVars["Star"].BaseValue = stars;
-        // 角标只是数值展示，静默同步，避免弹出 +N 的能力增减特效。
+        // 静默同步角标，避免弹出 +N 的能力增减特效。
         SetAmount((int)stars, true);
         UpgradedDishes = upgradedDishes;
     }
@@ -106,8 +101,7 @@ public class KurakurasMealsPower : FgoPowerModel
         power._nextIndex = (power._nextIndex + 1) % Rotation.Length;
         power._granted++;
 
-        // 自第 7 张起，轮到炒荞麦面时有 5% 概率变成传说中的饭团。
-        // 短路求值保证"掷骰与否"只取决于同步状态，各端消耗的随机序列长度一致。
+        // 自第 7 张起，轮到炒荞麦面时 5% 变传说饭团。短路求值保证掷骰只取决于同步状态，各端随机序列长度一致。
         var mutates = power._granted >= MutationStartCount
                       && Rotation[index].Type == typeof(Yakisoba)
                       && player.RunState.Rng.Niche.NextFloat() * 100f < MutationChancePercent;
@@ -135,7 +129,6 @@ public class KurakurasMealsPower : FgoPowerModel
 
         await FgoResCmd.ModifyStars(powers.Sum(p => p.DynamicVars["Star"].IntValue), player);
 
-        // 满腹槽上限与当前饱腹合并挂在同一个能力上；首次施加用基础上限做 amount（Apply 对 0 会早退）。
         var fullness = await FullnessPower.Ensure(choiceContext, player.Creature, player.Creature, dish);
         fullness?.Gain(FullnessPower.PerDish);
     }

@@ -25,8 +25,6 @@ public abstract class TempStrengthPower<T> : ModTemporaryAppliedPowerTemplate<T,
 
     // protected override int LastForXExtraTurns => 0; // 额外持续回合数
 
-    // 推荐重载描述，以达到多个power共享一条文本的效果
-    // 例如这里的文本需要在powers.json中写"TEST_POWER_TEMP_POWER.description"和"TEST_POWER_TEMP_POWER_DOWN.description"
     public override LocString Description => new("powers",
         IsPositive ? "TEMPORARY_STRENGTH_POWER.description" : "TEMPORARY_STRENGTH_DOWN.description");
 }

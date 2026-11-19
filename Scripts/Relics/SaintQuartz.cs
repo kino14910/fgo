@@ -64,7 +64,6 @@ public class SaintQuartz : FgoRelic, IModRightClickableRelic
 
     public override Task AfterRoomEntered(AbstractRoom room)
     {
-        // 读档重建当前房间时（仅客户端）重放本动作：已在存档里计过，跳过以免相对主机多 +1。
         if (FgoQuartzSync.ShouldSkipRoomEntry()) return Task.CompletedTask;
         IncrementQuartzOnRoomEntry(CostPerChoice);
         return Task.CompletedTask;

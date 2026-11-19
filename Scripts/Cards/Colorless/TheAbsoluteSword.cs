@@ -28,7 +28,6 @@ public class TheAbsoluteSword() : FgoBaseCardModel(3, CardType.Attack,
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        // 通过 AttackCommand.Results 直接读取本次伤害，无需施加追踪能力
         var attack = DamageCmd.Attack(DynamicVars.Damage.BaseValue)
             .FromCard(this, cardPlay)
             .TargetingAllOpponents(CombatState!)

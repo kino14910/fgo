@@ -258,6 +258,7 @@ public sealed class FgoPlayerState
     {
         _crit.Active = true;
         _crit.DamageMultiplier = multiplier;
+        // ActivationId 供外部 Power 区分同一次暴击是否已结算（见 HeroicKingPower）。
         _crit.ActivationId++;
     }
 

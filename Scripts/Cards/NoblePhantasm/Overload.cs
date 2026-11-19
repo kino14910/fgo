@@ -31,7 +31,6 @@ public class Overload() : NobleCardModel(1, CardType.Attack, TargetType.AnyEnemy
     {
         ArgumentNullException.ThrowIfNull(cardPlay.Target, nameof(cardPlay.Target));
 
-        // 宝具值获取提升
         await PowerCmd.Apply<NpRatePower>(choiceContext, Owner.Creature, 1m, Owner.Creature, this);
 
         if (cardPlay.Target.Block > 0)

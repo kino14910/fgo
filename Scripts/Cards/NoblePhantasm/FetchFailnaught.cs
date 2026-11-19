@@ -17,7 +17,6 @@ public class FetchFailnaught() : NobleCardModel(1, CardType.Attack, TargetType.A
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        // 计算伤害：基础伤害 * (1 + 诅咒层数 * 0.1)
         ModCardVars.ComputedDamage("FetchFailnaughtDamage",
             30,
             (card, target) =>
@@ -51,7 +50,6 @@ public class FetchFailnaught() : NobleCardModel(1, CardType.Attack, TargetType.A
 
         await PowerCmd.Apply<CursePower>(choiceContext, target, 3m, Owner.Creature, this);
 
-        // 若目标已有诅咒，再根据当前层数 × 倍率 施加额外诅咒
         if (target.HasPower<CursePower>())
         {
             var curAmt = target.GetPowerAmount<CursePower>();

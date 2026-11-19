@@ -29,6 +29,7 @@ public class MyFairSoldierPower : FgoPowerModel
     public override async Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         if (cardPlay.Player.Creature != Owner) return;
+        // 授予本能力的那张卡自身打出不触发惩罚。
         if (cardPlay.Card == _grantingCard) return;
 
         if (cardPlay.Card.Type == CardType.Power)
