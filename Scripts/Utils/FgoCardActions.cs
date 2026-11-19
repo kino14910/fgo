@@ -111,17 +111,6 @@ public static class FgoCardActions
     }
     
     /// <summary> <c>CardSelectCmd.FromChooseACardScreen</c> 无3张数量限制版本。</summary>
-    public static void DiscardUnpiledCandidates(
-        ICombatState combat, IEnumerable<CardModel> candidates, CardModel? keep = null)
-    {
-        foreach (var candidate in candidates)
-        {
-            if (candidate == keep) continue;
-            combat.RemoveCard(candidate);
-            candidate.HasBeenRemovedFromState = true;
-        }
-    }
-
     public static async Task<CardModel?> FromChooseACardScreenUncapped(
         PlayerChoiceContext context,
         IReadOnlyList<CardModel> cards,

@@ -42,8 +42,6 @@ public class GunDealer() : FgoBaseCardModel(0, CardType.Skill,
 
         var selected = await FgoCardActions.FromChooseACardScreenUncapped(choiceContext, options, Owner);
 
-        FgoCardActions.DiscardUnpiledCandidates(combat, options, selected);
-
         if (selected == null) return;
 
         await CardPileCmd.AddGeneratedCardToCombat(selected, PileType.Hand, Owner);

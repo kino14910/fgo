@@ -74,8 +74,6 @@ public class ExtremelySpicyMapoTofu : FgoPotionModel
 
         var selected = await CardSelectCmd.FromChooseACardScreen(choiceContext, options, Owner);
 
-        FgoCardActions.DiscardUnpiledCandidates(combatState, options, selected);
-
         if (selected == null) return;
 
         switch (selected)

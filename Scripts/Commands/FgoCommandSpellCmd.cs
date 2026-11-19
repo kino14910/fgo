@@ -61,8 +61,6 @@ public static class FgoCommandSpellCmd
 
         var selected = await CardSelectCmd.FromChooseACardScreen(choiceContext, cards, player);
 
-        FgoCardActions.DiscardUnpiledCandidates(combatState, cards, selected);
-
         if (selected == null) return false;
 
         await playerState.UseCommandSpell();
