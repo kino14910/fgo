@@ -24,6 +24,10 @@ public sealed partial class FgoVoidSeaBackground : Node
 
     private static bool _reportedMissingInstance;
 
+    private static bool _validated;
+
+    private static bool _disabled;
+
     private static PackedScene? _backgroundScene;
 
     private static PackedScene? _layerScene;
@@ -36,6 +40,8 @@ public sealed partial class FgoVoidSeaBackground : Node
 
     public static void Initialize()
     {
+        ValidateAssets();
+
         var def = ModNodeAttachmentRegistry
             .For(Entry.ModId)
             .RegisterReadyChild<NCombatRoom, FgoVoidSeaBackground>(
@@ -53,6 +59,52 @@ public sealed partial class FgoVoidSeaBackground : Node
 
     /// <remarks>初始化期一次性校验资源，把"场景根挂错脚本"从运行期 InvalidCastException 变成显式失败。
     /// DEBUG 下直接抛出（开发期不可能漏）；RELEASE 下记录并熔断此功能，不影响 mod 其余部分。</remarks>
+    private static void ValidateAssets()
+    {
+        _validated = true;
+        try
+        {
+            _backgroundScene = LoadScene(BackgroundScenePath);
+            _layerScene = LoadScene(VoidSeaLayerPath);
+            if (_backgroundScene == null || _layerScene == null)
+                throw new InvalidOperationException("background or layer scene failed to load");
+
+            var root = _backgroundScene.Instantiate<Node>();
+            try
+            {
+                if (root is not FgoVoidSeaBackgroundRoot ||
+                    root.GetNodeOrNull<Control>("Layer_00") == null)
+                    throw new InvalidOperationException(
+                        $"scene root must carry {nameof(FgoVoidSeaBackgroundRoot)} and expose a 'Layer_00' Control");
+            }
+            finally
+            {
+                root.Free();
+            }
+
+            var layer = _layerScene.Instantiate<Node>();
+            try
+            {
+                if (layer is not Control)
+                    throw new InvalidOperationException("layer scene root must be a Control");
+            }
+            finally
+            {
+                layer.Free();
+            }
+
+            Entry.Logger.Info("[Fgo] VoidSea: assets validated.");
+        }
+        catch (Exception ex)
+        {
+            _disabled = true;
+            Entry.Logger.ErrorNoTrace($"[Fgo] VoidSea: asset validation failed, feature disabled: {ex}");
+#if DEBUG
+            throw new InvalidOperationException("[Fgo] VoidSea: asset validation failed (DEBUG hard fail)", ex);
+#endif
+        }
+    }
+
     public void Bind()
     {
         _instance = this;
@@ -62,6 +114,8 @@ public sealed partial class FgoVoidSeaBackground : Node
     /// <remarks>每帧轮询、只在边沿动作：状态只由〔虚数脱出〕解除，挂在 OnPlay 上会换不回。只认本地玩家。</remarks>
     public static void Update(ICombatState? combat)
     {
+        if (_disabled) return;
+
         var instance = _instance;
         if (instance == null || !IsInstanceValid(instance))
         {
@@ -212,9 +266,12 @@ public sealed partial class FgoVoidSeaBackground : Node
     /// <c>Instantiate&lt;NCombatBackground&gt;</c> 的 <c>InvalidCastException</c>。首次运行期失败即熔断，不再重试。</remarks>
     private NCombatBackground? TryCreateBackground()
     {
+        if (_disabled) return null;
+        if (!_validated) ValidateAssets();
+        if (_disabled) return null;
+
         try
         {
-            _backgroundScene ??= LoadScene(BackgroundScenePath);
             var scene = _backgroundScene;
             if (scene == null)
             {
@@ -222,7 +279,7 @@ public sealed partial class FgoVoidSeaBackground : Node
                 return null;
             }
 
-            var root = scene.Instantiate<NCombatBackground>();
+            var root = scene.Instantiate<Node>() as NCombatBackground;
             if (root == null)
             {
                 Entry.Logger.ErrorNoTrace($"[Fgo] VoidSea: Instantiate<{nameof(NCombatBackground)}> returned null " +
@@ -240,8 +297,13 @@ public sealed partial class FgoVoidSeaBackground : Node
         }
         catch (Exception ex)
         {
-            Entry.Logger.ErrorNoTrace($"[Fgo] VoidSea: failed to build background: {ex}");
+            _disabled = true;
+            Entry.Logger.ErrorNoTrace($"[Fgo] VoidSea: failed to build background, feature disabled: {ex}");
+#if DEBUG
+            throw;
+#else
             return null;
+#endif
         }
     }
 

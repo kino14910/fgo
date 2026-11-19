@@ -1,10 +1,9 @@
 using Godot;
-using MegaCrit.Sts2.Core.Nodes.Rooms;
 
 namespace Fgo.Scripts.UI;
 
 /// <remarks>遮罩用 Tween：Godot 4.5.1 下 AnimationPlayer 写 <c>shader_parameter/threshold</c> 会被静默忽略。</remarks>
-public sealed partial class FgoVoidSeaLayer : NCombatBackgroundLayer
+public sealed partial class FgoVoidSeaLayer : Control
 {
     private const string MaskNodePath = "TransitionMask";
 
@@ -18,8 +17,6 @@ public sealed partial class FgoVoidSeaLayer : NCombatBackgroundLayer
 
     public override void _Ready()
     {
-        base._Ready();
-
         PlayEnterTransition();
     }
 

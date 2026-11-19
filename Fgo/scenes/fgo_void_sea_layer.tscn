@@ -48,18 +48,6 @@ mouse_filter = 2
 texture = ExtResource("2_voidsea")
 expand_mode = 1
 
-[node name="PhobiaModeVisual" type="TextureRect" parent="."]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-texture = ExtResource("2_voidsea")
-expand_mode = 1
-
 [node name="TransitionMask" type="ColorRect" parent="."]
 material = SubResource("ShaderMaterial_voidmask")
 layout_mode = 1
