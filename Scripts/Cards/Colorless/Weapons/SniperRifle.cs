@@ -8,10 +8,6 @@ using STS2RitsuLib.Interop.AutoRegistration;
 
 namespace Fgo.Scripts.Cards.Colorless.Weapons;
 
-/// <remarks>
-///     <c>SniperDamage</c> 是**目标感知**的计算变量: 卡面拖到哪个敌人身上就按那个敌人的当前生命值换算，
-///     实际结算用同一个求值器（<c>EvaluateValueOrDefault(target:)</c>），显示与结算不会漂移。
-/// </remarks>
 [RegisterCard(typeof(TokenCardPool))]
 public class SniperRifle() : FgoBaseCardModel(0, CardType.Attack,
     CardRarity.Token, TargetType.AnyEnemy)

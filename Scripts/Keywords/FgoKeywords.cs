@@ -5,9 +5,6 @@ using STS2RitsuLib.Keywords;
 
 namespace Fgo.Scripts.Keywords;
 
-/// <summary>
-///     FGO mod 自定义卡牌关键词注册。
-/// </summary>
 [RegisterOwnedCardKeyword(
     nameof(IgnoreInvincible),
     IconPath = "res://Fgo/images/powers/big/IgnoreInvinciblePower.png",

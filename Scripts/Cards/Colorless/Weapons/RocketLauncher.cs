@@ -39,8 +39,6 @@ public class RocketLauncher() : FgoBaseCardModel(0, CardType.Attack,
             .WithHitFx("vfx/vfx_fire_burst")
             .Execute(choiceContext);
 
-        // 溅射目标在主体伤害落地后再取一次: 已被打死的敌人不该再吃溅射。
-        // 溅射走 CreatureCmd.Damage 而不是再开一条 AttackCommand —— "对其他敌人各 6 点"是固定值，
         var others = combat.HittableEnemies.Where(enemy => enemy != target && enemy.IsAlive).ToList();
         if (others.Count == 0) return;
 

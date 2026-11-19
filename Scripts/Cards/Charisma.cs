@@ -49,7 +49,6 @@ public class Charisma() : FgoCardModel(2, CardType.Power,
         }
     }
 
-    /// <summary>本卡当前疲劳层数。</summary>
     public int Fatigue => DynamicVars[FatigueKey].IntValue;
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips =>

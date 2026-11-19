@@ -110,16 +110,7 @@ public static class FgoCardActions
         CardCmd.PreviewCardPileAdd(await CardPileCmd.AddGeneratedCardToCombat(card, pile, card.Owner, position), time);
     }
     
-    /// <summary>
-    ///     清理「生成一批候选卡 → 选一张 → 其余作废」流程中未被选中的候选。
-    ///     这些候选由 <c>CombatState.CreateCard</c> 生成、从未进入任何牌堆，因此
-    ///     <c>Pile == null</c>，**不能**走 <c>CardPileCmd.RemoveFromCombat</c>
-    ///     （会抛 "Card must be in a combat pile for it to be removed"）；
-    ///     正确做法是从 <c>CombatState</c> 的卡表摘除，并标记 <c>HasBeenRemovedFromState</c>，
-    ///     否则每次选牌都会在 <c>_allCards</c> 里留下废卡。
-    ///     <para />
-    ///     不传 <paramref name="keep" /> 时全部清理（用于选牌被取消的场景）。
-    /// </summary>
+    /// <summary> <c>CardSelectCmd.FromChooseACardScreen</c> 无3张数量限制版本。</summary>
     public static void DiscardUnpiledCandidates(
         ICombatState combat, IEnumerable<CardModel> candidates, CardModel? keep = null)
     {

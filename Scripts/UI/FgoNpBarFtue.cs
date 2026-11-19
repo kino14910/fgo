@@ -6,18 +6,7 @@ using MegaCrit.Sts2.Core.TestSupport;
 
 namespace Fgo.Scripts.UI;
 
-/// <summary>
-///     「宝具条已满」的 FTUE 教学弹窗，等价于原版 <c>NCombatRewardFtue</c> 的单页结构。
-/// </summary>
-/// <remarks>
-///     场景照搬原版 <c>combat_reward_ftue.tscn</c> 结构，只把 <c>res://images|themes|shaders|addons|src</c> 换成
-///     <c>res://Fgo/**</c> 与 <c>res://Scripts/**</c>（mod pck 仅打包这两前缀）。
-///     固定节点路径（对照原版）：<c>FtuePopup/Header</c>=Label+<see cref="FgoFtueText" />、
-///     <c>FtuePopup/DescriptionContainer/Description</c>=RichTextLabel+手动装 <c>[gold]</c>、
-///     <c>FtuePopup/FtueConfirmButton</c>=<see cref="FgoFtueConfirmButton" />。
-///     位置不同于原版（右下角）：本弹窗贴着 NP 按钮，由 <see cref="Create" /> 传入按钮屏幕矩形、<see cref="LayoutTowards" /> 运行时重摆。
-///     焦点与热键屏蔽由基类 <see cref="NFtue._EnterTree" /> 的 <c>AddBlockingScreen(this)</c> 处理；<c>CloseFtue()</c> 为 protected 可直接调。
-/// </remarks>
+/// <remarks>弹窗贴 NP 按钮、运行时摆位，由 <see cref="Create" /> 传入按钮矩形。</remarks>
 public sealed partial class FgoNpBarFtue : NFtue
 {
     private const string TitleKey = "FGO_NP_FTUE_TITLE";
@@ -29,21 +18,8 @@ public sealed partial class FgoNpBarFtue : NFtue
 
     private const float ArrowScale = 0.5f;
 
-    /// <summary>
-    ///     箭头未旋转时尖端的朝向（y-down 坐标，+X 为 0°、+Y 为 90°）。
-    /// </summary>
-    /// <remarks>
-    ///     由 <see cref="ArrowTipOffset" /> 反推：<c>atan2(96, -106) ≈ 137.83°</c>；贴图默认朝左下，指向性旋转即「目标方位角 - 此值」。
-    /// </remarks>
     private const float ArrowDefaultBearingDeg = 137.83f;
 
-    /// <summary>
-    ///     箭头贴图尖端相对 <c>PivotOffset</c> 的偏移。
-    /// </summary>
-    /// <remarks>
-    ///     贴图像素扫出：244×204 图里红点最左下像素 (16,198)，pivot (122,102)，差值即此。
-    ///     <b>必须瞄尖端而非 pivot</b>：尖端离 pivot 143px，瞄 pivot 会让箭头指到目标前方 143px 处。
-    /// </remarks>
     private static readonly Vector2 ArrowTipOffset = new(-106f, 96f);
 
     private TextureRect? _arrow;
@@ -53,28 +29,11 @@ public sealed partial class FgoNpBarFtue : NFtue
     private Label? _header;
     private Control? _popup;
 
-    /// <summary>
-    ///     NP 按钮在屏幕坐标系里的矩形，由 <see cref="Create" /> 注入。
-    /// </summary>
-    /// <remarks>
-    ///     NP 条挂在 <c>NCreatureStateDisplay</c> 下、跟着 HP 条走（见 <c>FgoNpBar.SyncWithHealthBar</c>），
-    ///     运行期位置随分辨率与玩家变化，场景写死 offset 一定对不上，只能运行时算。
-    /// </remarks>
     private Rect2 _targetRect;
 
     private static string ScenePath => $"{Entry.ResPath}/scenes/fgo_np_bar_ftue.tscn";
 
-    /// <summary>
-    ///     用预加载场景创建实例。
-    /// </summary>
-    /// <param name="targetRect">
-    ///     NP 按钮在屏幕坐标系里的矩形，用于把弹窗摆到按钮旁边、箭头指向按钮。
-    /// </param>
-    /// <remarks>
-    ///     原版走 <c>PreloadManager.Cache.GetScene</c>，那是主程序集的场景缓存；
-    ///     mod 场景不在里面，直接 <c>GD.Load</c>。路径写死以保证是常量、
-    ///     Godot 能在导出时把它算进 pck 依赖。
-    /// </remarks>
+    /// <remarks>mod 场景不在主程序集的 <c>PreloadManager</c> 缓存里，须 <c>GD.Load</c>；路径写成常量以便导出时算进 pck 依赖。</remarks>
     public static FgoNpBarFtue? Create(Rect2 targetRect)
     {
         if (TestMode.IsOn)
@@ -108,21 +67,12 @@ public sealed partial class FgoNpBarFtue : NFtue
             Callable.From((Action<NButton>)OnConfirmReleased)
         );
 
-        // 同步摆位：_popup 的尺寸来自它自己的 offset（anchors_preset=3 + 绝对 offset），
-        // 不依赖父节点布局是否解析完，所以 _Ready 里直接算就是准的。
-        // 用 deferred 反而会在首帧渲染前多出一帧「原版右下角位置」的闪烁。
+        // 同步摆位（不用 deferred，否则首帧闪一帧原版右下角位置）。
         LayoutTowards(_targetRect);
         _confirmButton.GrabFocus();
     }
 
-    /// <summary>
-    ///     把弹窗摆到 NP 按钮旁边，并让箭头从弹窗指向按钮。
-    /// </summary>
-    /// <remarks>
-    ///     布局：默认按钮右侧（NP 条在左、右侧空间足且不挡血条/手牌），放不下翻到左侧；垂直居中对齐并夹进屏幕（留 <see cref="ScreenMargin" />）。
-    ///     箭头用<b>指向性旋转</b>而非写死角度（贴图默认 bearing≈137.8°，按「弹窗侧边→按钮中心」方位角求差），否则按钮上下移动时立刻指偏。
-    ///     摆位<b>瞄箭头尖端而非 pivot</b>（差 143px）；缩放 0.5、<see cref="GapHorizontal" /> 据此放大，否则箭头压在弹窗边框上。
-    /// </remarks>
+    /// <remarks>默认摆按钮右侧、放不下翻左；箭头按方位角旋转（瞄尖端而非 pivot，否则指偏）。</remarks>
     private void LayoutTowards(Rect2 targetRect)
     {
         if (_popup == null || _arrow == null)
@@ -130,14 +80,9 @@ public sealed partial class FgoNpBarFtue : NFtue
 
         var screen = GetViewport().GetVisibleRect().Size;
 
-        // 尺寸必须在改 anchor 之前量：场景里 popup 用右下角 anchors + offset 定位，
-        // 改成左上角后 offset 语义就变了，晚读会拿到塌陷尺寸导致摆位全错。
+        // 先量尺寸再改 anchor；offset 必须按 popupSize 铺满，否则 TextureRect 按 expand_mode 用贴图原生尺寸重算宽度，弹窗跑出屏外。
         var popupSize = _popup.Size;
 
-        // 换成纯左上角定位模式，让 Position 直接等于屏幕坐标。
-        // 四项 offset 必须显式按 popupSize 铺满：场景里 offset 是相对右下角的负值，
-        // 光把 anchor 归零会让 TextureRect 按expand_mode（FIT_WIDTH_PROPORTIONAL）
-        // 用贴图原生尺寸重算最小宽度，实测会从 579 被拉到 3012，弹窗大部分跑到屏外。
         _popup.AnchorLeft = 0f;
         _popup.AnchorTop = 0f;
         _popup.AnchorRight = 0f;
@@ -165,24 +110,16 @@ public sealed partial class FgoNpBarFtue : NFtue
         LayoutArrow(targetCenter, new Vector2(x, y), popupSize);
     }
 
-    /// <summary>
-    ///     把箭头摆到弹窗朝向目标的那条边上，并旋转到正对目标中心。
-    /// </summary>
-    /// <param name="targetCenter">目标（NP 按钮）中心，屏幕坐标。</param>
-    /// <param name="popupTopLeft">弹窗左上角，屏幕坐标。</param>
-    /// <param name="popupSize">弹窗尺寸。</param>
     private void LayoutArrow(Vector2 targetCenter, Vector2 popupTopLeft, Vector2 popupSize)
     {
         if (_arrow == null)
             return;
 
-        // 目标在弹窗左侧 ⇒ 箭头摆左边；反之摆右边。
         var targetIsLeft = targetCenter.X < popupTopLeft.X + popupSize.X * 0.5f;
 
-        // 同样先量尺寸再铺 offset：TextureRect 换了 anchor 后会按 expand_mode 重算最小尺寸。
+        // 先量尺寸再铺 offset（TextureRect 换 anchor 会按 expand_mode 重算最小尺寸）。
         var arrowSize = _arrow.Size;
 
-        // 先按「箭头摆在弹窗侧边、中心对齐弹窗中心」估一个位置，只用来定朝向。
         var pivotGuess = new Vector2(
             targetIsLeft ? popupTopLeft.X : popupTopLeft.X + popupSize.X,
             popupTopLeft.Y + popupSize.Y * 0.5f
@@ -193,17 +130,13 @@ public sealed partial class FgoNpBarFtue : NFtue
         _arrow.Rotation = Mathf.DegToRad(bearing - ArrowDefaultBearingDeg);
         _arrow.Scale = Vector2.One * ArrowScale;
 
-        // Control 的变换顺序是「先按 pivot 平移 → 旋转 → 缩放 → 沿 -pivot 平移回来」，
-        // 所以尖端在旋转缩放后的偏移 = ArrowTipOffset * Scale 再旋转 rotation。
-        // 要尖端落在目标上，就得把 pivot 放在「目标 - 旋转后的尖端偏移」处，
-        // 最后再减去 pivotOffset —— 因为 Position 记的是外框左上角。
+        // 尖端偏移 = ArrowTipOffset * Scale 再旋转；pivot 放在「目标 - 该偏移 - PivotOffset」处，尖端才落在目标上。
         var rotatedTip = ArrowTipOffset * ArrowScale;
         rotatedTip = new Vector2(
             rotatedTip.X * Mathf.Cos(_arrow.Rotation) - rotatedTip.Y * Mathf.Sin(_arrow.Rotation),
             rotatedTip.X * Mathf.Sin(_arrow.Rotation) + rotatedTip.Y * Mathf.Cos(_arrow.Rotation)
         );
 
-        // 同样切成纯左上角定位，让 Position 直接是屏幕坐标。
         _arrow.AnchorLeft = 0f;
         _arrow.AnchorTop = 0f;
         _arrow.AnchorRight = 0f;
@@ -215,13 +148,7 @@ public sealed partial class FgoNpBarFtue : NFtue
         _arrow.Position = targetCenter - rotatedTip - _arrow.PivotOffset;
     }
 
-    /// <summary>
-    ///     确认按钮被按下。
-    /// </summary>
-    /// <remarks>
-    ///     必须写成带 <c>NButton</c> 参数的私有重载来「遮蔽」基类无参 protected <c>CloseFtue()</c>：信号回调签名是
-    ///     <c>Action&lt;NButton&gt;</c>，直接 <c>Callable.From((Action&lt;NButton&gt;)CloseFtue)</c> 会因方法组转换找不到匹配重载而编译失败（CS0123）。原版 <c>NCombatRewardFtue</c> 同手法。
-    /// </remarks>
+    // 带 NButton 参数以遮蔽基类无参 CloseFtue()：信号签名 Action<NButton>，直接转方法组会 CS0123。
     private void OnConfirmReleased(NButton _)
     {
         CloseFtue();

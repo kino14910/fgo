@@ -61,7 +61,6 @@ public static class FgoCommandSpellCmd
 
         var selected = await CardSelectCmd.FromChooseACardScreen(choiceContext, cards, player);
 
-        // 未选中的候选从未入堆，必须从 CombatState 摘除，否则每次使用都留下废卡。
         FgoCardActions.DiscardUnpiledCandidates(combatState, cards, selected);
 
         if (selected == null) return false;

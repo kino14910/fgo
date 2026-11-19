@@ -10,23 +10,6 @@ using STS2RitsuLib.Interop.AutoRegistration;
 
 namespace Fgo.Scripts.Cards.Colorless.Weapons;
 
-/// <summary>
-///     军火经销商: 0 费、保留。打出时从四张武器牌中选一张直接加入手牌。
-/// </summary>
-/// <remarks>
-///     选牌走「choose-a-card 界面」：<c>CardSelectCmd.FromChooseACardScreen</c> 硬性拒绝超过 3 张候选
-///     （护栏只为 UI 好看，并非逻辑限制），因此改用
-///     <c>FgoCardActions.FromChooseACardScreenUncapped</c> —— 它逐行复刻原方法、仅放开张数上限，
-///     多人同步与本地/远端分支行为完全一致。
-///     <para />
-///     四个候选都由 <c>CombatState.CreateCard</c> 从 canonical 生成 —— 数量与顺序各端完全一致，
-///     因此"按 index 跨端同步"是安全的。
-///     <para />
-///     未被选中的候选从未进过任何牌堆（<c>Pile == null</c>），因此**不能**用
-///     <c>CardPileCmd.RemoveFromCombat</c> 清理（它会因 "Card must be in a combat pile" 抛异常）；
-///     正确做法是 <c>CombatState.RemoveCard</c> 把它从 <c>_allCards</c> 摘掉，再置
-///     <c>HasBeenRemovedFromState</c>，免得每次打出都留下 3 张废卡。
-/// </remarks>
 [RegisterCard(typeof(TokenCardPool))]
 public class GunDealer() : FgoBaseCardModel(0, CardType.Skill,
     CardRarity.Token, TargetType.Self)

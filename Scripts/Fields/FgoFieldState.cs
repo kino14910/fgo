@@ -1,28 +1,15 @@
 namespace Fgo.Scripts.Fields;
 
-/// <summary>
-///     单场战斗的场地表: 战场上的场地及其层数。
-/// </summary>
-/// <remarks>
-///     层数 = 剩余回合数: 所有场地都是有时限的（回合数由施加方给出），每回合开始时 -1，归零即消失。
-///     是否递减由 <see cref="FgoFieldIdExtensions.TicksDownEachTurn" /> 决定。
-///     <para />
-///     状态按战斗对象附着（见 <see cref="FgoField" />），战斗结束随对象一并回收。
-/// </remarks>
+/// <remarks>是否递减由 <see cref="FgoFieldIdExtensions.TicksDownEachTurn" /> 决定。状态按战斗对象附着（见 <see cref="FgoField" />），随战斗回收。</remarks>
 public sealed class FgoFieldState
 {
     private readonly Dictionary<FgoFieldId, int> _stacks = [];
 
-    /// <summary>
-    ///     场地集合的版本号: 每次增删或层数变化自增。供 UI 做脏检查，避免每帧重建显示。
-    /// </summary>
     public int Version { get; private set; }
 
     public IReadOnlyCollection<FgoFieldId> Active => _stacks.Keys;
 
-    /// <summary>
-    ///     〔阳光照射〕本回合（side turn）是否已触发过「首次攻击牌返还活力」；每回合开始时重置。
-    /// </summary>
+    /// <summary>本回合首次攻击牌是否已返还过活力；回合开始重置。</summary>
     public bool SunlightAttackPlayedThisTurn { get; set; }
 
     public bool Has(FgoFieldId id)
@@ -53,15 +40,11 @@ public sealed class FgoFieldState
         return true;
     }
 
-    /// <summary>
-    ///     每回合开始时调用: 对所有「有时限」的场地各 -1 层，归零即移除。
-    /// </summary>
-    /// <returns>是否有任何场地发生变化。</returns>
     public bool TickDown()
     {
         if (_stacks.Count == 0) return false;
 
-        // 先快照键集合: 递减过程中可能移除条目，不能边遍历边改字典。
+        // 先快照键：递减中会移除条目。
         var changed = false;
         foreach (var id in _stacks.Keys.ToList())
         {
